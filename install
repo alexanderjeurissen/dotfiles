@@ -1,0 +1,17 @@
+#!/bin/bash
+
+INSTALLDIR=${1:-$HOME/dotfilesTest}
+
+echo -n "Do you want to use my zsh configs? [n/y]"
+read -n 1 use_zsh_configs
+
+if [ "$use_zsh_configs" == "y" ]; then
+  shopt -s nullglob
+  for file in $PWD/zsh/*
+  do
+    original_file_name=${file##*/}
+    new_file_name="."$original_file_name
+    ln -s $file $INSTALLDIR/$new_file_name
+  done
+fi
+echo
