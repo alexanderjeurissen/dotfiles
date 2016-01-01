@@ -1,0 +1,374 @@
+# Angular snippets
+snippet ngc "Define a new Angular Controller" b
+.controller(${1:controllerName}, ['$scope', '${2:controllerDependencies}',
+	function($scope, ${4:injectables}) {
+		${5}
+	};
+]);
+endsnippet
+
+snippet ngfor "angular.foreach loop" b
+angular.forEach(${1:iterateOver}, function(value, key) {
+	${2}
+});
+endsnippet
+
+snippet ngm "A new angular module without a config function" b
+angular.module('${1:moduleName}', ['${2:moduleDependencies}']);
+${3}
+endsnippet
+
+snippet ngma "A new angular module without a config function and a variable assignment" b
+var ${1:moduleName} = angular.module('$1', ['${2:moduleDeps}']);
+${3}
+endsnippet
+
+snippet ngmc "A new angular module with a config function" b
+var ${1:moduleName} = angular.module('$1', ['${2:moduleDeps}'], function(${3:configDeps}) {
+	${4}
+});
+endsnippet
+
+snippet ngmo "reopen an already existing angular module" b
+'use strict'
+angular.module('${1:appName}')
+${2}
+endsnippet
+
+snippet ngmfa "A factory in a module" b
+.factory('${1:factoryName}', ['${2:factoryDependencies}',
+	function(${3:injectables}) {
+		${3}
+	}
+]);
+endsnippet
+
+snippet ngms "Define an Angular Module Service to be attached to a previously defined module" b
+.service('${1:serviceName}', ['${2:serviceDependencies}',
+	function(${3:injectables}) {
+		${4}
+	}
+]);
+endsnippet
+
+snippet ngmfi "Define an Angular Module Filter to be attached to a previously defined module" b
+.filter('${1:filterName}', ['${2:filterDependencies}',
+	function(${3:injectables}) {
+		return function(input, ${4:args}) {
+			${5}
+		};
+	}
+]);
+endsnippet
+
+snippet ngrw "Defines a when condition of an AngularJS route" b
+$routeProvider.when('${1:url}', {
+	templateUrl: '${2:templateUrl}',
+	controller: '${3:controller}'
+});
+${4}
+endsnippet
+
+snippet ngrwr "Defines a when condition of an AngularJS route with the resolve block" b
+$routeProvider.when('${1:url}', {
+	templateUrl: '${2:templateUrl}',
+	controller: '${3:controller}',
+	resolve: {
+		${4}
+	}
+});
+${5}
+endsnippet
+
+snippet ngro "Defines an otherwise condition of an AngularJS route" b
+$routeProvider.otherwise({
+	redirectTo: '${1:url}'
+});
+${2}
+endsnippet
+
+snippet $f "Define a new $scope'd function (usually inside an AngularJS Controller)" b
+$scope.${1:functionName} = function(${2:args}) {
+	${3}
+};
+endsnippet
+
+snippet $v "Defines a new $scope'd variable inside an AngularJS controller" b
+$scope.${1:variable} = ${2:value};
+${3}
+endsnippet
+
+snippet $va "Defines a new $scope'd variable inside an AngularJS controller and assigns a value from a constructor arguments" b
+$scope.${1:variable} = ${2:variable};
+${3}
+endsnippet
+
+snippet $w "Define a $watch for an expression" b
+$scope.$watch('${1:watchExpr}', function(newValue, oldValue) {
+	${2}
+});
+endsnippet
+
+snippet $on "Define a $on for a $broadcast/$emit on the $scope inside an Angular Controller" b
+$scope.$on('${1:eventName}', function(event, ${2:args}) {
+	${3}
+});
+endsnippet
+
+snippet $b "Define a $broadcast for a $scope inside an Angular Controller / Angular Controller Function" b
+$scope.$broadcast('${1:eventName}', ${2:eventArgs});
+${3}
+endsnippet
+
+snippet $e "Define an $emit for a $scope inside an Angular Controller / Angular Controller Function" b
+$scope.$emit('${1:eventName}', ${2:eventArgs});
+${3}
+endsnippet
+
+snippet ngdcf "A compile function" b
+compile: function(tElement, tAttrs, transclude) {
+	return function(scope, element, attrs) {
+		${1}
+	}
+}
+endsnippet
+
+snippet ngdlf "A linking function in a directive" b
+link: function(scope, element, attrs, ${1:ctrl}) {
+	${2}
+}
+endsnippet
+
+snippet ngdc "A directive with a compile function" b
+.directive('${2:directiveName}', ['${3:injectService}',
+	function(${4:injectService}) {
+		return {
+			restrict: '${5:restrictType}',
+			scope: {
+				${6://scopeVariables}
+			},
+			controller: ${7://controller},
+			transclude: ${8://transclude?},
+			templateUrl: '${9://templateUrl}',
+			compile: function compile(tElement, tAttrs, transclude) {
+				return function (scope, element, attrs) {
+					${10://compile content here}
+				}
+			}
+		};
+	}
+]);
+endsnippet
+
+snippet ngdl "A directive with a linking function only" b
+.directive('${2:directiveName}', ['${3:injectService}',
+	function(${4:injectService}) {
+		return {
+			restrict: '${5:restrictType}',
+			scope: {
+				${6://scopeVariables}
+			},
+			controller: ${7://controller},
+			transclude: ${8://transclude?},
+			templateUrl: '${9://templateUrl}',
+			link: function(scope, element, attrs) {
+				${10://link content here}
+			}
+		};
+	}
+]);
+endsnippet
+
+snippet ngsc "Angular controller spec" b
+'use strict';
+
+describe('Controller: ${1:ControllerName}', function() {
+
+		var $1,
+		scope,
+		state,
+		${2:serviceMock}Mock,
+		${3:resourceMock};
+
+	// Initialize the controller and a mock scope
+	beforeEach(inject(function($controller, $rootScope, $state, $stateParams) {
+		scope = $rootScope.$new();
+		state = $state;
+		$3 = {
+		};
+		$2Mock = {
+			${4:serviceFunction}: function() {
+				return $3;
+			}
+		};
+
+		$1 = function() {
+			$rootScope.$apply();
+			$controller('$1', {
+				$scope: scope,
+				$state: state,
+				$2: $2Mock
+			});
+		};
+	}));
+
+	${5:// first it statement here}
+});
+endsnippet
+
+#Angular 2.0
+snippet ngfor "foreach template"
+*foreach="#${1:item} in ${2:items}"${0}
+endsnippet
+
+snippet ngexp "angular 2.0 expression"
+[${1:property}]="${2:expression}"${0}
+endsnippet
+
+snippet ngstat "angular 2.0 statement"
+(${1:event})="${2:statement}"${0}
+endsnippet
+
+snippet ngcomp "angular 2.0 component annot"
+/**
+ * ${1:Component Annotations}
+ */
+@Component({
+${2:  selector: '${3:my-app}'}${4}
+})
+@Template({
+${5:  inline: '${6:<h1>Hello {{ name }}</h1>}'}${7}
+})
+/**
+ * ${8:Component Controller}
+ */
+class ${9:MyAppComponent} {
+  constructor() {
+    ${10:this.name = 'Alice';}${11}
+  }
+}${0}
+endsnippet
+
+snippet ngimp "angular 2.0 imports" b
+import {${1:Component,}} from 'angular2/angular2';${0}
+endsnippet
+
+#Custom react snippets
+snippet rrc "render component" b
+React.renderComponent(
+<${1:component} />,
+document.getElementById('${2:id}'));
+endsnippet
+
+snippet child "get children components / content" i
+this.props.children
+endsnippet
+
+snippet refs "get value of ref" b
+this.refs.${1:refName}
+endsnippet
+
+snippet refval "get value of ref" b
+this.refs.${1:refName}.getDOMNode().value
+endsnippet
+
+snippet rre "require react" b
+var React = require('React');
+endsnippet
+
+snippet rpa "React.PropTypes.array" b
+React.PropTypes.array
+endsnippet
+
+snippet rpb "React.PropTypes.bool" b
+React.PropTypes.bool
+endsnippet
+
+snippet rpf "React.PropTypes.func" b
+React.PropTypes.func
+endsnippet
+
+snippet rpn "React.PropTypes.number" b
+React.PropTypes.number
+endsnippet
+
+snippet rpo "React.PropTypes.object" b
+React.PropTypes.object
+endsnippet
+
+snippet rps "React.PropTypes.string" b
+React.PropTypes.string
+endsnippet
+
+snippet div "div with content" b
+<div>
+${VISUAL}${1}
+</div>$0
+endsnippet
+
+# Custom sequelize snippets
+snippet sqseed "Seed file for sequelize model" b
+'use strict';
+
+module.exports = function (db, chance, count) {
+	var model = db.models.${1:ModelName},
+		models = [];
+
+	function generate$1() {
+		var $1 = {
+			name: chance.first(),
+			description: chance.last(),
+		};
+		return $1;
+	}
+
+	for (var i = 0; i < count; i++) {
+		models.push(generate$1());
+	}
+
+	// create the rows using our generated models.
+	return model.bulkCreate(models);
+};
+endsnippet
+
+snippet log "Console.log snippet" b
+console.log('${1: test}' ${2: + ${VISUAL}});${0}
+endsnippet
+
+snippet strict "use strict snippet" b
+(function () {
+	'use strict';
+	${VISUAL}${0}
+})();
+endsnippet
+
+snippet ember "import ember es6 module" b
+import Ember from 'ember';${0}
+endsnippet
+
+snippet ember-data "import DS" b
+import DS from 'ember-data';${0}
+endsnippet
+
+snippet ember-cli-acceptance
+import Ember from 'ember';
+import { module, test } from 'qunit';
+import { make, makeList } from 'ember-data-factory-guy';
+import TestHelper from 'ember-data-factory-guy/factory-guy-test-helper';${0}
+endsnippet
+
+snippet ember-i18n
+import t from 'ember-cli-i18n/utils/t';${0}
+endsnippet
+
+snippet exp "export default" b
+export default ${VISUAL}${0}
+endsnippet
+
+snippet import "import module" b
+import ${VISUAL} from '${1:./path/filename}';${0}
+endsnippet
+
+snippet splitword "split word"
+${VISUAL}.split(/\s+/)${0}
+endsnippet

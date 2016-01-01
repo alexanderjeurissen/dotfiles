@@ -1,0 +1,23 @@
+" Assumes your test headers are written in the following format:
+" test('test description', (assert) => {
+
+nmap <leader>mtt :call RunEmberTests()<cr>
+
+function! RunEmberTests()
+  let lineNumber = line('.')
+
+  while lineNumber > 0
+    let test = matchlist(getline(lineNumber), '^test.* => {$')
+
+    if len(test) > 0 && test[0] != ''
+      let filter = substitute(test[0], '"', '\\"', 'g')
+      let filter = substitute(filter, "test\(\'", '', 'g')
+      let filter = substitute(filter, "\', (assert) => {", '', 'g')
+
+      execute "Dispatch "." ember test --filter ".filter
+      let lineNumber = 0
+    else
+      let lineNumber -= 1
+    endif
+  endwhile
+endfunction

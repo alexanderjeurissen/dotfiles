@@ -1,0 +1,8 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/Misc/
+set runtimepath+=$HOME/.vim/settings/plugins/Misc/
+
+runtime localVimrc.plugin
+runtime markdown.plugin
+runtime vimorg.plugin
