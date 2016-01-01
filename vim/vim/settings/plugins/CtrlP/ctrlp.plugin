@@ -1,0 +1,45 @@
+"-------------------------------------------------------------------------------
+" Install / load plugin
+"-------------------------------------------------------------------------------
+Plug 'kien/ctrlp.vim'
+Plug 'FelikZ/ctrlp-py-matcher' "faster matcher for ctrlp
+Plug 'sgur/ctrlp-extensions.vim' "provides yankring and CMDline history
+
+"-------------------------------------------------------------------------------
+" Settings
+"-------------------------------------------------------------------------------
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.pyc"
+      \ -g ""'
+" let g:ctrlp_regexp = 1
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+let g:ctrlp_prompt_mappings = {
+  \ 'PrtSelectMove("j")':   ['<c-n>', '<down>'],
+  \ 'PrtSelectMove("k")':   ['<c-p>', '<up>'],
+  \}
+"-------------------------------------------------------------------------------
+" Functions
+"-------------------------------------------------------------------------------
+"-------------------------------------------------------------------------------
+" Keybindings
+"-------------------------------------------------------------------------------
+" nmap <leader>f [ctrlp]
+" nnoremap [ctrlp] <nop>
+
+nnoremap <leader>fm :<C-u>CtrlPMixed<CR>
+nnoremap <leader>ff :<C-u>CtrlP<CR>
+nnoremap <leader>b :<C-u>CtrlPBuffer<CR>
+
+nnoremap <leader>y :<C-u>CtrlPYankring<CR>
+nnoremap <leader>u :<C-u>CtrlPUndo<CR>
+nnoremap <leader>l :<C-u>CtrlPLine<CR>

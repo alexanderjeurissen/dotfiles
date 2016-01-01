@@ -1,0 +1,101 @@
+"-------------------------------------------------------------------------------
+" Install / load plugin
+"-------------------------------------------------------------------------------
+Plug 'BlackIkeEagle/vim-colors-solarized'
+" NeoBundle 'altercation/vim-colors-solarized'
+
+"-------------------------------------------------------------------------------
+" Settings
+"-------------------------------------------------------------------------------
+if &diff
+  set wrap
+  let g:solarized_diffmode='normal'
+endif
+
+"-------------------------------------------------------------------------------
+" Functions
+"-------------------------------------------------------------------------------
+function! ActivateColorScheme()
+  colorscheme solarized
+  set background=dark
+  call SolarizeCustomization()
+endfunction
+
+function! ToggleBG()
+  if &background == "dark"
+    echom 'switching to light'
+    set background=light
+  else
+    echom 'switching to dark'
+    set background=dark
+  endif
+  exec ':highlight clear SignColumn'
+  exec ':highlight link SignColumn CursorColumn'
+endfunction
+
+function! SolarizeCustomization()
+  if has("gui_running")
+    let g:solarized_visibility = "high"
+    let g:solarized_contrast = "high"
+    let g:solarized_termtrans = 1
+
+    hi! link txtBold Identifier
+    hi! link zshVariableDef Identifier
+    hi! link zshFunction Function
+    hi! link rubyControl Statement
+    hi! link rspecGroupMethods rubyControl
+    hi! link rspecMocks Identifier
+    hi! link rspecKeywords Identifier
+    hi! link rubyLocalVariableOrMethod Normal
+    hi! link rubyStringDelimiter Constant
+    hi! link rubyString Constant
+    hi! link rubyAccess Todo
+    hi! link rubySymbol Identifier
+    hi! link rubyPseudoVariable Type
+    hi! link rubyRailsARAssociationMethod Title
+    hi! link rubyRailsARValidationMethod Title
+    hi! link rubyRailsMethod Title
+    hi! link rubyDoBlock Normal
+    hi! link MatchParen DiffText
+
+    hi! link CTagsModule Type
+    hi! link CTagsClass Type
+    hi! link CTagsMethod Identifier
+    hi! link CTagsSingleton Identifier
+
+    hi! link javascriptFuncName Type
+    hi! link jsFuncCall jsFuncName
+    hi! link javascriptFunction Statement
+    hi! link javascriptThis Statement
+    hi! link javascriptParens Normal
+    hi! link jOperators javascriptStringD
+    hi! link jId Title
+    hi! link jClass Title
+
+    hi! link sassMixinName Function
+    hi! link sassDefinition Function
+    hi! link sassProperty Type
+    hi! link htmlTagName Type
+    hi! PreProc gui=bold
+
+    let hour = strftime("%H") " Set the background light from 7am to 7pm
+    if 7 <= hour && hour < 17
+      set background=light
+      let g:airline_theme = 'sol'
+      exec ':AirlineRefresh'
+    else " Set to dark from 7pm to 7am
+      set background=light
+      let g:airline_theme = 'solarized'
+      exec ':AirlineRefresh'
+    endif
+  endif
+
+  exec ':highlight clear SignColumn'
+  exec ':highlight link SignColumn CursorColumn'
+endfunction
+
+"-------------------------------------------------------------------------------
+" Keybindings
+"-------------------------------------------------------------------------------
+"toggle background mapping
+nnoremap <F5> :call ToggleBG()<CR>

@@ -1,0 +1,10 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/Web/
+set runtimepath+=$HOME/.vim/settings/plugins/Web/
+
+runtime haml.plugin
+runtime css3Syntax.plugin
+runtime dash.plugin
+runtime rest.plugin
+

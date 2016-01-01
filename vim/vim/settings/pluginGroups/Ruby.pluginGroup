@@ -1,0 +1,11 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/Ruby/
+set runtimepath+=$HOME/.vim/settings/plugins/Ruby/
+
+runtime rubyBeautifier.plugin
+runtime rails.plugin
+runtime rubocop.plugin
+runtime bundler.plugin
+runtime rspec.plugin
+runtime cucumber.plugin
