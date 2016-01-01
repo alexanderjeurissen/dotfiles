@@ -1,0 +1,14 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/Editing/
+set runtimepath+=$HOME/.vim/settings/plugins/Editing/
+
+runtime vimover.plugin
+runtime exchange.plugin
+runtime surround.plugin
+runtime abolish.plugin
+runtime tComment.plugin
+runtime endwise.plugin
+" runtime syntastic.plugin
+runtime rainbow_parentheses.plugin
+runtime wakatime.plugin

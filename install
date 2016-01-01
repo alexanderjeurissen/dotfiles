@@ -2,6 +2,19 @@
 
 INSTALLDIR=${1:-$HOME/dotfilesTest}
 
+echo -n "Do you want to use my vim configs? [n/y]"
+read -n 1 use_vim_configs
+
+if [ "$use_vim_configs" == "y" ]; then
+  shopt -s nullglob
+  for file in $PWD/vim/*
+  do
+    file_name="."${file##*/}
+    ln -s $file $INSTALLDIR/$file_name
+  done
+fi
+echo
+
 echo -n "Do you want to use my zsh configs? [n/y]"
 read -n 1 use_zsh_configs
 
@@ -9,9 +22,41 @@ if [ "$use_zsh_configs" == "y" ]; then
   shopt -s nullglob
   for file in $PWD/zsh/*
   do
-    original_file_name=${file##*/}
-    new_file_name="."$original_file_name
-    ln -s $file $INSTALLDIR/$new_file_name
+    file_name="."${file##*/}
+    ln -s $file $INSTALLDIR/$file_name
   done
 fi
+echo
+
+# echo -n "Do you want to use my tmux configs? [n/Y]"
+# read -n 1 use_tmux_configs
+#
+# if [ "$use_tmux_configs" == "Y" ]; then
+#   ln -s $PWD/tmux $INSTALLDIR/.tmux
+#   ln -s $PWD/tmux.conf $INSTALLDIR/.tmux.conf
+# fi
+# echo
+#
+# echo -n "Do you want to use my git configs? [n/Y]"
+# read -n 1 use_git_configs
+#
+# if [ "$use_git_configs" == "Y" ]; then
+#
+#   echo "Git config settings"
+#   echo -n "Name: "
+#   read git_name
+#   echo -ne "\nEmail: "
+#   read git_email
+#
+#   cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
+#   sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
+#   sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
+#
+#   if [ ! -d $INSTALLDIR/.node-completion ]; then
+#     mkdir $INSTALLDIR/.node-completion
+#   fi
+#
+#   echo "Initializing submodules..."
+#   git submodule init && git submodule update
+# fi
 echo

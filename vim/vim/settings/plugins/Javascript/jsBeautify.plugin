@@ -1,0 +1,25 @@
+"-------------------------------------------------------------------------------
+" Install / load plugin
+"-------------------------------------------------------------------------------
+Plug 'maksimr/vim-jsbeautify', {'depends': 'beautify-web/js-beautify'} "{{{
+
+"-------------------------------------------------------------------------------
+" Settings
+"-------------------------------------------------------------------------------
+"-------------------------------------------------------------------------------
+" Functions
+"-------------------------------------------------------------------------------
+"-------------------------------------------------------------------------------
+" Keybindings
+"-------------------------------------------------------------------------------
+"for Javascript
+autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+
+"for html
+autocmd FileType html,html.javascript,eruby.html,handlebars noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType html,html.javascript,eruby.html,handlebars vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+
+"for css or scss
+autocmd FileType css,scss noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType css,scss vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>

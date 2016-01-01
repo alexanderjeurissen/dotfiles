@@ -1,0 +1,14 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/Navigation/
+set runtimepath+=$HOME/.vim/settings/plugins/Navigation/
+
+runtime signify.plugin
+runtime ag.plugin
+runtime easymotion.plugin
+" runtime nerdTreeTabs.plugin
+runtime rename.plugin
+runtime rooter.plugin
+runtime tmuxNavigator.plugin
+runtime fzf.plugin
+runtime ranger.plugin

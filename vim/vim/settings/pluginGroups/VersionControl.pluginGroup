@@ -1,0 +1,9 @@
+" set runtime path for easier loading
+" the runtime command lookups the file from
+" $HOME/.vim/settings/plugins/VersionControl/
+set runtimepath+=$HOME/.vim/settings/plugins/VersionControl/
+
+runtime fugitive.plugin
+runtime gist.plugin
+runtime webapi.plugin
+runtime extradite.plugin
