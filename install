@@ -9,6 +9,7 @@ SELECTION=(
   "$PWD/vimperator/*"
   "$PWD/linting/*"
   "$PWD/ruby/*"
+  "$PWD/bash/*"
 )
 
 # Determine what dotfiles to install
@@ -67,6 +68,13 @@ if [ "$use_ruby_configs" == "n" ]; then
 fi
 echo
 
+echo -n "Do you want to use my bash configs? [n/y]"
+read -n 1 use_bash_configs
+
+if [ "$use_bash_configs" == "n" ]; then
+  unset SELECTION[7]
+fi
+echo
 
 # Start creating symlinks
 shopt -s nullglob
