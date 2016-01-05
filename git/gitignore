@@ -1,0 +1,29 @@
+#GistID:9526183
+
+# javascript
+node_modules
+bower_components
+coverage
+dist
+.tmp
+npm-debug.log
+app/bower_components
+*.tern.project
+
+# ruby
+*.ruby-version
+.sass-cache
+.bundle
+
+#temp json output of yaml translations
+app/languages/*.json
+
+# Webstorm files
+.idea/*
+
+# vim swap files
+*.swp
+*.swo
+
+# apple temp files
+.DS_Store
