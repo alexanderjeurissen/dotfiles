@@ -1,0 +1,13 @@
+" Reset all styles first
+hi clear
+
+" Hints!
+" hi Hint						color: white; background-color: #800; border-color: ButtonShadow; font-family: Inconsolata; font-size: 12px; border-width: 0px; border-style: solid; padding 0 1px; */
+hi Hint background: -moz-linear-gradient(top, rgb(255, 247, 133), rgb(255, 197, 66)); border: 1px solid rgb(227, 190, 35); border-radius:5px; color: black; font-weight: bold; font-size: 15px; padding: 2px;
+
+"hi Hint::after				content: attr(number);
+hi HintActive				color: blue;
+hi HintElem					color: black;
+"hi HintImage				opacity: .5;
+
+" vim:set filetype=vim:
