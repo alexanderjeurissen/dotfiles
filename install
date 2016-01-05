@@ -1,62 +1,58 @@
 #!/bin/bash
 
 INSTALLDIR=${1:-$HOME/dotfilesTest}
+SELECTION=(
+  "$PWD/vim/*"
+  "$PWD/zsh/*"
+  "$PWD/tmux/*"
+  "$PWD/git/*"
+)
 
+# Determine what dotfiles to install
 echo -n "Do you want to use my vim configs? [n/y]"
 read -n 1 use_vim_configs
 
-if [ "$use_vim_configs" == "y" ]; then
-  shopt -s nullglob
-  for file in $PWD/vim/*
-  do
-    file_name="."${file##*/}
-    ln -s $file $INSTALLDIR/$file_name
-  done
+if [ "$use_vim_configs" == "n" ]; then
+  unset SELECTION[0]
 fi
 echo
 
 echo -n "Do you want to use my zsh configs? [n/y]"
 read -n 1 use_zsh_configs
 
-if [ "$use_zsh_configs" == "y" ]; then
+if [ "$use_zsh_configs" == "n" ]; then
+  unset SELECTION[1]
+fi
+echo
+
+echo -n "Do you want to use my tmux configs? [n/y]"
+read -n 1 use_tmux_configs
+
+if [ "$use_tmux_configs" == "n" ]; then
+  unset SELECTION[2]
+fi
+
+echo -n "Do you want to use my git configs? [n/y]"
+read -n 1 use_git_configs
+
+if [ "$use_git_configs" == "n" ]; then
+  unset SELECTION[0]
+fi
+echo
+
+# Start creating symlinks
+shopt -s nullglob
+for path in "${SELECTION[@]}"
+do
+  echo "processing $path"
+  echo
+
   shopt -s nullglob
-  for file in $PWD/zsh/*
+  for file in $path
   do
     file_name="."${file##*/}
     ln -s $file $INSTALLDIR/$file_name
   done
-fi
-echo
+done
 
-# echo -n "Do you want to use my tmux configs? [n/Y]"
-# read -n 1 use_tmux_configs
-#
-# if [ "$use_tmux_configs" == "Y" ]; then
-#   ln -s $PWD/tmux $INSTALLDIR/.tmux
-#   ln -s $PWD/tmux.conf $INSTALLDIR/.tmux.conf
-# fi
-# echo
-#
-# echo -n "Do you want to use my git configs? [n/Y]"
-# read -n 1 use_git_configs
-#
-# if [ "$use_git_configs" == "Y" ]; then
-#
-#   echo "Git config settings"
-#   echo -n "Name: "
-#   read git_name
-#   echo -ne "\nEmail: "
-#   read git_email
-#
-#   cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
-#   sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
-#   sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
-#
-#   if [ ! -d $INSTALLDIR/.node-completion ]; then
-#     mkdir $INSTALLDIR/.node-completion
-#   fi
-#
-#   echo "Initializing submodules..."
-#   git submodule init && git submodule update
-# fi
 echo
