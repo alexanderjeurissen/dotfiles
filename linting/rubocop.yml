@@ -1,0 +1,10 @@
+# GistID: 10715991
+
+StringLiterals:
+  EnforcedStyle: double_quotes
+  Enabled: true
+Style/ClassLength:
+  CountComments: false  # count full line comments?
+  Max: 150
+Documentation:
+  Enabled: false

@@ -7,6 +7,7 @@ SELECTION=(
   "$PWD/tmux/*"
   "$PWD/git/*"
   "$PWD/vimperator/*"
+  "$PWD/linting/*"
 )
 
 # Determine what dotfiles to install
@@ -46,6 +47,14 @@ read -n 1 use_vimperator_configs
 
 if [ "$use_vimperator_configs" == "n" ]; then
   unset SELECTION[4]
+fi
+echo
+
+echo -n "Do you want to use my linting configs? [n/y]"
+read -n 1 use_linting_configs
+
+if [ "$use_linting_configs" == "n" ]; then
+  unset SELECTION[5]
 fi
 echo
 
