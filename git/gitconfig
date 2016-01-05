@@ -1,0 +1,66 @@
+[user]
+  name = Alexander Jeurissen
+  email = alexanderjeurissen@gmail.com
+[diff]
+  tool = vim-diff-tool
+[difftool "vim-diff-tool"]
+  cmd= vimdiff $REMOTE $LOCAL
+[pager]
+  diff =
+[color]
+ ui = auto
+[alias]
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative
+  lgo = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --date=relative
+
+  d = diff
+  ;branch navigation aliases
+  ch = checkout
+  b = branch
+
+  ;rebase aliases
+  ri = rebase -i
+  r = rebase
+  rc = rebase --continue
+  ra = rebase --abort
+  rs = rebase --skip
+
+  ;merge aliases
+  m = merge
+  mc = merge --continue
+  ma = merge --abort
+
+  ; push/commit aliases
+  aa = add -A
+  unadd = reset HEAD
+  c = commit
+  p = push
+
+  ; stash aliases
+  stash = stash -u
+  sp = stash pop
+  sb = stash branch
+
+  ;files changed between two commits
+  changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
+
+[merge]
+  tool = vimdiff
+  conflictstyle = diff3
+
+# vim: set et :
+[credential]
+  helper = cache --timeout=36000
+[github]
+  user = alexanderjeurissen
+[core]
+  excludesfile = /Users/alexander/.gitignore
+  editor = vim
+[push]
+  default = current
+[difftool]
+  prompt = false
+[mergetool]
+  path = nvim
+[url "git@github.com:"]
+  insteadOf = "https://github.com/"
