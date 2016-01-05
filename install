@@ -6,6 +6,7 @@ SELECTION=(
   "$PWD/zsh/*"
   "$PWD/tmux/*"
   "$PWD/git/*"
+  "$PWD/vimperator/*"
 )
 
 # Determine what dotfiles to install
@@ -36,7 +37,15 @@ echo -n "Do you want to use my git configs? [n/y]"
 read -n 1 use_git_configs
 
 if [ "$use_git_configs" == "n" ]; then
-  unset SELECTION[0]
+  unset SELECTION[3]
+fi
+echo
+
+echo -n "Do you want to use my vimperator configs? [n/y]"
+read -n 1 use_vimperator_configs
+
+if [ "$use_vimperator_configs" == "n" ]; then
+  unset SELECTION[4]
 fi
 echo
 
