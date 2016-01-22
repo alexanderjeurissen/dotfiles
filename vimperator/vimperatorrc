@@ -72,7 +72,7 @@ set! browser.tabs.insertRelatedAfterCurrent.override=true
 " sup NSA
 set! privacy.donottrackheader.enabled=true
 set! privacy.donottrackheader.value=1
-set! privacy.trackingprotection.enabled=true
+" set! privacy.trackingprotection.enabled=false
 
 " don't check if we're the default browser
 set! browser.shell.checkDefaultBrowser=false
@@ -173,3 +173,6 @@ set! extensions.treestyletab.show.context-item-toggleFixed=false
 " no collapsing
 set! extensions.treestyletab.allowSubtreeCollapseExpand.horizontal=false
 set! extensions.treestyletab.allowSubtreeCollapseExpand.vertical=false
+
+" NoScript and forbidden things
+colorscheme fxdevtools-dark
