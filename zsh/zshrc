@@ -1,21 +1,20 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-fpath+=("/usr/local/share/zsh/site-functions")
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+export PATH="$HOME/.bin:$PATH"
 
-# source "$HOME/base16-solarized.light.sh"
+# recommended by brew doctor
+export PATH="/usr/local/bin:$PATH"
+eval "$(rbenv init - --no-rehash)"
 
-# symlink hub to git
-# eval "$(hub alias -s)"
+# minimal prompt
+autoload -U promptinit && promptinit
+prompt pure
 
-# Customize to your needs...
+# Vi mode
+bindkey -v
+
+# completions
+autoload -U compinit && compinit
+
+# aliasses
 alias rake="noglob rake"
 alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
 alias bower="noglob bower"
@@ -29,17 +28,13 @@ alias c++='c++-5'
 alias tn='tmux new -s "$(basename `pwd`)" || tmux at -t "$(basename `pwd`)"'
 alias findP='ps -ef | grep -v grep | grep '
 
-# this alias creates shortcuts for gui emacs
-alias es='/Applications/Emacs.app/Contents/MacOS/Emacs --daemon'
-alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -c -n'
-export EDITOR='/Applications/Emacs.app/Contents/MacOS/Emacs'
-
 # Aliases for common typo's
 alias cd..='cd ..'
 alias cd..l='cd .. && l'
 alias cd..ls='cd .. && ls'
 
 alias attach='tmux attach -t'
+
 # Directory aliases
 alias etf='cd ~/git/PersonalProjects/EmergencyTeamFrontend/'
 alias etb='cd ~/git/PersonalProjects/EmergencyTeamBackend/'
@@ -56,22 +51,10 @@ alias shopmob='cd /git/Hanze/ShopOfTheFuture_android'
 alias newtab='cd /git/PersonalProjects/new-tab-replacement'
 alias poc='cd ~/git/ProofOfConcepts/'
 alias resolutions='system_profiler SPDisplaysDataType |grep Resolution'
-eval $(thefuck --alias)
-# # Preferred editor for local and remote sessions
-#if [[ -n $SSH_CONNECTION ]]; then
-#  export EDITOR='vim'
-#else
-  # export EDITOR='vim'
-#fi
+
 export EDITOR="vim"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-# eval "$(rbenv init -)"
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
