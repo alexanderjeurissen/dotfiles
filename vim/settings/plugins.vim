@@ -4,7 +4,7 @@
 " |_____|_____|_____| |  __/| | |_| | (_| | | | | \__ \ |_____|_____|_____|
 "                     |_|   |_|\__,_|\__, |_|_| |_|___/
 "                                    |___/
-"
+
 " ------------------------------------------------------------------
 " Comment a Plugin group to disable a whole group, comment a runtime
 " statement within a group to disable a single plugin
