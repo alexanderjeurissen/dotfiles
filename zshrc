@@ -15,6 +15,7 @@ bindkey -v
 autoload -U compinit && compinit
 
 # aliasses
+alias l="ls -a"
 alias rake="noglob rake"
 alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
 alias bower="noglob bower"
@@ -62,15 +63,6 @@ export LANG=en_US.UTF-8
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-#Vim mode in zsh
-
-# bindkey '^P' history-beginning-search-backward
-# bindkey '^N' history-beginning-search-forward
-# bindkey '^?' backward-delete-char
-# bindkey '^h' backward-delete-char
-# bindkey '^w' backward-kill-word
-# bindkey '^r' history-incremental-search-backward
-# bindkey 'jj' vi-cmd-mode
 
 export NVM_DIR="/Users/alexander/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -78,8 +70,11 @@ export NVM_DIR="/Users/alexander/.nvm"
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
-source /usr/local/share/zsh/site-functions/_aws
+# source /usr/local/share/zsh/site-functions/_aws
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # added by travis gem
 [ -f /Users/alexander/.travis/travis.sh ] && source /Users/alexander/.travis/travis.sh
+
+# syntax highlighting
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
