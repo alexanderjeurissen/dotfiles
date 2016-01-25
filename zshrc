@@ -78,3 +78,6 @@ export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 
 # syntax highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# git aliases
+source ~/.gitaliases
