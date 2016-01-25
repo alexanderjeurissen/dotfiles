@@ -5,7 +5,6 @@ set runtimepath+=$HOME/.vim/settings/plugins/ColorSchemes/
 
 " runtime seoul256.colorscheme
 " runtime solarized.colorscheme
-runtime base16.colorscheme
+" runtime base16.colorscheme
 " runtime gruvbox.colorscheme
-
-set background=light
+  runtime gotham.colorscheme
