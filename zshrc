@@ -15,13 +15,14 @@ bindkey -v
 autoload -U compinit && compinit
 
 # aliasses
-alias l="ls -a"
+alias l="ls -1AG"
 alias rake="noglob rake"
 alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
 alias bower="noglob bower"
 alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias showDriveUsage='sudo lsof'
 alias gd='git diff'
 alias sq='sequelize'
 alias gcc='gcc-5'
