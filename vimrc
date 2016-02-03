@@ -476,49 +476,6 @@ endfun
 
   " set background=light
 
-
-"
-" Layer specific functions
-" TODO: a layer should register using following object:
-" {name:string, filetypes, callback}
-" calling register should return a UID so that the layer function can deactivate
-" itself easily etc.
-"
-
-let g:layers = []
-
-fun! RegisterLayer(layer)
-  call add(g:layers, {'text': a:layer, 'filetypes': ['*.hello'], 'callback': 'ActiveLayers'})
-endfun
-
-fun! RemoveLayer(layer)
-  let index = index(g:layers, layer)
-  call remove(g:layers, index)
-endfun
-
-
-" initialize all layers this has to take place after adding
-" all layers to the runtime using runtime commands
-" autocmd BufRead,BufNewFile *.* :call InitializeLayers()
-"
-" fun! InitializeLayers()
-"   augroup vimrcEx
-"     autocmd!
-"     for layer in g:layers
-"       for ftype in layer.filetypes
-"         autocmd BufRead,BufNewFile ftype :call eval(layer.callback)
-"       endfor
-"     endfor
-"   augroup END
-" endfun
-"
-" fun! ActiveLayers()
-"   echo "Active Layers:"
-"   for layer in g:layers
-"     echo "* " layer.text
-"   endfor
-" endfun
-
     function! PasteCode()
       set paste
       execute "normal! o\<esc>\]p"
