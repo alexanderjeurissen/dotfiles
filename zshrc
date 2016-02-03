@@ -13,6 +13,7 @@ bindkey -v
 
 # completions
 autoload -U compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # aliasses
 alias l="ls -1AG"
@@ -82,3 +83,20 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # git aliases
 source ~/.gitaliases
+
+# History options
+if [ -z "$HISTFILE" ]; then
+    HISTFILE=$HOME/.zsh_history
+fi
+
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups # ignore duplication command history list
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+setopt share_history # share command history data
