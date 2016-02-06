@@ -11,6 +11,7 @@ prompt pure
 
 # Vi mode
 bindkey -v
+export KEYTIMEOUT=1
 
 # completions
 autoload -U compinit && compinit
@@ -39,23 +40,6 @@ alias cd..ls='cd .. && ls'
 
 alias attach='tmux attach -t'
 
-# Directory aliases
-alias etf='cd ~/git/PersonalProjects/EmergencyTeamFrontend/'
-alias etb='cd ~/git/PersonalProjects/EmergencyTeamBackend/'
-alias 3feed='cd ~/git/Defacto/360-Feedback/'
-alias 3web='cd ~/git/Defacto/360WebApp/'
-alias hours='cd ~/Git/Defacto/Hours'
-alias LS='cd ~/git/Defacto/LearningSpaces'
-alias proof='cd ~/git/Defacto/proof'
-
-alias shopback='cd ~/git/Hanze/ShopOfTheFuture_backend'
-alias shopfront='cd /git/Hanze/ShopOfTheFuture_frontend'
-alias shopmob='cd /git/Hanze/ShopOfTheFuture_android'
-
-alias newtab='cd /git/PersonalProjects/new-tab-replacement'
-alias poc='cd ~/git/ProofOfConcepts/'
-alias resolutions='system_profiler SPDisplaysDataType |grep Resolution'
-
 export EDITOR="vim"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
@@ -65,7 +49,6 @@ export LANG=en_US.UTF-8
 
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
 
 export NVM_DIR="/Users/alexander/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
