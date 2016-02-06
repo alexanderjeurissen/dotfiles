@@ -5,4 +5,3 @@ set runtimepath+=$HOME/.vim/settings/plugins/WindowManagers/
 
 runtime goldenview.plugin
 " runtime dwm.plugin
-runtime tmuxline.plugin
