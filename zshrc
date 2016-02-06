@@ -1,5 +1,6 @@
 export PATH="$HOME/.bin:$PATH"
 
+
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
 eval "$(rbenv init - --no-rehash)"
@@ -100,3 +101,9 @@ setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
+
+# Go settings
+export GOPATH=$HOME/golang
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
