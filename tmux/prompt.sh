@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 export TMUX_POWERLINE_DIR_HOME="$(dirname $0)"
-export DEBUG_MODE=1 # enable this to test all segments
-export DEBUG_VCS=1 # enable this to also show the vcs segments
+export DEBUG_MODE=0 # enable this to test all segments
+export DEBUG_VCS=0 # enable this to also show the vcs segments
 source "${TMUX_POWERLINE_DIR_HOME}/config.sh"
 get_pane_width
 
