@@ -20,7 +20,13 @@ run_segment() {
 	fi
 
 	if [ -n "$branch" ]; then
-    length=20
+    local branch_length=${#branch}
+    local length=20
+
+    if [ $TMUX_PANE_WIDTH -lt 90 ]; then
+      length=15
+    fi
+
     echo "${branch:0:length}"
 	fi
 	return 0
