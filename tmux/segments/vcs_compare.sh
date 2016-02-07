@@ -51,8 +51,7 @@ __parse_git_stats() {
 	fi
 
   if [[ $ahead -gt 0 && $behind -gt 0 ]]; then
-    local diff=$(($ahead + $behind))
-    local ret="#[fg=brightgreen, bg=brightmagenta, noreverse] ⇵ #[fg=brightmagenta, bg=brightgreen] $diff "
+    local ret="#[fg=brightgreen, bg=brightmagenta, noreverse] ⇵ #[bg=brightgreen] #[fg=brightmagenta]$ahead #[fg=magenta]$behind "
   fi
 
 	echo "$ret"
