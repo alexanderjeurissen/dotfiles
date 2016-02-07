@@ -1,7 +1,6 @@
 # Prints current branch in a VCS directory if it could be detected.
 
 # Source lib to get the function get_tmux_pwd
-source "${TMUX_POWERLINE_DIR_HOME}/config.sh"
 
 branch_symbol=""
 git_colour="11"
@@ -21,14 +20,8 @@ run_segment() {
 	fi
 
 	if [ -n "$branch" ]; then
-  cols=$(tput cols)
-  length=45
-
-  if test $cols -gt 80; then
-    length=${#${branch}}
-  fi
-
-  echo "${branch:0:length}"
+    length=20
+    echo "${branch:0:length}"
 	fi
 	return 0
 }

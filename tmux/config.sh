@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+export TMUX_POWERLINE_DIR_SEGMENTS="${TMUX_POWERLINE_DIR_HOME}/segments"
+export TMUX_POWERLINE_DIR_LIB="${TMUX_POWERLINE_DIR_HOME}/lib"
+
+get_pane_width() {
+	tmux_path=$(get_tmux_cwd)
+	cd "$tmux_path"
+  local pane_width="$(tmux display-message -p -t @1 '#{pane_width}')"
+
+	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+    export TMUX_PANE_WIDTH=$(($pane_width-30))
+  else
+    export TMUX_PANE_WIDTH=$pane_width
+  fi
+}
+
 # Get the current path in the segment.
 get_tmux_cwd() {
   local env_name=$(tmux display -p "TMUXPWD_#D" | tr -d %)
@@ -44,9 +59,7 @@ segment() {
 
   # don't show output if the result is empty
   # or if the screen is small and has autohide enabled
-  cols=$(tput cols)
-
-  if [ $cols -lt $4 ]; then
+  if [ $TMUX_PANE_WIDTH -lt $4 ]; then
     local display="hidden"
   fi
 
@@ -85,9 +98,8 @@ double_segment() {
 
   # don't show output if the result is empty
   # or if the screen is small and has autohide enabled
-  cols=$(tput cols)
 
-  if [ $cols -lt $7 ]; then
+  if [ $TMUX_PANE_WIDTH -lt $7 ]; then
     local display="hidden"
   fi
 
