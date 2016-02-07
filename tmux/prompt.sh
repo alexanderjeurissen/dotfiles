@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 export TMUX_POWERLINE_DIR_HOME="$(dirname $0)"
-export DEBUG_MODE=0 # enable this to test all segments
-export DEBUG_VCS=0 # enable this to also show the vcs segments
+export DEBUG_MODE=1 # enable this to test all segments
+export DEBUG_VCS=1 # enable this to also show the vcs segments
 source "${TMUX_POWERLINE_DIR_HOME}/config.sh"
 get_pane_width
 
@@ -15,7 +15,7 @@ print_powerline() {
   # If the required PANE_WIDTH isn't met then the segment will be
   # hidden
   if [ $DEBUG_MODE -ne 1 ]; then
-    double_segment "♫" brightgreen blue "now_playing" blue brightgreen 140
+    double_segment "♫" brightgreen blue "now_playing" blue brightgreen 143
     double_segment "js" brightgreen yellow "node" yellow brightgreen 100
     double_segment "rb" brightgreen red "ruby" red brightgreen 100
     double_segment "" brightgreen brightred "vcs_branch" brightred brightgreen
