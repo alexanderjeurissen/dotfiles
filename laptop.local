@@ -1,0 +1,23 @@
+#!bin/sh
+
+brew_install_or_upgrade 'go'
+brew_install_or_upgrade 'fzf'
+brew_install_or_upgrade 'coreutils'
+brew_install_or_upgrade 'neovim'
+
+brew_install_or_upgrade 'node-build'
+brew_install_or_upgrade 'nodenv'
+
+brew_install_or_upgrade 'ranger'
+brew_install_or_upgrade 'terminal-notifier'
+
+brew_install_or_upgrade 'zsh-syntax-highlighting'
+
+fancy_echo "Cleaning up old Homebrew formulae ..."
+brew cleanup
+brew cask cleanup
+
+if [ -r "$HOME/.rcrc" ]; then
+  fancy_echo "Updating dotfiles ..."
+  rcup
+fi
