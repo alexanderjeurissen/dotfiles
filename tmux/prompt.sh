@@ -1,27 +1,32 @@
 #!/usr/bin/env bash
 
 export TMUX_POWERLINE_DIR_HOME="$(dirname $0)"
-export TMUX_POWERLINE_DIR_SEGMENTS="${TMUX_POWERLINE_DIR_HOME}/segments"
-export TMUX_POWERLINE_DIR_LIB="${TMUX_POWERLINE_DIR_HOME}/lib"
-
+export DEBUG_MODE=0 # enable this to test all segments
+export DEBUG_VCS=0 # enable this to also show the vcs segments
 source "${TMUX_POWERLINE_DIR_HOME}/config.sh"
+get_pane_width
 
 print_powerline() {
   # The format of the segments is:
 
-  # segment "segment_file_name" foreground background required_term_columns
-  # double_segment "label" fg bg "segment_filename" fg bg required_term_columns
+  # segment "segment_file_name" foreground background min_pane_width
+  # double_segment "label" fg bg "segment_filename" fg bg min_pane_width
 
-  # If the required amount of term columns isn't met then the segment will be
+  # If the required PANE_WIDTH isn't met then the segment will be
   # hidden
-  double_segment "♫" brightgreen blue "now_playing" blue brightgreen 80
-  double_segment "node" brightgreen yellow "node" yellow brightgreen 80
-  double_segment "ruby" brightgreen red "ruby" red brightgreen 80
-  double_segment "" brightgreen brightred "vcs_branch" brightred brightgreen
-  segment "vcs_compare" black black #this is kind of a hack need to refactor
-  double_segment "⊕" brightgreen green "vcs_staged" green brightgreen
-  double_segment "+" brightgreen yellow "vcs_modified" yellow brightgreen
-  double_segment "○" brightgreen white "vcs_others" white brightgreen
+  if [ $DEBUG_MODE -ne 1 ]; then
+    double_segment "♫" brightgreen blue "now_playing" blue brightgreen 140
+    double_segment "js" brightgreen yellow "node" yellow brightgreen 100
+    double_segment "rb" brightgreen red "ruby" red brightgreen 100
+    double_segment "" brightgreen brightred "vcs_branch" brightred brightgreen
+    segment "vcs_compare" black black #this is kind of a hack need to refactor
+    double_segment "⊕" brightgreen green "vcs_staged" green brightgreen
+    double_segment "+" brightgreen yellow "vcs_modified" yellow brightgreen
+    double_segment "○" brightgreen white "vcs_other" white brightgreen
+  else
+    source "${TMUX_POWERLINE_DIR_HOME}/debug_prompt.sh"
+  fi
+
   exit 0
 }
 
