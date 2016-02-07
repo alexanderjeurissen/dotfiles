@@ -4,6 +4,7 @@ export PATH="$HOME/.bin:$PATH"
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
 eval "$(rbenv init - --no-rehash)"
+eval "$(nodenv init - --no-rehash)"
 
 # minimal prompt
 autoload -U promptinit && promptinit
@@ -31,6 +32,7 @@ alias sq='sequelize'
 alias gcc='gcc-5'
 alias c++='c++-5'
 alias tn='tmux new -s "$(basename `pwd`)" || tmux at -t "$(basename `pwd`)"'
+alias attach='tmux attach -t'
 alias findP='ps -ef | grep -v grep | grep '
 
 # Aliases for common typo's
@@ -38,26 +40,23 @@ alias cd..='cd ..'
 alias cd..l='cd .. && l'
 alias cd..ls='cd .. && ls'
 
-alias attach='tmux attach -t'
-
+# set vim as defaut editory
 export EDITOR="vim"
 
+# rbenv and nodeenv init
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-export NVM_DIR="/Users/alexander/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
-# source /usr/local/share/zsh/site-functions/_aws
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # added by travis gem
 [ -f /Users/alexander/.travis/travis.sh ] && source /Users/alexander/.travis/travis.sh
@@ -85,8 +84,3 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
 
-# Go settings
-export GOPATH=$HOME/golang
-export GOROOT=/usr/local/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
