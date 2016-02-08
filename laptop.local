@@ -26,12 +26,31 @@ brew cask install slack
 brew cask install teensy
 # brew cask install rescuetime
 
+# Setup ssh for git
+terminal-notifier -title "waiting.." -message "laptop script is waiting for user interaction in order to continue" -sound "default"
+ssh-keygen -t rsa -b 4096 -C "alexanderjeurissen@gmail.com"
+pbcopy < ~/.ssh/id_rsa.pub
+open https://github.com/settings/ssh
+
+# Clone dotfiles
+fancy_echo "Have you configured ssh on github ? ready to clone dotfiles ?"
+read continue
+git clone git@github.com:alexanderjeurissen/dotfiles.git
+
 # Finish installation and cleanup
 fancy_echo "Cleaning up old Homebrew formulae ..."
 brew cleanup
 brew cask cleanup
 
-if [ -r "$HOME/.rcrc" ]; then
+if [ -r "$HOME/.dotfiles" ]; then
   fancy_echo "Updating dotfiles ..."
   rcup
+else
+  fancy_echo "Dotfiles directory not found trying to clone using https"
+  git clone https://github.com/alexanderjeurissen/dotfiles.git
+  if [ -r "$HOME/.dotfiles" ]; then
+    rcup
+  else
+    fancy_echo "dotfiles still not found, giving up try cloning manually"
+  fi
 fi
