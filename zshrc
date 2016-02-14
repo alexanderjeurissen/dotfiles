@@ -5,6 +5,8 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 eval "$(rbenv init - --no-rehash)"
 eval "$(nodenv init - --no-rehash)"
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
 
 # minimal prompt
 autoload -U promptinit && promptinit
@@ -27,7 +29,6 @@ alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias showDriveUsage='sudo lsof'
-alias gd='git diff'
 alias sq='sequelize'
 alias gcc='gcc-5'
 alias c++='c++-5'
@@ -39,6 +40,9 @@ alias findP='ps -ef | grep -v grep | grep '
 alias cd..='cd ..'
 alias cd..l='cd .. && l'
 alias cd..ls='cd .. && ls'
+
+#H1 aliase
+alias start_db="pg_ctl -D ./tmp/postgres -l logfile start"
 
 # set vim as defaut editory
 export EDITOR="vim"
@@ -84,3 +88,33 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
 
+export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+
+
+# FZF
+# COLOR:
+#     fg      Text
+#     bg      Background
+#     hl      Highlighted substrings
+#     fg+     Text (current line)
+#     bg+     Background (current line)
+#     hl+     Highlighted substrings (current line)
+#     info    Info
+#     prompt  Prompt
+#     pointer Pointer to the current line
+#     marker  Multi-select marker
+#     spinner Streaming input indicator
+#     header  Header
+
+# export FZF_DEFAULT_OPTS='
+# --color fg:7,bg:0,hl:136,fg+:7,bg+:2,hl+:2
+# --color info:7,prompt:7,spinner:7,pointer:167,marker:255,header:33
+# '
+export FZF_DEFAULT_OPTS='
+  --color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
+  --color info:183,prompt:110,spinner:107,pointer:167,marker:215
+'
+
+# export FZF_DEFAULT_OPTS='
+#   --color=dark
+# '
