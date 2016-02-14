@@ -6,7 +6,7 @@
 [difftool "vim-diff-tool"]
   cmd= vimdiff $REMOTE $LOCAL
 [pager]
-  diff =
+  diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
  ui = auto
 [alias]
@@ -56,11 +56,12 @@
 [core]
   excludesfile = /Users/alexander/.gitignore
   editor = vim
+	pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
 [difftool]
   prompt = false
 [mergetool]
-  path = nvim
+  path = vim
 [url "git@github.com:"]
   insteadOf = "https://github.com/"
