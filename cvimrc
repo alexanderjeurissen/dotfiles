@@ -1,0 +1,33 @@
+" load config file from dotfiles dir
+let configpath = "/Users/alexanderjeurissen/cvimrc"
+set localconfig  " use localconfig file, i want cvimrc in dotfiles not gists..
+
+" Position bar at bottom like vimperator
+let barposition = "bottom"
+
+
+" Use <C-d> and <C-u> to scroll like in vimperator
+map <C-u> scrollPageUp
+map <C-d> scrollPageDown
+
+" Use d for closing tab and u for undo close tab
+" like in vimperator
+unmap d
+unmap u
+map d closeTab
+map u lastClosedTab
+
+" Copy url with y
+map y yankDocumentUrl
+
+" reverse bookmark / buffer binding
+map b :buffer<Space>
+map B :bookmarks<Space>
+
+" Add default tab navigation
+map <C-n> nextTab
+map <C-p> previousTab
+
+
+set smoothscroll " smoothscroll please
+set noautofocus  " don't autofocus those input fields..
