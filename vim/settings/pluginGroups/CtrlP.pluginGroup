@@ -3,4 +3,4 @@
 " $HOME/.vim/settings/plugins/CtrlP/
 set runtimepath+=$HOME/.vim/settings/plugins/CtrlP/
 
-" runtime ctrlp.plugin
+runtime ctrlp.plugin
