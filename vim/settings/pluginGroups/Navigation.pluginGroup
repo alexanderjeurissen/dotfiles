@@ -10,5 +10,5 @@ runtime easymotion.plugin
 runtime rename.plugin
 runtime rooter.plugin
 runtime tmuxNavigator.plugin
-runtime fzf.plugin
+" runtime fzf.plugin
 runtime ranger.plugin
