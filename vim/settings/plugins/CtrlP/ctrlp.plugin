@@ -24,8 +24,10 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 let g:ctrlp_prompt_mappings = {
-  \ 'PrtSelectMove("j")':   ['<c-n>', '<down>'],
-  \ 'PrtSelectMove("k")':   ['<c-p>', '<up>'],
+  \ 'PrtSelectMove("j")':   ['<c-n>'],
+  \ 'PrtSelectMove("k")':   ['<c-p>'],
+  \ 'PrtHistory(-1)':       ['<down>'],
+  \ 'PrtHistory(1)':        ['<up>'],
   \}
 "-------------------------------------------------------------------------------
 " Functions

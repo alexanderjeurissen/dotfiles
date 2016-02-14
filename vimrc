@@ -137,7 +137,7 @@ endif
 if has('nvim')
   " fix issue where <c-h> would result in <BS>
   " issue: neovim/issues/2048
-     " nmap <BS> <C-W>h
+     " nmap <BS> C-W>h
   nmap <bs> :<c-u>TmuxNavigateLeft<cr>
 endif
 

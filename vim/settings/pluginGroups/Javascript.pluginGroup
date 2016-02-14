@@ -11,4 +11,5 @@ runtime ember.plugin
 runtime javascript.plugin
 runtime jsx.plugin
 runtime ember_tests.plugin
+runtime coffeeScript.plugin
 " runtime es6.plugin
