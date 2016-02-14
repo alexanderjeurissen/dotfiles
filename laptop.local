@@ -4,7 +4,9 @@
 brew_install_or_upgrade 'go'
 brew_install_or_upgrade 'fzf'
 brew_install_or_upgrade 'coreutils'
-brew_install_or_upgrade 'neovim'
+brew_install_or_upgrade 'python3'
+
+brew_install_or_upgrade 'vim' --with-cscope --with-lua --with-python3 --with-ruby
 
 brew_install_or_upgrade 'node-build'
 brew_install_or_upgrade 'nodenv'
@@ -25,6 +27,8 @@ brew cask install lastpass
 brew cask install slack
 brew cask install teensy
 # brew cask install rescuetime
+
+npm install --global pure-prompt
 
 # Setup ssh for git
 terminal-notifier -title "waiting.." -message "laptop script is waiting for user interaction in order to continue" -sound "default"
