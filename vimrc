@@ -63,7 +63,7 @@ set completeopt=menu
 set mousemodel=popup
 
 " Characters to fill the statuslines and vertical separators.
-set fillchars=vert:¦
+set fillchars=vert:│
 
 " unknown
 set cc=+1,+2
@@ -71,7 +71,7 @@ set cc=+1,+2
 " Strings to use in 'list' mode and for the |:list| command.
 set list
 " set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,eol:¬
-set listchars=tab:▸\ ,trail:-,extends:>,precedes:<
+set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,eol:¬
 
 " location to store tags
 set tags=./tags
@@ -134,6 +134,10 @@ if !has("gui_running") && !has('nvim')
   " let base16colorspace=256
 endif
 
+if has("gui_running")
+  set guifont=Operator\ Mono\ Light\ for\ Powerline:h18
+endif
+
 if has('nvim')
   " fix issue where <c-h> would result in <BS>
   " issue: neovim/issues/2048
@@ -178,9 +182,13 @@ augroup vimrcEx
   " Automatically remove trailing whitespaces
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
+  " Add vim highlighting when editing plugin files
   autocmd BufRead,BufNewFile *.plugin set filetype=vim
   autocmd BufRead,BufNewFile *.plugingroup set filetype=vim
   autocmd BufRead,BufNewFile *.colorscheme set filetype=vim
+
+  " Add coffeescript highlighting to coffee.cjsx files
+  autocmd BufRead,BufNewFile *.coffee.cjsx set filetype=coffee.html
 
   " Enable omni completion.
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -459,6 +467,8 @@ endfun
   nnoremap <leader>v  :vsplit $MYVIMRC<CR>
   nnoremap <leader>gv  :vsplit $MYGVIMRC<CR>
   nnoremap <leader>vr :source $MYVIMRC<CR>
+  nnoremap <leader>vs  :e /tmp/scratchpad
+  command! Scratchpad  :e /tmp/scratchpad
 
   noremap <leader>n :call RenameFile()<CR>
 
