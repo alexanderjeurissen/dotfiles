@@ -1,10 +1,5 @@
-" load config file from dotfiles dir
-let configpath = "/Users/alexanderjeurissen/cvimrc"
-set localconfig  " use localconfig file, i want cvimrc in dotfiles not gists..
-
 " Position bar at bottom like vimperator
 let barposition = "bottom"
-
 
 " Use <C-d> and <C-u> to scroll like in vimperator
 map <C-u> scrollPageUp
@@ -18,7 +13,7 @@ map d closeTab
 map u lastClosedTab
 
 " Copy url with y
-map y yankDocumentUrl
+map yy yankDocumentUrl
 
 " reverse bookmark / buffer binding
 map b :buffer<Space>
