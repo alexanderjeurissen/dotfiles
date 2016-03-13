@@ -41,7 +41,9 @@ let g:ctrlp_prompt_mappings = {
 nnoremap <leader>fm :<C-u>CtrlPMixed<CR>
 nnoremap <leader>ff :<C-u>CtrlP<CR>
 nnoremap <leader>b :<C-u>CtrlPBuffer<CR>
+nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 
 nnoremap <leader>y :<C-u>CtrlPYankring<CR>
 nnoremap <leader>u :<C-u>CtrlPUndo<CR>
 nnoremap <leader>l :<C-u>CtrlPLine<CR>
+
