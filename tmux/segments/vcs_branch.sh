@@ -2,7 +2,7 @@
 
 # Source lib to get the function get_tmux_pwd
 
-branch_symbol=""
+branch_symbol="⎇"
 git_colour="11"
 svn_colour="220"
 hg_colour="45"
