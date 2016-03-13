@@ -34,7 +34,7 @@ function! ToggleBG()
 endfunction
 
 function! SolarizeCustomization()
-  if has("gui_running")
+  " if has("gui_running")
     let g:solarized_visibility = "high"
     let g:solarized_contrast = "high"
     let g:solarized_termtrans = 1
@@ -81,14 +81,14 @@ function! SolarizeCustomization()
     let hour = strftime("%H") " Set the background light from 7am to 7pm
     if 7 <= hour && hour < 17
       set background=light
-      let g:airline_theme = 'sol'
+      let g:airline_theme = 'solarized'
       exec ':AirlineRefresh'
     else " Set to dark from 7pm to 7am
       set background=light
       let g:airline_theme = 'solarized'
       exec ':AirlineRefresh'
     endif
-  endif
+  " endif
 
   exec ':highlight clear SignColumn'
   exec ':highlight link SignColumn CursorColumn'
