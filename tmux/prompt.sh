@@ -16,9 +16,9 @@ print_powerline() {
   # hidden
   if [ $DEBUG_MODE -ne 1 ]; then
     double_segment "♫" brightgreen blue "now_playing" blue brightgreen 143
-    double_segment "js" brightgreen yellow "node" yellow brightgreen 100
-    double_segment "rb" brightgreen red "ruby" red brightgreen 100
-    double_segment "" brightgreen brightred "vcs_branch" brightred brightgreen
+    double_segment "js" brightgreen yellow "node" yellow brightgreen 113
+    double_segment "rb" brightgreen red "ruby" red brightgreen 113
+    double_segment "⎇" brightgreen brightred "vcs_branch" brightred brightgreen
     segment "vcs_compare" black black #this is kind of a hack need to refactor
     double_segment "⊕" brightgreen green "vcs_staged" green brightgreen
     double_segment "+" brightgreen yellow "vcs_modified" yellow brightgreen
