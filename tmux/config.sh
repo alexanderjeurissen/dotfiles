@@ -4,14 +4,15 @@ export TMUX_POWERLINE_DIR_SEGMENTS="${TMUX_POWERLINE_DIR_HOME}/segments"
 export TMUX_POWERLINE_DIR_LIB="${TMUX_POWERLINE_DIR_HOME}/lib"
 
 get_pane_width() {
-	tmux_path=$(get_tmux_cwd)
-	cd "$tmux_path"
-  local pane_width="$(tmux display-message -p -t @1 '#{pane_width}')"
+  tmux_path=$(get_tmux_cwd)
+  cd "$tmux_path"
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
-    export TMUX_PANE_WIDTH=$(($pane_width-30))
+  local pane_width="$(tmux display-message -p '#{pane_width}')"
+
+  if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+   export TMUX_PANE_WIDTH=$(($pane_width-30))
   else
-    export TMUX_PANE_WIDTH=$pane_width
+   export TMUX_PANE_WIDTH=$pane_width
   fi
 }
 
@@ -79,6 +80,7 @@ double_segment() {
   local segment="$4"
   local seg_fg="$5"
   local seg_bg="$6"
+  local collapse_width="$7"
 
   local output="#[fg=${label_fg}, bg=${label_bg}, noreverse] ${label} "
 
@@ -92,7 +94,7 @@ double_segment() {
 
   # Show error when exit code != 0
   if [ "$exit_code" -ne 0 ]; then
-    echo "Segment '${segment_name}' exited with code ${exit_code}. Aborting."
+    echo "Segment '${segment}' exited with code ${exit_code}. Aborting."
     exit 1
   fi
 
