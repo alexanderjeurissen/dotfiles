@@ -5,7 +5,7 @@ set runtimepath+=$HOME/.vim/settings/plugins/AutoCompletion
 
 runtime vimAddonMwUtils.plugin
 runtime tlib.plugin
-runtime emmet.plugin
+" runtime emmet.plugin
 runtime repeat.plugin
 runtime neocomplete.plugin
 runtime ultisnips.plugin
