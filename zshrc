@@ -22,7 +22,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # aliasses
 alias l="ls -1AG"
-alias rake="noglob rake"
+alias rake="noglob bundle exec rake"
 alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
 alias bower="noglob bower"
 alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
@@ -36,14 +36,18 @@ alias tn='tmux new -s "$(basename `pwd`)" || tmux at -t "$(basename `pwd`)"'
 alias attach='tmux attach -t'
 alias findP='ps -ef | grep -v grep | grep '
 
+# Create nginx conf for current git repo
+alias devlink='nginx_setup'
+alias sites='ranger $(brew --prefix)/etc/nginx/sites/'
 # Aliases for common typo's
 alias cd..='cd ..'
 alias cd..l='cd .. && l'
 alias cd..ls='cd .. && ls'
 
-#H1 aliase
-alias start_db="pg_ctl -D ./tmp/postgres -l logfile start"
 
+#H1 aliases
+alias start_db="pg_ctl -D ./tmp/postgres -l logfile start"
+alias h1="cd ~/git/hackerone/"
 # set vim as defaut editory
 export EDITOR="vim"
 
@@ -115,6 +119,11 @@ export FZF_DEFAULT_OPTS='
   --color info:183,prompt:110,spinner:107,pointer:167,marker:215
 '
 
-# export FZF_DEFAULT_OPTS='
-#   --color=dark
-# '
+nginx_setup() {
+  local dest=$(brew --prefix)/etc/nginx/sites/$(basename `pwd`).conf
+
+  $(cp ~/.dotfiles/nginx/template.conf $dest)
+  $(sed -ie "s/APP_NAME/$(basename `PWD`)/g" $dest)
+  $(sed -ie "s@APP_PATH@$PWD@g" $dest)
+  $(sudo nginx -s reload)
+}
