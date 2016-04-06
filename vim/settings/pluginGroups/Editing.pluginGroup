@@ -10,5 +10,6 @@ runtime abolish.plugin
 runtime tComment.plugin
 runtime endwise.plugin
 " runtime syntastic.plugin
+runtime syntasticarc.plugin
 runtime rainbow_parentheses.plugin
 runtime wakatime.plugin

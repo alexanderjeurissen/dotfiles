@@ -20,7 +20,6 @@ set runtimepath+=$HOME/.vim/settings/pluginGroups
 
  runtime AutoCompletion.pluginGroup
  runtime Core.pluginGroup
- runtime CtrlP.pluginGroup
  runtime Editing.pluginGroup
  runtime Indentation.pluginGroup
  runtime Javascript.pluginGroup
