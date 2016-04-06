@@ -15,9 +15,13 @@ brew_install_or_upgrade 'ranger'
 brew_install_or_upgrade 'terminal-notifier'
 brew_install_or_upgrade 'zsh-syntax-highlighting'
 
-# Apps
+# Apps using brew cask
 brew cask install firefox
-brew cask install google-chrome
+
+# Fixes bug where 1password wo'n work with brew cask google-chrome
+# https://twitter.com/jsser/status/532587663279157248
+brew cask install --caskroom=/Applications google-chrome --devel
+
 brew cask install amethyst
 brew cask install dash
 brew cask install alfred
@@ -26,9 +30,12 @@ brew cask install karabiner
 brew cask install lastpass
 brew cask install slack
 brew cask install teensy
-# brew cask install rescuetime
 
+# Node packages
 npm install --global pure-prompt
+
+# Ruby gems
+gem install awesome_print
 
 # Setup ssh for git
 terminal-notifier -title "waiting.." -message "laptop script is waiting for user interaction in order to continue" -sound "default"
