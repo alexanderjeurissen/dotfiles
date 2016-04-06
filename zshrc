@@ -1,5 +1,7 @@
 export PATH="$HOME/.bin:$PATH"
 
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=screen-256color
 
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
@@ -32,22 +34,32 @@ alias showDriveUsage='sudo lsof'
 alias sq='sequelize'
 alias gcc='gcc-5'
 alias c++='c++-5'
-alias tn='tmux new -s "$(basename `pwd`)" || tmux at -t "$(basename `pwd`)"'
+alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
 alias attach='tmux attach -t'
 alias findP='ps -ef | grep -v grep | grep '
 
 # Create nginx conf for current git repo
 alias devlink='nginx_setup'
 alias sites='ranger $(brew --prefix)/etc/nginx/sites/'
+
 # Aliases for common typo's
 alias cd..='cd ..'
 alias cd..l='cd .. && l'
 alias cd..ls='cd .. && ls'
 
+# Aliases for foreman
+#
+alias startServices="tmux new-window -n 'Services' 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read'"
+alias startBackend="tmux new-window -n 'Backend' 'foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; read'"
+alias startBackend_test="tmux new-window -n 'Backend' 'foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; exec bash'"
+alias startFrontend="tmux new-window -n 'Frontend' 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read'"
+alias startAll="startServices & startBackend & startFrontend"
 
-#H1 aliases
-alias start_db="pg_ctl -D ./tmp/postgres -l logfile start"
 alias h1="cd ~/git/hackerone/"
+
+# Alias for clearing the screen
+alias clearScreen="clear && printf '\e[3J'"
+
 # set vim as defaut editory
 export EDITOR="vim"
 
@@ -93,31 +105,6 @@ setopt inc_append_history
 setopt share_history # share command history data
 
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
-
-
-# FZF
-# COLOR:
-#     fg      Text
-#     bg      Background
-#     hl      Highlighted substrings
-#     fg+     Text (current line)
-#     bg+     Background (current line)
-#     hl+     Highlighted substrings (current line)
-#     info    Info
-#     prompt  Prompt
-#     pointer Pointer to the current line
-#     marker  Multi-select marker
-#     spinner Streaming input indicator
-#     header  Header
-
-# export FZF_DEFAULT_OPTS='
-# --color fg:7,bg:0,hl:136,fg+:7,bg+:2,hl+:2
-# --color info:7,prompt:7,spinner:7,pointer:167,marker:255,header:33
-# '
-export FZF_DEFAULT_OPTS='
-  --color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
-  --color info:183,prompt:110,spinner:107,pointer:167,marker:215
-'
 
 nginx_setup() {
   local dest=$(brew --prefix)/etc/nginx/sites/$(basename `pwd`).conf
