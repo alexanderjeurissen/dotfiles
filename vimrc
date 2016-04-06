@@ -158,8 +158,8 @@ augroup vimrcEx
 
   " Automatically wrap at 80 characters for Markdown, ruby, css and coffescript
   autocmd BufRead,BufNewFile *.md setlocal textwidth=80
-  autocmd BufRead,BufNewFile *.erb setlocal textwidth=80
-  autocmd BufRead,BufNewFile *.rb setlocal textwidth=80
+  autocmd BufRead,BufNewFile *.erb setlocal textwidth=100
+  autocmd BufRead,BufNewFile *.rb setlocal textwidth=100
   autocmd BufRead,BufNewFile *.css setlocal textwidth=80
   autocmd BufRead,BufNewFile *.coffee setlocal textwidth=80
 
@@ -179,7 +179,7 @@ augroup vimrcEx
   " Add javascript highlighting when editing ecmascript 6 files
   autocmd BufRead,BufNewFile *.es6 setfiletype javascript
 
-  " Automatically remove trailing whitespaces
+  " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
   " Add vim highlighting when editing plugin files
@@ -275,8 +275,15 @@ function! Preserve(command)
   let _s=@/
   let l = line(".")
   let c = col(".")
-  " Do the business:
-  execute a:command
+
+  " Do the business unless filetype is blacklisted
+
+  let blacklist = ['sql']
+
+  if index(blacklist, &ft) < 0
+    execute a:command
+  endif
+
   " Clean up: restore previous search history, and cursor position
   let @/=_s
   call cursor(l, c)
@@ -318,6 +325,22 @@ fun! Ranger()
   silent call system('rm -rf ' . tmpfile)
   return result
 endfun
+
+function! s:ArcLint(args)
+    let olderrorformat = &errorformat
+    let oldmakeprg = &makeprg
+
+    set errorformat=%f:%l:%m
+    let &makeprg="arc lint --output compiler ".a:args
+    silent make
+    redraw!
+
+    let &errorformat = olderrorformat
+    let &makeprg = oldmakeprg
+    copen
+endfunction
+
+command! -nargs=* ArcLint call s:ArcLint("<args>")
 
   "                                                              _
   "  _____ _____ _____ _____ _____   _ __ ___   __ _ _ __  _ __ (_)_ __   __ _ ___   _____ _____ _____ _____ _____
@@ -414,7 +437,7 @@ endfun
   nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
 
   "Ranger mapping
-  nnoremap <leader>r :call Ranger()<CR>
+  nnoremap <leader>fe :call Ranger()<CR>
 
   "Replace mappings
   nnoremap <leader>rl 0:s/
