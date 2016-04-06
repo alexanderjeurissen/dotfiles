@@ -44,16 +44,16 @@ endfunction
 " Keybindings
 "-------------------------------------------------------------------------------
 " 1. split to tiled windows
-nnoremap <silent> <leader>vs :call DWM_New()<CR>
+nnoremap <silent> <leader>wv :call DWM_New()<CR>
 
 " 2. close dwm windows
-nnoremap <silent> <Leader>q :call DWM_Close_AND_Fix()<CR>
+nnoremap <silent> <Leader>wc :call DWM_Close_AND_Fix()<CR>
 
 " 3. quickly switch current window with the main pane and toggle backupdir
-nnoremap <silent> <leader>vm :call DWM_Focus()<CR>
+nnoremap <silent> <leader>wt :call DWM_Focus()<CR>
 
 " 4. jump to next and previous window
 " map <silent><C-H> <C-W>W
 " map <expr><C-L> winnr("$") == 1 ? ":call DWM_Split()\<CR>" : "\<C-W>w"
-nnoremap <silent><C-L> :call DWM_Rotate(1)<CR>
-nnoremap <silent><C-H> :call DWM_Rotate(0)<CR>
+nnoremap <silent> <leader>wl :call DWM_Rotate(1)<CR>
+nnoremap <silent> <leader>wh :call DWM_Rotate(0)<CR>

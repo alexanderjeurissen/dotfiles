@@ -4,6 +4,7 @@
 Plug 'kien/ctrlp.vim'
 Plug 'FelikZ/ctrlp-py-matcher' "faster matcher for ctrlp
 Plug 'sgur/ctrlp-extensions.vim' "provides yankring and CMDline history
+Plug 'iurifq/ctrlp-rails.vim' "provides rails.vim modes
 
 "-------------------------------------------------------------------------------
 " Settings
@@ -16,7 +17,9 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
       \ --ignore .DS_Store
       \ --ignore "**/*.pyc"
       \ -g ""'
+
 " let g:ctrlp_regexp = 1
+"
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll)$',
@@ -47,3 +50,10 @@ nnoremap <leader>y :<C-u>CtrlPYankring<CR>
 nnoremap <leader>u :<C-u>CtrlPUndo<CR>
 nnoremap <leader>l :<C-u>CtrlPLine<CR>
 
+" CtrlP-Rails.vim bindings
+nnoremap <leader>rm :<C-u>CtrlPModels<CR>
+nnoremap <leader>rmi :<C-u>CtrlPMigrations<CR>
+nnoremap <leader>rc :<C-u>CtrlPControllers<CR>
+nnoremap <leader>rv :<C-u>CtrlPViews<CR>
+nnoremap <leader>rs :<C-u>CtrlPSpecs<CR>
+nnoremap <leader>rl :<C-u>CtrlPLibs<CR>

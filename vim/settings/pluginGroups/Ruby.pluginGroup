@@ -3,9 +3,11 @@
 " $HOME/.vim/settings/plugins/Ruby/
 set runtimepath+=$HOME/.vim/settings/plugins/Ruby/
 
-runtime rubyBeautifier.plugin
-runtime rails.plugin
-runtime rubocop.plugin
 runtime bundler.plugin
-runtime rspec.plugin
 runtime cucumber.plugin
+runtime rails.plugin
+runtime rspec.plugin
+runtime rspec_snippets.plugin
+runtime rubocop.plugin
+runtime ruby.plugin
+runtime ruby_beautifier.plugin
