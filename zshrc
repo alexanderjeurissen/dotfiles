@@ -61,7 +61,7 @@ alias h1="cd ~/git/hackerone/"
 alias clearScreen="clear && printf '\e[3J'"
 
 # set vim as defaut editory
-export EDITOR="vim"
+export EDITOR="nvim"
 
 # rbenv and nodeenv init
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
@@ -86,6 +86,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # git aliases
 source ~/.gitaliases
+changedfiles = "git diff --name-only | uniq | xargs nvim"
 
 # History options
 if [ -z "$HISTFILE" ]; then
