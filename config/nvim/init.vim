@@ -116,10 +116,6 @@ set clipboard=unnamed
 highlight TermCursor ctermfg=red guifg=red
 tnoremap <Leader>wc <C-\><C-n>
 
-for dir in ["h", "j", "l", "k"]
-    call s:mapMoveToWindowInDirection(dir)
-endfor
-
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
@@ -147,6 +143,8 @@ if has('nvim')
   " issue: neovim/issues/2048
      " nmap <BS> <C-W>h
   nmap <bs> :<c-u>TmuxNavigateLeft<cr>
+  let python_host_prog = "python3"
+  runtime! plugin/python_setup.vim
 endif
 
 " }}}
@@ -431,32 +429,6 @@ fun! WriteSession()
   echo "Wrote " . fname
 endfun
 
-" Use ranger as vim file manager
-fun! Ranger()
-  let tmpfile = tempname()
-  if a:0 > 0 && a:1 != ""
-    let dir = a:1
-  elseif expand("%")
-    let dir = "."
-  else
-    let dir = expand("%:p:h")
-  endif
-
-  exe 'silent !ranger --choosefile='.tmpfile dir
-  if filereadable(tmpfile)
-    exe 'edit' readfile(tmpfile)[0]
-    call delete(tmpfile)
-  endif
-  redraw!
-
-  let result = 0
-  if filereadable(tmpfile)
-      silent let result = system('cat '. tmpfile)
-  endif
-  silent call system('rm -rf ' . tmpfile)
-  return result
-endfun
-
 function! s:ArcLint(args)
     let olderrorformat = &errorformat
     let oldmakeprg = &makeprg
@@ -495,6 +467,10 @@ func! s:mapMoveToWindowInDirection(direction)
     execute "nnoremap" "<silent>" "<leader>w" . a:direction . ""
                 \ " :call <SID>maybeInsertMode(\"" . a:direction . "\")<CR>"
 endfunc
+
+for dir in ["h", "j", "l", "k"]
+    call s:mapMoveToWindowInDirection(dir)
+endfor
 
 " }}}
 " ==============================================================================
@@ -556,7 +532,7 @@ endif
       \}
     " }}}
   endif "}}}
-  Plug 'Shougo/neocomplete'
+  " Plug 'Shougo/neocomplete'
   if has_key(g:plugs, 'neocomplete') "{{{
     " Settings {{{
       let g:acp_enableAtStartup = 0
@@ -595,7 +571,7 @@ endif
   endif "}}}
   Plug 'tpope/vim-repeat'
   Plug 'tomtom/tlib_vim'
-  Plug 'SirVer/ultisnips'
+  " Plug 'SirVer/ultisnips'
   if has_key(g:plugs, 'ultisnips') "{{{
     " Settings {{{
       " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -787,7 +763,8 @@ endif
   endif "}}}
 
   Plug 'tpope/vim-sensible'
-  " Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-dispatch'
+  Plug 'radenling/vim-dispatch-neovim'
   Plug 'MarcWeber/vim-addon-local-vimrc'
 " }}}
 " ------------------------------------------------------------------------------
@@ -979,7 +956,7 @@ endif
     " }}}
 
     " Keybindings {{{
-      nnoremap <silent> <leader>f :<C-u>Files<CR>
+      nnoremap <silent> <leader>fm :<C-u>Files<CR>
       nnoremap <silent> <leader>b :<C-u>Buffers<CR>
       nnoremap <silent> <leader>s :<C-u>Windows<CR>
       nnoremap <silent> <leader>; :<C-u>BLines<CR>
@@ -1013,17 +990,23 @@ endif
     " }}}
   endif "}}}
 
-  Plug 'airodactyl/neovim-ranger'
-  if has_key(g:plugs, 'neovim-ranger') "{{{
+  Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye'
+  if has_key(g:plugs, 'ranger.vim') "{{{
     " Keybindings {{{
-      nnoremap <silent> <leader>fe <C-u>:split .<cr><c-w>J<cr>
+      nnoremap <silent> <leader>fe <C-u>:call OpenRanger()<CR>
     " }}}
   endif "}}}
-
   Plug 'danro/rename.vim'
   Plug 'airblade/vim-rooter'
   Plug 'mhinz/vim-signify'
   Plug 'christoomey/vim-tmux-navigator'
+  " Plug 'scrooloose/nerdtree'
+  if has_key(g:plugs, 'nerdtree') "{{{
+    let NERDTreeCascadeOpenSingleChildDir=1
+    let NERDTreeQuitOnOpen=1
+    nnoremap <leader>fe :NERDTreeFind<cr>
+  endif "}}}
+
 " }}}
 " ------------------------------------------------------------------------------
 
