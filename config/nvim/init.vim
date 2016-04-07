@@ -1,4 +1,3 @@
-" vim: set foldmethod=marker
 "
      " E      888                                             888                  d88b
     " d8b     888  e88~~8e  Y88b  /    /~~~8e  888-~88e  e88~\888  e88~~8e  888-~\ Y88P  d88~\
@@ -285,7 +284,7 @@ command! PasteCode call s:PasteCode()
 
 " Automatically remove trailing whitespaces unless file is blacklisted
 autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
-
+autocmd BufRead init.vim set foldmethod=marker
 autocmd FileType gitcommit setlocal textwidth=70
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
@@ -295,6 +294,58 @@ autocmd BufReadPost *
       \   exe "normal g`\"" |
       \ endif
 
+augroup vimrcEx
+  autocmd!
+  " Set syntax highlighting for specific file types
+  autocmd BufRead,BufNewFile Appraisals set filetype=ruby
+  autocmd BufRead,BufNewFile *.md set filetype=markdown
+  autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+
+  " Enable spellchecking for Markdown and git commit
+  autocmd FileType markdown setlocal spell
+  autocmd FileType gitcommit setlocal spell
+
+  " Automatically wrap at 80 characters for Markdown, ruby, css and coffescript
+  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+  autocmd BufRead,BufNewFile *.erb setlocal textwidth=100
+  autocmd BufRead,BufNewFile *.rb setlocal textwidth=100
+  autocmd BufRead,BufNewFile *.css setlocal textwidth=80
+  autocmd BufRead,BufNewFile *.coffee setlocal textwidth=80
+
+  " Automatically wrap at 150 characters for javascript files
+  autocmd BufRead,BufNewFile *.js setlocal textwidth=80
+
+  " Add html highlighting when editing rails views & handlebar templates
+  autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
+  autocmd BufRead,BufNewFile *.hbs set filetype=handlebars.html
+
+  " Add javascript highlighting when embeded in HTML file
+  autocmd BufRead,BufNewFile *.html set filetype=html.javascript
+
+  " Add javascript highlighting when embeded in erb file
+  autocmd BufRead,BufNewFile *.js.erb set filetype=eruby.javascript
+
+  " Add javascript highlighting when editing ecmascript 6 files
+  autocmd BufRead,BufNewFile *.es6 setfiletype javascript
+
+  " Automatically remove trailing whitespaces unless file is blacklisted
+  autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
+
+  " Add vim highlighting when editing plugin files
+  autocmd BufRead,BufNewFile *.plugin set filetype=vim
+  autocmd BufRead,BufNewFile *.plugingroup set filetype=vim
+  autocmd BufRead,BufNewFile *.colorscheme set filetype=vim
+
+  " Add coffeescript highlighting to coffee.cjsx files
+  autocmd BufRead,BufNewFile *.coffee.cjsx set filetype=coffee.html
+
+  " Enable omni completion.
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup END
 " }}}
 " ==============================================================================
 
