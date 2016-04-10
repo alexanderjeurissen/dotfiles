@@ -113,7 +113,7 @@ set splitright
 set clipboard=unnamed
 
 " Terminal settings
-highlight TermCursor ctermfg=red guifg=red
+highlight TermCursor ctermfg=9 guifg=1
 tnoremap <Leader>wc <C-\><C-n>
 
 " When editing a file, always jump to the last known cursor position.
@@ -141,12 +141,132 @@ endif
 if has('nvim')
   " fix issue where <c-h> would result in <BS>
   " issue: neovim/issues/2048
-     " nmap <BS> <C-W>h
   nmap <bs> :<c-u>TmuxNavigateLeft<cr>
+  " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
   let python_host_prog = "python3"
   runtime! plugin/python_setup.vim
 endif
 
+" Statusline {{{
+    set laststatus=2
+    set showtabline=1
+    set guioptions-=e
+
+    let g:currentmode={
+        \ 'n'  : 'N ',
+        \ 'no' : 'N·Operator Pending ',
+        \ 'v'  : 'V ',
+        \ 'V'  : 'V·Line ',
+        \ '^V' : 'V·Block ',
+        \ 's'  : 'Select ',
+        \ 'S'  : 'S·Line ',
+        \ '^S' : 'S·Block ',
+        \ 'i'  : 'I ',
+        \ 'R'  : 'R ',
+        \ 'Rv' : 'V·Replace ',
+        \ 'c'  : 'Command ',
+        \ 'cv' : 'Vim Ex ',
+        \ 'ce' : 'Ex ',
+        \ 'r'  : 'Prompt ',
+        \ 'rm' : 'More ',
+        \ 'r?' : 'Confirm ',
+        \ '!'  : 'Shell ',
+        \ 't'  : 'Terminal '
+        \}
+
+    function! ReadOnly()
+      if &readonly || !&modifiable
+        return ''
+      else
+        return ''
+      endif
+    endfunction
+
+    function! Paste()
+      if &paste
+        return ' ⚠ PASTE '
+      else
+        return ''
+      endif
+    endfunction
+
+    function! GitInfo()
+      let git = fugitive#head()
+      if git != ''
+        return fugitive#head(7)
+      else
+        return ' - '
+      endif
+    endfunction
+
+    " Returns a warning flag if amount of added lines exceeds 20% of all lines
+    function! CommitWarning()
+      let [added, modified, removed] = sy#repo#get_stats()
+      let lines=(line('$')+0)
+      let changessum=(added+modified+removed) * 1.0
+      if (changessum / lines) > 0.20
+        return ' ⚠ COMMIT '
+      else
+        return ''
+      endif
+    endfunction
+
+    let g:insert_mode = 0
+    au InsertEnter * let g:insert_mode=1
+    au InsertLeave * let g:insert_mode=0
+
+    function! InsertWarning()
+      if g:insert_mode == 1
+        return ' ⚠ INSERT '
+      else
+        return ''
+      endif
+    endfunction
+
+    function! Segment(colorgroup, content)
+      return '%' . a:colorgroup . '*' . a:content . '%*'
+    endfunction
+
+    function! Flag(colorgroup, content)
+      return '%' . a:colorgroup . '*' . a:content . '%*%2* %*'
+    endfunction
+
+    function! DoubleSegment(labelColor, contentColor, label, content)
+      return '  %' . a:labelColor . '*' . a:label . '%*'.
+              \'%' . a:contentColor . '*' . a:content . '%*  '
+    endfunction
+
+    function! SetSegmentsColorGroups()
+      " Label color
+      hi! User1 ctermfg=7 ctermbg=12
+      " content colors
+      hi! User2 ctermfg=14 ctermbg=10
+      " don't show at all with User0
+      hi! statusline ctermbg=0
+
+      " Git double segment
+      hi! User3 ctermfg=10 ctermbg=9
+
+      "WARNINGS
+      hi! User4 ctermfg=10 ctermbg=9
+      hi! User5 ctermfg=10 ctermbg=2
+      hi! User6 ctermfg=10 ctermbg=3
+    endfunction
+
+    let &statusline=''
+    let &statusline.=Segment(1, ' %n ')                          " bufnr
+    let &statusline.=Flag(4, '%{Paste()}')                    " paste warning
+    let &statusline.=Flag(5, '%{CommitWarning()}')            " paste warning
+    let &statusline.=Flag(6, '%{InsertWarning()}')            " insert mode warning
+    let &statusline.=Segment(2, ' %<%F %{ReadOnly()} %m %w')     " File path
+    let &statusline.=Segment(0, '%=')                            " Space
+    " let &statusline.=DoubleSegment(3,4,' ⎇ ', ' %{GitInfo()}') " Git info
+    let &statusline.=Segment(2, ' %{&ff}%y ')                    " FileType
+    let &statusline.=Segment(1, ' %c ')                         " Rownumber/total (%)
+
+    autocmd ColorScheme * call SetSegmentsColorGroups()
+  " }}}
 " }}}
 " ==============================================================================
 
@@ -255,7 +375,7 @@ noremap L $
 
 " Open vimrc with <leader>v
 nnoremap <leader>v  :vsplit $MYVIMRC<CR>
-nnoremap <leader>gv  :vsplit $MYGVIMRC<CR>
+nnoremap <leader>gv :vsplit $MYGVIMRC<CR>
 nnoremap <leader>vr :source $MYVIMRC<CR>
 
 " Rename current file with <leader>n
@@ -328,11 +448,6 @@ augroup vimrcEx
 
   " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
-
-  " Add vim highlighting when editing plugin files
-  autocmd BufRead,BufNewFile *.plugin set filetype=vim
-  autocmd BufRead,BufNewFile *.plugingroup set filetype=vim
-  autocmd BufRead,BufNewFile *.colorscheme set filetype=vim
 
   " Add coffeescript highlighting to coffee.cjsx files
   autocmd BufRead,BufNewFile *.coffee.cjsx set filetype=coffee.html
@@ -517,8 +632,8 @@ endif
 " ------------------------------------------------------------------------------
 " AutoCompletion {{{
 " ------------------------------------------------------------------------------
-  Plug 'mattn/emmet-vim'
-  if has_key(g:plugs, 'emmet-vim') "{{{
+  Plug 'mattn/emmet-vim' "{{{
+  if has_key(g:plugs, 'emmet-vim')
     " Settings {{{
       let g:user_emmet_install_global = 1
       imap <expr> <C-e> emmet#expandAbbrIntelligent("\<C-e>")
@@ -530,10 +645,10 @@ endif
       \    'filters' : 'html',
       \  }
       \}
-    " }}}
+    "}}}
   endif "}}}
-  " Plug 'Shougo/neocomplete'
-  if has_key(g:plugs, 'neocomplete') "{{{
+  " Plug 'Shougo/neocomplete' "{{{
+  if has_key(g:plugs, 'neocomplete')
     " Settings {{{
       let g:acp_enableAtStartup = 0
       let g:neocomplete#enable_at_startup = 1
@@ -571,8 +686,8 @@ endif
   endif "}}}
   Plug 'tpope/vim-repeat'
   Plug 'tomtom/tlib_vim'
-  " Plug 'SirVer/ultisnips'
-  if has_key(g:plugs, 'ultisnips') "{{{
+  " Plug 'SirVer/ultisnips' "{{{
+  if has_key(g:plugs, 'ultisnips')
     " Settings {{{
       " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
       let g:UltiSnipsExpandTrigger="<tab>"
@@ -592,33 +707,33 @@ endif
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  " Plug 'chriskempson/base16-vim'
-  if has_key(g:plugs, 'base16-vim') "{{{
+  " Plug 'chriskempson/base16-vim' "{{{
+  if has_key(g:plugs, 'base16-vim')
     " Settings {{{
       let g:airline_theme = 'base16_solarized'
     "}}}
   endif "}}}
-  Plug 'whatyouhide/vim-gotham'
-  if has_key(g:plugs, 'vim-gotham') "{{{
+  Plug 'whatyouhide/vim-gotham' "{{{
+  if has_key(g:plugs, 'vim-gotham')
     " Settings {{{
       let g:airline_theme = 'gotham'
     "}}}
   endif "}}}
-  " Plug 'morhetz/gruvbox'
-  if has_key(g:plugs, 'gruvbox') "{{{
+  " Plug 'morhetz/gruvbox' "{{{
+  if has_key(g:plugs, 'gruvbox')
     " Settings {{{
       let g:airline_theme = 'gruvbox'
       let g:gruvbox_contrast_light = 'medium'
     "}}}
   endif "}}}
-  " Plug 'junegunn/seoul256.vim'
-  if has_key(g:plugs, 'seoul256.vim') "{{{
+  " Plug 'junegunn/seoul256.vim' "{{{
+  if has_key(g:plugs, 'seoul256.vim')
     " Settings {{{
       let g:airline_theme = 'bubblegum'
     "}}}
   endif "}}}
-  " Plug 'BlackIkeEagle/vim-colors-solarized'
-  if has_key(g:plugs, 'vim-colors-solarized') "{{{
+  " Plug 'BlackIkeEagle/vim-colors-solarized' "{{{
+  if has_key(g:plugs, 'vim-colors-solarized')
     " Settings {{{
       if &diff
         set wrap
@@ -705,14 +820,58 @@ endif
       nnoremap <F5> :call ToggleBG()<CR>
     "}}}
   endif "}}}
+Plug 'ryanoasis/vim-devicons'
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Mode aware Cursor Color {{{
+" ------------------------------------------------------------------------------
+" see https://gist.github.com/asethwright/9c436d2a8a5b0f48e499
+
+" let mode_to_shape = { 'normal':'block', 'insert':'ibeam', 'replace':'underline'}
+" # blinking block
+" printf '\e[1 q'
+" # steady block
+" printf '\e[2 q'
+" # blinking underscore
+" printf '\e[3 q'
+" # steady underscore
+" printf '\e[4 q'
+" # blinking bar
+" printf '\e[5 q'
+" # steady bar
+" printf '\e[6 q'
+
+  " let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  " let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  " let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+" au InsertEnter * execute "!printf '\e[1 q'"
+" au InsertEnter * execute "!printf '\e[1 q'"
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Core {{{
 " ------------------------------------------------------------------------------
-  Plug 'bling/vim-airline'
-  if has_key(g:plugs, 'vim-airline') "{{{
+  Plug 'tpope/vim-fugitive' "{{{
+  if has_key(g:plugs, 'vim-fugitive')
+    nnoremap <silent> <leader>gs :Gstatus<CR>
+    nnoremap <silent> <leader>gd  :Gvdiff<CR>
+    nnoremap <silent> <leader>gc  :Gcommit<CR>
+    nnoremap <silent> <leader>gb  :Gblame<CR>
+    nnoremap <silent> <leader>gl  :Glog<CR>
+    nnoremap <silent> <leader>gp  :Git push<CR>
+    nnoremap <silent> <leader>gr  :Gread<CR>
+    nnoremap <silent> <leader>gw  :Gwrite<CR>
+    nnoremap <silent> <leader>gwq  :Gwrite<CR>:qa<CR>
+    nnoremap <silent> <leader>ge  :Gedit<CR>
+
+    " Automatically remove fugitive buffers
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+  endif "}}}
+  " Plug 'bling/vim-airline' "{{{
+  if has_key(g:plugs, 'vim-airline')
     Plug 'vim-airline/vim-airline-themes'
     " Settings {{{
       let g:airline_powerline_fonts = 1
@@ -761,7 +920,6 @@ endif
           \ }
     "}}}
   endif "}}}
-
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-dispatch'
   Plug 'radenling/vim-dispatch-neovim'
@@ -777,8 +935,8 @@ endif
   Plug 'tommcdo/vim-exchange'
   Plug 'junegunn/rainbow_parentheses.vim'
   Plug 'tpope/vim-surround'
-  Plug 'benekastah/neomake'
-  if has_key(g:plugs, 'neomake') "{{{
+  Plug 'benekastah/neomake' "{{{
+  if has_key(g:plugs, 'neomake')
     " Settings {{{
       autocmd! BufWritePost * Neomake
 
@@ -797,17 +955,18 @@ endif
     "}}}
   endif "}}}
   Plug 'vim-scripts/tComment'
-  Plug 'osyo-manga/vim-over'
-  if has_key(g:plugs, 'vim-over') "{{{
-    " Settings {{{
-      let g:over#command_line#paste_escape_chars = '/.*$^~'
-    "}}}
-
-    " Keybindings {{{
-      command! Replace OverCommandLine %s/
-    "}}}
+  Plug 'osyo-manga/vim-over' "{{{
+  if has_key(g:plugs, 'vim-over')
+    let g:over#command_line#paste_escape_chars = '/.*$^~'
+    command! Replace OverCommandLine %s/
   endif "}}}
   Plug 'editorconfig/editorconfig-vim'
+  Plug '907th/vim-auto-save' "{{{
+  if has_key(g:plugs, 'vim-auto-save')
+    let g:auto_save = 1
+    let g:auto_save_silent = 1
+    let g:auto_save_in_insert_mode = 0
+  endif "}}}
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -818,47 +977,48 @@ endif
   Plug 'kchmck/vim-coffee-script'
   Plug 'Raimondi/delimitMate'
   Plug 'dsawardekar/ember.vim'
-  Plug 'pangloss/vim-javascript'
-  if has_key(g:plugs, 'vim-javascript') "{{{
-    " Settings {{{
-      let g:javascript_conceal_function   = "ƒ"
-      let g:javascript_conceal_null       = "ø"
-      let g:javascript_conceal_this       = "@"
-      let g:javascript_conceal_return     = "⇚"
-      let g:javascript_conceal_undefined  = "¿"
-      let g:javascript_conceal_NaN        = "ℕ"
-      let g:javascript_conceal_prototype  = "¶"
-      let g:javascript_conceal_static     = "•"
-      let g:javascript_conceal_super      = "Ω"
-    "}}}
+  Plug 'pangloss/vim-javascript' "{{{
+  if has_key(g:plugs, 'vim-javascript')
+    let g:javascript_conceal_function   = "ƒ"
+    let g:javascript_conceal_null       = "ø"
+    let g:javascript_conceal_this       = "@"
+    let g:javascript_conceal_return     = "⇚"
+    let g:javascript_conceal_undefined  = "¿"
+    let g:javascript_conceal_NaN        = "ℕ"
+    let g:javascript_conceal_prototype  = "¶"
+    let g:javascript_conceal_static     = "•"
+    let g:javascript_conceal_super      = "Ω"
   endif "}}}
   Plug 'JarrodCTaylor/vim-ember-cli-test-runner'
   Plug 'isRuslan/vim-es6'
   Plug 'mxw/vim-jsx'
-  Plug 'maksimr/vim-jsbeautify' | Plug 'beautify-web/js-beautify'
-  if has_key(g:plugs, 'vim-jsbeautify') "{{{
-    " Keybindings {{{
-      "for Javascript
-      autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-      autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+  Plug 'maksimr/vim-jsbeautify' | Plug 'beautify-web/js-beautify' "{{{
+  if has_key(g:plugs, 'vim-jsbeautify')
+    "for Javascript
+    autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+    autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
 
-      "for html
-      autocmd FileType html,html.javascript,eruby.html,handlebars noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-      autocmd FileType html,html.javascript,eruby.html,handlebars vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+    "for html
+    autocmd FileType html,html.javascript,eruby.html,handlebars noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+    autocmd FileType html,html.javascript,eruby.html,handlebars vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
 
-      "for css or scss
-      autocmd FileType css,scss noremap <buffer> <c-f> :call CSSBeautify()<cr>
-      autocmd FileType css,scss vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
-    "}}}
+    "for css or scss
+    autocmd FileType css,scss noremap <buffer> <c-f> :call CSSBeautify()<cr>
+    autocmd FileType css,scss vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
   endif "}}}
+  Plug 'othree/javascript-libraries-syntax.vim' "{{{
+  if has_key(g:plugs, 'javascript-libraries-syntax.vim')
+    let g:used_javascript_libs = 'underscore,backbone,react,flux'
+  endif
+  "}}}
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Navigation {{{
 " ------------------------------------------------------------------------------
-  Plug 'rking/ag.vim'
-  if has_key(g:plugs, 'ag.vim') "{{{
+  Plug 'rking/ag.vim' "{{{
+  if has_key(g:plugs, 'ag.vim')
     " Keybindings {{{
       "map Silver Searcher
         noremap <leader>ag :Ag!<space>
@@ -871,8 +1031,8 @@ endif
     "}}}
   endif "}}}
 
-  " Plug 'kien/ctrlp.vim'
-  if has_key(g:plugs, 'ctrlp.vim') "{{{
+  " Plug 'ctrlpvim/ctrlp.vim' "{{{
+  if has_key(g:plugs, 'ctrlp.vim')
     Plug 'FelikZ/ctrlp-py-matcher' "faster matcher for ctrlp
     Plug 'sgur/ctrlp-extensions.vim' "provides yankring and CMDline history
     Plug 'iurifq/ctrlp-rails.vim' "provides rails.vim modes
@@ -923,8 +1083,8 @@ endif
     "}}}
   endif "}}}
 
-  Plug 'Lokaltog/vim-easymotion'
-  if has_key(g:plugs, 'vim-easymotion') "{{{
+  Plug 'Lokaltog/vim-easymotion' "{{{
+  if has_key(g:plugs, 'vim-easymotion')
     " Keybindings {{{
       "change leader leader defaults to just leader
       map <Leader> <Plug>(easymotion-prefix)
@@ -933,8 +1093,8 @@ endif
     "}}}
   endif "}}}
 
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  if has_key(g:plugs, 'fzf') "{{{
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
+  if has_key(g:plugs, 'fzf')
     Plug 'junegunn/fzf.vim'
 
     " Functions {{{
@@ -990,18 +1150,16 @@ endif
     " }}}
   endif "}}}
 
-  Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye'
-  if has_key(g:plugs, 'ranger.vim') "{{{
-    " Keybindings {{{
-      nnoremap <silent> <leader>fe <C-u>:call OpenRanger()<CR>
-    " }}}
+  Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye' "{{{
+  if has_key(g:plugs, 'ranger.vim')
+    nnoremap <silent> <leader>f <C-u>:call OpenRanger()<CR>
   endif "}}}
   Plug 'danro/rename.vim'
   Plug 'airblade/vim-rooter'
   Plug 'mhinz/vim-signify'
   Plug 'christoomey/vim-tmux-navigator'
-  " Plug 'scrooloose/nerdtree'
-  if has_key(g:plugs, 'nerdtree') "{{{
+  " Plug 'scrooloose/nerdtree' "{{{
+  if has_key(g:plugs, 'nerdtree')
     let NERDTreeCascadeOpenSingleChildDir=1
     let NERDTreeQuitOnOpen=1
     nnoremap <leader>fe :NERDTreeFind<cr>
@@ -1015,25 +1173,28 @@ endif
 " ------------------------------------------------------------------------------
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-cucumber'
-  Plug 'tpope/vim-rails'
-  if has_key(g:plugs, 'vim-rails') "{{{
-    " Keybindings {{{
-      nnoremap <leader>r <c-u>:Rrunner<CR>
-    "}}}
+  Plug 'tpope/vim-rails' "{{{
+  if has_key(g:plugs, 'vim-rails')
+    nnoremap <leader>r <c-u>:Rrunner<CR>
+    let g:rails_projections = {
+      \"app/models/*.rb": {
+      \  "alternate": ["spec/integrations/models/%s_spec.rb"],
+      \},
+      \"app/controllers/*.rb": {
+      \  "alternate": ["spec/integrations/controllers/%s_spec.rb"],
+      \}
+    \}
   endif "}}}
 
   Plug 'thoughtbot/vim-rspec'
   Plug 'Trevoke/ultisnips-rspec'
   Plug 'ngmy/vim-rubocop'
-  Plug 'vim-ruby/vim-ruby'
-  if has_key(g:plugs, 'vim-ruby') "{{{
-    " Settings {{{
-      "autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-      autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-      autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-    "}}}
+  Plug 'vim-ruby/vim-ruby' "{{{
+  if has_key(g:plugs, 'vim-ruby')
+    "autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+    autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+    autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
   endif "}}}
-
   Plug 'subbarao/vim-rubybeautifier'
 " }}}
 " ------------------------------------------------------------------------------
@@ -1041,39 +1202,20 @@ endif
 " ------------------------------------------------------------------------------
 " VersionControl {{{
 " ------------------------------------------------------------------------------
-  Plug 'int3/vim-extradite'
-  if has_key(g:plugs, 'vim-extradite') "{{{
-    " Settings {{{
-      let g:gitgutter_eager=0
-    "}}}
+  Plug 'tpope/vim-git' " Vim runtime files and syntax highlighting
+  Plug 'int3/vim-extradite' "{{{
+  if has_key(g:plugs, 'vim-extradite')
+    let g:gitgutter_eager=0
   endif "}}}
 
-  Plug 'tpope/vim-fugitive'
-  if has_key(g:plugs, 'vim-fugitive') "{{{
-    " Keybindings {{{
-      nnoremap <silent> <leader>gs :Gstatus<CR>
-      nnoremap <silent> <leader>gd  :Gvdiff<CR>
-      nnoremap <silent> <leader>gc  :Gcommit<CR>
-      nnoremap <silent> <leader>gb  :Gblame<CR>
-      nnoremap <silent> <leader>gl  :Glog<CR>
-      nnoremap <silent> <leader>gp  :Git push<CR>
-      nnoremap <silent> <leader>gr  :Gread<CR>
-      nnoremap <silent> <leader>gw  :Gwrite<CR>
-      nnoremap <silent> <leader>gwq  :Gwrite<CR>:qa<CR>
-      nnoremap <silent> <leader>ge  :Gedit<CR>
-    "}}}
-  endif "}}}
-
-  Plug 'mattn/gist-vim' , { 'on': 'Gist' }
-  if has_key(g:plugs, 'gist-vim') "{{{
-    " Settings {{{
-      let g:gist_clip_command = 'pbcopy'
-      let g:gist_detect_filetype = 1
-      " let g:gist_open_browser_after_post = 1
-      let g:gist_show_privates = 1
-      " :w and :w! update a gist.
-      let g:gist_update_on_write = 1
-    "}}}
+  Plug 'mattn/gist-vim' , { 'on': 'Gist' } "{{{
+  if has_key(g:plugs, 'gist-vim')
+    let g:gist_clip_command = 'pbcopy'
+    let g:gist_detect_filetype = 1
+    " let g:gist_open_browser_after_post = 1
+    let g:gist_show_privates = 1
+    " :w and :w! update a gist.
+    let g:gist_update_on_write = 1
   endif "}}}
 " }}}
 " ------------------------------------------------------------------------------
@@ -1083,6 +1225,7 @@ endif
 " ------------------------------------------------------------------------------
   Plug 'mattn/webapi-vim'
   Plug 'hail2u/vim-css3-syntax'
+  Plug 'ap/vim-css-color'
   Plug 'rizzatti/dash.vim'
   Plug 'tpope/vim-haml'
   Plug 'aquach/vim-http-client'
@@ -1093,8 +1236,8 @@ endif
 " Window Managers {{{
 " ------------------------------------------------------------------------------
   " Plug 'spolu/dwm.vim'
-  Plug 'zhaocai/GoldenView.Vim'
-  if has_key(g:plugs, 'GoldenView.Vim') "{{{
+  Plug 'zhaocai/GoldenView.Vim' "{{{
+  if has_key(g:plugs, 'GoldenView.Vim')
     " Settings {{{
       let g:goldenview__enable_default_mapping = 0
       let g:goldenview__enable_at_startup = 0
@@ -1142,7 +1285,6 @@ endif
       " nmap <silent> <leader>wv <plug>GoldenViewSplit
       nmap <silent> <leader>wv :vs<cr>
       nmap <silent> <leader>ws :split<cr>
-      nmap <silent> <leader>wc :q<cr>
 
       " 2. quickly switch current window with the main pane and toggle back
       nmap <silent> <leader>wm <Plug>GoldenViewSwitchMain
@@ -1162,6 +1304,16 @@ endif
       nmap <silent> <leader>tg :ToggleGoldenViewAutoResize<CR>
     " }}}
   endif "}}}
+
+  Plug 'aaronjensen/vim-command-w' "{{{
+  " Smarts around killing buffers.
+  " will close the split if it's the last buffer in
+  " it, and close vim if it's the last buffer/split. Use ,w
+  if has_key(g:plugs, 'vim-command-w')
+    nmap <leader>wc :CommandW<CR>
+  endif
+  "}}}
+
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -1171,3 +1323,11 @@ colorscheme gotham
 " }}}
 " ==============================================================================
 
+" ==============================================================================
+" Include user's local vim config {{{
+" ==============================================================================
+  if filereadable(expand("~/.nvimrc.local"))
+    source ~/.vimrc.local
+  endif
+" }}}
+" ==============================================================================

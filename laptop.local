@@ -36,6 +36,7 @@ npm install --global pure-prompt
 
 # Ruby gems
 gem install awesome_print
+gem install seeing_is_believing
 
 # Setup ssh for git
 terminal-notifier -title "waiting.." -message "laptop script is waiting for user interaction in order to continue" -sound "default"
