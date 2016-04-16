@@ -60,6 +60,11 @@ export TERM=xterm-256color
   alias startServices="tmux new-window -n 'Services' 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read'"
   alias startBackend="tmux new-window -n 'Backend' 'foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; read'"
   alias startFrontend="tmux new-window -n 'Frontend' 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read'"
+
+  alias nServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read"
+  alias nBackend="foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; read"
+  alias nFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read"
+
   alias startAll="startServices & startBackend & startFrontend"
 # }}}
 
@@ -98,6 +103,8 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # git aliases {{{
   source ~/.gitaliases
   alias changedfiles= "git diff --name-only | uniq | xargs nvim"
+  alias removeArtefacts="git stash -u && git stash drop"
+  # alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
 # }}}
 
 # History options {{{

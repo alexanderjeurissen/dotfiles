@@ -55,13 +55,13 @@
   user = alexanderjeurissen
 [core]
   excludesfile = /Users/alexander/.gitignore
-  editor = vim
+  editor = nvim
 	pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
 [difftool]
   prompt = false
 [mergetool]
-  path = vim
+  path = nvim
 [url "git@github.com:"]
   insteadOf = "https://github.com/"
