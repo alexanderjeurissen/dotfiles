@@ -1,0 +1,2 @@
+cd ~/Git/hackerone
+foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read

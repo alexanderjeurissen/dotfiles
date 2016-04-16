@@ -112,10 +112,6 @@ set splitright
 
 set clipboard=unnamed
 
-" Terminal settings
-highlight TermCursor ctermfg=9 guifg=1
-tnoremap <Leader>wc <C-\><C-n>
-
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
@@ -142,10 +138,11 @@ if has('nvim')
   " fix issue where <c-h> would result in <BS>
   " issue: neovim/issues/2048
   nmap <bs> :<c-u>TmuxNavigateLeft<cr>
-  " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  let python_host_prog = "python3"
-  runtime! plugin/python_setup.vim
+  " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  let python3_host_prog = "python3"
+  let python_host_prog = "python"
+  " let g:ruby_host_prog = "ruby"
+  " runtime! plugin/python_setup.vim
 endif
 
 " Statusline {{{
@@ -191,12 +188,11 @@ endif
       endif
     endfunction
 
-    function! GitInfo()
-      let git = fugitive#head()
-      if git != ''
-        return fugitive#head(7)
+    function! Spell()
+      if &spell
+        return ' ⚠ SPELL '
       else
-        return ' - '
+        return ''
       endif
     endfunction
 
@@ -233,40 +229,238 @@ endif
     endfunction
 
     function! DoubleSegment(labelColor, contentColor, label, content)
-      return '  %' . a:labelColor . '*' . a:label . '%*'.
-              \'%' . a:contentColor . '*' . a:content . '%*  '
+      return ' %' . a:labelColor . '*' . a:label . '%*'.
+              \'%' . a:contentColor . '*' . a:content . '%* '
     endfunction
 
     function! SetSegmentsColorGroups()
-      " Label color
-      hi! User1 ctermfg=7 ctermbg=12
-      " content colors
+
+    if has_key(g:plugs, 'vim-gotham')
+      " black on blue
+      hi! User1 ctermfg=10 ctermbg=14
+
+      " blue on black
       hi! User2 ctermfg=14 ctermbg=10
+
+      " purple on black
+      hi! User3 ctermfg=10 ctermbg=5
+
       " don't show at all with User0
       hi! statusline ctermbg=0
 
-      " Git double segment
-      hi! User3 ctermfg=10 ctermbg=9
-
-      "WARNINGS
+      "black on red
       hi! User4 ctermfg=10 ctermbg=9
+      "black on green
       hi! User5 ctermfg=10 ctermbg=2
+      "black on yellow
       hi! User6 ctermfg=10 ctermbg=3
+
+      " red on black
+      hi! User7 ctermfg=9 ctermbg=10
+      " green on black
+      hi! User8 ctermfg=2 ctermbg=10
+      " yellow on black
+      hi! User9 ctermfg=3 ctermbg=10
+    elseif has_key(g:plugs, 'base16-vim')
+      " don't show at all with User0
+      hi! statusLine ctermfg=13 ctermbg=13
+
+      " black on blue
+      hi! User1 ctermfg=10 ctermbg=14
+
+      " blue on statusbar
+      hi! User2 ctermfg=4 ctermbg=13
+
+      " purple status flag
+      hi! User3 term=underline cterm=underline ctermfg=14 ctermbg=15
+
+      " red status flag
+      hi! User4 term=underline cterm=underline ctermfg=9 ctermbg=15
+
+      " green status flag
+      hi! User5 term=underline cterm=underline ctermfg=2 ctermbg=15
+
+      " yellow status flag
+      hi! User6 term=underline cterm=underline ctermfg=3 ctermbg=15
+
+      " red on statusbar
+      hi! User7 ctermfg=9 ctermbg=13
+
+      " green on statusbar
+      hi! User8 ctermfg=2 ctermbg=13
+
+      " yellow on statusbar
+      hi! User9 ctermfg=3 ctermbg=13
+    endif
     endfunction
 
     let &statusline=''
-    let &statusline.=Segment(1, ' %n ')                          " bufnr
+    let &statusline.=Segment(8, ' %n ')                       " bufnr
     let &statusline.=Flag(4, '%{Paste()}')                    " paste warning
-    let &statusline.=Flag(5, '%{CommitWarning()}')            " paste warning
-    let &statusline.=Flag(6, '%{InsertWarning()}')            " insert mode warning
-    let &statusline.=Segment(2, ' %<%F %{ReadOnly()} %m %w')     " File path
+    " let &statusline.=Flag(5, '%{CommitWarning()}')            " paste warning
+    " let &statusline.=Flag(6, '%{InsertWarning()}')          " insert mode warning
+    let &statusline.=Flag(6, '%{Spell()}')                    " Spell warning
+    let &statusline.=Segment(2, ' %<%F %{ReadOnly()} %m %w')   " File path
     let &statusline.=Segment(0, '%=')                            " Space
     " let &statusline.=DoubleSegment(3,4,' ⎇ ', ' %{GitInfo()}') " Git info
     let &statusline.=Segment(2, ' %{&ff}%y ')                    " FileType
-    let &statusline.=Segment(1, ' %c ')                         " Rownumber/total (%)
+    let &statusline.=Segment(8, ' %2c ')                         " Rownumber/total (%)
 
     autocmd ColorScheme * call SetSegmentsColorGroups()
   " }}}
+
+" TabLine {{{
+" segment functions are in the statusline fold
+  function! FetchGitStatus()
+    let projectroot=projectroot#get(expand('%'))
+    let g:status=system('~/.config/nvim/vcs_status/status.sh '.projectroot)
+    if g:status != ''
+      let status_list=split(g:status,",")
+      let g:vcs_staged=status_list[0]
+      let g:vcs_modified=status_list[1]
+      let g:vcs_others=status_list[2]
+    else
+      let g:vcs_staged=0
+      let g:vcs_modified=0
+      let g:vcs_others=0
+    endif
+  endfunction
+
+  function! GitStaged()
+    if g:vcs_staged != 0
+      return DoubleSegment(5, 8,  ' ⊕ ', ' '.g:vcs_staged)
+    else
+      return ''
+    endif
+  endfunction
+
+  function! GitModified()
+    if g:vcs_modified != 0
+      return Segment(6, ' + '.g:vcs_modified)
+    else
+     return ''
+    endif
+  endfunction
+
+  function! GitOthers()
+    if g:vcs_others != 0
+      return Segment(4, ' ~ '.g:vcs_others)
+    else
+      return ''
+    endif
+  endfunction
+
+  function! GitBranch()
+    let git = fugitive#head()
+    if git != ''
+      return ''.Segment(7, ' ⎇ '.strpart(git, strlen(git)-30))
+    else
+      return ''
+    endif
+  endfunction
+
+  function! MyTabLine()
+      let s = ''
+      let t = tabpagenr()
+      let i = 1
+      while i <= tabpagenr('$')
+          let buflist = tabpagebuflist(i)
+          let winnr = tabpagewinnr(i)
+          let s .= '%' . i . 'T'
+          let s .= (i == t ? '%1*' : '%2*')
+
+          " let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+          " let s .= ' '
+          let s .= (i == t ? '%#TabNumSel#' : '%#TabNum#')
+          let s .= ' ' . i . ' '
+          let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+
+          let bufnr = buflist[winnr - 1]
+          let file = bufname(bufnr)
+          let buftype = getbufvar(bufnr, '&buftype')
+
+          if buftype == 'help'
+              let file = 'help:' . fnamemodify(file, ':t:r')
+
+          elseif buftype == 'quickfix'
+              let file = 'quickfix'
+
+          elseif buftype == 'nofile'
+              if file =~ '\/.'
+                  let file = substitute(file, '.*\/\ze.', '', '')
+              endif
+
+          else "show current working directory
+              let file = pathshorten(fnamemodify(file, ':p:~:.:h'))
+              if file == '.'
+                let file = pathshorten(fnamemodify(getcwd(), ':~'))
+              endif
+              if getbufvar(bufnr, '&modified')
+                  let file = '+' . file
+              endif
+
+          endif
+
+          if file == ''
+              let file = '[No Name]'
+          endif
+
+          let s .= ' ' . file
+
+          let nwins = tabpagewinnr(i, '$')
+          if nwins > 1
+              let modified = ''
+              for b in buflist
+                  if getbufvar(b, '&modified') && b != bufnr
+                      let modified = '*'
+                      break
+                  endif
+              endfor
+              let hl = (i == t ? '%#WinNumSel#' : '%#WinNum#')
+              let nohl = (i == t ? '%#TabLineSel#' : '%#TabLine#')
+              let s .= ' ' . modified . '(' . hl . winnr . nohl . '/' . nwins . ')'
+          endif
+
+          if i < tabpagenr('$')
+              let s .= ' %#TabLine#%*'
+          else
+              let s .= ' '
+          endif
+
+          let i = i + 1
+
+      endwhile
+
+      call FetchGitStatus()
+
+      let s .= '%T%#TabLineFill#%='
+      " let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+      " Right side esting
+       " let s .= GitDiverge()
+       let s .= GitStaged()
+       let s .= ' '
+       let s .= GitModified()
+       let s .= ' '
+       let s .= GitOthers()
+       let s .= ' '
+       let s .= GitBranch()
+      return s
+  endfunction
+
+  set tabline=%!MyTabLine()
+
+  function! SetTablineHighlights()
+    highlight! TabNum term=bold cterm=bold ctermfg=4 ctermbg=15
+    highlight! TabNumSel term=bold cterm=bold ctermfg=13 ctermbg=4
+    highlight! TabLine ctermbg=15
+    highlight! TabLineSel term=bold cterm=bold ctermfg=4 ctermbg=13
+    highlight! WinNum term=bold cterm=bold ctermfg=7 ctermbg=15
+    highlight! WinNumSel term=bold cterm=bold ctermfg=10 ctermbg=13
+  endfunction
+
+  autocmd Colorscheme * call SetTablineHighlights()
+" }}}
+
 " }}}
 " ==============================================================================
 
@@ -287,10 +481,6 @@ vno <down> <Nop>
 vno <left> <Nop>
 vno <right> <Nop>
 vno <up> <Nop>
-
-"use up and dow arrow to move line
-noremap <up> ddkP
-noremap <down> ddp
 
 " Fix annoying typo's of WQ, QA and Q
 command! WQ wq
@@ -392,7 +582,6 @@ nnoremap <leader>wq :w<CR>:bd<CR>
 " Call ArcLint using :ArcLint
 command! -nargs=* ArcLint call s:ArcLint("<args>")
 command! PasteCode call s:PasteCode()
-
 " }}}
 " ==============================================================================
 
@@ -563,30 +752,6 @@ function! s:PasteCode()
   execute "normal! o\<esc>\]p"
   set nopaste
 endfunction
-
-" Window navigation function
-" Make <leader>w + h,i,j,k move between windows and auto-insert in terminals
-func! s:mapMoveToWindowInDirection(direction)
-    func! s:maybeInsertMode(direction)
-        stopinsert
-        execute "wincmd" a:direction
-
-        if &buftype == 'terminal'
-            startinsert!
-        endif
-    endfunc
-
-    execute "tnoremap" "<silent>" "<leader>w" . a:direction . ""
-                \ " <C-\\><C-n>"
-                \ ":call <SID>maybeInsertMode(\"" . a:direction . "\")<CR>"
-    execute "nnoremap" "<silent>" "<leader>w" . a:direction . ""
-                \ " :call <SID>maybeInsertMode(\"" . a:direction . "\")<CR>"
-endfunc
-
-for dir in ["h", "j", "l", "k"]
-    call s:mapMoveToWindowInDirection(dir)
-endfor
-
 " }}}
 " ==============================================================================
 
@@ -684,9 +849,28 @@ endif
       let g:neocomplete#keyword_patterns['default'] = '\h\w*'
     "}}}
   endif "}}}
+  Plug 'Shougo/deoplete.nvim' "{{{
+  if has_key(g:plugs, 'deoplete.nvim')
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#omni#input_patterns = {}
+    let g:deoplete#omni#input_patterns.ruby =
+    \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+    let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
+
+    let g:deoplete#enable_smart_case = 1
+
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  endif"}}}
+
+
+  let g:monster#completion#rcodetools#backend = "async_rct_complete"
   Plug 'tpope/vim-repeat'
   Plug 'tomtom/tlib_vim'
-  " Plug 'SirVer/ultisnips' "{{{
+  Plug 'SirVer/ultisnips' "{{{
   if has_key(g:plugs, 'ultisnips')
     " Settings {{{
       " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -707,17 +891,78 @@ endif
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  " Plug 'chriskempson/base16-vim' "{{{
+  Plug 'chriskempson/base16-vim' "{{{
   if has_key(g:plugs, 'base16-vim')
-    " Settings {{{
-      let g:airline_theme = 'base16_solarized'
-    "}}}
+      function! SolarizeCustomization()
+        let g:solarized_visibility = "high"
+        let g:solarized_contrast = "high"
+        let g:solarized_termtrans = 1
+
+        hi! link txtBold Identifier
+        hi! link zshVariableDef Identifier
+        hi! link zshFunction Function
+        hi! link rubyControl Statement
+        hi! link rspecGroupMethods rubyControl
+        hi! link rspecMocks Identifier
+        hi! link rspecKeywords Identifier
+        hi! link rubyLocalVariableOrMethod Normal
+        hi! link rubyStringDelimiter Constant
+        hi! link rubyString Constant
+        hi! link rubyAccess Todo
+        hi! link rubySymbol Identifier
+        hi! link rubyPseudoVariable Type
+        hi! link rubyRailsARAssociationMethod Title
+        hi! link rubyRailsARValidationMethod Title
+        hi! link rubyRailsMethod Title
+        hi! link rubyDoBlock Normal
+        hi! link MatchParen DiffText
+
+        hi! link CTagsModule Type
+        hi! link CTagsClass Type
+        hi! link CTagsMethod Identifier
+        hi! link CTagsSingleton Identifier
+
+        hi! link javascriptFuncName Type
+        hi! link jsFuncCall jsFuncName
+        hi! link javascriptFunction Statement
+        hi! link javascriptThis Statement
+        hi! link javascriptParens Normal
+        hi! link jOperators javascriptStringD
+        hi! link jId Title
+        hi! link jClass Title
+
+        hi! link sassMixinName Function
+        hi! link sassDefinition Function
+        hi! link sassProperty Type
+        hi! link htmlTagName Type
+        hi! PreProc gui=bold
+
+        if g:solarized_flux == 1
+          let hour = strftime("%H") " Set the background light from 7am to 7pm
+          if 7 <= hour && hour < 17
+            set background=light
+          else " Set to dark from 7pm to 7am
+            set background=dark
+          endif
+        endif
+
+        hi! clear SignColumn
+        hi! link SignColumn CursorColumn
+      endfunction
+
+      function! ActivateColorScheme()
+        colorscheme base16-solarized
+        let g:solarized_flux = 0
+        call SolarizeCustomization()
+        set background=light
+      endfunction
   endif "}}}
-  Plug 'whatyouhide/vim-gotham' "{{{
+  " Plug 'whatyouhide/vim-gotham' "{{{
   if has_key(g:plugs, 'vim-gotham')
-    " Settings {{{
-      let g:airline_theme = 'gotham'
-    "}}}
+      function! ActivateColorScheme()
+        colorscheme gotham
+        set background=dark
+      endfunction
   endif "}}}
   " Plug 'morhetz/gruvbox' "{{{
   if has_key(g:plugs, 'gruvbox')
@@ -732,122 +977,18 @@ endif
       let g:airline_theme = 'bubblegum'
     "}}}
   endif "}}}
-  " Plug 'BlackIkeEagle/vim-colors-solarized' "{{{
-  if has_key(g:plugs, 'vim-colors-solarized')
-    " Settings {{{
-      if &diff
-        set wrap
-        let g:solarized_diffmode='normal'
-      endif
-    "}}}
-
-    " Functions {{{
-      function! ToggleBG()
-        if &background == "dark"
-          echom 'switching to light'
-          set background=light
-        else
-          echom 'switching to dark'
-          set background=dark
-        endif
-        exec ':highlight clear SignColumn'
-        exec ':highlight link SignColumn CursorColumn'
-      endfunction
-
-      function! SolarizeCustomization()
-        " if has("gui_running")
-          let g:solarized_visibility = "high"
-          let g:solarized_contrast = "high"
-          let g:solarized_termtrans = 1
-
-          hi! link txtBold Identifier
-          hi! link zshVariableDef Identifier
-          hi! link zshFunction Function
-          hi! link rubyControl Statement
-          hi! link rspecGroupMethods rubyControl
-          hi! link rspecMocks Identifier
-          hi! link rspecKeywords Identifier
-          hi! link rubyLocalVariableOrMethod Normal
-          hi! link rubyStringDelimiter Constant
-          hi! link rubyString Constant
-          hi! link rubyAccess Todo
-          hi! link rubySymbol Identifier
-          hi! link rubyPseudoVariable Type
-          hi! link rubyRailsARAssociationMethod Title
-          hi! link rubyRailsARValidationMethod Title
-          hi! link rubyRailsMethod Title
-          hi! link rubyDoBlock Normal
-          hi! link MatchParen DiffText
-
-          hi! link CTagsModule Type
-          hi! link CTagsClass Type
-          hi! link CTagsMethod Identifier
-          hi! link CTagsSingleton Identifier
-
-          hi! link javascriptFuncName Type
-          hi! link jsFuncCall jsFuncName
-          hi! link javascriptFunction Statement
-          hi! link javascriptThis Statement
-          hi! link javascriptParens Normal
-          hi! link jOperators javascriptStringD
-          hi! link jId Title
-          hi! link jClass Title
-
-          hi! link sassMixinName Function
-          hi! link sassDefinition Function
-          hi! link sassProperty Type
-          hi! link htmlTagName Type
-          hi! PreProc gui=bold
-
-          let hour = strftime("%H") " Set the background light from 7am to 7pm
-          if 7 <= hour && hour < 17
-            set background=light
-            let g:airline_theme = 'solarized'
-            exec ':AirlineRefresh'
-          else " Set to dark from 7pm to 7am
-            set background=light
-            let g:airline_theme = 'solarized'
-            exec ':AirlineRefresh'
-          endif
-        " endif
-
-        exec ':highlight clear SignColumn'
-        exec ':highlight link SignColumn CursorColumn'
-      endfunction
-    "}}}
-
-    " Keybindings {{{
-      nnoremap <F5> :call ToggleBG()<CR>
-    "}}}
-  endif "}}}
-Plug 'ryanoasis/vim-devicons'
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Mode aware Cursor Color {{{
-" ------------------------------------------------------------------------------
-" see https://gist.github.com/asethwright/9c436d2a8a5b0f48e499
-
-" let mode_to_shape = { 'normal':'block', 'insert':'ibeam', 'replace':'underline'}
-" # blinking block
-" printf '\e[1 q'
-" # steady block
-" printf '\e[2 q'
-" # blinking underscore
-" printf '\e[3 q'
-" # steady underscore
-" printf '\e[4 q'
-" # blinking bar
-" printf '\e[5 q'
-" # steady bar
-" printf '\e[6 q'
-
-  " let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  " let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-  " let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-" au InsertEnter * execute "!printf '\e[1 q'"
-" au InsertEnter * execute "!printf '\e[1 q'"
+  Plug 'ryanoasis/vim-devicons'
+Plug 'vheon/vim-cursormode' "{{{
+if has_key(g:plugs, 'vim-cursormode')
+let cursormode_color_map = {
+      \   "n":      "#8bbebb",
+      \   "i":      "#edb442",
+      \   "v":      "#888ca6",
+      \   "V":      "#888ca6",
+      \   "\<C-V>": "#888ca6",
+      \   "R":      "#d26936",
+      \ }
+endif "}}}
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -869,56 +1010,6 @@ Plug 'ryanoasis/vim-devicons'
 
     " Automatically remove fugitive buffers
     autocmd BufReadPost fugitive://* set bufhidden=delete
-  endif "}}}
-  " Plug 'bling/vim-airline' "{{{
-  if has_key(g:plugs, 'vim-airline')
-    Plug 'vim-airline/vim-airline-themes'
-    " Settings {{{
-      let g:airline_powerline_fonts = 1
-      let g:airline#extensions#branch#enabled = 1
-
-      let g:airline#extensions#neomake#enabled = 1
-      let g:airline_section_warning = '⚠'
-      let g:airline_section_error = '✗'
-      let g:airline#extensions#tagbar#enabled = 0
-
-      "Tabline
-      let g:airline#extensions#tabline#enabled = 0
-
-      if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-      endif
-
-      " unicode symbols
-      let g:airline_left_sep = '»'
-      let g:airline_left_sep = ''
-      let g:airline_right_sep = '«'
-      let g:airline_right_sep = ''
-      let g:airline_symbols.crypt = '🔒'
-      " let g:airline_symbols.linenr = '␊'
-      let g:airline_symbols.linenr = '␤'
-      let g:airline_symbols.branch = '⎇'
-      let g:airline_symbols.paste = 'ρ'
-      let g:airline_symbols.paste = 'Þ'
-      let g:airline_symbols.paste = '∥'
-      let g:airline_symbols.notexists = '∄'
-      let g:airline_symbols.whitespace = 'Ξ'
-
-      " Use shorthand mode indication
-      let g:airline_mode_map = {
-          \ '__' : '-',
-          \ 'n'  : ' N ',
-          \ 'i'  : ' I ',
-          \ 'R'  : ' R ',
-          \ 'c'  : ' C ',
-          \ 'v'  : ' V ',
-          \ 'V'  : ' V ',
-          \ '' : ' V ',
-          \ 's'  : ' S ',
-          \ 'S'  : ' S ',
-          \ '' : ' S ',
-          \ }
-    "}}}
   endif "}}}
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-dispatch'
@@ -951,7 +1042,7 @@ Plug 'ryanoasis/vim-devicons'
         \ }
 
       let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-      let g:neomake_javascript_enabled_makers = ['eslint', 'jscs']
+      let g:neomake_javascript_enabled_makers = ['eslint']
     "}}}
   endif "}}}
   Plug 'vim-scripts/tComment'
@@ -961,9 +1052,9 @@ Plug 'ryanoasis/vim-devicons'
     command! Replace OverCommandLine %s/
   endif "}}}
   Plug 'editorconfig/editorconfig-vim'
-  Plug '907th/vim-auto-save' "{{{
+  " Plug '907th/vim-auto-save' "{{{
   if has_key(g:plugs, 'vim-auto-save')
-    let g:auto_save = 1
+    let g:auto_save = 0
     let g:auto_save_silent = 1
     let g:auto_save_in_insert_mode = 0
   endif "}}}
@@ -1026,8 +1117,8 @@ Plug 'ryanoasis/vim-devicons'
         noremap <leader>Ag :Ag! "<C-r>=expand('<cword>')<CR>"
 
       " quick go to next match in quickfix window
-        noremap <leader>agn :cnext<CR>
-        noremap <leader>agp :cprev<CR>
+        noremap <leader>cn :cnext<CR>
+        noremap <leader>cp :cprev<CR>
     "}}}
   endif "}}}
 
@@ -1083,7 +1174,7 @@ Plug 'ryanoasis/vim-devicons'
     "}}}
   endif "}}}
 
-  Plug 'Lokaltog/vim-easymotion' "{{{
+  " Plug 'Lokaltog/vim-easymotion' "{{{
   if has_key(g:plugs, 'vim-easymotion')
     " Keybindings {{{
       "change leader leader defaults to just leader
@@ -1125,7 +1216,7 @@ Plug 'ryanoasis/vim-devicons'
       nnoremap <silent> <leader>O :<C-u>Tags<CR>
       nnoremap <silent> <leader>: :<C-u>Commands<CR>
       nnoremap <silent> <leader>? :<C-u>History<CR>
-      nnoremap <silent> <leader>/ :<C-u>execute 'Ag ' . input('Ag/')<CR>
+      nnoremap <silent> <leader>/ :<C-u>Ag<CR>
       nnoremap <silent> K :call SearchWordWithAg()<CR>
       vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
       nnoremap <silent> <leader>gl :<C-u>Commits<CR>
@@ -1152,11 +1243,20 @@ Plug 'ryanoasis/vim-devicons'
 
   Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye' "{{{
   if has_key(g:plugs, 'ranger.vim')
-    nnoremap <silent> <leader>f <C-u>:call OpenRanger()<CR>
+    nmap <silent> <leader>f <C-u>:call OpenRanger()<CR>
+    command! Ranger call OpenRanger()
   endif "}}}
   Plug 'danro/rename.vim'
   Plug 'airblade/vim-rooter'
-  Plug 'mhinz/vim-signify'
+  " Plug 'mhinz/vim-signify' "{{{
+  if has_key(g:plugs, 'vim-signify')
+    let g:signify_vcs_list = ['git']
+    let g:signify_sign_add               = '+'
+    let g:signify_sign_delete            = '_'
+    let g:signify_sign_delete_first_line = '‾'
+    let g:signify_sign_change            = '!'
+    let g:signify_sign_changedelete      = g:signify_sign_change
+  endif "}}}
   Plug 'christoomey/vim-tmux-navigator'
   " Plug 'scrooloose/nerdtree' "{{{
   if has_key(g:plugs, 'nerdtree')
@@ -1178,11 +1278,17 @@ Plug 'ryanoasis/vim-devicons'
     nnoremap <leader>r <c-u>:Rrunner<CR>
     let g:rails_projections = {
       \"app/models/*.rb": {
-      \  "alternate": ["spec/integrations/models/%s_spec.rb"],
+      \  "alternate": ["spec/integration/models/%s_spec.rb"],
       \},
       \"app/controllers/*.rb": {
-      \  "alternate": ["spec/integrations/controllers/%s_spec.rb"],
-      \}
+      \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
+      \},
+      \"spec/integration/models/*_spec.rb": {
+      \  "alternate": ["app/models/%s.rb"],
+      \},
+      \"spec/integration/controllers/*_spec.rb": {
+      \  "alternate": ["app/controllers/%s.rb"],
+      \},
     \}
   endif "}}}
 
@@ -1217,6 +1323,7 @@ Plug 'ryanoasis/vim-devicons'
     " :w and :w! update a gist.
     let g:gist_update_on_write = 1
   endif "}}}
+  Plug 'dbakker/vim-projectroot'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -1250,7 +1357,8 @@ Plug 'ryanoasis/vim-devicons'
       \  'buftype': [
       \    'nofile',
       \    'nerd',
-      \    'nerdtree'
+      \    'nerdtree',
+      \    'terminal'
       \  ]
       \}
 
@@ -1263,7 +1371,8 @@ Plug 'ryanoasis/vim-devicons'
       \  'buftype': [
       \    'nofile',
       \    'nerd',
-      \    'nerdtree'
+      \    'nerdtree',
+      \    'terminal'
       \  ]
       \}
     " }}}
@@ -1271,12 +1380,10 @@ Plug 'ryanoasis/vim-devicons'
     " Functions {{{
       function! GoldenViewNext()
         execute "normal \<Plug>GoldenViewNext"
-        exec ':AirlineRefresh'
       endfunction
 
       function! GoldenViewPrevious()
         execute "normal \<Plug>GoldenViewPrevious"
-        exec ':AirlineRefresh'
       endfunction
     " }}}
 
@@ -1313,13 +1420,123 @@ Plug 'ryanoasis/vim-devicons'
     nmap <leader>wc :CommandW<CR>
   endif
   "}}}
+  "
+" Plug 'simeji/winresizer' "{{{
+if has_key(g:plugs, 'winresizer')
+  nnoremap <leader>wr :call WinResizerStartResize()<cr>
+  " let g:winresizer_start_key='<c-s>'
+  let g:winresizer_finish_with_escape=1
+  let g:winresizer_vert_resize=10
+  let g:winresizer_horiz_resize=3
+endif "}}}
 
+" Plug 'Shougo/denite.nvim'
+if has_key(g:plugs, 'denite.nvim')
+
+endif
 " }}}
 " ------------------------------------------------------------------------------
 
 call plug#end()
+call ActivateColorScheme()
+" }}}
+" ==============================================================================
 
-colorscheme gotham
+" ==============================================================================
+" Start replacing tmux with nvim terminal splits {{{
+" ==============================================================================
+  let g:maximized=0
+  func! MaximizeWindow()
+    if g:maximized == 0
+      let g:maximized=1
+      exe "normal! \<C-w>_"
+      exe "normal! \<C-w>|"
+    else
+      let g:maximized=0
+      exe "normal! \<C-w>="
+    endif
+  endfunc
+
+  nnoremap <leader>st :botright split<cr>:terminal<cr>
+  nnoremap <leader>stv :botright vsplit<cr>:terminal<cr>
+  nnoremap <leader>wz :call MaximizeWindow()<cr>
+  tnoremap <leader><ESC> <C-\><C-n>
+
+  " resize splits
+  function! IsMost(direction)
+    let oldw = winnr()
+    silent! exe "normal! \<c-w>".a:direction
+    let neww = winnr()
+    silent! exe oldw.'wincmd w'
+    return oldw == neww
+  endfunction
+
+  function! ResizeSplits(direction)
+    let oldw = winnr()
+    let leftMost=IsMost('h')
+    let bottomMost=IsMost('j')
+
+    if a:direction == 'left'
+      if IsMost('h')
+        silent! exe 'vertical resize -5'
+      else
+        silent! exe "normal! \<c-w>h"
+        silent! exe "vertical resize +5"
+        silent! exe oldw.'wincmd w'
+      endif
+    elseif a:direction == 'right'
+      if IsMost('h')
+        silent! exe 'vertical resize +5'
+      else
+        silent! exe "normal! \<c-w>h"
+        silent! exe "vertical resize +5"
+        silent! exe oldw.'wincmd w'
+      endif
+    elseif a:direction == 'up'
+      if bottomMost
+        silent! exe 'resize +5'
+      else
+        silent! exe "normal! \<c-w>j"
+        silent! exe "resize +5"
+        silent! exe oldw.'wincmd w'
+      endif
+    elseif a:direction == 'down'
+      if bottomMost
+        silent! exe 'resize -5'
+      else
+        let oldw = winnr()
+        silent! exe "normal! \<c-w>k"
+        silent! exe "resize +5"
+        silent! exe oldw.'wincmd w'
+      endif
+    endif
+  endfunction
+
+  " nnoremap <up> :call ResizeSplits('up')<CR><ESC>
+  " nnoremap <down> :call ResizeSplits('down')<CR><ESC>
+  " nnoremap <left> :call ResizeSplits('left')<CR><ESC>
+  " nnoremap <right> :call ResizeSplits('right')<CR><ESC>
+
+  " Window navigation between terminal and nonterminal
+  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+  tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
+  tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
+  tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
+  tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
+
+  " Default workspace
+  function! DefaultWorkspace()
+    tabnew term://~/.dotfiles/scripts/startBackend
+    file Backend:daemon
+
+    vsp term://~/.dotfiles/scripts/startServices
+    file Services:daemon
+
+    vsp term://~/.dotfiles/scripts/startFrontend
+    file Frontend:daemon
+  endfunction
+
+  command! -register StartAll call DefaultWorkspace()
 " }}}
 " ==============================================================================
 

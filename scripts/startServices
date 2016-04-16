@@ -1,0 +1,2 @@
+cd ~/Git/hackerone
+foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read
