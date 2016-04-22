@@ -1,2 +1,2 @@
 cd ~/Git/hackerone
-foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read
+foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1,payments_dev=1,sidekiq=1 ; read
