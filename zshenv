@@ -35,7 +35,7 @@ fi
 
 # solarized
 export FZF_DEFAULT_OPTS='
-  --color=light
+  --color=dark
 '
 
 # export FZF_DEFAULT_OPTS='

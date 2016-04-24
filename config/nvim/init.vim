@@ -131,13 +131,13 @@ if !has("gui_running") && !has('nvim')
   set t_Co=256
   set term=screen-256color
   "Access colors present in 256 colorspace"
-  let base16colorspace=256
+  " let base16colorspace=256
 endif
 
 if has('nvim')
   " fix issue where <c-h> would result in <BS>
   " issue: neovim/issues/2048
-  nmap <bs> :<c-u>TmuxNavigateLeft<cr>
+  " nmap <bs> :<c-u>TmuxNavigateLeft<cr>
   " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
@@ -447,21 +447,8 @@ endfunction
 " ==============================================================================
 " Start replacing tmux with nvim terminal splits {{{
 " ==============================================================================
-  let g:maximized=0
-  func! MaximizeWindow()
-    if g:maximized == 0
-      let g:maximized=1
-      exe "normal! \<C-w>_"
-      exe "normal! \<C-w>|"
-    else
-      let g:maximized=0
-      exe "normal! \<C-w>="
-    endif
-  endfunc
-
   nnoremap <leader>st :botright split<cr>:terminal<cr>
   nnoremap <leader>stv :botright vsplit<cr>:terminal<cr>
-  nnoremap <leader>wz :call MaximizeWindow()<cr>
   tnoremap <leader><ESC> <C-\><C-n>
 
   " resize splits
@@ -565,10 +552,16 @@ endfunction
 " Dein.vim {{{
 " ------------------------------------------------------------------------------
 "Note: install dein if not present
-let g:dein_path='$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim'
-if empty(glob(g:dein_path))
-  silent !curl -fLo g:dein_path --create-dirs
-    \ https://raw.githubusercontent.com/Shougo/dein.vim
+let g:dein_path='$HOME/.config/nvim/dein'
+if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
+  " if executable('git')
+  "  call termopen('git clone https://github.com/Shougo/dein.vim ' .  g:dein_path .  '/repos/github.com/Shougo/dein.vim')
+  " else
+    silent !curl -fLo /tmp/dein/installer.sh --create-dirs
+      \ https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh
+
+    call termopen('sh /tmp/dein/installer.sh '.g:dein_path)
+  " endif
 endif
 
 if &compatible
@@ -595,6 +588,7 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('Shougo/deoplete.nvim', { 'lazy': 1, 'on_i': 1 })
 
   call dein#add('tpope/vim-repeat')
+
   call dein#add('tomtom/tlib_vim')
   call dein#add('SirVer/ultisnips', {
         \ 'hook_add': "
@@ -613,7 +607,7 @@ if dein#load_state(expand(g:plugin_path))
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
   call dein#add('chriskempson/base16-vim', {
-        \ 'hook_source': "
+        \ 'hook_add': "
         \   colorscheme base16-solarized\n
         \   set background=dark\n
         \"})
@@ -659,6 +653,12 @@ if dein#load_state(expand(g:plugin_path))
     hi! PreProc gui=bold
 
     hi! Search ctermfg=10 ctermbg=3
+    hi! vimfilerNormalFile  ctermfg=13
+    hi! vimfilerClosedFile  ctermfg=4
+    hi! vimfilerOpenedFile  ctermfg=13
+    hi! vimfilerCurrentDirectory  ctermfg=9
+    hi! vimfilerNonMark     ctermfg=4
+    hi! vimfilerLeaf        ctermfg=11
   endfunction
 
   autocmd Colorscheme * call SolarizeCustomization()
@@ -670,7 +670,6 @@ if dein#load_state(expand(g:plugin_path))
   "       \"})
 
   " call dein#add('junegunn/seoul256.vim'
-  call dein#add('ryanoasis/vim-devicons')
   call dein#add('vheon/vim-cursormode')
   let cursormode_color_map = {
         \   "n":      "#FFFFFF",
@@ -701,9 +700,18 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('tpope/vim-endwise')
   call dein#add('tommcdo/vim-exchange')
   call dein#add('junegunn/rainbow_parentheses.vim')
-  call dein#add('tpope/vim-surround')
+  call dein#add('tpope/vim-surround', {
+        \ 'depends': ['vim-repeat'],
+        \ 'lazy': 1,
+        \ 'on_map': 'cs'
+        \})
+
   call dein#add('benekastah/neomake')
-  call dein#add('vim-scripts/tComment')
+  call dein#add('vim-scripts/tComment', {
+        \ 'lazy': 1,
+        \ 'on_map': ['gc', 'g<', 'g>']
+        \})
+
   call dein#add('osyo-manga/vim-over', {
         \ 'lazy': 1,
         \ 'on_cmd': 'Replace',
@@ -713,6 +721,18 @@ if dein#load_state(expand(g:plugin_path))
         \"})
 
   call dein#add('editorconfig/editorconfig-vim')
+
+  " makes it easy to switch between single line and multi line blocks
+  call dein#add('AndrewRadev/splitjoin.vim', {
+        \ 'lazy': 1,
+        \ 'on_map': ['gS','gJ']
+        \})
+
+  call dein#add('Yggdroot/indentLine', {
+        \ 'hook_add': "
+        \  let g:indentLine_char = '▸'
+        \"})
+
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -745,25 +765,42 @@ if dein#load_state(expand(g:plugin_path))
         \   noremap <silent> <leader>ag :Ag!<space>
         \"})
 
-  " call dein#add('ctrlpvim/ctrlp.vim')
-
-  " call dein#add('Lokaltog/vim-easymotion', {
-  "       " \ 'lazy': 1,
-  "       " \ 'on_map' : '<Plug>(easymotion-prefix)',
-  "       \ 'hook_add': "
-  "       \   map <Leader> <plug>(easymotion-prefix)\n
-  "       \   nmap <leader><leader> <Plug>(easymotion-s)
-  "       \"})
-
-  call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '' })
-  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-  call dein#add('moll/vim-bbye')
-  call dein#add('dangerzone/ranger.vim', {
-        \ 'depends': 'moll/vim-bbye',
+  call dein#add('Lokaltog/vim-easymotion', {
+        \ 'lazy': 1,
+        \ 'on_map': [['n', '<plug>']],
         \ 'hook_add': "
-        \   nmap <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
-        \   command! Ranger call OpenRanger()
+        \   map <Leader> <plug>(easymotion-prefix)\n
+        \   nmap <leader><leader> <Plug>(easymotion-s)
         \"})
+
+  " call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '' })
+  " call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+
+  " call dein#add('Shougo/denite.nvim')
+  call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/neoyank.vim')
+  call dein#add('basyura/unite-rails')
+  call dein#add('Shougo/unite-session')
+  call dein#add('osyo-manga/unite-quickfix')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('Shougo/unite-help')
+
+  call dein#add('Shougo/vimfiler.vim', {
+        \ 'lazy': 1,
+        \ 'on_cmd': 'VimFiler',
+        \ 'hook_source': "
+        \  let g:vimfiler_as_default_explorer = 1\n
+        \  let g:vimfiler_tree_opened_icon = ' '\n
+        \  let g:vimfiler_tree_closed_icon = ' '\n
+        \  let g:vimfiler_file_icon = ' '\n
+        \  let g:vimfiler_marked_file_icon = ' ✓'\n
+        \  let g:vimfiler_readonly_file_icon = ' '\n
+        \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
+        \"})
+
+  call dein#add('moll/vim-bbye')
 
   call dein#add('danro/rename.vim')
   call dein#add('airblade/vim-rooter')
@@ -783,8 +820,6 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('Trevoke/ultisnips-rspec')
   call dein#add('ngmy/vim-rubocop')
   call dein#add('vim-ruby/vim-ruby', {
-        \ 'lazy': 1,
-        \ 'on_ft': ['ruby', 'eruby'],
         \ 'hook_source': "
         \   let g:rubycomplete_classes_in_global = 1\n
         \   let g:rubycomplete_rails = 1\n
@@ -818,7 +853,8 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Web {{{
 " ------------------------------------------------------------------------------
-  " call dein#add('mattn/webapi-vim')
+  call dein#add('mattn/webapi-vim')
+  call dein#add('mattn/wwwrenderer-vim')
   call dein#add('cakebaker/scss-syntax.vim')
   call dein#add('hail2u/vim-css3-syntax')
   call dein#add('ap/vim-css-color')
@@ -832,7 +868,7 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Window Managers {{{
+" Window Management {{{
 " ------------------------------------------------------------------------------
   " call dein#add('spolu/dwm.vim')
   call dein#add('zhaocai/GoldenView.Vim')
@@ -847,19 +883,36 @@ if dein#load_state(expand(g:plugin_path))
         \ 'hook_add': 'nnoremap <silent><leader>wc :CommandW<CR>'
         \})
 
-" call dein#add('Shougo/denite.nvim')
+  " Maximizes windows and restores them afterwards
+  call dein#add('szw/vim-maximizer', {
+        \ 'lazy': 1,
+        \ 'on_cmd': 'MaximizerToggle',
+        \ 'hook_add': 'nnoremap <silent><leader>wz :MaximizerToggle<CR>'
+        \})
 " }}}
 " ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Misc {{{
+" ------------------------------------------------------------------------------
+  call dein#add('tybenz/vimdeck')
+  call dein#add('ryanoasis/vim-devicons')
+" }}}
+" ------------------------------------------------------------------------------
+
   call dein#end()
+  call dein#call_hook('source') " call hooks of non lazy plugins
   call dein#save_state() " Save dein state (cache)
 endif
 
 filetype plugin indent on
 
-if dein#check_install()
+if !has('vim_starting') && dein#check_install()
+  " Installation check.
   let g:dein#types#git#default_protocol = "ssh"
   call dein#install() " install plugins that aren't installed yet
   call dein#remote_plugins() " Install remote plugins
+  call dein#check_lazy_plugins() " check for lazy plugins that don't have /plugin
 endif
 
 " call map(dein#check_clean(), "delete(v:val, 'rf')") " remove unused/disabled plugins
@@ -1097,7 +1150,7 @@ if dein#tap('neomake') "{{{
 endif "}}}
 
 if dein#tap('vim-fugitive') "{{{
-  nnoremap <silent> <leader>gs :Gstatus<CR>
+  nnoremap <silent> <leader>gs  :Gstatus<CR>
   nnoremap <silent> <leader>gd  :Gvdiff<CR>
   nnoremap <silent> <leader>gc  :Gcommit<CR>
   nnoremap <silent> <leader>gb  :Gblame<CR>
@@ -1105,7 +1158,7 @@ if dein#tap('vim-fugitive') "{{{
   nnoremap <silent> <leader>gp  :Git push<CR>
   nnoremap <silent> <leader>gr  :Gread<CR>
   nnoremap <silent> <leader>gw  :Gwrite<CR>
-  nnoremap <silent> <leader>gwq  :Gwrite<CR>:qa<CR>
+  nnoremap <silent> <leader>gwq :Gwrite<CR>:qa<CR>
   nnoremap <silent> <leader>ge  :Gedit<CR>
 
   " Automatically remove fugitive buffers
@@ -1141,6 +1194,130 @@ if dein#tap('deoplete.nvim') "{{{
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 endif "}}}
 
+if dein#tap('unite.vim') "{{{
+
+  call dein#disable('fzf')
+  call dein#disable('fzf.vim')
+
+  let g:unite_data_directory='~/.nvim/.cache/unite'
+  let g:unite_source_history_yank_enable=1
+  let g:unite_prompt='❯ '
+  let g:unite_source_menu_menus = {}
+
+  " Using ag as recursive command.
+  let g:unite_source_rec_async_command =
+        \ ['ag', '--follow', '--nocolor', '--nogroup',
+        \  '--hidden', '-g', '']
+
+  let g:unite_source_grep_command='ag'
+  let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+  let g:unite_source_grep_recursive_opt=''
+
+  " bindings {{{
+    nmap <leader>f [unite]
+    nmap [unite] <nop>
+
+    nnoremap <silent> [unite]e  :<C-u>VimFiler -no-split<CR>
+
+    nnoremap <silent> [unite]m  :<C-u>Unite
+          \ -no-split file_rec/neovim:! buffer file_mru<CR>
+
+    nnoremap <silent> [unite]r  :<C-u>Unite
+          \ -no-split -buffer-name=recent file_mru<CR>
+
+    nnoremap <silent> <leader>y :<C-u>Unite
+          \ -auto-resize -direction=botright
+          \ -buffer-name=yanks history/yank<CR>
+
+    nnoremap <silent> <leader>b :<C-u>Unite
+          \ -no-split -buffer-name=buffers buffer<CR>
+
+    nnoremap <silent> <Leader>h :<C-u>Unite
+          \ -auto-resize -buffer-name=help help<CR>
+
+  " }}}
+
+  " Git fugitive menu {{{
+    let g:unite_source_menu_menus.git = {
+      \ 'description' : '            Manage Git repositories
+          \                            ⌘ [space]g',
+      \}
+    let g:unite_source_menu_menus.git.command_candidates = [
+      \['▷ tig                                                        ⌘ ,gt',
+          \'normal ,gt'],
+      \['▷ git status       (Fugitive)                                ⌘ ,gs',
+          \'Gstatus'],
+      \['▷ git diff         (Fugitive)                                ⌘ ,gd',
+          \'Gdiff'],
+      \['▷ git commit       (Fugitive)                                ⌘ ,gc',
+          \'Gcommit'],
+      \['▷ git log          (Fugitive)                                ⌘ ,gl',
+          \'exe "silent Glog | Unite quickfix"'],
+      \['▷ git blame        (Fugitive)                                ⌘ ,gb',
+          \'Gblame'],
+      \['▷ git stage        (Fugitive)                                ⌘ ,gw',
+          \'Gwrite'],
+      \['▷ git checkout     (Fugitive)                                ⌘ ,go',
+          \'Gread'],
+      \['▷ git rm           (Fugitive)                                ⌘ ,gr',
+          \'Gremove'],
+      \['▷ git mv           (Fugitive)                                ⌘ ,gm',
+          \'exe "Gmove " input("destination: ")'],
+      \['▷ git push         (Fugitive, output buffer)                 ⌘ ,gp',
+          \'Git! push'],
+      \['▷ git pull         (Fugitive, output buffer)                 ⌘ ,gP',
+          \'Git! pull'],
+      \['▷ git prompt       (Fugitive, output buffer)                 ⌘ ,gi',
+          \'exe "Git! " input("git command: ")'],
+      \['▷ git cd           (Fugitive)',
+          \'Gcd'],
+      \]
+    nnoremap <silent>[unite]g :Unite -silent -start-insert menu:git<CR>
+  " }}}
+
+  " Custom mappings for the unite buffer
+  autocmd FileType unite call s:unite_settings()
+
+  function! s:unite_settings() "{{{
+    " Enable navigation with control-n and control-p in insert mode
+    imap <buffer> <C-n>       <Plug>(unite_select_next_line)
+    imap <buffer> <C-p>       <Plug>(unite_select_previous_line)
+
+    imap <buffer> <esc>       <Plug>(unite_exit)
+    nmap <buffer> <esc>       <Plug>(unite_exit)
+
+    nmap <buffer> <left>      <Plug>(unite_exit)
+    nmap <buffer> <right>     <Plug>(unite_do_default_action)
+
+    nmap <buffer><expr> <C-h> unite#do_action('split')
+    imap <buffer><expr> <C-h> unite#do_action('split')
+
+    nmap <buffer><expr> <C-v> unite#do_action('vsplit')
+    imap <buffer><expr> <C-v> unite#do_action('vsplit')
+
+    nmap <buffer><expr> <C-t> unite#do_action('tabopen')
+    imap <buffer><expr> <C-t> unite#do_action('tabopen')
+
+    call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    call unite#filters#sorter_default#use(['sorter_rank'])
+    call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '(\.meta$|\.tmp)')
+  endfunction "}}}
+
+endif "}}}
+
+if dein#tap('vimfiler.vim') "{{{
+  autocmd FileType vimfiler call <SID>VimfilerSetup()
+  function! s:VimfilerSetup()
+    nnoremap <buffer> <silent> <Esc> :bd<CR>
+    nmap <buffer> <silent> f <Plug>(vimfiler_find)
+
+    nnoremap <silent><buffer><expr> v
+          \ vimfiler#do_switch_action('vsplit')
+    nnoremap <silent><buffer><expr> s
+          \ vimfiler#do_switch_action('split')
+  endfunction
+endif "}}}
+
 " }}}
 " ==============================================================================
 
@@ -1148,7 +1325,7 @@ endif "}}}
 " Statusline {{{
 " ==============================================================================
     set laststatus=2
-    set showtabline=1
+    set showtabline=2
     set guioptions-=e
 
     let g:currentmode={
@@ -1264,13 +1441,13 @@ endif "}}}
       hi! User9 ctermfg=3 ctermbg=10
     elseif dein#tap('base16-vim')
       " don't show at all with User0
-      hi! statusLine ctermfg=13 ctermbg=13
+      hi! statusLine ctermfg=4 ctermbg=10
 
       " black on blue
-      hi! User1 ctermfg=10 ctermbg=15
+      hi! User1 ctermfg=10 ctermbg=10
 
       " blue on statusbar
-      hi! User2 ctermfg=4 ctermbg=13
+      hi! User2 ctermfg=4 ctermbg=10
 
       " blue status flag
       hi! User3 ctermfg=15 ctermbg=4
@@ -1285,13 +1462,13 @@ endif "}}}
       hi! User6 ctermfg=15 ctermbg=3
 
       " red on statusbar
-      hi! User7 ctermfg=9 ctermbg=13
+      hi! User7 ctermfg=9 ctermbg=10
 
       " green on statusbar
-      hi! User8 ctermfg=2 ctermbg=13
+      hi! User8 ctermfg=11 ctermbg=10
 
       " yellow on statusbar
-      hi! User9 ctermfg=3 ctermbg=13
+      hi! User9 ctermfg=3 ctermbg=10
     endif
     endfunction
 
@@ -1308,7 +1485,6 @@ endif "}}}
     let &statusline.=Segment(8, ' %2c ')                         " Rownumber/total (%)
 
     autocmd ColorScheme * call SetSegmentsColorGroups()
-
   " }}}
 " ==============================================================================
 
@@ -1318,12 +1494,12 @@ endif "}}}
 " segment functions are in the statusline fold
   function! FetchGitStatus()
     let projectroot=projectroot#get(expand('%'))
-    let g:status=system('~/.config/nvim/vcs_status/status.sh '.projectroot)
-    if g:status != ''
-      let status_list=split(g:status,",")
-      let g:vcs_staged=status_list[0]
-      let g:vcs_modified=status_list[1]
-      let g:vcs_others=status_list[2]
+    let status=system('~/.config/nvim/vcs_status/status.sh '.projectroot)
+    if status != ''
+      let status_list=split(status,",")
+      let g:vcs_staged=get(status_list, 0 , 0)
+      let g:vcs_modified=get(status_list, 1 , 0)
+      let g:vcs_others=get(status_list, 2 , 0)
     else
       let g:vcs_staged=0
       let g:vcs_modified=0
@@ -1455,12 +1631,12 @@ endif "}}}
   set tabline=%!MyTabLine()
 
   function! SetTablineHighlights()
-    highlight! TabNum term=bold cterm=bold ctermfg=4 ctermbg=15
-    highlight! TabNumSel term=bold cterm=bold ctermfg=13 ctermbg=4
-    highlight! TabLine ctermbg=15
-    highlight! TabLineSel term=bold cterm=bold ctermfg=4 ctermbg=13
-    highlight! WinNum term=bold cterm=bold ctermfg=7 ctermbg=15
-    highlight! WinNumSel term=bold cterm=bold ctermfg=10 ctermbg=13
+    hi! TabNum term=bold cterm=bold ctermfg=4 ctermbg=15
+    hi! TabNumSel term=bold cterm=bold ctermfg=13 ctermbg=4
+    hi! TabLine ctermbg=15
+    hi! TabLineSel term=bold cterm=bold ctermfg=4 ctermbg=13
+    hi! WinNum term=bold cterm=bold ctermfg=7 ctermbg=15
+    hi! WinNumSel term=bold cterm=bold ctermfg=10 ctermbg=13
   endfunction
 
   autocmd Colorscheme * call SetTablineHighlights()
@@ -1475,14 +1651,3 @@ endif "}}}
   endif
 " }}}
 " ==============================================================================
-  " TODO: remove this when fixed.
-  " Broken W key temp fix
-  nmap <silent> <left> <C-w>h
-  nmap <silent> <down> <C-w>j
-  nmap <silent> <up> <C-w>k
-  nmap <silent> <right> <C-w>l
-
-" colorscheme gotham
-colorscheme base16-solarized
-set background=dark
-syntax on
