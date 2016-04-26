@@ -40,7 +40,7 @@ set smartcase
 
 " Maximum width of text that is being inserted.  A longer line will be
 " broken after white space to get this width.
-set textwidth=80
+" set textwidth=80
 
 " Changes the effect of the |:mksession| command.
 set sessionoptions-=options  " Don't save options
@@ -450,6 +450,7 @@ endfunction
   nnoremap <leader>st :botright split<cr>:terminal<cr>
   nnoremap <leader>stv :botright vsplit<cr>:terminal<cr>
   tnoremap <leader><ESC> <C-\><C-n>
+  tnoremap <leader>tn <C-\><C-n>:tabnext<CR>
 
   " resize splits
   function! IsMost(direction)
@@ -730,9 +731,9 @@ if dein#load_state(expand(g:plugin_path))
 
   call dein#add('Yggdroot/indentLine', {
         \ 'hook_add': "
-        \  let g:indentLine_char = '▸'
+        \  let g:indentLine_char = '┆'\n
+        \  let g:indentLine_indentLevel = 20
         \"})
-
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -1205,12 +1206,16 @@ if dein#tap('unite.vim') "{{{
   let g:unite_source_menu_menus = {}
 
   " Using ag as recursive command.
-  let g:unite_source_rec_async_command =
-        \ ['ag', '--follow', '--nocolor', '--nogroup',
+  " let g:unite_source_rec_async_command =
+  "       \ ['ag', '--follow', '--nocolor', '--nogroup',
+  "       \  '--hidden', '-g', '']
+  let g:unite_source_rec_async_command=
+        \ ['ag', '--nocolor', '--nogroup',
+        \  '--ignore', '.hg', '--ignore', '.svn', '--ignore', '.git', '--ignore', '.bzr',
         \  '--hidden', '-g', '']
 
-  let g:unite_source_grep_command='ag'
-  let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden --ignore-dir .git --ignore *.log'
   let g:unite_source_grep_recursive_opt=''
 
   " bindings {{{
@@ -1220,10 +1225,15 @@ if dein#tap('unite.vim') "{{{
     nnoremap <silent> [unite]e  :<C-u>VimFiler -no-split<CR>
 
     nnoremap <silent> [unite]m  :<C-u>Unite
-          \ -no-split file_rec/neovim:! buffer file_mru<CR>
+          \ -start-insert -no-split file_rec/neovim:! buffer file_mru<CR>
 
     nnoremap <silent> [unite]r  :<C-u>Unite
           \ -no-split -buffer-name=recent file_mru<CR>
+
+    nnoremap <silent> [unite]g  :<C-u>Unite
+          \ file_rec/git:--cached:--others:--exclude-standard<CR>
+
+    nnoremap <silenT> <leader>ur :<Plug>(unite_redraw)
 
     nnoremap <silent> <leader>y :<C-u>Unite
           \ -auto-resize -direction=botright
@@ -1234,6 +1244,8 @@ if dein#tap('unite.vim') "{{{
 
     nnoremap <silent> <Leader>h :<C-u>Unite
           \ -auto-resize -buffer-name=help help<CR>
+
+    nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<CR>
 
   " }}}
 
@@ -1272,7 +1284,7 @@ if dein#tap('unite.vim') "{{{
       \['▷ git cd           (Fugitive)',
           \'Gcd'],
       \]
-    nnoremap <silent>[unite]g :Unite -silent -start-insert menu:git<CR>
+    nnoremap <silent><leader>g :Unite -silent -start-insert menu:git<CR>
   " }}}
 
   " Custom mappings for the unite buffer
@@ -1444,7 +1456,7 @@ endif "}}}
       hi! statusLine ctermfg=4 ctermbg=10
 
       " black on blue
-      hi! User1 ctermfg=10 ctermbg=10
+      hi! User1 ctermfg=10 ctermbg=15
 
       " blue on statusbar
       hi! User2 ctermfg=4 ctermbg=10
@@ -1507,9 +1519,39 @@ endif "}}}
     endif
   endfunction
 
+  function! FetchArcStatus()
+      let projectroot=projectroot#get(expand('%'))
+      let status=system('~/.config/nvim/vcs_status/arc.sh '.projectroot)
+      if status != ''
+        let status_list=split(status,",")
+        let g:arc_diffs=get(status_list, 0 , 0)
+        let g:arc_tasks=get(status_list, 1 , 0)
+      else
+        let g:arc_diffs=0
+        let g:arc_tasks=0
+      endif
+    endfunction
+
+  function! ArcTasks()
+    if g:arc_tasks != 0
+      return Segment(5, ' T '.g:arc_tasks.' ')
+    else
+      return ''
+    endif
+  endfunction
+
+  function! ArcDiffs()
+    if g:arc_diffs != 0
+      return Segment(6, ' D '.g:arc_diffs.' ')
+    else
+      return ''
+    endif
+  endfunction
+
   function! GitStaged()
     if g:vcs_staged != 0
-      return DoubleSegment(5, 1,  ' + ', ' '.g:vcs_staged.' ')
+      " return DoubleSegment(5, 1,  ' + ', ' '.g:vcs_staged.' ')
+      return Segment(5, ' + '.g:vcs_staged.' ')
     else
       return ''
     endif
@@ -1517,7 +1559,8 @@ endif "}}}
 
   function! GitModified()
     if g:vcs_modified != 0
-      return DoubleSegment(4, 1, ' + ', ' '.g:vcs_modified.' ')
+      " return DoubleSegment(4, 1, ' + ', ' '.g:vcs_modified.' ')
+      return Segment(4, ' + '.g:vcs_modified.' ')
     else
      return ''
     endif
@@ -1525,7 +1568,8 @@ endif "}}}
 
   function! GitOthers()
     if g:vcs_others != 0
-      return DoubleSegment(3, 1, ' ~ ', ' '.g:vcs_others.' ')
+      " return DoubleSegment(3, 1, ' ~ ', ' '.g:vcs_others.' ')
+      return Segment(3, ' ~ '.g:vcs_others.' ')
     else
       return ''
     endif
@@ -1534,7 +1578,8 @@ endif "}}}
   function! GitBranch()
     let git = fugitive#head()
     if git != ''
-      return ''.Segment(7, ' ⎇ '.strpart(git, strlen(git)-30))
+      " return DoubleSegment(6, 1 ,' ⎇ ', ' '.strpart(git, strlen(git)-30).' ')
+      return Segment(9, ' ⎇ '.strpart(git, strlen(git)-30).' ')
     else
       return ''
     endif
@@ -1615,9 +1660,10 @@ endif "}}}
       call FetchGitStatus()
 
       let s .= '%T%#TabLineFill#%='
-      " let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
-      " Right side esting
-       " let s .= GitDiverge()
+       let s .= ArcTasks()
+       let s .= ' '
+       let s .= ArcDiffs()
+       let s .= ' '
        let s .= GitStaged()
        let s .= ' '
        let s .= GitModified()
@@ -1643,6 +1689,7 @@ endif "}}}
 " }}}
 " ==============================================================================
 
+autocmd BufRead,BufNewFile *.* IndentLinesReset
 " ==============================================================================
 " Include user's local vim config {{{
 " ==============================================================================
