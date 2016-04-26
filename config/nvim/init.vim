@@ -740,7 +740,6 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Javascript {{{
 " ------------------------------------------------------------------------------
-  call dein#add('burnettk/vim-angular')
   call dein#add('kchmck/vim-coffee-script')
   call dein#add('Raimondi/delimitMate')
   call dein#add('dsawardekar/ember.vim')
@@ -748,7 +747,8 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('JarrodCTaylor/vim-ember-cli-test-runner')
   call dein#add('isRuslan/vim-es6')
   call dein#add('mxw/vim-jsx')
-  call dein#add('maksimr/vim-jsbeautify') | call dein#add('beautify-web/js-beautify')
+  call dein#add('maksimr/vim-jsbeautify')
+  call dein#add('beautify-web/js-beautify')
   call dein#add('othree/javascript-libraries-syntax.vim', {
         \ 'hook_add': "
         \   let g:used_javascript_libs = 'underscore,backbone,react,flux'
@@ -761,10 +761,8 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
   call dein#add('rking/ag.vim', {
         \ 'lazy': 1,
-        \ 'on_cmd': 'Ag',
-        \ 'hook_add': "
-        \   noremap <silent> <leader>ag :Ag!<space>
-        \"})
+        \ 'on_cmd': 'Ag'
+        \})
 
   call dein#add('Lokaltog/vim-easymotion', {
         \ 'lazy': 1,
@@ -774,31 +772,38 @@ if dein#load_state(expand(g:plugin_path))
         \   nmap <leader><leader> <Plug>(easymotion-s)
         \"})
 
-  " call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '' })
-  " call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+  call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '' })
+  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
 
-  " call dein#add('Shougo/denite.nvim')
-  call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+  " TODO: unite / denite
+  " call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+  " call dein#add('Shougo/unite.vim')
+  " call dein#add('Shougo/neoyank.vim')
+  " call dein#add('basyura/unite-rails')
+  " call dein#add('Shougo/unite-session')
+  " call dein#add('osyo-manga/unite-quickfix')
+  " call dein#add('Shougo/neomru.vim')
+  " call dein#add('Shougo/unite-help')
+  " call dein#add('Shougo/vimfiler.vim', {
+  "       \ 'lazy': 1,
+  "       \ 'on_cmd': 'VimFiler',
+  "       \ 'hook_source': "
+  "       \  let g:vimfiler_as_default_explorer = 1\n
+  "       \  let g:vimfiler_tree_opened_icon = ' '\n
+  "       \  let g:vimfiler_tree_closed_icon = ' '\n
+  "       \  let g:vimfiler_file_icon = ' '\n
+  "       \  let g:vimfiler_marked_file_icon = ' ✓'\n
+  "       \  let g:vimfiler_readonly_file_icon = ' '\n
+  "       \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
+  "       \"})
 
-  call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/neoyank.vim')
-  call dein#add('basyura/unite-rails')
-  call dein#add('Shougo/unite-session')
-  call dein#add('osyo-manga/unite-quickfix')
-  call dein#add('Shougo/neomru.vim')
-  call dein#add('Shougo/unite-help')
-
-  call dein#add('Shougo/vimfiler.vim', {
+  call dein#add('dangerzone/ranger.vim', {
+        \ 'depends': 'moll/vim-bbye',
         \ 'lazy': 1,
-        \ 'on_cmd': 'VimFiler',
-        \ 'hook_source': "
-        \  let g:vimfiler_as_default_explorer = 1\n
-        \  let g:vimfiler_tree_opened_icon = ' '\n
-        \  let g:vimfiler_tree_closed_icon = ' '\n
-        \  let g:vimfiler_file_icon = ' '\n
-        \  let g:vimfiler_marked_file_icon = ' ✓'\n
-        \  let g:vimfiler_readonly_file_icon = ' '\n
-        \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
+        \ 'on_func': 'OpenRanger',
+        \ 'hook_add': "
+        \   nmap <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
+        \   command! Ranger call OpenRanger()
         \"})
 
   call dein#add('moll/vim-bbye')
@@ -806,7 +811,6 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('danro/rename.vim')
   call dein#add('airblade/vim-rooter')
   " call dein#add('mhinz/vim-signify')
-  call dein#add('christoomey/vim-tmux-navigator')
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -871,7 +875,6 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Window Management {{{
 " ------------------------------------------------------------------------------
-  " call dein#add('spolu/dwm.vim')
   call dein#add('zhaocai/GoldenView.Vim')
 
 
@@ -896,7 +899,6 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Misc {{{
 " ------------------------------------------------------------------------------
-  call dein#add('tybenz/vimdeck')
   call dein#add('ryanoasis/vim-devicons')
 " }}}
 " ------------------------------------------------------------------------------
