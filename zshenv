@@ -35,10 +35,6 @@ fi
 
 # solarized
 export FZF_DEFAULT_OPTS='
-  --color=dark
+  --color fg:7,bg:0,hl:8,fg+:7,bg+:10,hl+:1
+  --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
 '
-
-# export FZF_DEFAULT_OPTS='
-#   --color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
-#   --color info:183,prompt:110,spinner:107,pointer:167,marker:215
-# '
