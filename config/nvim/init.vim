@@ -135,14 +135,9 @@ if !has("gui_running") && !has('nvim')
 endif
 
 if has('nvim')
-  " fix issue where <c-h> would result in <BS>
-  " issue: neovim/issues/2048
-  " nmap <bs> :<c-u>TmuxNavigateLeft<cr>
   " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
-  " let g:ruby_host_prog = "ruby"
-  " runtime! plugin/python_setup.vim
 endif
 " }}}
 " ==============================================================================
@@ -520,7 +515,7 @@ endfunction
   nmap <silent> <leader>wl <C-w>l
 
   " Default workspace
-  function! DefaultWorkspace()
+  function! s:DefaultWorkspace()
     tabnew term://~/.dotfiles/scripts/startBackend
     file Backend:daemon
 
@@ -531,7 +526,7 @@ endfunction
     file Frontend:daemon
   endfunction
 
-  command! -register StartAll call DefaultWorkspace()
+  command! -register StartAll call <sid>DefaultWorkspace()
 " }}}
 " ==============================================================================
 
@@ -547,22 +542,22 @@ endfunction
 " Some plugins conflict with each other, those plugins are wrapped in a if
 " statement that checks if the given plugin is enabled.
 " to check if a plugin is enabled use `dein#tap('plugin_name')`
-" to disable a plugin use `dein#disable('author/plugin')` instead of dein#add
+" to disable a plugin use `dein#disable('plugin')`
 
 " ------------------------------------------------------------------------------
 " Dein.vim {{{
 " ------------------------------------------------------------------------------
 "Note: install dein if not present
 let g:dein_path='$HOME/.config/nvim/dein'
-if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
-  " if executable('git')
-  "  call termopen('git clone https://github.com/Shougo/dein.vim ' .  g:dein_path .  '/repos/github.com/Shougo/dein.vim')
-  " else
-    silent !curl -fLo /tmp/dein/installer.sh --create-dirs
-      \ https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh
 
-    call termopen('sh /tmp/dein/installer.sh '.g:dein_path)
-  " endif
+if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
+  if executable('git')
+    exec '!git clone https://github.com/Shougo/dein.vim ' . g:dein_path . '/repos/github.com/Shougo/dein.vim'
+  else
+    echohl WarningMsg | echom "You need install git!" | echohl None
+  endif
+
+  autocmd VimEnter * source $MYVIMRC
 endif
 
 if &compatible
@@ -582,23 +577,15 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" AutoCompletion {{{
+" TODO:AutoCompletion {{{
 " ------------------------------------------------------------------------------
-  call dein#add('mattn/emmet-vim', { 'lazy' : 1, 'on_i' : 1 })
+  "call dein#add('mattn/emmet-vim', { 'lazy' : 1, 'on_i' : 1 })
 
-  call dein#add('Shougo/deoplete.nvim', { 'lazy': 1, 'on_i': 1 })
+  "call dein#add('Shougo/deoplete.nvim', { 'lazy': 1, 'on_i': 1 })
 
   call dein#add('tpope/vim-repeat')
 
   call dein#add('tomtom/tlib_vim')
-  call dein#add('SirVer/ultisnips', {
-        \ 'hook_add': "
-        \   let g:UltiSnipsExpandTrigger='<tab>'\n
-        \   let g:UltiSnipsJumpForwardTrigger='<c-n>'\n
-        \   let g:UltiSnipsJumpBackwardTrigger='<c-p>'\n
-        \   let g:UltiSnipsEditSplit='vertical'
-        \"})
-
   call dein#add('MarcWeber/vim-addon-mw-utils')
   call dein#add('alexanderjeurissen/vim-react-snippets')
 " }}}
@@ -608,47 +595,47 @@ if dein#load_state(expand(g:plugin_path))
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
   call dein#add('chriskempson/base16-vim', {
-        \ 'hook_add': "
-        \   colorscheme base16-solarized\n
-        \   set background=dark\n
-        \"})
+      \ 'hook_add': "
+      \   colorscheme base16-solarized\n
+      \   set background=dark
+      \"})
 
-  function! SolarizeCustomization()
-    hi! link txtBold Identifier
-    hi! link zshVariableDef Identifier
-    hi! link zshFunction Function
-    hi! link rubyControl Statement
-    hi! link rspecGroupMethods rubyControl
-    hi! link rspecMocks Identifier
-    hi! link rspecKeywords Identifier
-    hi! link rubyLocalVariableOrMethod Normal
-    hi! link rubyStringDelimiter Constant
-    hi! link rubyString Constant
-    hi! link rubyAccess Todo
-    hi! link rubySymbol Identifier
-    hi! link rubyPseudoVariable Type
-    hi! link rubyRailsARAssociationMethod Title
-    hi! link rubyRailsARValidationMethod Title
-    hi! link rubyRailsMethod Title
-    hi! link rubyDoBlock Normal
-    hi! link MatchParen DiffText
+ function! HighlightCustomization()
+  hi! link txtBold Identifier
+  hi! link zshVariableDef Identifier
+  hi! link zshFunction Function
+  hi! link rubyControl Statement
+  hi! link rspecGroupMethods rubyControl
+  hi! link rspecMocks Identifier
+  hi! link rspecKeywords Identifier
+  hi! link rubyLocalVariableOrMethod Normal
+  hi! link rubyStringDelimiter Constant
+  hi! link rubyString Constant
+  hi! link rubyAccess Todo
+  hi! link rubySymbol Identifier
+  hi! link rubyPseudoVariable Type
+  hi! link rubyRailsARAssociationMethod Title
+  hi! link rubyRailsARValidationMethod Title
+  hi! link rubyRailsMethod Title
+  hi! link rubyDoBlock Normal
+  hi! link MatchParen DiffText
 
-    hi! link CTagsModule Type
-    hi! link CTagsClass Type
-    hi! link CTagsMethod Identifier
-    hi! link CTagsSingleton Identifier
+  hi! link CTagsModule Type
+  hi! link CTagsClass Type
+  hi! link CTagsMethod Identifier
+  hi! link CTagsSingleton Identifier
 
-    hi! link javascriptFuncName Type
-    hi! link jsFuncCall jsFuncName
-    hi! link javascriptFunction Statement
-    hi! link javascriptThis Statement
-    hi! link javascriptParens Normal
-    hi! link jOperators javascriptStringD
-    hi! link jId Title
-    hi! link jClass Title
+  hi! link javascriptFuncName Type
+  hi! link jsFuncCall jsFuncName
+  hi! link javascriptFunction Statement
+  hi! link javascriptThis Statement
+  hi! link javascriptParens Normal
+  hi! link jOperators javascriptStringD
+  hi! link jId Title
+  hi! link jClass Title
 
-    hi! link sassMixinName Function
-    hi! link sassDefinition Function
+  hi! link sassMixinName Function
+  hi! link sassDefinition Function
     hi! link sassProperty Type
     hi! link htmlTagName Type
     hi! PreProc gui=bold
@@ -662,18 +649,13 @@ if dein#load_state(expand(g:plugin_path))
     hi! vimfilerLeaf        ctermfg=11
   endfunction
 
-  autocmd Colorscheme * call SolarizeCustomization()
-
-  " call dein#add('whatyouhide/vim-gotham', {
-  "       \ 'hook_source': "
-  "       \   colorscheme gotham
-  "       \   set background=dark
-  "       \"})
+  autocmd Colorscheme * call HighlightCustomization()
 
   " call dein#add('junegunn/seoul256.vim'
   call dein#add('vheon/vim-cursormode')
   let cursormode_color_map = {
-        \   "n":      "#FFFFFF",
+        \   "ndark":      "#FFFFFF",
+        \   "nlight":     "#586e75",
         \   "i":      "#edb442",
         \   "v":      "#888ca6",
         \   "V":      "#888ca6",
@@ -702,19 +684,17 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('tommcdo/vim-exchange')
   call dein#add('junegunn/rainbow_parentheses.vim')
   call dein#add('tpope/vim-surround', {
-        \ 'depends': ['vim-repeat'],
-        \ 'lazy': 1,
+        \ 'depends': 'vim-repeat',
         \ 'on_map': 'cs'
         \})
 
   call dein#add('benekastah/neomake')
+
   call dein#add('vim-scripts/tComment', {
-        \ 'lazy': 1,
-        \ 'on_map': ['gc', 'g<', 'g>']
+        \ 'on_map': ['gc', 'gcc', 'g<', 'g>']
         \})
 
   call dein#add('osyo-manga/vim-over', {
-        \ 'lazy': 1,
         \ 'on_cmd': 'Replace',
         \ 'hook_add': "
         \   let g:over#command_line#paste_escape_chars = '/.*$^~'\n
@@ -725,14 +705,14 @@ if dein#load_state(expand(g:plugin_path))
 
   " makes it easy to switch between single line and multi line blocks
   call dein#add('AndrewRadev/splitjoin.vim', {
-        \ 'lazy': 1,
         \ 'on_map': ['gS','gJ']
         \})
 
   call dein#add('Yggdroot/indentLine', {
         \ 'hook_add': "
         \  let g:indentLine_char = '┆'\n
-        \  let g:indentLine_indentLevel = 20
+        \  let g:indentLine_indentLevel = 20\n
+        \  let g:indentLine_bufNameExclude = ['terminal']
         \"})
 " }}}
 " ------------------------------------------------------------------------------
@@ -744,6 +724,7 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('Raimondi/delimitMate')
   call dein#add('dsawardekar/ember.vim')
   call dein#add('pangloss/vim-javascript')
+  " call dein#add('othree/yajs.vim')
   call dein#add('JarrodCTaylor/vim-ember-cli-test-runner')
   call dein#add('isRuslan/vim-es6')
   call dein#add('mxw/vim-jsx')
@@ -759,13 +740,8 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Navigation {{{
 " ------------------------------------------------------------------------------
-  call dein#add('rking/ag.vim', {
-        \ 'lazy': 1,
-        \ 'on_cmd': 'Ag'
-        \})
-
-  call dein#add('Lokaltog/vim-easymotion', {
-        \ 'lazy': 1,
+   "TODO: replace with vim-sneak
+   call dein#add('Lokaltog/vim-easymotion', {
         \ 'on_map': [['n', '<plug>']],
         \ 'hook_add': "
         \   map <Leader> <plug>(easymotion-prefix)\n
@@ -775,7 +751,7 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '' })
   call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
 
-  " TODO: unite / denite
+  " unite / denite
   " call dein#add('Shougo/vimproc.vim', {'build': 'make'})
   " call dein#add('Shougo/unite.vim')
   " call dein#add('Shougo/neoyank.vim')
@@ -797,16 +773,16 @@ if dein#load_state(expand(g:plugin_path))
   "       \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
   "       \"})
 
+  call dein#add('moll/vim-bbye')
+
   call dein#add('dangerzone/ranger.vim', {
-        \ 'depends': 'moll/vim-bbye',
-        \ 'lazy': 1,
+        \ 'depends': 'vim-bbye',
         \ 'on_func': 'OpenRanger',
         \ 'hook_add': "
+        \   command! Ranger call OpenRanger()\n
         \   nmap <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
-        \   command! Ranger call OpenRanger()
+        \   no <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
         \"})
-
-  call dein#add('moll/vim-bbye')
 
   call dein#add('danro/rename.vim')
   call dein#add('airblade/vim-rooter')
@@ -822,10 +798,9 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('tpope/vim-rails')
 
   call dein#add('thoughtbot/vim-rspec')
-  call dein#add('Trevoke/ultisnips-rspec')
   call dein#add('ngmy/vim-rubocop')
   call dein#add('vim-ruby/vim-ruby', {
-        \ 'hook_source': "
+        \ 'hook_add': "
         \   let g:rubycomplete_classes_in_global = 1\n
         \   let g:rubycomplete_rails = 1\n
         \"})
@@ -834,7 +809,7 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" VersionControl {{{
+" TODO:VersionControl {{{
 " ------------------------------------------------------------------------------
   call dein#add('tpope/vim-git') " Vim runtime files and syntax highlighting
   call dein#add('int3/vim-extradite', {
@@ -842,7 +817,6 @@ if dein#load_state(expand(g:plugin_path))
         \})
 
   call dein#add('mattn/gist-vim', {
-        \ 'lazy': 1,
         \ 'on_cmd': 'Gist',
         \ 'hook_add': "
         \   let g:gist_clip_command = 'pbcopy'\n
@@ -851,7 +825,7 @@ if dein#load_state(expand(g:plugin_path))
         \   let g:gist_update_on_write = 1
         \"})
 
-  call dein#add('dbakker/vim-projectroot')
+ "call dein#add('dbakker/vim-projectroot')
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -863,17 +837,14 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('cakebaker/scss-syntax.vim')
   call dein#add('hail2u/vim-css3-syntax')
   call dein#add('ap/vim-css-color')
-  call dein#add('rizzatti/dash.vim', {
-        \ 'lazy':1,
-        \ 'on_cmd': 'Dash'
-        \})
+  call dein#add('rizzatti/dash.vim', { 'on_cmd': 'Dash' })
   call dein#add('tpope/vim-haml')
   call dein#add('aquach/vim-http-client')
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Window Management {{{
+" TODO:Window Management {{{
 " ------------------------------------------------------------------------------
   call dein#add('zhaocai/GoldenView.Vim')
 
@@ -882,14 +853,12 @@ if dein#load_state(expand(g:plugin_path))
   " will close the split if it's the last buffer in
   " it, and close vim if it's the last buffer/split. Use ,w
   call dein#add('aaronjensen/vim-command-w', {
-        \ 'lazy': 1,
         \ 'on_cmd': 'CommandW',
         \ 'hook_add': 'nnoremap <silent><leader>wc :CommandW<CR>'
         \})
 
   " Maximizes windows and restores them afterwards
   call dein#add('szw/vim-maximizer', {
-        \ 'lazy': 1,
         \ 'on_cmd': 'MaximizerToggle',
         \ 'hook_add': 'nnoremap <silent><leader>wz :MaximizerToggle<CR>'
         \})
@@ -899,7 +868,7 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Misc {{{
 " ------------------------------------------------------------------------------
-  call dein#add('ryanoasis/vim-devicons')
+ call dein#add('ryanoasis/vim-devicons')
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -916,12 +885,14 @@ if !has('vim_starting') && dein#check_install()
   call dein#install() " install plugins that aren't installed yet
   call dein#remote_plugins() " Install remote plugins
   call dein#check_lazy_plugins() " check for lazy plugins that don't have /plugin
+
+  source $MYVIMRC
 endif
 
-" call map(dein#check_clean(), "delete(v:val, 'rf')") " remove unused/disabled plugins
+"call map(dein#check_clean(), "delete(v:val, 'rf')") " remove unused/disabled plugins
 
 " }}}
-" ==============================================================================
+"==============================================================================
 
 " ==============================================================================
 " taps {{{
@@ -1017,63 +988,146 @@ if dein#tap('vim-signify') "{{{
 endif "}}}
 
 if dein#tap('fzf.vim') "{{{
-    " Functions {{{
-      function! SearchWordWithAg()
-        execute 'Ag' expand('<cword>')
+  " Color/display options {{{
+    " Default fzf layout
+    " - down / up / left / right
+    " - window (nvim only)
+    let g:fzf_layout = { 'down': '~40%' }
+
+    " Customize fzf colors to match your color scheme
+    let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+      function! s:fzf_statusline()
+        " Override statusline as you like
+        highlight fzf1 ctermfg=161 ctermbg=251
+        highlight fzf2 ctermfg=23 ctermbg=251
+        highlight fzf3 ctermfg=237 ctermbg=251
+        setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
       endfunction
 
-      function! SearchVisualSelectionWithAg() range
-        let old_reg = getreg('"')
-        let old_regtype = getregtype('"')
-        let old_clipboard = &clipboard
-        set clipboard&
-        normal! ""gvy
-        let selection = getreg('"')
-        call setreg('"', old_reg, old_regtype)
-        let &clipboard = old_clipboard
-        execute 'Ag' selection
+      autocmd! User FzfStatusLine call <SID>fzf_statusline()
+  " }}}
+
+  " Ag search {{{
+    function! s:ag_to_qf(line)
+      let parts = split(a:line, ':')
+      return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
+            \ 'text': join(parts[3:], ':')}
+    endfunction
+
+    function! s:ag_handler(lines)
+      if len(a:lines) < 2 | return | endif
+
+      let cmd = get({'ctrl-s': 'split',
+                   \ 'ctrl-v': 'vertical split',
+                   \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
+      let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
+
+      let first = list[0]
+      execute cmd escape(first.filename, ' %#\')
+      execute first.lnum
+      execute 'normal!' first.col.'|zz'
+
+      if len(list) > 1
+        call setqflist(list)
+        copen
+        wincmd p
+      endif
+    endfunction
+
+    command! -nargs=* Agsearch call fzf#run({
+    \ 'source':  printf('ag --nogroup --column --color "%s"',
+    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
+    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. '.
+    \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
+    \            '--color hl:68,hl+:110',
+    \ 'down':    '50%'
+    \ })
+
+  " }}}
+
+  " Files + devicons {{{
+    function! Fzf_dev()
+      function! s:files()
+        let files = split(system($FZF_DEFAULT_COMMAND), '\n')
+        return s:prepend_icon(files)
       endfunction
-    " }}}
 
-    " Keybindings {{{
-      nnoremap <silent> <leader>fm :<C-u>Files<CR>
-      nnoremap <silent> <leader>b :<C-u>Buffers<CR>
-      nnoremap <silent> <leader>s :<C-u>Windows<CR>
-      nnoremap <silent> <leader>; :<C-u>BLines<CR>
-      nnoremap <silent> <leader>. :<C-u>Lines<CR>
-      nnoremap <silent> <leader>o :<C-u>BTags<CR>
-      nnoremap <silent> <leader>O :<C-u>Tags<CR>
-      nnoremap <silent> <leader>: :<C-u>Commands<CR>
-      nnoremap <silent> <leader>? :<C-u>History<CR>
-      nnoremap <silent> <leader>/ :<C-u>Ag<CR>
-      nnoremap <silent> K :call SearchWordWithAg()<CR>
-      vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-      nnoremap <silent> <leader>gl :<C-u>Commits<CR>
-      nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
+      function! s:prepend_icon(candidates)
+        let result = []
+        for candidate in a:candidates
+          let filename = fnamemodify(candidate, ':p:t')
+          let icon = WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
+          call add(result, printf("%s %s", icon, candidate))
+        endfor
 
-      imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-      imap <C-x><C-l> <plug>(fzf-complete-line)
+        return result
+      endfunction
 
-      nnoremap <silent> <leader>rm :<C-u>FZF app/models<CR>
-      nnoremap <silent> <leader>rc :<C-u>FZF app/controllers<CR>
-      nnoremap <silent> <leader>rv :<C-u>FZF app/views<CR>
-      nnoremap <silent> <leader>rl :<C-u>FZF ./lib<CR>
+      function! s:edit_file(item)
+        let parts = split(a:item, ' ')
+        let file_path = get(parts, 1, '')
+        execute 'silent e' file_path
+      endfunction
 
-      nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
-      nnoremap <silent> <leader>rsm :<C-u>FZF spec/integration/models<CR>
-      nnoremap <silent> <leader>rsc :<C-u>FZF spec/integration/controllers<CR>
+      call fzf#run({
+            \ 'source': <sid>files(),
+            \ 'sink':   function('s:edit_file'),
+            \ 'options': '-m -x +s',
+            \ 'down':    '40%' })
+    endfunction
+  " }}}
 
-      nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
-      nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
+  " Keybindings {{{
+    nnoremap <silent> <leader>fm :<C-u>call Fzf_dev()<CR>
+    nnoremap <silent> <leader>b :<C-u>Buffers<CR>
+    nnoremap <silent> <leader>s :<C-u>Windows<CR>
+    nnoremap <silent> <leader>; :<C-u>BLines<CR>
+    nnoremap <silent> <leader>. :<C-u>Lines<CR>
+    nnoremap <silent> <leader>o :<C-u>BTags<CR>
+    nnoremap <silent> <leader>O :<C-u>Tags<CR>
+    nnoremap <silent> <leader>: :<C-u>Commands<CR>
+    nnoremap <silent> <leader>? :<C-u>History<CR>
+    nnoremap <silent> <leader>/ :<C-u>Agsearch<CR>
+    nnoremap <silent> <leader>gl :<C-u>Commits<CR>
+    nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
 
-      nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
-    " }}}
-  endif "}}}
+    imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+    imap <C-x><C-l> <plug>(fzf-complete-line)
+
+    nnoremap <silent> <leader>rm :<C-u>FZF app/models<CR>
+    nnoremap <silent> <leader>rc :<C-u>FZF app/controllers<CR>
+    nnoremap <silent> <leader>rv :<C-u>FZF app/views<CR>
+    nnoremap <silent> <leader>rl :<C-u>FZF ./lib<CR>
+
+    nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
+    nnoremap <silent> <leader>rsm :<C-u>FZF spec/integration/models<CR>
+    nnoremap <silent> <leader>rsc :<C-u>FZF spec/integration/controllers<CR>
+
+    nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
+    nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
+
+    nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
+  " }}}
+endif "}}}
 
 if dein#tap('ctrlp.vim') "{{{
-    call dein#add('FelikZ/ctrlp-py-matcher') "faster matcher for ctrlp
-    call dein#add('sgur/ctrlp-extensions.vim') "provides yankring and CMDline history
-    call dein#add('iurifq/ctrlp-rails.vim') "provides rails.vim modes
+    "call dein#add('FelikZ/ctrlp-py-matcher') "faster matcher for ctrlp
+    "call dein#add('sgur/ctrlp-extensions.vim') "provides yankring and CMDline history
+    "call dein#add('iurifq/ctrlp-rails.vim') "provides rails.vim modes
 
     " Settings {{{
       let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
@@ -1157,7 +1211,6 @@ if dein#tap('vim-fugitive') "{{{
   nnoremap <silent> <leader>gd  :Gvdiff<CR>
   nnoremap <silent> <leader>gc  :Gcommit<CR>
   nnoremap <silent> <leader>gb  :Gblame<CR>
-  nnoremap <silent> <leader>gl  :Glog<CR>
   nnoremap <silent> <leader>gp  :Git push<CR>
   nnoremap <silent> <leader>gr  :Gread<CR>
   nnoremap <silent> <leader>gw  :Gwrite<CR>
@@ -1388,6 +1441,11 @@ endif "}}}
       endif
     endfunction
 
+    function! Filetype()
+      let filename = expand('%F')
+      return WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
+    endfunction
+
     " Returns a warning flag if amount of added lines exceeds 20% of all lines
     function! CommitWarning()
       let [added, modified, removed] = sy#repo#get_stats()
@@ -1426,77 +1484,49 @@ endif "}}}
     endfunction
 
     function! SetSegmentsColorGroups()
+      if dein#tap('base16-vim') "{{{
+        " don't show at all with User0
+        hi! statusLine ctermfg=4 ctermbg=10
 
-    if dein#tap('vim-gotham')
-      " black on blue
-      hi! User1 ctermfg=10 ctermbg=14
+        " black on blue
+        hi! User1 ctermfg=10 ctermbg=15
 
-      " blue on black
-      hi! User2 ctermfg=14 ctermbg=10
+        " blue on statusbar
+        hi! User2 ctermfg=4 ctermbg=10
 
-      " purple on black
-      hi! User3 ctermfg=10 ctermbg=5
+        " blue status flag
+        hi! User3 ctermfg=15 ctermbg=4
 
-      " don't show at all with User0
-      hi! statusline ctermbg=0
+        " red status flag
+        hi! User4 ctermfg=15 ctermbg=9
 
-      "black on red
-      hi! User4 ctermfg=10 ctermbg=9
-      "black on green
-      hi! User5 ctermfg=10 ctermbg=2
-      "black on yellow
-      hi! User6 ctermfg=10 ctermbg=3
+        " green status flag
+        hi! User5 ctermfg=15 ctermbg=2
 
-      " red on black
-      hi! User7 ctermfg=9 ctermbg=10
-      " green on black
-      hi! User8 ctermfg=2 ctermbg=10
-      " yellow on black
-      hi! User9 ctermfg=3 ctermbg=10
-    elseif dein#tap('base16-vim')
-      " don't show at all with User0
-      hi! statusLine ctermfg=4 ctermbg=10
+        " yellow status flag
+        hi! User6 ctermfg=15 ctermbg=3
 
-      " black on blue
-      hi! User1 ctermfg=10 ctermbg=15
+        " red on statusbar
+        hi! User7 ctermfg=9 ctermbg=10
 
-      " blue on statusbar
-      hi! User2 ctermfg=4 ctermbg=10
+        " green on statusbar
+        hi! User8 ctermfg=11 ctermbg=10
 
-      " blue status flag
-      hi! User3 ctermfg=15 ctermbg=4
-
-      " red status flag
-      hi! User4 ctermfg=15 ctermbg=9
-
-      " green status flag
-      hi! User5 ctermfg=15 ctermbg=2
-
-      " yellow status flag
-      hi! User6 ctermfg=15 ctermbg=3
-
-      " red on statusbar
-      hi! User7 ctermfg=9 ctermbg=10
-
-      " green on statusbar
-      hi! User8 ctermfg=11 ctermbg=10
-
-      " yellow on statusbar
-      hi! User9 ctermfg=3 ctermbg=10
-    endif
+        " yellow on statusbar
+        hi! User9 ctermfg=3 ctermbg=10
+      endif "}}}
     endfunction
 
     let &statusline=''
-    let &statusline.=Segment(8, ' %n ')                       " bufnr
+    " let &statusline.=Segment(9, ' %2n ')                       " bufnr
+    let &statusline.=Segment(7, '%3c ')                         " Rownumber/total (%)
     let &statusline.=Flag(4, '%{Paste()}')                    " paste warning
     " let &statusline.=Flag(5, '%{CommitWarning()}')            " paste warning
     " let &statusline.=Flag(6, '%{InsertWarning()}')          " insert mode warning
     let &statusline.=Flag(6, '%{Spell()}')                    " Spell warning
-    let &statusline.=Segment(2, ' %<%F %{ReadOnly()} %m %w')   " File path
+    let &statusline.=Segment(2, ' %<%F %{ReadOnly()}%{Filetype()} %m %w')   " File path
     let &statusline.=Segment(0, '%=')                            " Space
     " let &statusline.=DoubleSegment(3,4,' ⎇ ', ' %{GitInfo()}') " Git info
-    let &statusline.=Segment(2, ' %{&ff}%y ')                    " FileType
-    let &statusline.=Segment(8, ' %2c ')                         " Rownumber/total (%)
 
     autocmd ColorScheme * call SetSegmentsColorGroups()
   " }}}
@@ -1659,20 +1689,22 @@ endif "}}}
 
       endwhile
 
-      call FetchGitStatus()
+      if dein#tap('vim-projectroot')
+        call FetchGitStatus()
 
-      let s .= '%T%#TabLineFill#%='
-       let s .= ArcTasks()
-       let s .= ' '
-       let s .= ArcDiffs()
-       let s .= ' '
-       let s .= GitStaged()
-       let s .= ' '
-       let s .= GitModified()
-       let s .= ' '
-       let s .= GitOthers()
-       let s .= ' '
-       let s .= GitBranch()
+        let s .= '%T%#TabLineFill#%='
+         " let s .= ArcTasks()
+         " let s .= ' '
+         " let s .= ArcDiffs()
+         " let s .= ' '
+         let s .= GitStaged()
+         let s .= ' '
+         let s .= GitModified()
+         let s .= ' '
+         let s .= GitOthers()
+         let s .= ' '
+         let s .= GitBranch()
+       endif
       return s
   endfunction
 
@@ -1696,7 +1728,7 @@ autocmd BufRead,BufNewFile *.* IndentLinesReset
 " Include user's local vim config {{{
 " ==============================================================================
   if filereadable(expand("~/.nvimrc.local"))
-    source ~/.vimrc.local
+    source ~/.nvimrc.local
   endif
 " }}}
 " ==============================================================================
