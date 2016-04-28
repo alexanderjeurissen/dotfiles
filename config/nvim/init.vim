@@ -135,7 +135,8 @@ if !has("gui_running") && !has('nvim')
 endif
 
 if has('nvim')
-  " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
 endif
@@ -594,48 +595,55 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  call dein#add('chriskempson/base16-vim', {
+  " call dein#add('chriskempson/base16-vim', {
+  "     \ 'hook_add': "
+  "     \   colorscheme base16-solarized\n
+  "     \   set background=dark
+  "     \"})
+
+
+  call dein#add('mhartington/oceanic-next', {
       \ 'hook_add': "
-      \   colorscheme base16-solarized\n
+      \   colorscheme OceanicNext\n
       \   set background=dark
       \"})
 
  function! HighlightCustomization()
-  hi! link txtBold Identifier
-  hi! link zshVariableDef Identifier
-  hi! link zshFunction Function
-  hi! link rubyControl Statement
-  hi! link rspecGroupMethods rubyControl
-  hi! link rspecMocks Identifier
-  hi! link rspecKeywords Identifier
-  hi! link rubyLocalVariableOrMethod Normal
-  hi! link rubyStringDelimiter Constant
-  hi! link rubyString Constant
-  hi! link rubyAccess Todo
-  hi! link rubySymbol Identifier
-  hi! link rubyPseudoVariable Type
-  hi! link rubyRailsARAssociationMethod Title
-  hi! link rubyRailsARValidationMethod Title
-  hi! link rubyRailsMethod Title
-  hi! link rubyDoBlock Normal
-  hi! link MatchParen DiffText
+    hi! link txtBold Identifier
+    hi! link zshVariableDef Identifier
+    hi! link zshFunction Function
+    hi! link rubyControl Statement
+    hi! link rspecGroupMethods rubyControl
+    hi! link rspecMocks Identifier
+    hi! link rspecKeywords Identifier
+    hi! link rubyLocalVariableOrMethod Normal
+    hi! link rubyStringDelimiter Constant
+    hi! link rubyString Constant
+    hi! link rubyAccess Todo
+    hi! link rubySymbol Identifier
+    hi! link rubyPseudoVariable Type
+    hi! link rubyRailsARAssociationMethod Title
+    hi! link rubyRailsARValidationMethod Title
+    hi! link rubyRailsMethod Title
+    hi! link rubyDoBlock Normal
+    hi! link MatchParen DiffText
 
-  hi! link CTagsModule Type
-  hi! link CTagsClass Type
-  hi! link CTagsMethod Identifier
-  hi! link CTagsSingleton Identifier
+    hi! link CTagsModule Type
+    hi! link CTagsClass Type
+    hi! link CTagsMethod Identifier
+    hi! link CTagsSingleton Identifier
 
-  hi! link javascriptFuncName Type
-  hi! link jsFuncCall jsFuncName
-  hi! link javascriptFunction Statement
-  hi! link javascriptThis Statement
-  hi! link javascriptParens Normal
-  hi! link jOperators javascriptStringD
-  hi! link jId Title
-  hi! link jClass Title
+    hi! link javascriptFuncName Type
+    hi! link jsFuncCall jsFuncName
+    hi! link javascriptFunction Statement
+    hi! link javascriptThis Statement
+    hi! link javascriptParens Normal
+    hi! link jOperators javascriptStringD
+    hi! link jId Title
+    hi! link jClass Title
 
-  hi! link sassMixinName Function
-  hi! link sassDefinition Function
+    hi! link sassMixinName Function
+    hi! link sassDefinition Function
     hi! link sassProperty Type
     hi! link htmlTagName Type
     hi! PreProc gui=bold
@@ -652,16 +660,16 @@ if dein#load_state(expand(g:plugin_path))
   autocmd Colorscheme * call HighlightCustomization()
 
   " call dein#add('junegunn/seoul256.vim'
-  call dein#add('vheon/vim-cursormode')
-  let cursormode_color_map = {
-        \   "ndark":      "#FFFFFF",
-        \   "nlight":     "#586e75",
-        \   "i":      "#edb442",
-        \   "v":      "#888ca6",
-        \   "V":      "#888ca6",
-        \   "\<C-V>": "#888ca6",
-        \   "R":      "#d26936",
-        \ }
+  " call dein#add('vheon/vim-cursormode')
+  " let cursormode_color_map = {
+  "       \   "ndark":      "#FFFFFF",
+  "       \   "nlight":     "#586e75",
+  "       \   "i":      "#edb442",
+  "       \   "v":      "#888ca6",
+  "       \   "V":      "#888ca6",
+  "       \   "\<C-V>": "#888ca6",
+  "       \   "R":      "#d26936",
+  "       \ }
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -1014,7 +1022,7 @@ if dein#tap('fzf.vim') "{{{
         highlight fzf1 ctermfg=161 ctermbg=251
         highlight fzf2 ctermfg=23 ctermbg=251
         highlight fzf3 ctermfg=237 ctermbg=251
-        setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+        setlocal statusline=%#fzf1#
       endfunction
 
       autocmd! User FzfStatusLine call <SID>fzf_statusline()
