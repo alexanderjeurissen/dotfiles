@@ -1,6 +1,6 @@
 export PATH="$HOME/.bin:$PATH"
 
-export TERM=xterm-256color
+export TERM=xterm-256color-italic
 [ -n "$TMUX" ] && export TERM=screen-256color
 
 # recommended by brew doctor {{{
@@ -142,3 +142,5 @@ export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
   alias sites='ranger $(brew --prefix)/etc/nginx/sites/'
 
 # }}}
+
+it2prof() { echo -e "\033]50;SetProfile=$1\a" }

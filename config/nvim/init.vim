@@ -136,7 +136,7 @@ endif
 
 if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
 endif
@@ -192,7 +192,7 @@ nnoremap <leader>f7 :set foldlevel=7<CR>
 nnoremap <leader>f8 :set foldlevel=8<CR>
 nnoremap <leader>f9 :set foldlevel=9<CR>
 
-"Spelling mapping
+" Spelling mapping
 inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " tabpage mappings
@@ -203,7 +203,7 @@ noremap <Leader>t :tabnew<CR>
 noremap <leader>m :call WriteSession()<CR>
 noremap <leader>cm :!rm -f ~/.vim/session/*.*<CR>
 
-"custom comma motion mapping
+" custom comma motion mapping
 nnoremap di, f,dT,
 nnoremap ci, f,cT,
 nnoremap da, f,ld2F,i,<ESC>l "delete argument
@@ -226,14 +226,14 @@ nnoremap go o<ESC>k
 " go to create a new line above cursor
 nnoremap gO O<ESC>j
 
-"I really hate that things don't auto-center
+" I really hate that things don't auto-center
 nnoremap G Gzz
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap } }zz
 nnoremap { {zz
 
-"open tag in new tab with <C-\>
+" open tag in new tab with <C-\>
 noremap <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Make Y behave like other capital commands.
@@ -252,7 +252,7 @@ nnoremap <leader>vr :source $MYVIMRC<CR>
 " Rename current file with <leader>n
 noremap <leader>n :call RenameFile()<CR>
 
-" Toggle highlight search with <leader>hl
+" Toggle highlight search with <leader>thl
 nnoremap <leader>thl :set hlsearch!<CR>
 
 " close buffer with leader-q
@@ -601,52 +601,67 @@ if dein#load_state(expand(g:plugin_path))
   "     \   set background=dark
   "     \"})
 
+  " call dein#add('mhartington/oceanic-next', {
+  "     \ 'hook_add': "
+  "     \   colorscheme OceanicNext\n
+  "     \   set background=dark
+  "     \"})
 
-  call dein#add('mhartington/oceanic-next', {
+  " call dein#add('morhetz/gruvbox', {
+  "     \ 'hook_add': "
+  "     \   let g:gruvbox_italic=1\n
+  "     \   let g:gruvbox_italicize_strings=1\n
+  "     \   let g:gruvbox_contrast_dark='soft'\n
+  "     \   colorscheme gruvbox\n
+  "     \   set background=dark
+  "     \"})
+
+  call dein#add('zefei/cake16', {
       \ 'hook_add': "
-      \   colorscheme OceanicNext\n
-      \   set background=dark
+      \   let g:hybrid_reduced_contrast = 1\n
+      \   colorscheme cake16\n
+      \   set background=light
       \"})
 
  function! HighlightCustomization()
-    hi! link txtBold Identifier
-    hi! link zshVariableDef Identifier
-    hi! link zshFunction Function
-    hi! link rubyControl Statement
-    hi! link rspecGroupMethods rubyControl
-    hi! link rspecMocks Identifier
-    hi! link rspecKeywords Identifier
-    hi! link rubyLocalVariableOrMethod Normal
-    hi! link rubyStringDelimiter Constant
-    hi! link rubyString Constant
-    hi! link rubyAccess Todo
-    hi! link rubySymbol Identifier
-    hi! link rubyPseudoVariable Type
-    hi! link rubyRailsARAssociationMethod Title
-    hi! link rubyRailsARValidationMethod Title
-    hi! link rubyRailsMethod Title
-    hi! link rubyDoBlock Normal
-    hi! link MatchParen DiffText
-
-    hi! link CTagsModule Type
-    hi! link CTagsClass Type
-    hi! link CTagsMethod Identifier
-    hi! link CTagsSingleton Identifier
-
-    hi! link javascriptFuncName Type
-    hi! link jsFuncCall jsFuncName
-    hi! link javascriptFunction Statement
-    hi! link javascriptThis Statement
-    hi! link javascriptParens Normal
-    hi! link jOperators javascriptStringD
-    hi! link jId Title
-    hi! link jClass Title
-
-    hi! link sassMixinName Function
-    hi! link sassDefinition Function
-    hi! link sassProperty Type
-    hi! link htmlTagName Type
-    hi! PreProc gui=bold
+    " hi! link txtBold Identifier
+    " hi! link zshVariableDef Identifier
+    " hi! link zshFunction Function
+    " hi! link rubyControl Statement
+    " hi! link rspecGroupMethods rubyControl
+    " hi! link rspecMocks Identifier
+    " hi! link rspecKeywords Identifier
+    " hi! link rubyLocalVariableOrMethod Normal
+    " hi! link rubyStringDelimiter Constant
+    " hi! link rubyString Constant
+    " hi! link rubyAccess Todo
+    " hi! link rubySymbol Identifier
+    " hi! link rubyPseudoVariable Type
+    " hi! link rubyRailsARAssociationMethod Title
+    " hi! link rubyRailsARValidationMethod Title
+    " hi! link rubyRailsMethod Title
+    " hi! link rubyDoBlock Normal
+    " hi! link MatchParen DiffText
+    "
+    " hi! link CTagsModule Type
+    " hi! link CTagsClass Type
+    " hi! link CTagsMethod Identifier
+    " hi! link CTagsSingleton Identifier
+    "
+    " hi! link javascriptFuncName Type
+    " hi! link jsFuncCall jsFuncName
+    " hi! link javascriptFunction Statement
+    " hi! link javascriptThis Statement
+    " hi! link javascriptParens Normal
+    " hi! link jOperators javascriptStringD
+    " hi! link jId Title
+    " hi! link jClass Title
+    "
+    " hi! link sassMixinName Function
+    " hi! link sassDefinition Function
+    " hi! link sassProperty Type
+    " hi! link htmlTagName Type
+    " hi! PreProc gui=bold
 
     hi! Search ctermfg=10 ctermbg=3
     hi! vimfilerNormalFile  ctermfg=13
@@ -681,6 +696,19 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('tpope/vim-dispatch')
   call dein#add('radenling/vim-dispatch-neovim')
   call dein#add('MarcWeber/vim-addon-local-vimrc')
+  call dein#add('xolox/vim-misc')
+  call dein#add('xolox/vim-session', {
+        \ 'depends': 'vim-misc',
+        \ 'on_add': "
+        \  let g:session_autoload = 'no'\n
+        \  let g:session_autosave = 'yes'\n
+        \  let g:session_autosave_periodic = 30\n
+        \  let g:session_default_to_last = 0\n
+        \  let g:session_persist_font = 1\n
+        \  let g:session_persist_colors = 1\n
+        \  let g:session_persist_globals = 1\n
+        \  let g:session_directory =$HOME/.config/nvim/sessions
+        \"})
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -773,9 +801,8 @@ if dein#load_state(expand(g:plugin_path))
   "       \ 'on_cmd': 'VimFiler',
   "       \ 'hook_source': "
   "       \  let g:vimfiler_as_default_explorer = 1\n
-  "       \  let g:vimfiler_tree_opened_icon = ' '\n
+  "       \  let g:vimfiler_tree_opened_icon = ' '\n
   "       \  let g:vimfiler_tree_closed_icon = ' '\n
-  "       \  let g:vimfiler_file_icon = ' '\n
   "       \  let g:vimfiler_marked_file_icon = ' ✓'\n
   "       \  let g:vimfiler_readonly_file_icon = ' '\n
   "       \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
@@ -870,6 +897,15 @@ if dein#load_state(expand(g:plugin_path))
         \ 'on_cmd': 'MaximizerToggle',
         \ 'hook_add': 'nnoremap <silent><leader>wz :MaximizerToggle<CR>'
         \})
+
+  call dein#add('zefei/vim-wintabs', {
+        \ 'hook_add': "
+        \   let g:wintabs_ui_sep_leftmost = ' '\n
+        \   let g:wintabs_ui_sep_inbetween = '|'\n
+        \   let g:wintabs_ui_sep_rightmost = ' '\n
+        \   let g:wintabs_ui_active_left = ' '\n
+        \   let g:wintabs_ui_active_right = ' '\n
+        \"})
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -1399,38 +1435,52 @@ endif "}}}
 " ==============================================================================
 " Statusline {{{
 " ==============================================================================
+"
+" additional symbols that might be usefull in the future:
+"   paste mode  
+"   fzf symbol:   
+"   wifi: 
+"   direction: 
+"   labeled file or sesison? 
+"   warnings:   
+"   info: 
+"   inbox: 
+"   hot: 
+"   time: 
+
     set laststatus=2
-    set showtabline=2
+    " set showtabline=2
     set guioptions-=e
 
-    let g:currentmode={
-        \ 'n'  : 'N ',
-        \ 'no' : 'N·Operator Pending ',
-        \ 'v'  : 'V ',
-        \ 'V'  : 'V·Line ',
-        \ '^V' : 'V·Block ',
-        \ 's'  : 'Select ',
-        \ 'S'  : 'S·Line ',
-        \ '^S' : 'S·Block ',
-        \ 'i'  : 'I ',
-        \ 'R'  : 'R ',
-        \ 'Rv' : 'V·Replace ',
-        \ 'c'  : 'Command ',
-        \ 'cv' : 'Vim Ex ',
-        \ 'ce' : 'Ex ',
-        \ 'r'  : 'Prompt ',
-        \ 'rm' : 'More ',
-        \ 'r?' : 'Confirm ',
-        \ '!'  : 'Shell ',
-        \ 't'  : 'Terminal '
-        \}
+    autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
+    let &statusline = " %{SessionFlag()} "
+    let &statusline .= "\ue0b1 %<%f "
+    let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ' '}"
+    let &statusline .= "%=\u2571 %{&filetype == '' ? 'unknown' : &filetype} "
+    let &statusline .= "\u2571 %p%% \u2571 col %c "
 
-    function! ReadOnly()
-      if &readonly || !&modifiable
-        return ''
+    function! SessionFlag()
+      " let session = xolox#session#find_current_session()
+      let session=''
+      if empty(session) || session == 'default'
+        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
       else
-        return ''
+        return ' '.session
       endif
+    endfunction
+
+    function! GitFlag()
+      let git = fugitive#head()
+      if git != '' && winwidth(0) > 70
+        return "\ue0b1  ".strpart(git, strlen(git)-30)." "
+      else
+        return ""
+      endif
+    endfunction
+
+    function! FiletypeFlag()
+      let filename = expand('%F')
+      return WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
     endfunction
 
     function! Paste()
@@ -1449,286 +1499,14 @@ endif "}}}
       endif
     endfunction
 
-    function! Filetype()
-      let filename = expand('%F')
-      return WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
-    endfunction
+  " wintabs
+  " let g:wintabs_ui_sep_leftmost = ' '
+  " let g:wintabs_ui_sep_inbetween = '|'
+  " let g:wintabs_ui_sep_rightmost = ' '
+  " let g:wintabs_ui_active_left = ' '
+  " let g:wintabs_ui_active_right = ' '
 
-    " Returns a warning flag if amount of added lines exceeds 20% of all lines
-    function! CommitWarning()
-      let [added, modified, removed] = sy#repo#get_stats()
-      let lines=(line('$')+0)
-      let changessum=(added+modified+removed) * 1.0
-      if (changessum / lines) > 0.20
-        return ' ⚠ COMMIT '
-      else
-        return ''
-      endif
-    endfunction
-
-    let g:insert_mode = 0
-    au InsertEnter * let g:insert_mode=1
-    au InsertLeave * let g:insert_mode=0
-
-    function! InsertWarning()
-      if g:insert_mode == 1
-        return ' ⚠ INSERT '
-      else
-        return ''
-      endif
-    endfunction
-
-    function! Segment(colorgroup, content)
-      return '%' . a:colorgroup . '*' . a:content . '%*'
-    endfunction
-
-    function! Flag(colorgroup, content)
-      return '%' . a:colorgroup . '*' . a:content . '%*%2* %*'
-    endfunction
-
-    function! DoubleSegment(labelColor, contentColor, label, content)
-      return ' %' . a:labelColor . '*' . a:label . '%*'.
-              \'%' . a:contentColor . '*' . a:content . '%* '
-    endfunction
-
-    function! SetSegmentsColorGroups()
-      if dein#tap('base16-vim') "{{{
-        " don't show at all with User0
-        hi! statusLine ctermfg=4 ctermbg=10
-
-        " black on blue
-        hi! User1 ctermfg=10 ctermbg=15
-
-        " blue on statusbar
-        hi! User2 ctermfg=4 ctermbg=10
-
-        " blue status flag
-        hi! User3 ctermfg=15 ctermbg=4
-
-        " red status flag
-        hi! User4 ctermfg=15 ctermbg=9
-
-        " green status flag
-        hi! User5 ctermfg=15 ctermbg=2
-
-        " yellow status flag
-        hi! User6 ctermfg=15 ctermbg=3
-
-        " red on statusbar
-        hi! User7 ctermfg=9 ctermbg=10
-
-        " green on statusbar
-        hi! User8 ctermfg=11 ctermbg=10
-
-        " yellow on statusbar
-        hi! User9 ctermfg=3 ctermbg=10
-      endif "}}}
-    endfunction
-
-    let &statusline=''
-    " let &statusline.=Segment(9, ' %2n ')                       " bufnr
-    let &statusline.=Segment(7, '%3c ')                         " Rownumber/total (%)
-    let &statusline.=Flag(4, '%{Paste()}')                    " paste warning
-    " let &statusline.=Flag(5, '%{CommitWarning()}')            " paste warning
-    " let &statusline.=Flag(6, '%{InsertWarning()}')          " insert mode warning
-    let &statusline.=Flag(6, '%{Spell()}')                    " Spell warning
-    let &statusline.=Segment(2, ' %<%F %{ReadOnly()}%{Filetype()} %m %w')   " File path
-    let &statusline.=Segment(0, '%=')                            " Space
-    " let &statusline.=DoubleSegment(3,4,' ⎇ ', ' %{GitInfo()}') " Git info
-
-    autocmd ColorScheme * call SetSegmentsColorGroups()
   " }}}
-" ==============================================================================
-
-" ==============================================================================
-" TabLine {{{
-" ==============================================================================
-" segment functions are in the statusline fold
-  function! FetchGitStatus()
-    let projectroot=projectroot#get(expand('%'))
-    let status=system('~/.config/nvim/vcs_status/status.sh '.projectroot)
-    if status != ''
-      let status_list=split(status,",")
-      let g:vcs_staged=get(status_list, 0 , 0)
-      let g:vcs_modified=get(status_list, 1 , 0)
-      let g:vcs_others=get(status_list, 2 , 0)
-    else
-      let g:vcs_staged=0
-      let g:vcs_modified=0
-      let g:vcs_others=0
-    endif
-  endfunction
-
-  function! FetchArcStatus()
-      let projectroot=projectroot#get(expand('%'))
-      let status=system('~/.config/nvim/vcs_status/arc.sh '.projectroot)
-      if status != ''
-        let status_list=split(status,",")
-        let g:arc_diffs=get(status_list, 0 , 0)
-        let g:arc_tasks=get(status_list, 1 , 0)
-      else
-        let g:arc_diffs=0
-        let g:arc_tasks=0
-      endif
-    endfunction
-
-  function! ArcTasks()
-    if g:arc_tasks != 0
-      return Segment(5, ' T '.g:arc_tasks.' ')
-    else
-      return ''
-    endif
-  endfunction
-
-  function! ArcDiffs()
-    if g:arc_diffs != 0
-      return Segment(6, ' D '.g:arc_diffs.' ')
-    else
-      return ''
-    endif
-  endfunction
-
-  function! GitStaged()
-    if g:vcs_staged != 0
-      " return DoubleSegment(5, 1,  ' + ', ' '.g:vcs_staged.' ')
-      return Segment(5, ' + '.g:vcs_staged.' ')
-    else
-      return ''
-    endif
-  endfunction
-
-  function! GitModified()
-    if g:vcs_modified != 0
-      " return DoubleSegment(4, 1, ' + ', ' '.g:vcs_modified.' ')
-      return Segment(4, ' + '.g:vcs_modified.' ')
-    else
-     return ''
-    endif
-  endfunction
-
-  function! GitOthers()
-    if g:vcs_others != 0
-      " return DoubleSegment(3, 1, ' ~ ', ' '.g:vcs_others.' ')
-      return Segment(3, ' ~ '.g:vcs_others.' ')
-    else
-      return ''
-    endif
-  endfunction
-
-  function! GitBranch()
-    let git = fugitive#head()
-    if git != ''
-      " return DoubleSegment(6, 1 ,' ⎇ ', ' '.strpart(git, strlen(git)-30).' ')
-      return Segment(9, ' ⎇ '.strpart(git, strlen(git)-30).' ')
-    else
-      return ''
-    endif
-  endfunction
-
-  function! MyTabLine()
-      let s = ''
-      let t = tabpagenr()
-      let i = 1
-      while i <= tabpagenr('$')
-          let buflist = tabpagebuflist(i)
-          let winnr = tabpagewinnr(i)
-          let s .= '%' . i . 'T'
-          let s .= (i == t ? '%1*' : '%2*')
-
-          " let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
-          " let s .= ' '
-          let s .= (i == t ? '%#TabNumSel#' : '%#TabNum#')
-          let s .= ' ' . i . ' '
-          let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
-
-          let bufnr = buflist[winnr - 1]
-          let file = bufname(bufnr)
-          let buftype = getbufvar(bufnr, '&buftype')
-
-          if buftype == 'help'
-              let file = 'help:' . fnamemodify(file, ':t:r')
-
-          elseif buftype == 'quickfix'
-              let file = 'quickfix'
-
-          elseif buftype == 'nofile'
-              if file =~ '\/.'
-                  let file = substitute(file, '.*\/\ze.', '', '')
-              endif
-
-          else "show current working directory
-              let file = pathshorten(fnamemodify(file, ':p:~:.:h'))
-              if file == '.'
-                let file = pathshorten(fnamemodify(getcwd(), ':~'))
-              endif
-              if getbufvar(bufnr, '&modified')
-                  let file = '+' . file
-              endif
-
-          endif
-
-          if file == ''
-              let file = '[No Name]'
-          endif
-
-          let s .= ' ' . file
-
-          let nwins = tabpagewinnr(i, '$')
-          if nwins > 1
-              let modified = ''
-              for b in buflist
-                  if getbufvar(b, '&modified') && b != bufnr
-                      let modified = '*'
-                      break
-                  endif
-              endfor
-              let hl = (i == t ? '%#WinNumSel#' : '%#WinNum#')
-              let nohl = (i == t ? '%#TabLineSel#' : '%#TabLine#')
-              let s .= ' ' . modified . '(' . hl . winnr . nohl . '/' . nwins . ')'
-          endif
-
-          if i < tabpagenr('$')
-              let s .= ' %#TabLine#%*'
-          else
-              let s .= ' '
-          endif
-
-          let i = i + 1
-
-      endwhile
-
-      if dein#tap('vim-projectroot')
-        call FetchGitStatus()
-
-        let s .= '%T%#TabLineFill#%='
-         " let s .= ArcTasks()
-         " let s .= ' '
-         " let s .= ArcDiffs()
-         " let s .= ' '
-         let s .= GitStaged()
-         let s .= ' '
-         let s .= GitModified()
-         let s .= ' '
-         let s .= GitOthers()
-         let s .= ' '
-         let s .= GitBranch()
-       endif
-      return s
-  endfunction
-
-  set tabline=%!MyTabLine()
-
-  function! SetTablineHighlights()
-    hi! TabNum term=bold cterm=bold ctermfg=4 ctermbg=15
-    hi! TabNumSel term=bold cterm=bold ctermfg=13 ctermbg=4
-    hi! TabLine ctermbg=15
-    hi! TabLineSel term=bold cterm=bold ctermfg=4 ctermbg=13
-    hi! WinNum term=bold cterm=bold ctermfg=7 ctermbg=15
-    hi! WinNumSel term=bold cterm=bold ctermfg=10 ctermbg=13
-  endfunction
-
-  autocmd Colorscheme * call SetTablineHighlights()
-" }}}
 " ==============================================================================
 
 autocmd BufRead,BufNewFile *.* IndentLinesReset
