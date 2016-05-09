@@ -27,7 +27,6 @@ brew cask install dash
 brew cask install alfred
 brew cask install flux
 brew cask install karabiner
-brew cask install lastpass
 brew cask install slack
 brew cask install teensy
 
@@ -37,6 +36,9 @@ npm install --global pure-prompt
 # Ruby gems
 gem install awesome_print
 gem install seeing_is_believing
+
+# terminal related actions
+tic ~/.dotfiles/iterm/xterm-256color-italic.terminfo
 
 # Setup ssh for git
 terminal-notifier -title "waiting.." -message "laptop script is waiting for user interaction in order to continue" -sound "default"
