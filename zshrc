@@ -1,5 +1,5 @@
 export PATH="$HOME/.bin:$PATH"
-
+export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH"
 export TERM=xterm-256color-italic
 [ -n "$TMUX" ] && export TERM=screen-256color
 
@@ -29,6 +29,7 @@ export TERM=xterm-256color-italic
 # aliasses {{{
   alias l="ls -1AG"
   alias rake="noglob bundle exec rake"
+  alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
   alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
