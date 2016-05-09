@@ -43,7 +43,6 @@ set smartcase
 " set textwidth=80
 
 " Changes the effect of the |:mksession| command.
-set sessionoptions-=options  " Don't save options
 set sessionoptions+=resize
 
 " Use a popup menu to show the possible completions in Insert mode
@@ -201,7 +200,6 @@ noremap <Leader>t :tabnew<CR>
 
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
-noremap <leader>cm :!rm -f ~/.vim/session/*.*<CR>
 
 " custom comma motion mapping
 nnoremap di, f,dT,
@@ -218,7 +216,7 @@ nnoremap g^ gUiW
 nnoremap gv guiW
 
 " default to very magic
-no / /\v
+no / :Subvert/
 
 " gO to create a new line below cursor in normal mode
 nnoremap go o<ESC>k
@@ -274,9 +272,7 @@ noremap <leader>cp :cprev<CR>
 " General AutoCommands {{{
 " ============================================================================
 
-" Automatically remove trailing whitespaces unless file is blacklisted
-autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
-autocmd BufRead init.vim set foldmethod=marker
+autocmd FileType vim set foldmethod=marker
 autocmd FileType gitcommit setlocal textwidth=70
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
@@ -297,16 +293,6 @@ augroup vimrcEx
   autocmd FileType markdown setlocal spell
   autocmd FileType gitcommit setlocal spell
 
-  " Automatically wrap at 80 characters for Markdown, ruby, css and coffescript
-  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
-  autocmd BufRead,BufNewFile *.erb setlocal textwidth=100
-  autocmd BufRead,BufNewFile *.rb setlocal textwidth=100
-  autocmd BufRead,BufNewFile *.css setlocal textwidth=80
-  autocmd BufRead,BufNewFile *.coffee setlocal textwidth=80
-
-  " Automatically wrap at 150 characters for javascript files
-  autocmd BufRead,BufNewFile *.js setlocal textwidth=80
-
   " Add html highlighting when editing rails views & handlebar templates
   autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
   autocmd BufRead,BufNewFile *.hbs set filetype=handlebars.html
@@ -317,14 +303,11 @@ augroup vimrcEx
   " Add javascript highlighting when embeded in erb file
   autocmd BufRead,BufNewFile *.js.erb set filetype=eruby.javascript
 
-  " Add javascript highlighting when editing ecmascript 6 files
-  autocmd BufRead,BufNewFile *.es6 setfiletype javascript
+  " Add coffeescript highlighting to coffee.cjsx files
+  autocmd BufRead,BufNewFile *.coffee.cjsx set filetype=coffee.html
 
   " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
-
-  " Add coffeescript highlighting to coffee.cjsx files
-  autocmd BufRead,BufNewFile *.coffee.cjsx set filetype=coffee.html
 
   " Enable omni completion.
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -414,7 +397,7 @@ fun! WriteSession()
   let extension = ".session"
   let fname = cwd . "_" . dateStamp . extension
 
-  silent exe ":UniteSessionSave " . fname
+  silent exe ":SaveSession " . fname
   echo "Wrote " . fname
 endfun
 
@@ -571,7 +554,11 @@ set runtimepath^=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 let g:plugin_path='$HOME/.config/nvim/dein'
 
 if dein#load_state(expand(g:plugin_path))
-  call dein#begin(expand(g:plugin_path)) " tell dein where the plugins live
+  " tell dein where the plugins live
+  call dein#begin(
+        \ expand(g:plugin_path),
+        \ [expand('$HOME/.config/nvim/init.vim')]
+        \)
   call dein#add('Shougo/dein.vim') " Let dein manage dein
 
 " }}}
@@ -624,46 +611,7 @@ if dein#load_state(expand(g:plugin_path))
       \"})
 
  function! HighlightCustomization()
-    " hi! link txtBold Identifier
-    " hi! link zshVariableDef Identifier
-    " hi! link zshFunction Function
-    " hi! link rubyControl Statement
-    " hi! link rspecGroupMethods rubyControl
-    " hi! link rspecMocks Identifier
-    " hi! link rspecKeywords Identifier
-    " hi! link rubyLocalVariableOrMethod Normal
-    " hi! link rubyStringDelimiter Constant
-    " hi! link rubyString Constant
-    " hi! link rubyAccess Todo
-    " hi! link rubySymbol Identifier
-    " hi! link rubyPseudoVariable Type
-    " hi! link rubyRailsARAssociationMethod Title
-    " hi! link rubyRailsARValidationMethod Title
-    " hi! link rubyRailsMethod Title
-    " hi! link rubyDoBlock Normal
-    " hi! link MatchParen DiffText
-    "
-    " hi! link CTagsModule Type
-    " hi! link CTagsClass Type
-    " hi! link CTagsMethod Identifier
-    " hi! link CTagsSingleton Identifier
-    "
-    " hi! link javascriptFuncName Type
-    " hi! link jsFuncCall jsFuncName
-    " hi! link javascriptFunction Statement
-    " hi! link javascriptThis Statement
-    " hi! link javascriptParens Normal
-    " hi! link jOperators javascriptStringD
-    " hi! link jId Title
-    " hi! link jClass Title
-    "
-    " hi! link sassMixinName Function
-    " hi! link sassDefinition Function
-    " hi! link sassProperty Type
-    " hi! link htmlTagName Type
-    " hi! PreProc gui=bold
-
-    hi! Search ctermfg=10 ctermbg=3
+    " hi! Search ctermfg=10 ctermbg=3
     hi! vimfilerNormalFile  ctermfg=13
     hi! vimfilerClosedFile  ctermfg=4
     hi! vimfilerOpenedFile  ctermfg=13
@@ -673,18 +621,6 @@ if dein#load_state(expand(g:plugin_path))
   endfunction
 
   autocmd Colorscheme * call HighlightCustomization()
-
-  " call dein#add('junegunn/seoul256.vim'
-  " call dein#add('vheon/vim-cursormode')
-  " let cursormode_color_map = {
-  "       \   "ndark":      "#FFFFFF",
-  "       \   "nlight":     "#586e75",
-  "       \   "i":      "#edb442",
-  "       \   "v":      "#888ca6",
-  "       \   "V":      "#888ca6",
-  "       \   "\<C-V>": "#888ca6",
-  "       \   "R":      "#d26936",
-  "       \ }
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -694,20 +630,27 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('tpope/vim-fugitive')
   call dein#add('tpope/vim-sensible')
   call dein#add('tpope/vim-dispatch')
-  call dein#add('radenling/vim-dispatch-neovim')
+  call dein#add('radenling/vim-dispatch-neovim', {'depends': 'vim-dispatch'})
   call dein#add('MarcWeber/vim-addon-local-vimrc')
   call dein#add('xolox/vim-misc')
   call dein#add('xolox/vim-session', {
+        \ 'on_cmd': [
+        \   'SaveSession',
+        \   'OpenSession',
+        \   'RestartVim',
+        \   'CloseSession',
+        \   'DeleteSession',
+        \   'ViewSession'
+        \ ],
         \ 'depends': 'vim-misc',
-        \ 'on_add': "
+        \ 'hook_add': "
         \  let g:session_autoload = 'no'\n
         \  let g:session_autosave = 'yes'\n
         \  let g:session_autosave_periodic = 30\n
         \  let g:session_default_to_last = 0\n
         \  let g:session_persist_font = 1\n
         \  let g:session_persist_colors = 1\n
-        \  let g:session_persist_globals = 1\n
-        \  let g:session_directory =$HOME/.config/nvim/sessions
+        \  let g:session_directory = '~/.config/nvim/sessions'
         \"})
 " }}}
 " ------------------------------------------------------------------------------
@@ -715,10 +658,9 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Editing {{{
 " ------------------------------------------------------------------------------
-  call dein#add('tpope/vim-abolish')
+  call dein#add('tpope/vim-abolish', { 'on_cmd': ['Abolish', 'Subvert'] })
   call dein#add('tpope/vim-endwise')
   call dein#add('tommcdo/vim-exchange')
-  call dein#add('junegunn/rainbow_parentheses.vim')
   call dein#add('tpope/vim-surround', {
         \ 'depends': 'vim-repeat',
         \ 'on_map': 'cs'
@@ -761,7 +703,13 @@ if dein#load_state(expand(g:plugin_path))
   call dein#add('dsawardekar/ember.vim')
   call dein#add('pangloss/vim-javascript')
   " call dein#add('othree/yajs.vim')
-  call dein#add('JarrodCTaylor/vim-ember-cli-test-runner')
+  call dein#add('JarrodCTaylor/vim-ember-cli-test-runner', {
+        \'on_cmd': [
+        \  'RunAllEmberTests',
+        \  'RunSingleEmberTest',
+        \  'RunSingleEmberTestModule',
+        \  'RerunLastEmberTests'
+        \]})
   call dein#add('isRuslan/vim-es6')
   call dein#add('mxw/vim-jsx')
   call dein#add('maksimr/vim-jsbeautify')
@@ -808,6 +756,14 @@ if dein#load_state(expand(g:plugin_path))
   "       \  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
   "       \"})
 
+  " call dein#add('scrooloose/nerdtree', {
+  "       \ 'on_cmd': 'NERDTree',
+  "       \ 'hook_add': "
+  "       \   let g:NERDTreeDirArrowExpandable = ''\n
+  "       \   let g:NERDTreeDirArrowCollapsible = ''
+  "       \"})
+  " call dein#add('Xuyuanp/nerdtree-git-plugin', { 'depends': 'nerdtree' })
+
   call dein#add('moll/vim-bbye')
 
   call dein#add('dangerzone/ranger.vim', {
@@ -815,11 +771,9 @@ if dein#load_state(expand(g:plugin_path))
         \ 'on_func': 'OpenRanger',
         \ 'hook_add': "
         \   command! Ranger call OpenRanger()\n
-        \   nmap <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
-        \   no <silent> <leader>fe <C-u>:call OpenRanger()<CR>\n
+        \   no <silent> <leader>fe :call OpenRanger()<CR>\n
         \"})
 
-  call dein#add('danro/rename.vim')
   call dein#add('airblade/vim-rooter')
   " call dein#add('mhinz/vim-signify')
 " }}}
@@ -859,8 +813,6 @@ if dein#load_state(expand(g:plugin_path))
         \   let g:gist_show_privates = 1\n
         \   let g:gist_update_on_write = 1
         \"})
-
- "call dein#add('dbakker/vim-projectroot')
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -868,7 +820,6 @@ if dein#load_state(expand(g:plugin_path))
 " Web {{{
 " ------------------------------------------------------------------------------
   call dein#add('mattn/webapi-vim')
-  call dein#add('mattn/wwwrenderer-vim')
   call dein#add('cakebaker/scss-syntax.vim')
   call dein#add('hail2u/vim-css3-syntax')
   call dein#add('ap/vim-css-color')
@@ -1036,7 +987,7 @@ if dein#tap('fzf.vim') "{{{
     " Default fzf layout
     " - down / up / left / right
     " - window (nvim only)
-    let g:fzf_layout = { 'down': '~40%' }
+    let g:fzf_layout = { 'window': 'rightbelow 30new' }
 
     " Customize fzf colors to match your color scheme
     let g:fzf_colors =
@@ -1103,6 +1054,17 @@ if dein#tap('fzf.vim') "{{{
 
   " }}}
 
+  " rails routes {{{
+    command! -nargs=* RailsRoutes call fzf#run({
+    \ 'source':  'rails_routes',
+    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 3.. '.
+    \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
+    \            '--color hl:68,hl+:110',
+    \ 'down':    '50%'
+    \ })
+  " }}}
+
   " Files + devicons {{{
     function! Fzf_dev()
       function! s:files()
@@ -1131,7 +1093,7 @@ if dein#tap('fzf.vim') "{{{
             \ 'source': <sid>files(),
             \ 'sink':   function('s:edit_file'),
             \ 'options': '-m -x +s',
-            \ 'down':    '40%' })
+            \ 'window':  'rightbelow 20new' })
     endfunction
   " }}}
 
@@ -1441,7 +1403,7 @@ endif "}}}
 "   fzf symbol:   
 "   wifi: 
 "   direction: 
-"   labeled file or sesison? 
+"   labeled file or sesison?  
 "   warnings:   
 "   info: 
 "   inbox: 
@@ -1455,17 +1417,21 @@ endif "}}}
     autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
     let &statusline = " %{SessionFlag()} "
     let &statusline .= "\ue0b1 %<%f "
-    let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ' '}"
+    let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ''}"
     let &statusline .= "%=\u2571 %{&filetype == '' ? 'unknown' : &filetype} "
     let &statusline .= "\u2571 %p%% \u2571 col %c "
 
     function! SessionFlag()
-      " let session = xolox#session#find_current_session()
-      let session=''
+      if dein#is_sourced('vim-session')
+        let session = xolox#session#find_current_session()
+      else
+        let session = ''
+      endif
+
       if empty(session) || session == 'default'
         return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
       else
-        return ' '.session
+        return ' '.session
       endif
     endfunction
 
@@ -1498,14 +1464,6 @@ endif "}}}
         return ''
       endif
     endfunction
-
-  " wintabs
-  " let g:wintabs_ui_sep_leftmost = ' '
-  " let g:wintabs_ui_sep_inbetween = '|'
-  " let g:wintabs_ui_sep_rightmost = ' '
-  " let g:wintabs_ui_active_left = ' '
-  " let g:wintabs_ui_active_right = ' '
-
   " }}}
 " ==============================================================================
 
