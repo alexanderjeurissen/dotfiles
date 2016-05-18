@@ -4,6 +4,7 @@
 brew_install_or_upgrade 'go'
 brew_install_or_upgrade 'fzf'
 brew_install_or_upgrade 'coreutils'
+brew_install_or_upgrade 'python'
 brew_install_or_upgrade 'python3'
 
 brew_install_or_upgrade 'vim' --with-cscope --with-lua --with-python3 --with-ruby
@@ -22,7 +23,6 @@ brew cask install firefox
 # https://twitter.com/jsser/status/532587663279157248
 brew cask install --caskroom=/Applications google-chrome --devel
 
-brew cask install amethyst
 brew cask install dash
 brew cask install alfred
 brew cask install flux
@@ -36,6 +36,11 @@ npm install --global pure-prompt
 # Ruby gems
 gem install awesome_print
 gem install seeing_is_believing
+
+# Python packages
+pip3 install neovim-remote
+pip install neovim
+pip3 install neovim
 
 # terminal related actions
 tic ~/.dotfiles/iterm/xterm-256color-italic.terminfo
