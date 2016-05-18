@@ -53,8 +53,15 @@ export TERM=xterm-256color-italic
 # Nvim & vim aliases {{{
   alias vim='nvim'
   alias nvim='nvim'
-  alias v='nvim'
   alias vi='vim'
+
+  # Courtesy of Henry Kupty
+  # this makes it so no nested vim sessions are started when editing files in term splits
+  if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
+    alias h='nvr -o'
+    alias v='nvr -O'
+    alias t='nvr --remote-tab'
+  fi
 # }}}
 
 # Aliases for foreman {{{
@@ -69,6 +76,9 @@ export TERM=xterm-256color-italic
   alias startAll="startServices & startBackend & startFrontend"
 # }}}
 
+# Aliases for Arcanist {{{
+  alias diff="arc diff --browse"
+# }}}
 alias h1="cd ~/git/hackerone/"
 
 # Alias for clearing the screen
@@ -145,3 +155,29 @@ export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 # }}}
 
 it2prof() { echo -e "\033]50;SetProfile=$1\a" }
+
+# Fzf functions {{{
+  # fbr - checkout git branch (including remote branches)
+  fbr() {
+    local branches branch
+    branches=$(git branch --all | grep -v HEAD) &&
+    branch=$(echo "$branches" |
+             fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+    git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+  }
+
+  # fco - checkout git branch/tag
+  fco() {
+    local tags branches target
+    tags=$(
+      git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+    branches=$(
+      git branch --all | grep -v HEAD             |
+      sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
+      sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+    target=$(
+      (echo "$tags"; echo "$branches") |
+      fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
+    git checkout $(echo "$target" | awk '{print $2}')
+  }
+#}}}
