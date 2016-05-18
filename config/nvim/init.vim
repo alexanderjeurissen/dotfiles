@@ -40,7 +40,7 @@ set smartcase
 
 " Maximum width of text that is being inserted.  A longer line will be
 " broken after white space to get this width.
-" set textwidth=80
+set textwidth=100
 
 " Changes the effect of the |:mksession| command.
 set sessionoptions+=resize
@@ -122,20 +122,20 @@ autocmd BufReadPost *
 
 set rtp+=/usr/local/opt/fzf
 
-"open help in a new tab instead of vimbuffer
+"open help in a new ventical split instead of vimbuffer
 cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'vert help' : 'h'
 
 "set terminal colors if gui isn't running
 if !has("gui_running") && !has('nvim')
   set t_Co=256
-  set term=screen-256color
+  " set term=screen-256color
   "Access colors present in 256 colorspace"
   " let base16colorspace=256
 endif
 
 if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
 endif
@@ -179,17 +179,8 @@ command! Bufmacro bufdo execute "normal @a" | write
 noremap j gj
 noremap k gk
 
-" Code folding options
-nnoremap <leader>f0 :set foldlevel=0<CR>
-nnoremap <leader>f1 :set foldlevel=1<CR>
-nnoremap <leader>f2 :set foldlevel=2<CR>
-nnoremap <leader>f3 :set foldlevel=3<CR>
-nnoremap <leader>f4 :set foldlevel=4<CR>
-nnoremap <leader>f5 :set foldlevel=5<CR>
-nnoremap <leader>f6 :set foldlevel=6<CR>
-nnoremap <leader>f7 :set foldlevel=7<CR>
-nnoremap <leader>f8 :set foldlevel=8<CR>
-nnoremap <leader>f9 :set foldlevel=9<CR>
+" Find merge conflict markers
+noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 
 " Spelling mapping
 inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
@@ -272,8 +263,6 @@ noremap <leader>cp :cprev<CR>
 " General AutoCommands {{{
 " ============================================================================
 
-autocmd FileType vim set foldmethod=marker
-autocmd FileType gitcommit setlocal textwidth=70
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
@@ -315,6 +304,13 @@ augroup vimrcEx
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  " set foldmethod for vim files
+  autocmd FileType vim set foldmethod=marker
+
+  " set text_width for git buffers
+  autocmd FileType gitcommit setlocal textwidth=70
+
 augroup END
 " }}}
 " ==============================================================================
@@ -481,10 +477,10 @@ endfunction
     endif
   endfunction
 
-  " nnoremap <up> :call ResizeSplits('up')<CR><ESC>
-  " nnoremap <down> :call ResizeSplits('down')<CR><ESC>
-  " nnoremap <left> :call ResizeSplits('left')<CR><ESC>
-  " nnoremap <right> :call ResizeSplits('right')<CR><ESC>
+  nnoremap <up> :call ResizeSplits('up')<CR><ESC>
+  nnoremap <down> :call ResizeSplits('down')<CR><ESC>
+  nnoremap <left> :call ResizeSplits('left')<CR><ESC>
+  nnoremap <right> :call ResizeSplits('right')<CR><ESC>
 
   " Window navigation between terminal and nonterminal
   au BufEnter * if &buftype == 'terminal' | :startinsert | endif
@@ -498,19 +494,68 @@ endfunction
   nmap <silent> <leader>wk <C-w>k
   nmap <silent> <leader>wl <C-w>l
 
-  " Default workspace
-  function! s:DefaultWorkspace()
+  if !exists('g:jobs')
+    let Shell = {}
+    let g:Shell = {}
+    let g:jobs = {}
+
+    function Shell.on_stdout(job_id, data)
+      let self.output .= ' stdout: '.join(a:data).'\n'
+    endfunction
+
+    function Shell.on_stderr(job_id, data)
+      let self.output .= ' stderr: '.join(a:data).'\n'
+    endfunction
+
+    function Shell.on_exit(job_id, data)
+      let self.output .= ' exited\n'
+    endfunction
+
+    function Shell.get_name()
+      return 'shell '.self.name
+    endfunction
+
+
+    function Shell.get_output()
+      let lines = split(self.output, '\\n')
+      call fzf#run({
+      \ 'source':  lines,
+      \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 3.. '.
+      \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
+      \            '--color hl:68,hl+:110',
+      \ 'down':    '90%'
+      \ })
+    endfunction
+
+    function Shell.new(name, ...)
+      let instance = extend(copy(g:Shell), {'name': a:name})
+      let argv = 'zsh'
+      if a:0 > 0
+        let argv = a:1
+      endif
+      let instance.id = jobstart(argv, instance)
+      let instance.output = ''
+      return instance
+    endfunction
+  endif
+
+ function! s:default_workspace(Shell)
+    " let g:jobs['zeus'] = a:Shell.new('zeus', 'zeus start')
+    " let g:jobs['frontend'] = a:Shell.new('frontend', 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read')
+    " let g:jobs['services'] = a:Shell.new('services', 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read')
+
     tabnew term://~/.dotfiles/scripts/startBackend
     file Backend:daemon
-
+    "
     split term://~/.dotfiles/scripts/startServices
     file Services:daemon
-
+    "
     vsp term://~/.dotfiles/scripts/startFrontend
     file Frontend:daemon
-  endfunction
+ endfunction
 
-  command! -register StartAll call <sid>DefaultWorkspace()
+ command! -nargs=* StartAll call s:default_workspace(Shell)
+
 " }}}
 " ==============================================================================
 
@@ -571,6 +616,16 @@ if dein#load_state(expand(g:plugin_path))
 
   "call dein#add('Shougo/deoplete.nvim', { 'lazy': 1, 'on_i': 1 })
 
+  " add ultisnips or neosnippets
+  call dein#add('SirVer/ultisnips', {
+        \ "hook_add": "
+        \   let g:UltiSnipsUsePythonVersion = 3\n
+        \   let g:UltiSnipsExpandTrigger='<tab>'\n
+        \   let g:UltiSnipsJumpForwardTrigger='<c-n>'\n
+        \   let g:UltiSnipsJumpBackwardTrigger='<c-p>'\n
+        \   let g:UltiSnipsEditSplit='vertical'
+        \"})
+
   call dein#add('tpope/vim-repeat')
 
   call dein#add('tomtom/tlib_vim')
@@ -603,14 +658,39 @@ if dein#load_state(expand(g:plugin_path))
   "     \   set background=dark
   "     \"})
 
-  call dein#add('zefei/cake16', {
+  " call dein#add('zefei/cake16', {
+  "     \ 'hook_add': "
+  "     \   colorscheme cake16\n
+  "     \   set background=light
+  "     \"})
+
+  " call dein#add('junegunn/seoul256.vim', {
+  "     \ 'hook_add': "
+  "     \   colorscheme seoul256\n
+  "     \   set background=dark
+  "     \"})
+
+  " call dein#add('romainl/flattened', {
+  "     \ 'hook_add': "
+  "     \   colorscheme flattened_dark\n
+  "     \   set background=dark
+  "     \"})
+
+
+  " \   set termguicolors\n
+  call dein#add('Samuel-Phillips/nvim-colors-solarized', {
+      \ 'rev': '3618276',
       \ 'hook_add': "
-      \   let g:hybrid_reduced_contrast = 1\n
-      \   colorscheme cake16\n
-      \   set background=light
+      \   colorscheme solarized\n
+      \   set background=dark\n
       \"})
 
+
  function! HighlightCustomization()
+    let g:solarized_visibility = "high"
+    let g:solarized_contrast = "high"
+    let g:solarized_termtrans = 1
+
     " hi! Search ctermfg=10 ctermbg=3
     hi! vimfilerNormalFile  ctermfg=13
     hi! vimfilerClosedFile  ctermfg=4
@@ -618,6 +698,49 @@ if dein#load_state(expand(g:plugin_path))
     hi! vimfilerCurrentDirectory  ctermfg=9
     hi! vimfilerNonMark     ctermfg=4
     hi! vimfilerLeaf        ctermfg=11
+
+    hi! link txtBold Identifier
+    hi! link zshVariableDef Identifier
+    hi! link zshFunction Function
+
+    hi! link rubyControl Statement
+    hi! link rspecGroupMethods rubyControl
+    hi! link rspecMocks Identifier
+    hi! link rspecKeywords Identifier
+    hi! link rubyLocalVariableOrMethod Normal
+    hi! link rubyStringDelimiter Constant
+    hi! link rubyString Constant
+    hi! link rubyAccess Todo
+    hi! link rubySymbol Identifier
+    hi! link rubyPseudoVariable Type
+    hi! link rubyRailsARAssociationMethod Title
+    hi! link rubyRailsARValidationMethod Title
+    hi! link rubyRailsMethod Title
+    hi! link rubyDoBlock Normal
+    hi! link MatchParen DiffText
+
+    hi! link CTagsModule Type
+    hi! link CTagsClass Type
+    hi! link CTagsMethod Identifier
+    hi! link CTagsSingleton Identifier
+
+    hi! link javascriptFuncName Type
+    hi! link jsFuncCall jsFuncName
+    hi! link javascriptFunction Statement
+    hi! link javascriptThis Statement
+    hi! link javascriptParens Normal
+    hi! link jOperators javascriptStringD
+    hi! link jId Title
+    hi! link jClass Title
+
+    hi! link sassMixinName Function
+    hi! link sassDefinition Function
+    hi! link sassProperty Type
+    hi! link htmlTagName Type
+    hi! PreProc gui=bold
+
+    exec ':highlight clear SignColumn'
+    exec ':highlight link SignColumn CursorColumn'
   endfunction
 
   autocmd Colorscheme * call HighlightCustomization()
@@ -863,6 +986,50 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Misc {{{
 " ------------------------------------------------------------------------------
+  call dein#add('junegunn/limelight.vim', { 'on_cmd': 'Limelight' })
+  call dein#add('junegunn/goyo.vim', {
+        \ 'depends': 'limelight.vim',
+        \ 'hook_add': "
+        \   nnoremap <leader>tw :Goyo<cr>\n
+        \   let g:goyo_width = 110
+        \"})
+
+  function! s:goyo_enter()
+    silent !tmux set status off
+    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+    set noshowmode
+    set noshowcmd
+    set scrolloff=999
+    Limelight
+    " ...
+  endfunction
+
+  function! s:goyo_leave()
+    silent !tmux set status on
+    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+    set showmode
+    set showcmd
+    set scrolloff=5
+    Limelight!
+    " ...
+  endfunction
+
+  function! Goyo_hook_source() abort
+    let g:testing_source = 1
+  endfunction
+
+  function! Goyo_hook_add() abort
+    let g:testing_add = 1
+  endfunction
+
+  autocmd! User GoyoEnter nested call <SID>goyo_enter()
+  autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Misc {{{
+" ------------------------------------------------------------------------------
  call dein#add('ryanoasis/vim-devicons')
 " }}}
 " ------------------------------------------------------------------------------
@@ -908,6 +1075,12 @@ if dein#tap('vim-rails') "{{{
       \"spec/integration/controllers/*_spec.rb": {
       \  "alternate": ["app/controllers/%s.rb"],
       \},
+      \"lib/support/app/controllers/support/*.rb": {
+      \  "alternate": ["lib/support/spec/controllers/support/%s_spec.rb"]
+      \},
+      \"lib/support/spec/controllers/support/*_spec.rb": {
+      \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
+      \},
     \}
   endif "}}}
 
@@ -933,13 +1106,15 @@ if dein#tap('GoldenView.Vim') "{{{
       \  'filetype': [
       \    'nerdtree',
       \    'nerd',
-      \    'unite'
+      \    'unite',
+      \    'gitcommit'
       \  ],
       \  'buftype': [
       \    'nofile',
       \    'nerd',
       \    'nerdtree',
-      \    'terminal'
+      \    'terminal',
+      \    'gitcommit'
       \  ]
       \}
     " }}}
@@ -1064,6 +1239,31 @@ if dein#tap('fzf.vim') "{{{
     \ 'down':    '50%'
     \ })
   " }}}
+  "
+
+  " Jobs {{{
+
+    function! s:jobs()
+      if len(keys(g:jobs)) > 0
+        return keys(g:jobs)
+      else
+        return []
+      endif
+    endfunction
+
+    function! s:show_output(job)
+      call g:jobs[''.a:job].get_output()
+      wincmd j
+      exec 'startinsert'
+    endfunction
+
+    command! -nargs=* Jobs call fzf#run({
+    \ 'source':  <sid>jobs(),
+    \ 'sink':    function('s:show_output'),
+    \ 'options': '-m -x +s',
+    \ 'down':    '50%'
+    \ })
+  "}}}
 
   " Files + devicons {{{
     function! Fzf_dev()
@@ -1110,6 +1310,7 @@ if dein#tap('fzf.vim') "{{{
     nnoremap <silent> <leader>/ :<C-u>Agsearch<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
+    nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
 
     imap <C-x><C-f> <plug>(fzf-complete-file-ag)
     imap <C-x><C-l> <plug>(fzf-complete-line)
