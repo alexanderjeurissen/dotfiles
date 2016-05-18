@@ -1,7 +1,7 @@
 # GistID: 10715991
 
 StringLiterals:
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
   Enabled: true
 Style/ClassLength:
   CountComments: false  # count full line comments?
