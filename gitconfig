@@ -55,7 +55,7 @@
   user = alexanderjeurissen
 [core]
   excludesfile = /Users/alexander/.gitignore
-  editor = nvim
+  editor = neovim_nvr
 	pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
