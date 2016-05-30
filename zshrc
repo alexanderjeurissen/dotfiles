@@ -11,9 +11,14 @@ export TERM=xterm-256color-italic
   . $(brew --prefix nvm)/nvm.sh
 # }}}
 
+if [[ $TERM = dumb ]]; then
+  unset zle_bracketed_paste
+fi
+
 # minimal prompt {{{
   autoload -U promptinit && promptinit
   prompt pure
+  prompt_pure_set_title() {}
 # }}}
 
 # Vi mode {{{
