@@ -427,6 +427,8 @@ endfunction
   tnoremap <leader><ESC> <C-\><C-n>
   tnoremap <leader>tn <C-\><C-n>:tabnext<CR>
 
+  command! -nargs=* T terminal
+
   " resize splits
   function! IsMost(direction)
     let oldw = winnr()
@@ -986,7 +988,13 @@ if dein#load_state(expand(g:plugin_path))
 " ------------------------------------------------------------------------------
 " Misc {{{
 " ------------------------------------------------------------------------------
-  call dein#add('junegunn/limelight.vim', { 'on_cmd': 'Limelight' })
+
+  call dein#add('chrisbra/CheckAttach', {
+        \ 'hook_add': "
+        \   let g:attach_check_keywords = ',bijlage,bijlagen,pdf,word,docx'\n
+        \   let g:checkattach_filebrowser = 'ranger --choosefiles=%s'
+        \"})
+  call dein#add('junegunn/limelight.vim')
   call dein#add('junegunn/goyo.vim', {
         \ 'depends': 'limelight.vim',
         \ 'hook_add': "
@@ -995,8 +1003,8 @@ if dein#load_state(expand(g:plugin_path))
         \"})
 
   function! s:goyo_enter()
-    silent !tmux set status off
-    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+    " silent !tmux set status off
+    " silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
     set noshowmode
     set noshowcmd
     set scrolloff=999
@@ -1005,21 +1013,13 @@ if dein#load_state(expand(g:plugin_path))
   endfunction
 
   function! s:goyo_leave()
-    silent !tmux set status on
-    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+    " silent !tmux set status on
+    " silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
     set showmode
     set showcmd
     set scrolloff=5
     Limelight!
     " ...
-  endfunction
-
-  function! Goyo_hook_source() abort
-    let g:testing_source = 1
-  endfunction
-
-  function! Goyo_hook_add() abort
-    let g:testing_add = 1
   endfunction
 
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
