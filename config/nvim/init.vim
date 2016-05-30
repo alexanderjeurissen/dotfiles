@@ -134,7 +134,7 @@ if !has("gui_running") && !has('nvim')
 endif
 
 if has('nvim')
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   let python3_host_prog = "python3"
   let python_host_prog = "python"
