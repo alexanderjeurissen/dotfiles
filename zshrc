@@ -28,7 +28,9 @@ export TERM=xterm-256color-italic
 
 # aliasses {{{
   alias l="ls -1AG"
-  alias rake="noglob bundle exec rake"
+  # alias rake="noglob bundle exec rake"
+  alias rake="noglob bin/rake"
+  alias rails="bin/rails"
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
@@ -52,7 +54,6 @@ export TERM=xterm-256color-italic
 
 # Nvim & vim aliases {{{
   alias vim='nvim'
-  alias nvim='nvim'
   alias vi='vim'
 
   # Courtesy of Henry Kupty
@@ -78,6 +79,7 @@ export TERM=xterm-256color-italic
 
 # Aliases for Arcanist {{{
   alias diff="arc diff --browse"
+  alias kerk="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
 # }}}
 alias h1="cd ~/git/hackerone/"
 
