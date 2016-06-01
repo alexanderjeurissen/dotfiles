@@ -1,15 +1,51 @@
-(use-package enh-ruby-mode
+(use-package rspec-mode
+  :ensure t)
+
+(use-package projectile-rails
   :ensure t
   :config
-    (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
-    (add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
-    (add-to-list 'auto-mode-alist '("\\.rake$" . enh-ruby-mode))
-    (add-to-list 'auto-mode-alist '("Rakefile$" . enh-ruby-mode))
-    (add-to-list 'auto-mode-alist '("\\.gemspec$" . enh-ruby-mode))
-    (add-to-list 'auto-mode-alist '("\\.ru$" . enh-ruby-mode))
-    (add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+  ;; add key binds for easily searching for
+  ;; models, controllers, migration etc.
+  (evil-leader/set-key
+    "rm"  'projectile-rails-find-model
+    "rc"  'projectile-rails-find-controller
+    "rs"  'projectile-rails-find-spec
+    "rM"  'projectile-rails-find-migration
+    "rR"  'projectile-rails-goto-routes
+    "rC"  'projectile-rails-console))
 
-    (add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+(use-package yard-mode
+  :ensure t)
 
-    (setq enh-ruby-bounce-deep-indent t)
-    (setq enh-ruby-hanging-brace-indent-level 2))
+(require 'rcodetools)
+
+;; enable several minor modes for ruby files including:
+;; ya snippets, rspec, yard, flycheck(linting)
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (setq ruby-insert-encoding-magic-comment nil)
+            (yas-minor-mode)
+            (rspec-mode)
+            (yard-mode)
+            (flycheck-mode)
+            (local-set-key "\r" 'newline-and-indent)
+            (setq rspec-command-options "--color --order random")
+            (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+            (projectile-rails-mode)))
+
+;; enable ruby-mode for additional buffers
+(hrs/add-auto-mode
+ 'ruby-mode
+ "\\Gemfile$"
+ "\\.rake$"
+ "\\.gemspec$"
+ "\\Guardfile$"
+ "\\Rakefile$")
+
+;; scroll to first error when running rspec
+(add-hook 'rspec-compilation-mode-hook
+          (lambda ()
+            (make-local-variable 'compilation-scroll-output)
+            (setq compilation-scroll-output 'first-error)))
+
+(provide 'ruby)
