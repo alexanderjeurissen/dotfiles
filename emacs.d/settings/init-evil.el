@@ -55,7 +55,7 @@
       "gb" 'magit-checkout       ;; git checkout
       "wz" 'delete-other-windows  ;; C-w o
       "q"  'hrs/kill-current-buffer
-      "wc" 'quit-window
+      "wc" 'evil-quit
       "wh" 'evil-window-left
       "wl" 'evil-window-right
       "wk" 'evil-window-up
