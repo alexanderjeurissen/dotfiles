@@ -1,36 +1,14 @@
-(require 'package)
-
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-
-(setq package-enable-at-startup nil)
 (add-to-list 'load-path
              (expand-file-name "settings" user-emacs-directory))
 
-;; Activate installed packages
-(package-initialize)
-
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-;; custom configuration
-(require 'general)
-(require 'ruby)
-(require 'init-evil)
-(require 'init-ag)
-(require 'init-helm)
-(require 'init-shell)
-
+(require 'use-package)
 
 ;; list available fonts
 ;; (print (font-family-list))
 
 ;; specify font for all unicode characters
 (when (member "SauceCodePro Nerd Font" (font-family-list))
-  (set-fontset-font t 'unicode "SauceCodePro Nerd Font-20" nil 'prepend))
+  (set-fontset-font t 'unicode "SauceCodePro Nerd Font-24" nil 'prepend))
 
 ;;;;;;;;;;;; General options ;;;;;;;;;;;;;;;;;;;
 
@@ -62,17 +40,31 @@
 ;; show parenthesis
 (show-paren-mode 1)
 
+;; show column numbers
+(column-number-mode 1)
+
 ;; settings for fringe
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 (setq-default left-fringe-width nil)
 (setq-default indent-tabs-mode nil)
 
+;; pretify symbols
+(global-prettify-symbols-mode t)
+
+;; highlight current line
+(when window-system
+  (global-hl-line-mode))
+
 ;; don't show warning for large files
 (setq large-file-warning-threshold nil)
 (setq split-width-threshold nil)
 
-;; allow themes
-(setq custom-safe-themes t)
+;; Follow symlinks without asking
+(setq vc-follow-symlinks t)
+
+;; Save backup files in centralised directory
+(defvar backup-dir "~/.emacs.d/backups/")
+(setq backup-directory-alist (list (cons "." backup-dir)))
 
 ;; Display settings
 (use-package solarized-theme
@@ -81,6 +73,18 @@
 (load-theme 'solarized-light)
 (load-theme 'solarized-dark t))
 
+;; custom configuration
+(require 'start-server)
+(require 'general)
+(require 'writing)
+(require 'init-org)
+(require 'init-powerline)
+(require 'init-magit)
+(require 'ruby)
+(require 'init-evil)
+(require 'init-ag)
+(require 'init-helm)
+(require 'init-shell)
 
 ;;;;;;;;;;;; Customization variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -97,7 +101,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default))))
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default))))
 
 
 
