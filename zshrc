@@ -22,7 +22,7 @@ fi
 # }}}
 
 # Vi mode {{{
-  bindkey -v
+  bindkey -e
   export KEYTIMEOUT=1
 # }}}
 
@@ -92,7 +92,7 @@ alias h1="cd ~/git/hackerone/"
 alias clearScreen="clear && printf '\e[3J'"
 
 # set nvim as defaut editory
-export EDITOR="nvim"
+export EDITOR="emacs-blocking"
 
 # rbenv and nodeenv init {{{
   if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
