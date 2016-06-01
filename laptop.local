@@ -16,6 +16,10 @@ brew_install_or_upgrade 'ranger'
 brew_install_or_upgrade 'terminal-notifier'
 brew_install_or_upgrade 'zsh-syntax-highlighting'
 
+# emacs mac port
+brew tap d12frosted/emacs-plus
+brew install emacs-plus --with-cocoa --with-gnutls --with-librsvg --with-imagemagick 
+
 # Apps using brew cask
 brew cask install firefox
 
@@ -36,6 +40,7 @@ npm install --global pure-prompt
 # Ruby gems
 gem install awesome_print
 gem install seeing_is_believing
+gem install rcodetools
 
 # Python packages
 pip3 install neovim-remote
