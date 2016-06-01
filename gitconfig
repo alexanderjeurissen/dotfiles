@@ -55,7 +55,7 @@
   user = alexanderjeurissen
 [core]
   excludesfile = /Users/alexander/.gitignore
-  editor = neovim_nvr
+  editor = emacs-blocking
 	pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
