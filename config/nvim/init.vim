@@ -900,7 +900,7 @@ if dein#load_state(expand(g:plugin_path))
         \"})
 
   call dein#add('airblade/vim-rooter')
-  " call dein#add('mhinz/vim-signify')
+  call dein#add('mhinz/vim-signify')
 " }}}
 " ------------------------------------------------------------------------------
 
