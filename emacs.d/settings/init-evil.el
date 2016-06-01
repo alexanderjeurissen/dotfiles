@@ -12,40 +12,25 @@
     (kbd "C-u")     'evil-scroll-up
     (kbd "C-w C-w") 'other-window)
 
-  (defun my/newline_before (times)
-    "insert a newline(s) above the current cursor position"
-    (interactive)
-    (save-excursion
-      (move-beginning-of-line 1)
-      (newline times)))
-
-  (defun my/newline_after (times)
-    "insert a newline(s) below the current cursor position"
-    (interactive)
-    (save-excursion
-      (move-beginning-of-line nil)
-      (newline times)))
-
-  (defun my/toggle-comment (region)
-    "comment or uncomment current line"
-    (interactive)
-    (comment-or-uncomment-region region))
+  ;; use evil search module
+  (setq evil-search-module 'evil-search)
 
   ;; move to beginning and end of line with capital H and L
   (define-key evil-normal-state-map (kbd "H") 'move-beginning-of-line)
   (define-key evil-normal-state-map (kbd "L") 'move-end-of-line)
+
   (define-key evil-visual-state-map (kbd "H") 'move-beginning-of-line)
   (define-key evil-visual-state-map (kbd "L") 'move-end-of-line)
 
   ;; Create new lines above/below current line
-  (define-key evil-normal-state-map (kbd "go") 'my/newline_after)
-  (define-key evil-normal-state-map (kbd "gO") 'my/newline_before)
+  (define-key evil-normal-state-map (kbd "go") 'aj/newline_after)
+  (define-key evil-normal-state-map (kbd "gO") 'aj/newline_before)
 
   ;; expand region in visual mode
   (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
 
   ;; comment current line
-  (define-key evil-normal-state-map (kbd "gc") 'my/toggle-comment-on-line))
+  (define-key evil-normal-state-map (kbd "gcc") 'hrs/comment-or-uncomment-region-or-line))
 
 (use-package evil
   :ensure t
@@ -60,10 +45,17 @@
     (evil-leader/set-leader "<SPC>")
     (setq evil-leader/in-all-states 1)
     (evil-leader/set-key
-      "b"  'helm-mini             ;; Switch to another buffer
-      "f" 'helm-find-files       ;; find file
-      "pf" 'projectile-find-files ;; find file
+      "b"  'ivy-switch-buffer    ;; Switch to another buffer
+      "f"  'find-file            ;; find file
+      "pf" 'projectile-find-file ;; find file
+      "p/" 'counsel-git-grep     ;; use git grep to locate file
+      "/"  'counsel-ag           ;; use ag in none git repositories
+      "gs" 'magit-status         ;; git status
+      "gl" 'magit-log            ;; git log
+      "gb" 'magit-checkout       ;; git checkout
       "wz" 'delete-other-windows  ;; C-w o
+      "q"  'hrs/kill-current-buffer
+      "wc" 'quit-window
       "wh" 'evil-window-left
       "wl" 'evil-window-right
       "wk" 'evil-window-up
@@ -71,8 +63,7 @@
       "wv" 'evil-window-vsplit
       "ws" 'evil-window-split
       "n"  'rename-file
-      "/"  'helm-ag          ;; Ag search from project's root
-      "x"  'helm-M-x
+      "x"  'counsel-M-x
       "y"  'yank-to-x-clipboard
     ))
 
@@ -81,6 +72,11 @@
     :config
     (global-evil-surround-mode))
 
+  (use-package evil-search-highlight-persist
+    :ensure t
+    :config
+    (global-evil-search-highlight-persist t))
+    
   (use-package evil-indent-textobject
     :ensure t))
 
