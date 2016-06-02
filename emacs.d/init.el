@@ -1,10 +1,25 @@
 (add-to-list 'load-path
              (expand-file-name "settings" user-emacs-directory))
 
-(require 'use-package)
+;; load use-package
+(require 'package)
 
-;; list available fonts
-;; (print (font-family-list))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+
+(setq package-enable-at-startup nil)
+
+;; Activate installed packages
+(package-initialize)
+
+;; allow custom themes
+(setq custom-safe-themes t)
+
+;; Bootstrap 'use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; specify font for all unicode characters
 (when (member "SauceCodePro Nerd Font" (font-family-list))
@@ -83,7 +98,7 @@
 (require 'ruby)
 (require 'init-evil)
 (require 'init-ag)
-(require 'init-helm)
+(require 'init-ivy)
 (require 'init-shell)
 
 ;;;;;;;;;;;; Customization variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
