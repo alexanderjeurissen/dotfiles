@@ -13,7 +13,7 @@
              '("^~/Git/\\(\\w+\\)/"
                (lambda (s) (concat ":" (upcase (match-string 1 s)) ":")))
              t)
-  (sml/setup)
+  (sml/setup))
 
   (use-package nyan-mode
     :ensure t
