@@ -4,12 +4,24 @@
 (use-package projectile-rails
   :ensure t
   :config
+
+  (use-package evil-rails
+    :ensure t
+    :config
+    (defgroup evil-rails nil
+      "Evil Rails customizations."
+      :prefix "evil-rails-"
+      :group 'evil-rails)
+
+    (evil-ex-define-cmd "A"           'projectile-toggle-between-implementation-and-test))
+
   ;; add key binds for easily searching for
   ;; models, controllers, migration etc.
   (evil-leader/set-key
     "rm"  'projectile-rails-find-model
     "rc"  'projectile-rails-find-controller
     "rs"  'projectile-rails-find-spec
+    "rv"  'projectile-rails-find-view
     "rM"  'projectile-rails-find-migration
     "rR"  'projectile-rails-goto-routes
     "rC"  'projectile-rails-console))
