@@ -111,4 +111,7 @@
   (dolist (pattern patterns)
     (add-to-list 'auto-mode-alist (cons pattern mode))))
 
+;; remove trailing whitespace
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (provide 'general)
