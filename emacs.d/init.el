@@ -83,10 +83,20 @@
 
 ;; Display settings
 (use-package solarized-theme
-:ensure t
-:config
-(load-theme 'solarized-light)
-(load-theme 'solarized-dark t))
+  :ensure t
+  :config
+  (load-theme 'solarized-light t t)
+  (load-theme 'solarized-dark t t))
+
+(use-package purple-haze-theme
+  :ensure t
+  :config
+  (load-theme 'purple-haze t t))
+
+(use-package atom-one-dark-theme
+  :ensure t
+  :config
+  (load-theme 'atom-one-dark t ))
 
 ;; custom configuration
 (require 'start-server)
@@ -100,6 +110,8 @@
 (require 'init-evil)
 (require 'init-ag)
 (require 'init-ivy)
+;; (require 'init-ido)
+;; (require 'init-helm)
 (require 'init-shell)
 
 ;;;;;;;;;;;; Customization variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -117,7 +129,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default))))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+ '(ivy-mode t))
 
 
 
