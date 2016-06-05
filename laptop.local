@@ -46,6 +46,7 @@ gem install rcodetools
 pip3 install neovim-remote
 pip install neovim
 pip3 install neovim
+pip install proselint
 
 # terminal related actions
 tic ~/.dotfiles/iterm/xterm-256color-italic.terminfo
