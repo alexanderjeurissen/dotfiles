@@ -96,6 +96,7 @@
 (require 'init-powerline)
 (require 'init-magit)
 (require 'ruby)
+(require 'web)
 (require 'init-evil)
 (require 'init-ag)
 (require 'init-ivy)
