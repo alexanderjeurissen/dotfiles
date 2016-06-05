@@ -30,7 +30,17 @@
   (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
 
   ;; comment current line
-  (define-key evil-normal-state-map (kbd "gcc") 'hrs/comment-or-uncomment-region-or-line))
+  (define-key evil-normal-state-map (kbd "gcc") 'hrs/comment-or-uncomment-region-or-line)
+
+  ;; scroll up ? no idea why this isn't enabled by default in evil
+  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+
+  ;; set evil-shift-width to the same value as tab-width
+  (setq evil-shift-width tab-width)
+
+  ;; use gj and gk instead of j / k to move more easily between wrapped lines.
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line))
 
 (use-package evil
   :ensure t
@@ -45,16 +55,18 @@
     (evil-leader/set-leader "<SPC>")
     (setq evil-leader/in-all-states 1)
     (evil-leader/set-key
-      "b"  'ivy-switch-buffer    ;; Switch to another buffer
-      "f"  'find-file            ;; find file
-      "pf" 'projectile-find-file ;; find file
-      "p/" 'counsel-git-grep     ;; use git grep to locate file
-      "/"  'counsel-ag           ;; use ag in none git repositories
-      "gs" 'magit-status         ;; git status
-      "gl" 'magit-log            ;; git log
-      "gb" 'magit-checkout       ;; git checkout
-      "wz" 'delete-other-windows  ;; C-w o
+      "s"  'swiper                 ;; Search in buffers
+      "b"  'ivy-switch-buffer      ;; Switch to another buffer
+      "f"  'find-file              ;; find file
+      "pf" 'projectile-find-file   ;; find file
+      "p/" 'counsel-git-grep       ;; use git grep to locate file
+      "/"  'counsel-ag             ;; use ag in none git repositories
+      "gs" 'magit-status           ;; git status
+      "gl" 'magit-log              ;; git log
+      "gb" 'magit-checkout         ;; git checkout
+      "wz" 'delete-other-windows   ;; C-w o
       "q"  'hrs/kill-current-buffer
+      "wt" 'ace-window
       "wc" 'evil-quit
       "wh" 'evil-window-left
       "wl" 'evil-window-right
