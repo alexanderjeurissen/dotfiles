@@ -55,17 +55,16 @@
     (evil-leader/set-leader "<SPC>")
     (setq evil-leader/in-all-states 1)
     (evil-leader/set-key
-      "s"  'swiper                 ;; Search in buffers
-      "b"  'ivy-switch-buffer      ;; Switch to another buffer
-      "f"  'find-file              ;; find file
-      "pf" 'projectile-find-file   ;; find file
-      "p/" 'counsel-git-grep       ;; use git grep to locate file
-      "/"  'counsel-ag             ;; use ag in none git repositories
+      "s"  'save-buffer
+
       "gs" 'magit-status           ;; git status
       "gl" 'magit-log              ;; git log
-      "gb" 'magit-checkout         ;; git checkout
+      "gc" 'magit-checkout         ;; git checkout
+      "gb" 'magit-blame            ;; git blame current buffer
+
       "wz" 'delete-other-windows   ;; C-w o
       "q"  'hrs/kill-current-buffer
+
       "wt" 'ace-window
       "wc" 'evil-quit
       "wh" 'evil-window-left
@@ -74,8 +73,14 @@
       "wj" 'evil-window-down
       "wv" 'evil-window-vsplit
       "ws" 'evil-window-split
+
+      "df" 'describe-function
+      "dv" 'describe-variable
+      "db" 'describe-bindings
+      "dm" 'describe-mode
+      "dp" 'describe-package
+
       "n"  'rename-file
-      "x"  'counsel-M-x
       "y"  'yank-to-x-clipboard
     ))
 

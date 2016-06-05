@@ -1,8 +1,13 @@
 (use-package smex
-  :ensure t)
+  :ensure t
+  :config
+  (setq smex-completion-method 'ivy))
 
 (use-package dash
   :ensure t)
+
+(use-package swiper
+  :Ensure t)
 
 (use-package ivy
   :ensure t
@@ -12,7 +17,8 @@
   (setq ivy-height 10)
   (setq ivy-count-format "(%d/%d) ")
   (setq projectile-completion-system 'ivy)
-  (setq magit-completing-read-function 'ivy-completing-read))
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
 
 (use-package counsel
   :ensure t
@@ -20,13 +26,16 @@
   (use-package counsel-projectile
     :ensure t))
 
-(use-package helm
-  :ensure t
-  :config
-  (use-package helm-swoop
-    :ensure t)
-  (helm-mode 1)
-  (setq helm-split-window-in-side-p t)
-  (setq helm-swoop-split-with-multiple-windows t))
+(define-key evil-normal-state-map (kbd "/") 'swiper) ;; I prefer the way swiper searches compared to evil
+
+(evil-leader/set-key
+  "b"  'ivy-switch-buffer      ;; Switch to another buffer
+  "f"  'counsel-find-file      ;; find file
+  "/"  'counsel-ag             ;; use ag in none git repositories
+
+  "pf" 'projectile-find-file   ;; find file in git project
+  "p/" 'counsel-git-grep       ;; use git grep to locate file
+
+  "x"  'counsel-M-x)
 
 (provide 'init-ivy)
