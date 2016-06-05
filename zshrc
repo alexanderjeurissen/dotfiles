@@ -1,6 +1,8 @@
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH"
 export TERM=xterm-256color-italic
+export PYTHONIOENCODING=utf8
+
 [ -n "$TMUX" ] && export TERM=screen-256color
 
 # recommended by brew doctor {{{
@@ -49,6 +51,7 @@ fi
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
   alias attach='tmux attach -t'
   alias findP='ps -ef | grep -v grep | grep '
+  alias proselint='PYTHONIOENCODING=utf8 proselint'
 # }}}
 
 # Aliases for common typo's {{{
@@ -99,9 +102,10 @@ export EDITOR="emacs-blocking"
   if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 # }}}
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
+# export LC_ALL=en_US.UTF-8
+# export LANG=en_US.UTF-8
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
 # FZF {{{
   export FZF_DEFAULT_COMMAND='ag -l -g ""'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
