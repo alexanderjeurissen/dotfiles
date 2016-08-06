@@ -1,7 +1,8 @@
 export PATH="$HOME/.bin:$PATH"
-export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH"
+export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
 export TERM=xterm-256color-italic
 export PYTHONIOENCODING=utf8
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
 [ -n "$TMUX" ] && export TERM=screen-256color
 
@@ -24,7 +25,7 @@ fi
 # }}}
 
 # Vi mode {{{
-  bindkey -e
+  bindkey -v
   export KEYTIMEOUT=1
 # }}}
 
@@ -95,7 +96,7 @@ alias h1="cd ~/git/hackerone/"
 alias clearScreen="clear && printf '\e[3J'"
 
 # set nvim as defaut editory
-export EDITOR="emacs-blocking"
+export EDITOR="nvim"
 
 # rbenv and nodeenv init {{{
   if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
