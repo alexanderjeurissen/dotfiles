@@ -114,13 +114,14 @@ endif
   Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
   " unite / denite
-  " Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+  Plug 'Shougo/vimproc.vim', { 'do': 'make' }
   " Plug 'Shougo/unite.vim'
   " Plug 'Shougo/neoyank.vim'
   " Plug 'basyura/unite-rails'
   " Plug 'Shougo/unite-session'
   " Plug 'osyo-manga/unite-quickfix'
-  " Plug 'Shougo/neomru.vim'
+  Plug 'Shougo/neomru.vim'
+  Plug 'Shougo/denite.nvim'
   " Plug 'Shougo/unite-help'
   " Plug 'Shougo/vimfiler.vim', { 'on': 'VimFiler' }
 
@@ -137,12 +138,12 @@ endif
 " ------------------------------------------------------------------------------
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-cucumber'
-  Plug 'tpope/vim-rails', { 'for': 'Ruby' }
+  Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
-  Plug 'thoughtbot/vim-rspec', { 'for': 'Ruby' }
-  Plug 'ngmy/vim-rubocop', { 'for': 'Ruby' }
-  Plug 'vim-ruby/vim-ruby', { 'for': 'Ruby' }
-  Plug 'subbarao/vim-rubybeautifier', { 'for': 'Ruby' }
+  Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
+  Plug 'ngmy/vim-rubocop', { 'for': 'ruby' }
+  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+  Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -153,6 +154,7 @@ endif
   Plug 'tpope/vim-git' " Vim runtime files and syntax highlighting
   Plug 'int3/vim-extradite'
   Plug 'mattn/gist-vim', { 'on': 'Gist' }
+  Plug 'jreybert/vimagit', { 'on': 'Magit' }
 " }}}
 " ------------------------------------------------------------------------------
 
