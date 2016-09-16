@@ -225,9 +225,8 @@ nnoremap Y y$
 noremap H ^
 noremap L $
 
-" Open vimrc with <leader>v
-nnoremap <leader>v  :vsplit $MYVIMRC<CR>
-nnoremap <leader>gv :vsplit $MYGVIMRC<CR>
+" Open vimrc with <leader>fed
+nnoremap <leader>fed  :vsplit $MYVIMRC<CR>
 nnoremap <leader>vr :source $MYVIMRC<CR>
 
 " Rename current file with <leader>n
@@ -429,72 +428,81 @@ endfunction
 
   command! -nargs=* T terminal
 
-  " resize splits
-  function! IsMost(direction)
-    let oldw = winnr()
-    silent! exe "normal! \<c-w>".a:direction
-    let neww = winnr()
-    silent! exe oldw.'wincmd w'
-    return oldw == neww
-  endfunction
+  " resize splits {{{
+    function! IsMost(direction)
+      let oldw = winnr()
+      silent! exe "normal! \<c-w>".a:direction
+      let neww = winnr()
+      silent! exe oldw.'wincmd w'
+      return oldw == neww
+    endfunction
 
-  function! ResizeSplits(direction)
-    let oldw = winnr()
-    let leftMost=IsMost('h')
-    let bottomMost=IsMost('j')
+    function! ResizeSplits(direction)
+      let oldw = winnr()
+      let leftMost=IsMost('h')
+      let bottomMost=IsMost('j')
 
-    if a:direction == 'left'
-      if IsMost('h')
-        silent! exe 'vertical resize -5'
-      else
-        silent! exe "normal! \<c-w>h"
-        silent! exe "vertical resize +5"
-        silent! exe oldw.'wincmd w'
+      if a:direction == 'left'
+        if IsMost('h')
+          silent! exe 'vertical resize -5'
+        else
+          silent! exe "normal! \<c-w>h"
+          silent! exe "vertical resize +5"
+          silent! exe oldw.'wincmd w'
+        endif
+      elseif a:direction == 'right'
+        if IsMost('h')
+          silent! exe 'vertical resize +5'
+        else
+          silent! exe "normal! \<c-w>h"
+          silent! exe "vertical resize +5"
+          silent! exe oldw.'wincmd w'
+        endif
+      elseif a:direction == 'up'
+        if bottomMost
+          silent! exe 'resize +5'
+        else
+          silent! exe "normal! \<c-w>j"
+          silent! exe "resize +5"
+          silent! exe oldw.'wincmd w'
+        endif
+      elseif a:direction == 'down'
+        if bottomMost
+          silent! exe 'resize -5'
+        else
+          let oldw = winnr()
+          silent! exe "normal! \<c-w>k"
+          silent! exe "resize +5"
+          silent! exe oldw.'wincmd w'
+        endif
       endif
-    elseif a:direction == 'right'
-      if IsMost('h')
-        silent! exe 'vertical resize +5'
-      else
-        silent! exe "normal! \<c-w>h"
-        silent! exe "vertical resize +5"
-        silent! exe oldw.'wincmd w'
-      endif
-    elseif a:direction == 'up'
-      if bottomMost
-        silent! exe 'resize +5'
-      else
-        silent! exe "normal! \<c-w>j"
-        silent! exe "resize +5"
-        silent! exe oldw.'wincmd w'
-      endif
-    elseif a:direction == 'down'
-      if bottomMost
-        silent! exe 'resize -5'
-      else
-        let oldw = winnr()
-        silent! exe "normal! \<c-w>k"
-        silent! exe "resize +5"
-        silent! exe oldw.'wincmd w'
-      endif
-    endif
-  endfunction
+    endfunction
 
-  nnoremap <up> :call ResizeSplits('up')<CR><ESC>
-  nnoremap <down> :call ResizeSplits('down')<CR><ESC>
-  nnoremap <left> :call ResizeSplits('left')<CR><ESC>
-  nnoremap <right> :call ResizeSplits('right')<CR><ESC>
+    nnoremap <up> :call ResizeSplits('up')<CR><ESC>
+    nnoremap <down> :call ResizeSplits('down')<CR><ESC>
+    nnoremap <left> :call ResizeSplits('left')<CR><ESC>
+    nnoremap <right> :call ResizeSplits('right')<CR><ESC>
+  "}}}
 
-  " Window navigation between terminal and nonterminal
-  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-  tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
-  tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
-  tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
-  tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
+  " Window navigation between terminal and nonterminal {{{
+    au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+    noremap <silent> <leader>wh <C-\><C-n><C-w>h
+    tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
+    tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
+    tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
 
-  nmap <silent> <leader>wh <C-w>h
-  nmap <silent> <leader>wj <C-w>j
-  nmap <silent> <leader>wk <C-w>k
-  nmap <silent> <leader>wl <C-w>l
+    nmap <silent> <leader>wh <C-w>h
+    nmap <silent> <leader>wj <C-w>j
+    nmap <silent> <leader>wk <C-w>k
+    nmap <silent> <leader>wl <C-w>l
+  "}}}
+
+  " split to tiled windows {{{
+    nmap <silent> <leader>wv :vs<cr>
+    nmap <silent> <leader>ws :split<cr>
+    tnoremap <silent> <leader>wv <C-\><C-n>:vs<cr>:startinsert<cr>
+    tnoremap <silent> <leader>ws <C-\><C-n>:split<cr>:startinsert<cr>
+  "}}}
 
   if !exists('g:jobs')
     let Shell = {}
@@ -587,6 +595,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
     let &statusline = " %{SessionFlag()} "
     let &statusline .= "\ue0b1 %<%f "
     let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ''}"
+    let &statusline .= "%{PasteFlag()}"
     let &statusline .= "%=\u2571 %{&filetype == '' ? 'unknown' : &filetype} "
     let &statusline .= "\u2571 %p%% \u2571 col %c "
 
@@ -618,9 +627,9 @@ source $HOME/.config/nvim/plugin_configuration.vim
       return WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
     endfunction
 
-    function! Paste()
+    function! PasteFlag()
       if &paste
-        return ' ⚠ PASTE '
+        return ''
       else
         return ''
       endif
