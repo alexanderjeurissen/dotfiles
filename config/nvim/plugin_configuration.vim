@@ -271,13 +271,15 @@ if has_key(g:plugs, 'GoldenView.Vim')
       \  'filetype': [
       \    'nerdtree',
       \    'nerd',
-      \    'unite'
+      \    'unite',
+      \    'gitcommit'
       \  ],
       \  'buftype': [
       \    'nofile',
       \    'nerd',
       \    'nerdtree',
-      \    'terminal'
+      \    'terminal',
+      \    'gitcommit'
       \  ]
       \}
 
@@ -309,20 +311,14 @@ if has_key(g:plugs, 'GoldenView.Vim')
     " }}}
 
     " Keybindings {{{
-      " 1. split to tiled windows
-      " nmap <silent> <leader>wv <plug>GoldenViewSplit
-      nmap <silent> <leader>wv :vs<cr>
-      nmap <silent> <leader>ws :split<cr>
-
-      " 2. quickly switch current window with the main pane and toggle back
+      " 1. quickly switch current window with the main pane and toggle back
       nmap <silent> <leader>wm <Plug>GoldenViewSwitchMain
       nmap <silent> <leader>wt <Plug>GoldenViewSwitchToggle
 
-      " 4. manipulate splits
+      " 2. manipulate splits
       nmap <leader>wt <C-W>T
 
-      " nmap <leader>wj
-      " 4. toggle auto resize
+      " 3. toggle auto resize
       nmap <silent> <leader>tg :ToggleGoldenViewAutoResize<CR>
     " }}}
 endif
