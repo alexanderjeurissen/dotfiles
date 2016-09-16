@@ -25,7 +25,7 @@ fi
 # }}}
 
 # Vi mode {{{
-  bindkey -v
+  bindkey -e
   export KEYTIMEOUT=1
 # }}}
 
@@ -63,7 +63,9 @@ fi
 
 # Nvim & vim aliases {{{
   alias vim='nvim'
-  alias vi='vim'
+  alias vi='nvim'
+  alias v='nvim'
+  alias oldvim="\vim"
 
   # Courtesy of Henry Kupty
   # this makes it so no nested vim sessions are started when editing files in term splits
@@ -71,6 +73,9 @@ fi
     alias h='nvr -o'
     alias v='nvr -O'
     alias t='nvr --remote-tab'
+
+    alias vim='nvr -O'
+    alias vi='nvr -O'
   fi
 # }}}
 
