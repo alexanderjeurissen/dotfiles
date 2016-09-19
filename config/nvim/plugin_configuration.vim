@@ -35,6 +35,16 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
+" mhartington/oceanic-next {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'oceanic-next')
+  colorscheme OceanicNext
+  set background=dark
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " Samuel-Phillips/nvim-colors-solarized {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'nvim-colors-solarized')
@@ -494,7 +504,8 @@ if has_key(g:plugs, 'fzf.vim')
   " }}}
 
   " Keybindings {{{
-    nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
+    " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
+    nnoremap <silent> <leader>ff :<C-u>Files<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>s :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
