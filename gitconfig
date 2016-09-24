@@ -4,7 +4,7 @@
 [diff]
   tool = vim-diff-tool
 [difftool "vim-diff-tool"]
-  cmd= vimdiff $REMOTE $LOCAL
+  cmd= nvim -d $REMOTE $LOCAL
 [pager]
   diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
@@ -62,6 +62,6 @@
 [difftool]
   prompt = false
 [mergetool]
-  path = nvim
+  path = neovim_nvr
 [url "git@github.com:"]
   insteadOf = "https://github.com/"
