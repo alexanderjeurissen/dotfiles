@@ -1,6 +1,9 @@
 export PATH="$HOME/.bin:$PATH"
-export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH"
+export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
 export TERM=xterm-256color-italic
+export PYTHONIOENCODING=utf8
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+
 [ -n "$TMUX" ] && export TERM=screen-256color
 
 # recommended by brew doctor {{{
@@ -11,13 +14,18 @@ export TERM=xterm-256color-italic
   . $(brew --prefix nvm)/nvm.sh
 # }}}
 
+if [[ $TERM = dumb ]]; then
+  unset zle_bracketed_paste
+fi
+
 # minimal prompt {{{
   autoload -U promptinit && promptinit
   prompt pure
+  prompt_pure_set_title() {}
 # }}}
 
 # Vi mode {{{
-  bindkey -v
+  bindkey -e
   export KEYTIMEOUT=1
 # }}}
 
@@ -44,6 +52,7 @@ export TERM=xterm-256color-italic
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
   alias attach='tmux attach -t'
   alias findP='ps -ef | grep -v grep | grep '
+  alias proselint='PYTHONIOENCODING=utf8 proselint'
 # }}}
 
 # Aliases for common typo's {{{
@@ -54,7 +63,9 @@ export TERM=xterm-256color-italic
 
 # Nvim & vim aliases {{{
   alias vim='nvim'
-  alias vi='vim'
+  alias vi='nvim'
+  alias v='nvim'
+  alias oldvim="\vim"
 
   # Courtesy of Henry Kupty
   # this makes it so no nested vim sessions are started when editing files in term splits
@@ -62,6 +73,9 @@ export TERM=xterm-256color-italic
     alias h='nvr -o'
     alias v='nvr -O'
     alias t='nvr --remote-tab'
+
+    alias vim='nvr -O'
+    alias vi='nvr -O'
   fi
 # }}}
 
