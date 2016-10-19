@@ -12,51 +12,6 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" morhetz/gruvbox {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'Gruvbox')
-  let g:gruvbox_italic=1
-  let g:gruvbox_italicize_strings=1
-  let g:gruvbox_contrast_dark='soft'
-  colorscheme gruvbox
-  set background=dark
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" zefei/cake16 {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'cake16')
-  colorscheme cake16
-  set background=light
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" mhartington/oceanic-next {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'oceanic-next')
-  colorscheme OceanicNext
-  set background=dark
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Samuel-Phillips/nvim-colors-solarized {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'nvim-colors-solarized')
-  colorscheme solarized
-  set background=dark
-  " should only be enabled if upgrading to master branch of this plugin
-  " \   set termguicolors\n
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " xolox/vim-session {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-session')
@@ -813,6 +768,64 @@ if has_key(g:plugs, 'unite.vim')
     call unite#filters#sorter_default#use(['sorter_rank'])
     call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '(\.meta$|\.tmp)')
   endfunction "}}}
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" morhetz/gruvbox {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'Gruvbox')
+  let g:gruvbox_italic=1
+  let g:gruvbox_italicize_strings=1
+  let g:gruvbox_contrast_dark='soft'
+  colorscheme gruvbox
+  set background=dark
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" zefei/cake16 {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'cake16')
+  colorscheme cake16
+  set background=light
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" mhartington/oceanic-next {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'oceanic-next')
+  colorscheme OceanicNext
+  set background=dark
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" joshdick/onedark.vim {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'onedark.vim')
+  func! ActivateColorScheme()
+    colorscheme onedark
+    set background=dark
+    " silent exec ":IndentLinesReset 2<CR>"
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Samuel-Phillips/nvim-colors-solarized {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'nvim-colors-solarized')
+  colorscheme solarized
+  set background=dark
+  " should only be enabled if upgrading to master branch of this plugin
+  " \   set termguicolors\n
 endif
 " }}}
 " ------------------------------------------------------------------------------
