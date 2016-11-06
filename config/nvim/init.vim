@@ -18,7 +18,9 @@
 " ============================================================================
 "
 " Sets the character encoding for the file of this buffer.
-set fileencoding=utf-8
+if !&readonly
+  set fileencoding=utf-8
+endif
 
 " Don't use swapfiles.. use a vcs like git instead
 set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
@@ -152,20 +154,6 @@ let python_host_prog = "python"
 " General Keybindings {{{
 " ============================================================================
 
-" unmap the arrow keys
-no <down> <Nop>
-no <left> <Nop>
-no <right> <Nop>
-no <up> <Nop>
-ino <down> <Nop>
-ino <left> <Nop>
-ino <right> <Nop>
-ino <up> <Nop>
-vno <down> <Nop>
-vno <left> <Nop>
-vno <right> <Nop>
-vno <up> <Nop>
-
 " Fix annoying typo's of WQ, QA and Q
 command! WQ wq
 command! Wq wq
@@ -236,8 +224,8 @@ noremap <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 nnoremap Y y$
 
 " Go to beginning and end of lines easier. From http://vimbits.com/bits/16
-noremap H ^
-noremap L $
+" noremap H ^
+" noremap L $
 
 " Open vimrc with <leader>fed
 nnoremap <leader>fed  :e $MYVIMRC<CR>
@@ -607,12 +595,13 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
     let &statusline = " %{SessionFlag()} "
-    let &statusline .= "\ue0b1 %<%f "
-    let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ''}"
+    let &statusline .= " %<%f "
+    let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
     let &statusline .= "%{PasteFlag()}"
     let &statusline .= "%{SpellFlag()}"
-    let &statusline .= "%=\u2571 %{&filetype == '' ? 'unknown' : &filetype} "
-    let &statusline .= "\u2571 %p%% \u2571 col %c "
+    let &statusline .= "%{HardTimeFlag()}"
+    let &statusline .= "%=╱ %{&filetype == '' ? 'unknown' : &filetype} "
+    let &statusline .= "╱ %p%% ╱ col %c "
 
     function! SessionFlag()
       if has_key(g:plugs, 'vim-session')
@@ -631,7 +620,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
     function! GitFlag()
       let git = fugitive#head()
       if git != '' && winwidth(0) > 70
-        return "\ue0b1  ".strpart(git, strlen(git)-30)." "
+        return "  ".strpart(git, strlen(git)-30)." "
       else
         return ""
       endif
@@ -661,6 +650,14 @@ source $HOME/.config/nvim/plugin_configuration.vim
     function! SyntaxFlag()
       if has_key(g:plugs, 'neomake')
         return ' ⚠ '
+      else
+        return ''
+      endif
+    endfunction
+
+    function! HardTimeFlag()
+      if exists("b:hardtime_on") && b:hardtime_on == 1
+        return '  '
       else
         return ''
       endif
