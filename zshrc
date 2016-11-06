@@ -1,18 +1,5 @@
-export PATH="$HOME/.bin:$PATH"
-export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
-export TERM=xterm-256color-italic
-export PYTHONIOENCODING=utf8
-export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
 [ -n "$TMUX" ] && export TERM=screen-256color
-
-# recommended by brew doctor {{{
-  export PATH="/usr/local/bin:$PATH"
-  eval "$(rbenv init - --no-rehash)"
-  eval "$(nodenv init - --no-rehash)"
-  export NVM_DIR=~/.nvm
-  . $(brew --prefix nvm)/nvm.sh
-# }}}
 
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
@@ -36,9 +23,10 @@ fi
 
 # aliasses {{{
   alias l="ls -1AG"
-  # alias rake="noglob bundle exec rake"
+  alias up="bundle && yarn"
   alias rake="noglob bin/rake"
   alias rails="bin/rails"
+  alias r="rails"
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
@@ -53,6 +41,23 @@ fi
   alias attach='tmux attach -t'
   alias findP='ps -ef | grep -v grep | grep '
   alias proselint='PYTHONIOENCODING=utf8 proselint'
+# }}}
+
+# Aliases for TaskWarrior {{{
+  alias t="task"
+  alias in='task add +in'
+
+  # TICKLER file, defer items etc.
+  tickle() {
+      deadline=$1
+      shift
+      in +tickle wait:$deadline $@
+  }
+
+  alias tick=tickle
+
+  # Think something over ? like yes/no ? think alias!!
+  alias think='tickle +1d'
 # }}}
 
 # Aliases for common typo's {{{
@@ -72,9 +77,9 @@ fi
   if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
     alias h='nvr -o'
     alias v='nvr -O'
-    alias t='nvr --remote-tab'
 
     alias vim='nvr -O'
+    alias nvim='nvr -O'
     alias vi='nvr -O'
   fi
 # }}}
@@ -92,16 +97,22 @@ fi
 # }}}
 
 # Aliases for Arcanist {{{
-  alias diff="arc diff --browse"
-  alias kerk="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
+  alias diffb="arc diff --browse"
+  alias difflc="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
 # }}}
-alias h1="cd ~/git/hackerone/"
+
+# Aliases for directories {{{
+  alias h1="cd ~/git/hackerone/"
+  alias dotfiles="cd ~/.dotfiles/"
+# }}}
+
+alias psqlh1='psql -D "./tmp/postgres" -k . -p 3100'
 
 # Alias for clearing the screen
 alias clearScreen="clear && printf '\e[3J'"
 
 # set nvim as defaut editory
-export EDITOR="nvim"
+export EDITOR="neovim_nvr"
 
 # rbenv and nodeenv init {{{
   if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
@@ -152,8 +163,6 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   setopt share_history # share command history data
 #}}}
 
-export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
-
 # Nginx {{{
   nginx_setup() {
     local dest=$(brew --prefix)/etc/nginx/sites/$(basename `pwd`).conf
@@ -197,3 +206,4 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
     git checkout $(echo "$target" | awk '{print $2}')
   }
 #}}}
+export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
