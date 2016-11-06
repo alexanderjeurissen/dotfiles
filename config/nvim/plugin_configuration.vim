@@ -870,8 +870,21 @@ if has_key(g:plugs, 'Base2Tone-vim')
     " colorscheme Base2Tone-Cave-light
 
     hi! StatusLine ctermbg=001 ctermfg=015
+    hi User1 ctermfg=10
   endfunc
 endif
 " }}}
 " ------------------------------------------------------------------------------
 
+" ------------------------------------------------------------------------------
+" takac/vim-hardtime {{{
+if has_key(g:plugs, 'Base2Tone-vim')
+  let g:hardtime_default_on = 1
+  let g:hardtime_showmsg = 0 " Show message
+  let g:list_of_insert_keys = ["<Bs>"]
+  let g:list_of_disabled_keys = ["<up>", "<down>", "<left>", "<right>"]
+  let g:hardtime_allow_different_key = 1 " This allows jh but not jj
+  let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
+endif
+" }}}
+" ------------------------------------------------------------------------------

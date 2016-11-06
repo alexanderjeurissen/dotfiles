@@ -81,6 +81,7 @@ endif
   Plug 'editorconfig/editorconfig-vim'
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'Yggdroot/indentLine' " adds indentation guides
+  Plug 'takac/vim-hardtime'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ endif
 " Javascript {{{
 " ------------------------------------------------------------------------------
   " Plug 'kchmck/vim-coffee-script'
-  Plug 'Raimondi/delimitMate'
+  " Plug 'Raimondi/delimitMate'
   Plug 'dsawardekar/ember.vim', { 'for': 'Javascript' }
   " Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
   " Plug 'othree/yajs.vim'
