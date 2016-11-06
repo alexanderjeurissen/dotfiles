@@ -48,7 +48,8 @@ endif
   " Plug 'chriskempson/base16-vim'
   " Plug 'mhartington/oceanic-next'
   " Plug 'morhetz/gruvbox'
-  Plug 'zefei/cake16'
+  " Plug 'zefei/cake16'
+  Plug 'joshdick/onedark.vim'
   " Plug 'junegunn/seoul256.vim'
   " Plug 'romainl/flattened'
   " Plug 'Samuel-Phillips/nvim-colors-solarized', { 'commit': '3618276' }
@@ -62,6 +63,7 @@ endif
   Plug 'radenling/vim-dispatch-neovim' | Plug 'tpope/vim-dispatch'
   Plug 'MarcWeber/vim-addon-local-vimrc'
   Plug 'xolox/vim-session' | Plug 'xolox/vim-misc'
+  Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -84,10 +86,10 @@ endif
 " ------------------------------------------------------------------------------
 " Javascript {{{
 " ------------------------------------------------------------------------------
-  Plug 'kchmck/vim-coffee-script'
+  " Plug 'kchmck/vim-coffee-script'
   Plug 'Raimondi/delimitMate'
   Plug 'dsawardekar/ember.vim', { 'for': 'Javascript' }
-  Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
+  " Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
   " Plug 'othree/yajs.vim'
   Plug 'JarrodCTaylor/vim-ember-cli-test-runner', {
         \'on': [
@@ -96,8 +98,8 @@ endif
         \  'RunSingleEmberTestModule',
         \  'RerunLastEmberTests'
         \]}
-  Plug 'isRuslan/vim-es6', { 'for': 'Javascript' }
-  Plug 'mxw/vim-jsx'
+  " Plug 'isRuslan/vim-es6', { 'for': 'Javascript' }
+  " Plug 'mxw/vim-jsx'
   Plug 'maksimr/vim-jsbeautify', { 'for': 'Javascript' }
   Plug 'beautify-web/js-beautify', { 'for': 'Javascript' }
   Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'Javascript' }
@@ -142,7 +144,7 @@ endif
 
   Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
   Plug 'ngmy/vim-rubocop', { 'for': 'ruby' }
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+  " Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
   Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
 " }}}
 " ------------------------------------------------------------------------------
