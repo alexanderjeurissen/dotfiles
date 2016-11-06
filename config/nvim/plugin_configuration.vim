@@ -332,7 +332,7 @@ if has_key(g:plugs, 'fzf.vim')
 
       function! s:fzf_statusline()
         " Override statusline as you like
-        highlight fzf1 ctermfg=161 ctermbg=251
+        highlight fzf1 ctermfg=13 ctermbg=10
         setlocal statusline=%#fzf1#
 
         if g:fzf_mode == 'Files'
@@ -829,3 +829,49 @@ if has_key(g:plugs, 'nvim-colors-solarized')
 endif
 " }}}
 " ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" atelierbram/Base2Tone-vim {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'Base2Tone-vim')
+  func! ActivateColorScheme()
+    " Base2Tone Dark
+    set background=dark
+    colorscheme Base2Tone-Evening-dark
+    " or any of the other schemes:
+    " colorscheme Base2Tone-Morning-dark
+    " colorscheme Base2Tone-Sea-dark
+    " colorscheme Base2Tone-Space-dark
+    " colorscheme Base2Tone-Earth-dark
+    " colorscheme Base2Tone-Forest-dark
+    " colorscheme Base2Tone-Desert-dark
+    " colorscheme Base2Tone-Lake-dark
+    " colorscheme Base2Tone-Meadow-dark
+    " colorscheme Base2Tone-Drawbridge-dark
+    " colorscheme Base2Tone-Pool-dark
+    " colorscheme Base2Tone-Heath-dark
+    " colorscheme Base2Tone-Cave-dark
+
+    " Base2Tone Light
+    "
+    " set background=light
+    " colorscheme Base2Tone-Evening-light
+    " colorscheme Base2Tone-Morning-light
+    " colorscheme Base2Tone-Sea-light
+    " colorscheme Base2Tone-Space-light
+    " colorscheme Base2Tone-Earth-light
+    " colorscheme Base2Tone-Forest-light
+    " colorscheme Base2Tone-Desert-light
+    " colorscheme Base2Tone-Lake-light
+    " colorscheme Base2Tone-Meadow-light
+    " colorscheme Base2Tone-Drawbridge-light
+    " colorscheme Base2Tone-Pool-light
+    " colorscheme Base2Tone-Heath-light
+    " colorscheme Base2Tone-Cave-light
+
+    hi! StatusLine ctermbg=001 ctermfg=015
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+

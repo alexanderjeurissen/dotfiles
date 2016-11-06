@@ -50,6 +50,7 @@ endif
   " Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   Plug 'joshdick/onedark.vim'
+  Plug 'atelierbram/Base2Tone-vim'
   " Plug 'junegunn/seoul256.vim'
   " Plug 'romainl/flattened'
   " Plug 'Samuel-Phillips/nvim-colors-solarized', { 'commit': '3618276' }

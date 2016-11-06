@@ -139,7 +139,7 @@ if (empty($TMUX))
   "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
   " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
   if (has("termguicolors"))
-    set termguicolors
+    " set termguicolors
   endif
 endif
 
@@ -610,6 +610,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
     let &statusline .= "\ue0b1 %<%f "
     let &statusline .= "%{&readonly ? \"\ue0a2 \" : &modified ? ' ' : ''}"
     let &statusline .= "%{PasteFlag()}"
+    let &statusline .= "%{SpellFlag()}"
     let &statusline .= "%=\u2571 %{&filetype == '' ? 'unknown' : &filetype} "
     let &statusline .= "\u2571 %p%% \u2571 col %c "
 
@@ -643,15 +644,23 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     function! PasteFlag()
       if &paste
-        return ''
+        return '  '
       else
         return ''
       endif
     endfunction
 
-    function! Spell()
+    function! SpellFlag()
       if &spell
-        return ' ⚠ SPELL '
+        return '  '
+      else
+        return ''
+      endif
+    endfunction
+
+    function! SyntaxFlag()
+      if has_key(g:plugs, 'neomake')
+        return ' ⚠ '
       else
         return ''
       endif
@@ -659,7 +668,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
   " }}}
 " ==============================================================================
 
-autocmd BufRead,BufNewFile *.* call ActivateColorScheme()
+" autocmd BufRead,BufNewFile *.* call ActivateColorScheme()
 call ActivateColorScheme()
 " ==============================================================================
 " Include user's local vim config {{{
