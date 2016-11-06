@@ -8,11 +8,6 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
 fi
 
 
-# export FZF_DEFAULT_OPTS='
-#   --color=dark
-# '
-
-
 # FZF
 # COLOR:
 #     fg      Text
@@ -39,8 +34,20 @@ fi
 #   --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
 # '
 
-# # Cake
+# Cake
+# export FZF_DEFAULT_OPTS='
+#   --color fg:0,bg:15,hl:8,fg+:0,bg+:14,hl+:6
+#   --color info:6,prompt:6,pointer:6,marker:6,spinner:6,header:8
+# '
+
+# Base2-Tone
 export FZF_DEFAULT_OPTS='
-  --color fg:0,bg:15,hl:8,fg+:0,bg+:14,hl+:6
-  --color info:6,prompt:6,pointer:6,marker:6,spinner:6,header:8
+  --color fg:13,bg:0,hl:8,fg+:13,bg+:10,hl+:15
+  --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
 '
+
+# OneDark.vim
+# export FZF_DEFAULT_OPTS='
+#   --color fg:145,bg:235,hl:59,fg+:145,bg+:236,hl+:170
+#   --color info:180,prompt:170,pointer:170,marker:204,spinner:170,header:59
+# '
