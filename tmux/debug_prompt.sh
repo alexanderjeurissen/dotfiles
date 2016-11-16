@@ -3,13 +3,13 @@
 # functionality
 
 # $(tmux display-message ${TMUX_PANE_WIDTH}) # show the pane_width
-double_segment "♫" brightgreen blue "debug/song" blue brightgreen 143
-double_segment "js" brightgreen yellow "debug/version" yellow brightgreen 113
-double_segment "rb" brightgreen red "debug/version" red brightgreen 113
+double_segment "♫" black blue "debug/song" blue brightblue 143
+double_segment "js" black yellow "debug/version" yellow brightyellow 113
+double_segment "rb" black red "debug/version" red brightred 113
 if [ $DEBUG_VCS -eq 1 ]; then
-  double_segment "⎇" brightgreen brightred "debug/branch" brightred brightgreen
-  segment "debug/compare" brightgreen brightgreen
-  double_segment "⊕" brightgreen green "debug/int" green brightgreen
-  double_segment "+" brightgreen yellow "debug/int" yellow brightgreen
-  double_segment "○" brightgreen cyan "debug/int" cyan brightgreen
+  double_segment "⎇" black brightred "debug/branch" black brightred
+  segment "debug/compare" black brightgreen
+  double_segment "⊕" black green "debug/int" black brightgreen
+  double_segment "+" black yellow "debug/int" black brightyellow
+  double_segment "○" black cyan "debug/int" black brightcyan
 fi
