@@ -1,3 +1,3 @@
 run_segment() {
-  echo "#[fg=brightgreen, bg=brightmagenta, noreverse] ⇵ #[bg=brightgreen] #[fg=brightmagenta]10 #[fg=magenta]10 "
+  echo "#[fg=black, bg=brightmagenta, noreverse] ⇵ #[bg=brightmagenta] #[fg=black]10 10 "
 }

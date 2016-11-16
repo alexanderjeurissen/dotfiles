@@ -43,15 +43,15 @@ __parse_git_stats() {
 
 	# print out the information
 	if [[ $behind -gt 0 ]] ; then
-		local ret="#[fg=brightgreen, bg=brightmagenta, noreverse] ↓ #[fg=brightmagenta, bg=brightgreen] $behind "
+		local ret="#[fg=black, bg=brightmagenta, noreverse] ↓ #[fg=black, bg=brightmagenta] $behind "
 	fi
 
 	if [[ $ahead -gt 0 ]] ; then
-		local ret="${ret}#[fg=brightgreen, bg=brightmagenta, noreverse] ↑ #[fg=brightmagenta, bg=brightgreen] $ahead "
+		local ret="${ret}#[fg=black, bg=brightmagenta, noreverse] ↑ #[fg=black, bg=brightmagenta] $ahead "
 	fi
 
   if [[ $ahead -gt 0 && $behind -gt 0 ]]; then
-    local ret="#[fg=brightgreen, bg=brightmagenta, noreverse] ⇵ #[bg=brightgreen] #[fg=brightmagenta]$ahead #[fg=magenta]$behind "
+    local ret="#[fg=black, bg=brightmagenta, noreverse] ⇵ #[bg=brightmagenta] #[fg=black]$ahead #[fg=black]$behind "
   fi
 
 	echo "$ret"
