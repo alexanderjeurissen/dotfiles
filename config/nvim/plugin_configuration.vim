@@ -759,7 +759,7 @@ if has_key(g:plugs, 'gruvbox')
 
     " Color overides
     let g:indentLine_color_term = 239
-    hi! Statusline ctermfg=006 ctermbg=066
+    " hi! Statusline ctermfg=006 ctermbg=066
   endfunc
 endif
 " }}}
