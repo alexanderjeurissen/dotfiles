@@ -7,7 +7,7 @@ fi
 
 # minimal prompt {{{
   autoload -U promptinit && promptinit
-  prompt pure
+  prompt lambda-pure
   prompt_pure_set_title() {}
 # }}}
 
@@ -137,6 +137,10 @@ export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 
 # syntax highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Gruvbox 256 colors support OSX
+# source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
+source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 # git aliases {{{
   source ~/.gitaliases
