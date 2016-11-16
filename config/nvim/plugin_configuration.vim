@@ -67,32 +67,6 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Shougo/vimfiler.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vimfiler.vim')
-  let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_tree_opened_icon = ' '
-  let g:vimfiler_tree_closed_icon = ' '
-  let g:vimfiler_marked_file_icon = ' ✓'
-  let g:vimfiler_readonly_file_icon = ' '
-  call vimfiler#custom#profile('default', 'context', { 'safe' : 0 })
-
-
-  autocmd FileType vimfiler call <SID>VimfilerSetup()
-  function! s:VimfilerSetup()
-    nnoremap <buffer> <silent> <Esc> :bd<CR>
-    nmap <buffer> <silent> f <Plug>(vimfiler_find)
-
-    nnoremap <silent><buffer><expr> v
-          \ vimfiler#do_switch_action('vsplit')
-    nnoremap <silent><buffer><expr> s
-          \ vimfiler#do_switch_action('split')
-  endfunction
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " scrooloose/nerdtree {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'nerdtree')
@@ -139,15 +113,6 @@ if has_key(g:plugs, 'gist-vim')
   let g:gist_detect_filetype = 1
   let g:gist_show_privates = 1
   let g:gist_update_on_write = 1
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" aaronjensen/vim-command-w {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-command-w')
-  nnoremap <silent><leader>wc :CommandW<CR>
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -282,6 +247,7 @@ if has_key(g:plugs, 'GoldenView.Vim')
 
       " 2. manipulate splits
       nmap <leader>wt <C-W>T
+      nmap <leader>wd :q<CR>
 
       " 3. toggle auto resize
       nmap <silent> <leader>tg :ToggleGoldenViewAutoResize<CR>
@@ -332,7 +298,7 @@ if has_key(g:plugs, 'fzf.vim')
 
       function! s:fzf_statusline()
         " Override statusline as you like
-        highlight fzf1 ctermfg=13 ctermbg=10
+        highlight! fzf1 ctermfg=243 ctermbg=234
         setlocal statusline=%#fzf1#
 
         if g:fzf_mode == 'Files'
@@ -458,9 +424,17 @@ if has_key(g:plugs, 'fzf.vim')
     endfunction
   " }}}
 
+  " Files in current directory {{{
+  "   command! -nargs=* FilesInCurrentDir call fzf#run({
+  "           \ 'source': getwinvar(0, 'getcwd', getcwd()),
+  "           \ 'sink':   function('s:edit_file'),
+  "           \ 'options': '-m -x +s',
+  "           \ 'window':  'rightbelow 20new' })
+  " " }}}
+
   " Keybindings {{{
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
-    nnoremap <silent> <leader>ff :<C-u>Files<CR>
+    nnoremap <silent> <leader>pf :<C-u>Files<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>s :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
@@ -775,12 +749,18 @@ endif
 " ------------------------------------------------------------------------------
 " morhetz/gruvbox {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'Gruvbox')
-  let g:gruvbox_italic=1
-  let g:gruvbox_italicize_strings=1
-  let g:gruvbox_contrast_dark='soft'
-  colorscheme gruvbox
-  set background=dark
+if has_key(g:plugs, 'gruvbox')
+  func! ActivateColorScheme()
+    let g:gruvbox_italic=1
+    let g:gruvbox_italicize_strings=1
+    let g:gruvbox_contrast_dark='hard'
+    colorscheme gruvbox
+    set background=dark
+
+    " Color overides
+    let g:indentLine_color_term = 239
+    hi! Statusline ctermfg=006 ctermbg=066
+  endfunc
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -833,7 +813,7 @@ endif
 " ------------------------------------------------------------------------------
 " atelierbram/Base2Tone-vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'Base2Tone-vim')
+if has_key(g:plugs, 'Base2Tone-vim---')
   func! ActivateColorScheme()
     " Base2Tone Dark
     set background=dark
@@ -878,13 +858,14 @@ endif
 
 " ------------------------------------------------------------------------------
 " takac/vim-hardtime {{{
-if has_key(g:plugs, 'Base2Tone-vim')
+if has_key(g:plugs, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
   let g:list_of_insert_keys = ["<Bs>"]
   let g:list_of_disabled_keys = ["<up>", "<down>", "<left>", "<right>"]
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
   let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
+  let g:hardtime_timeout = 500
 endif
 " }}}
 " ------------------------------------------------------------------------------
