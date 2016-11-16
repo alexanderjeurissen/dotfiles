@@ -47,10 +47,10 @@ endif
 " ------------------------------------------------------------------------------
   " Plug 'chriskempson/base16-vim'
   " Plug 'mhartington/oceanic-next'
-  " Plug 'morhetz/gruvbox'
+  Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
-  Plug 'joshdick/onedark.vim'
-  Plug 'atelierbram/Base2Tone-vim'
+  " Plug 'joshdick/onedark.vim'
+  " Plug 'atelierbram/Base2Tone-vim'
   " Plug 'junegunn/seoul256.vim'
   " Plug 'romainl/flattened'
   " Plug 'Samuel-Phillips/nvim-colors-solarized', { 'commit': '3618276' }
@@ -77,7 +77,7 @@ endif
   Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
   Plug 'benekastah/neomake'
   Plug 'vim-scripts/tComment'
-  Plug 'osyo-manga/vim-over', { 'on': 'Replace' }
+  "TODO:remove this: Plug 'osyo-manga/vim-over', { 'on': 'Replace' }
   Plug 'editorconfig/editorconfig-vim'
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'Yggdroot/indentLine' " adds indentation guides
@@ -146,7 +146,7 @@ endif
 
   Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
   Plug 'ngmy/vim-rubocop', { 'for': 'ruby' }
-  " Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
   Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
 " }}}
 " ------------------------------------------------------------------------------
@@ -165,13 +165,11 @@ endif
 " ------------------------------------------------------------------------------
 " Web {{{
 " ------------------------------------------------------------------------------
-  Plug 'mattn/webapi-vim'
   Plug 'cakebaker/scss-syntax.vim'
   Plug 'hail2u/vim-css3-syntax'
   Plug 'ap/vim-css-color'
   Plug 'rizzatti/dash.vim', { 'on': 'Dash' }
   Plug 'tpope/vim-haml'
-  Plug 'aquach/vim-http-client'
 " }}}
 " ------------------------------------------------------------------------------
 
