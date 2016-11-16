@@ -134,8 +134,8 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
 "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
 if (empty($TMUX))
   if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    let python3_host_prog = "python3"
+    let python_host_prog = "python"
   endif
   "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
   "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
@@ -144,9 +144,6 @@ if (empty($TMUX))
     " set termguicolors
   endif
 endif
-
-let python3_host_prog = "python3"
-let python_host_prog = "python"
 " }}}
 " ==============================================================================
 
@@ -223,17 +220,6 @@ noremap <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 " Hat-tip http://vimbits.com/bits/11
 nnoremap Y y$
 
-" Go to beginning and end of lines easier. From http://vimbits.com/bits/16
-" noremap H ^
-" noremap L $
-
-" Open vimrc with <leader>fed
-nnoremap <leader>fed  :e $MYVIMRC<CR>
-nnoremap <leader>feR :source $MYVIMRC<CR>
-
-" Rename current file with <leader>n
-noremap <leader>n :call RenameFile()<CR>
-
 " Toggle highlight search with <leader>thl
 nnoremap <leader>thl :set hlsearch!<CR>
 
@@ -255,7 +241,15 @@ noremap <leader>cp :cprev<CR>
 " ==============================================================================
 " File Keybindings {{{
 " ============================================================================
+" Save
 noremap <leader>fs :w<CR>
+
+" Open vimrc with <leader>fed
+nnoremap <leader>fed  :e $MYVIMRC<CR>
+nnoremap <leader>feR :source $MYVIMRC<CR>
+
+" Rename current file with <leader>fr
+noremap <leader>fr :call RenameFile()<CR>
 
 " }}}
 " ==============================================================================
@@ -430,65 +424,9 @@ endfunction
 
   command! -nargs=* T terminal
 
-  " resize splits {{{
-    function! IsMost(direction)
-      let oldw = winnr()
-      silent! exe "normal! \<c-w>".a:direction
-      let neww = winnr()
-      silent! exe oldw.'wincmd w'
-      return oldw == neww
-    endfunction
-
-    function! ResizeSplits(direction)
-      let oldw = winnr()
-      let leftMost=IsMost('h')
-      let bottomMost=IsMost('j')
-
-      if a:direction == 'left'
-        if IsMost('h')
-          silent! exe 'vertical resize -5'
-        else
-          silent! exe "normal! \<c-w>h"
-          silent! exe "vertical resize +5"
-          silent! exe oldw.'wincmd w'
-        endif
-      elseif a:direction == 'right'
-        if IsMost('h')
-          silent! exe 'vertical resize +5'
-        else
-          silent! exe "normal! \<c-w>h"
-          silent! exe "vertical resize +5"
-          silent! exe oldw.'wincmd w'
-        endif
-      elseif a:direction == 'up'
-        if bottomMost
-          silent! exe 'resize +5'
-        else
-          silent! exe "normal! \<c-w>j"
-          silent! exe "resize +5"
-          silent! exe oldw.'wincmd w'
-        endif
-      elseif a:direction == 'down'
-        if bottomMost
-          silent! exe 'resize -5'
-        else
-          let oldw = winnr()
-          silent! exe "normal! \<c-w>k"
-          silent! exe "resize +5"
-          silent! exe oldw.'wincmd w'
-        endif
-      endif
-    endfunction
-
-    nnoremap <up> :call ResizeSplits('up')<CR><ESC>
-    nnoremap <down> :call ResizeSplits('down')<CR><ESC>
-    nnoremap <left> :call ResizeSplits('left')<CR><ESC>
-    nnoremap <right> :call ResizeSplits('right')<CR><ESC>
-  "}}}
-
   " Window navigation between terminal and nonterminal {{{
     au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-    noremap <silent> <leader>wh <C-\><C-n><C-w>h
+    tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
     tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
     tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
     tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
@@ -506,52 +444,7 @@ endfunction
     tnoremap <silent> <leader>ws <C-\><C-n>:split<cr>:startinsert<cr>
   "}}}
 
-  if !exists('g:jobs')
-    let Shell = {}
-    let g:Shell = {}
-    let g:jobs = {}
-
-    function Shell.on_stdout(job_id, data)
-      let self.output .= ' stdout: '.join(a:data).'\n'
-    endfunction
-
-    function Shell.on_stderr(job_id, data)
-      let self.output .= ' stderr: '.join(a:data).'\n'
-    endfunction
-
-    function Shell.on_exit(job_id, data)
-      let self.output .= ' exited\n'
-    endfunction
-
-    function Shell.get_name()
-      return 'shell '.self.name
-    endfunction
-
-
-    function Shell.get_output()
-      let lines = split(self.output, '\\n')
-      call fzf#run({
-      \ 'source':  lines,
-      \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 3.. '.
-      \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
-      \            '--color hl:68,hl+:110',
-      \ 'down':    '90%'
-      \ })
-    endfunction
-
-    function Shell.new(name, ...)
-      let instance = extend(copy(g:Shell), {'name': a:name})
-      let argv = 'zsh'
-      if a:0 > 0
-        let argv = a:1
-      endif
-      let instance.id = jobstart(argv, instance)
-      let instance.output = ''
-      return instance
-    endfunction
-  endif
-
- function! s:default_workspace(Shell)
+ function! s:default_workspace()
     " let g:jobs['zeus'] = a:Shell.new('zeus', 'zeus start')
     " let g:jobs['frontend'] = a:Shell.new('frontend', 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read')
     " let g:jobs['services'] = a:Shell.new('services', 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read')
@@ -566,8 +459,7 @@ endfunction
     file Frontend:daemon
  endfunction
 
- command! -nargs=* StartAll call s:default_workspace(Shell)
-
+ command! -nargs=* StartAll call s:default_workspace()
 " }}}
 " ==============================================================================
 
