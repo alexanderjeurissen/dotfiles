@@ -141,7 +141,9 @@ if (empty($TMUX))
   "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
   " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
   if (has("termguicolors"))
-    " set termguicolors
+    set termguicolors
+    set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8b=^[[48;2;%lu;%lu;%lum
   endif
 endif
 " }}}
@@ -481,6 +483,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
 "   inbox: 
 "   hot: 
 "   time: 
+"   Git icon: 
 
     set laststatus=2
     set guioptions-=e
@@ -488,7 +491,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
     autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
     let &statusline = " %{SessionFlag()} "
     let &statusline .= " %<%f "
-    let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+    let &statusline .= "%{&readonly ? ' ' : &modified ? '  ' : ''}"
+    " let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
     let &statusline .= "%{PasteFlag()}"
     let &statusline .= "%{SpellFlag()}"
     let &statusline .= "%{HardTimeFlag()}"
@@ -503,18 +507,11 @@ source $HOME/.config/nvim/plugin_configuration.vim
       endif
 
       if empty(session) || session == 'default'
-        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
+        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
+        " return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
       else
-        return ' '.session
-      endif
-    endfunction
-
-    function! GitFlag()
-      let git = fugitive#head()
-      if git != '' && winwidth(0) > 70
-        return "  ".strpart(git, strlen(git)-30)." "
-      else
-        return ""
+        return ' '.session
+        " return ' '.session
       endif
     endfunction
 
@@ -525,7 +522,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     function! PasteFlag()
       if &paste
-        return '  '
+        return '   '
+        " return '  '
       else
         return ''
       endif
@@ -533,7 +531,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     function! SpellFlag()
       if &spell
-        return '  '
+        return '   '
+        " return '  '
       else
         return ''
       endif
@@ -549,7 +548,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     function! HardTimeFlag()
       if exists("b:hardtime_on") && b:hardtime_on == 1
-        return '  '
+        " return '  '
+        return ' '
       else
         return ''
       endif

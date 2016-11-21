@@ -446,7 +446,7 @@ if has_key(g:plugs, 'fzf.vim')
     nnoremap <silent> <leader>/ :<C-u>Agsearch<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
-    nnoremap <silent> <leader>pf :<C-u>GitFiles?<CR>
+    nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
 
     imap <C-x><C-f> <plug>(fzf-complete-file-ag)
     imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -802,8 +802,10 @@ endif
 " Samuel-Phillips/nvim-colors-solarized {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'nvim-colors-solarized')
-  colorscheme solarized
-  set background=dark
+  func! ActivateColorScheme()
+    colorscheme solarized
+    set background=dark
+  endfunc
   " should only be enabled if upgrading to master branch of this plugin
   " \   set termguicolors\n
 endif
@@ -857,7 +859,35 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
+" morhetz/flattened {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'flattened')
+  func! ActivateColorScheme()
+    colorscheme flattened_dark
+    set background=dark
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" icymind/NeoSolarized {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'NeoSolarized')
+  func! ActivateColorScheme()
+    colorscheme NeoSolarized
+    let g:neosolarized_contrast = "high"
+    let g:neosolarized_visibility = "high"
+    let g:neosolarized_diffmode = "high"
+    set background=dark
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " takac/vim-hardtime {{{
+" ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
