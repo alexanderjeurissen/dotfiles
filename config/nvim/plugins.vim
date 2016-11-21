@@ -47,13 +47,14 @@ endif
 " ------------------------------------------------------------------------------
   " Plug 'chriskempson/base16-vim'
   " Plug 'mhartington/oceanic-next'
-  Plug 'morhetz/gruvbox'
+  " Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'joshdick/onedark.vim'
   " Plug 'atelierbram/Base2Tone-vim'
   " Plug 'junegunn/seoul256.vim'
   " Plug 'romainl/flattened'
-  " Plug 'Samuel-Phillips/nvim-colors-solarized', { 'commit': '3618276' }
+  Plug 'Samuel-Phillips/nvim-colors-solarized'
+  Plug 'icymind/NeoSolarized'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -134,6 +135,7 @@ endif
   Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye'
   Plug 'airblade/vim-rooter'
   Plug 'mhinz/vim-signify'
+  Plug 'christoomey/vim-tmux-navigator'
 " }}}
 " ------------------------------------------------------------------------------
 
