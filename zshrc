@@ -1,18 +1,42 @@
-
 [ -n "$TMUX" ] && export TERM=screen-256color
 
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
 
-# minimal prompt {{{
+# prompt {{{
   autoload -U promptinit && promptinit
-  prompt lambda-pure
-  prompt_pure_set_title() {}
+  POWERLEVEL9K_MODE='awesome-patched'
+  POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+  POWERLEVEL9K_DISABLE_RPROMPT=true
+
+  POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\n"
+  POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="❯ "
+
+  POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+  POWERLEVEL9K_SHORTEN_DELIMITER=""
+  POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
+  POWERLEVEL9K_DIR_HOME_BACKGROUND="black"
+  POWERLEVEL9K_DIR_HOME_FOREGROUND="249"
+  POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="black"
+  POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="249"
+  POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="black"
+  POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="249"
+  POWERLEVEL9K_STATUS_OK_BACKGROUND="black"
+  POWERLEVEL9K_STATUS_OK_FOREGROUND="green"
+  POWERLEVEL9K_STATUS_ERROR_BACKGROUND="black"
+  POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
+  POWERLEVEL9K_TIME_BACKGROUND="black"
+  POWERLEVEL9K_TIME_FOREGROUND="249"
+  POWERLEVEL9K_TIME_FORMAT="%D{\UE12E %H:%M \uE868 %d.%m.%y}"
+  POWERLEVEL9K_SHOW_CHANGESET=true
+  POWERLEVEL9K_STATUS_VERBOSE=true
+  POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
+  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=('status' 'context' 'dir' 'vcs')
 # }}}
 
 # Vi mode {{{
-  bindkey -e
+  bindkey -v
   export KEYTIMEOUT=1
 # }}}
 
@@ -21,10 +45,21 @@ fi
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 # }}}
 
+# Zplug plugin definitions {{{
+  source ~/.zplug/init.zsh
+  zplug "zsh-users/zsh-syntax-highlighting", nice:10
+  zplug "bhilburn/powerlevel9k"
+# }}}
+
 # aliasses {{{
   alias l="ls -1AG"
-  alias up="bundle && yarn"
+  alias up="git up && bundle && yarn && bin/rake db:migrate"
+  alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
+  alias spec="bin/rspec"
+  alias console="bin/rails console"
+  alias commit="git add -A && git commit"
+  alias migrations="g up && bin/rake db:migrate"
   alias rails="bin/rails"
   alias r="rails"
   alias routes="zeus rake routes | fzf"
@@ -98,7 +133,7 @@ fi
 
 # Aliases for Arcanist {{{
   alias diffb="arc diff --browse"
-  alias difflc="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
+  # alias difflc="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
 # }}}
 
 # Aliases for directories {{{
@@ -112,7 +147,7 @@ alias psqlh1='psql -D "./tmp/postgres" -k . -p 3100'
 alias clearScreen="clear && printf '\e[3J'"
 
 # set nvim as defaut editory
-export EDITOR="neovim_nvr"
+export EDITOR="nvim"
 
 # rbenv and nodeenv init {{{
   if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
@@ -128,19 +163,31 @@ export LANG=en_US.UTF-8
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 
-PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
+export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 
 # added by travis gem
 [ -f /Users/alexander/.travis/travis.sh ] && source /Users/alexander/.travis/travis.sh
 
-# syntax highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Zplug {{{
+# Can manage local plugins
+# zplug "~/.zsh", from:local
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+# }}}
+
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
 
 # Gruvbox 256 colors support OSX
 # source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
+# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 # git aliases {{{
   source ~/.gitaliases
