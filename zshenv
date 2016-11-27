@@ -1,13 +1,39 @@
 #
 # Defines environment variables.
 #
-export ENABLE_SPRING=1
-# Ensure that a non-login, non-interactive shell has a defined environment.
-if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprofile"
-fi
 
-# FZF
+export ENABLE_SPRING=1
+export DEFAULT_USER=$USER
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# export NODENV_ROOT=/usr/local/var/nodenv
+
+# recommended by brew doctor {{{
+  export PATH="/usr/local/bin:$PATH"
+  export PATH="/usr/local/sbin:$PATH"
+  eval "$(rbenv init - --no-rehash)"
+  eval "$(nodenv init - --no-rehash)"
+  export NVM_DIR=~/.nvm
+  . $(brew --prefix nvm)/nvm.sh
+# }}}
+
+export PATH="$HOME/.bin:$PATH"
+export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
+export TERM=xterm-256color-italic
+export PYTHONIOENCODING=utf8
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+
+# Go settings
+export GOPATH=$HOME/golang
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+
+export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
+
+# FZF {{{
 # COLOR:
 #     fg      Text
 #     bg      Background
@@ -28,10 +54,10 @@ fi
 # --color info:2,prompt:5,spinner:1,pointer:6,marker:255,header:33
 
 # solarized
-# export FZF_DEFAULT_OPTS='
-#   --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
-#   --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
-# '
+export FZF_DEFAULT_OPTS='
+  --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
+  --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
+'
 
 # Cake
 # export FZF_DEFAULT_OPTS='
@@ -52,7 +78,14 @@ fi
 # '
 
 # Gruvbox.vim
-export FZF_DEFAULT_OPTS='
-  --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
-  --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
-'
+# export FZF_DEFAULT_OPTS='
+#   --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
+#   --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
+# '
+
+# }}}
+
+# Ensure that a non-login, non-interactive shell has a defined environment.
+if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprofile"
+fi
