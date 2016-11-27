@@ -805,6 +805,8 @@ if has_key(g:plugs, 'nvim-colors-solarized')
   func! ActivateColorScheme()
     colorscheme solarized
     set background=dark
+    hi! Normal ctermbg=NONE guibg=NONE
+    hi! NonText ctermbg=NONE guibg=NONE
   endfunc
   " should only be enabled if upgrading to master branch of this plugin
   " \   set termguicolors\n
@@ -880,6 +882,10 @@ if has_key(g:plugs, 'NeoSolarized')
     let g:neosolarized_visibility = "high"
     let g:neosolarized_diffmode = "high"
     set background=dark
+
+    " Transparant background
+    hi! Normal ctermbg=NONE guibg=NONE
+    hi! NonText ctermbg=NONE guibg=NONE
   endfunc
 endif
 " }}}
