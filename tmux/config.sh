@@ -112,3 +112,50 @@ double_segment() {
     echo -n "${output}"
   fi
 }
+
+
+powerline_segment() {
+  local label="$1"
+  local label_fg="$2"
+
+  local segment="$3"
+  local seg_fg="$4"
+  local seg_bg="$5"
+  local collapse_width="$6"
+
+  local output = ""
+
+  if [[ -n $label ]]; then
+    output="#[fg=${label_fg}, bg=${seg_bg}, noreverse] ${label} "
+  fi
+
+  source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
+  local result=$(run_segment)
+
+  local powerline_prefix="#[fg=${seg_bg}, bg=brightblack]"
+  local powerline_suffix="#[fg=brightblack, bg=${seg_bg}] "
+
+  output="${powerline_prefix}#[fg=${seg_fg}, bg=${seg_bg}] ${result}${output}${powerline_suffix}"
+
+  local exit_code="$?"
+  unset -f run_segment
+
+  # Show error when exit code != 0
+  if [ "$exit_code" -ne 0 ]; then
+    echo "Segment '${segment}' exited with code ${exit_code}. Aborting."
+    exit 1
+  fi
+
+  # don't show output if the result is empty
+  # or if the screen is small and has autohide enabled
+
+  if [ $TMUX_PANE_WIDTH -lt $7 ]; then
+    local display="hidden"
+  fi
+
+  if [[ -z "${result// }" || $display == "hidden" ]]; then
+    echo -n ""
+  else
+    echo -ne "${output}"
+  fi
+}
