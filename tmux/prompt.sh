@@ -22,7 +22,7 @@ print_powerline() {
     segment "vcs_compare" black black #this is kind of a hack need to refactor
     double_segment "⊕" black green "vcs_staged" black brightgreen
     double_segment "+" black yellow "vcs_modified" black brightyellow
-    double_segment "○" black white "vcs_others" black brightcyan
+    double_segment "○" black cyan "vcs_others" black brightcyan
   else
     source "${TMUX_POWERLINE_DIR_HOME}/debug_prompt.sh"
   fi
