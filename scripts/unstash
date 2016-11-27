@@ -1,0 +1,10 @@
+last_commit=$(git log -1 --pretty=%B)
+stash_commit=$(echo $last_commit | grep 'TEMP_COMMIT:')
+if [[ -n $stash_commit ]]; then
+  echo "popping stash commit"
+  git reset HEAD~
+  exit 0;
+else
+  echo "error: The most recent commit is not a stash commit"
+  exit 1;
+fi
