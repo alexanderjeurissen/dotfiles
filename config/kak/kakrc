@@ -5,22 +5,9 @@ map global normal <c-p> :lint<ret>
 set global tabstop     2
 set global indentwidth 2
 
+alias global x write-quit
 # Use space as leader key !!
 # map global normal <space> ,
-
-# colorscheme settings ───────────────────────────────────────────────────────────────────
-# colorscheme solarized
-
-# I like Solarized but with dark background
-
-face Default        default,default
-face MenuBackground default,black
-face MenuForeground black,white
-face MenuInfo       default
-face StatusLine     default,black
-face Information    default,black
-face LineNumbers    blue,default
-face BufferPadding  default,default
 
 # Python settings ───────────────────────────────────────────────────────────────────
 hook global WinSetOption filetype=python %{
@@ -37,11 +24,6 @@ hook global WinSetOption filetype=python %{
 }
 
 # Ruby settings ───────────────────────────────────────────────────────────────────
-
-hook global WinSetOption filetype=ruby %{
-  alias window lint rubocop
-}
-
 def rails-alternative-file -docstring 'Jump to the alternate file (implementation ↔ test)' %{ %sh{
   case $kak_buffile in
     *lib/support/app/*/*.rb)
@@ -86,12 +68,11 @@ def rails-alternative-file -docstring 'Jump to the alternate file (implementatio
 alias global A rails-alternative-file
 
 def rspec-current-file -docstring 'run the current spec using bin/rspec or bundle rspec' %{ %sh{
-
   case $kak_buffile in
    */*_spec.rb)
     rspec='./bin/rspec'
     if [ ! -f $rspec ]; then
-        echo "echo -color red 'You don't have bin/start falling back to bundle exec rspec'"
+        echo "echo -color red 'You don't have bin/rspec falling back to bundle exec rspec'"
         rspec='bundle rspec'
     fi
 
@@ -116,26 +97,64 @@ def rspec-current-file -docstring 'run the current spec using bin/rspec or bundl
 }}
 
 alias global Rrunner rspec-current-file
-#}
+
+def rubocop-lint -docstring 'run rubocop for the current buffer' %{ %sh{
+  out_fifo=$(mktemp -d -t kak-rubocop.XXXXXXXX)/fifo
+  mkfifo ${out_fifo}
+  ( bundle exec rubocop $kak_buffile --format emacs > $out_fifo 2>&1 ) > /dev/null 2>&1 < /dev/null &
+
+  printf %s "eval -client '$kak_client' %{
+            edit! -fifo ${out_fifo} *grep*
+            hook -group rspec_fifo buffer BufCloseFifo .* %{
+                nop %sh{ rm -r $(dirname ${out_fifo}) }
+                rmhooks buffer rspec_fifo
+            }
+        }"
+}}
+
+def rubocop -docstring 'run the rubocop linter for the current directory' %{ %sh{
+  if [ -z "$TMUX" ]; then
+    echo echo only works inside tmux
+  else
+
+    LINTOUTPUT=`rubocop --format files | fzf-tmux ${kak_opt_fzf_options}`
+    if [ -n "$LINTOUTPUT" ]; then
+      echo "eval -client '$kak_client' 'buffer ${LINTOUTPUT}'" | kak -p ${kak_session}
+    fi
+  fi
+}}
 
 # highlighting settings ───────────────────────────────────────────────────────────────────
-decl -hidden regex curword
-face CurWord default,rgb:4a4a4a
 
 hook global WinCreate .* %{
-    addhl show_matching
-    addhl dynregex '%reg{/}' 0:+u
+  # colorscheme settings ───────────────────────────────────────────────────────────────────
+  # colorscheme solarized
 
-    # Highlight the word under the cursor
-    addhl dynregex '%opt{curword}' 0:CurWord
-    ranger-open-on-edit-directory
+  # I like Solarized but with dark background
+
+  face Default        default,default
+  face MenuBackground default,black
+  face MenuForeground black,white
+  face MenuInfo       default
+  face StatusLine     default,black
+  face Information    default,black
+  face LineNumbers    blue,default
+  face BufferPadding  default,default
+  addhl show_matching
+  addhl dynregex '%reg{/}' 0:+u
+
+  # Highlight the word under the cursor
+  decl -hidden regex curword
+  face CurWord default,rgb:4a4a4a
+  addhl dynregex '%opt{curword}' 0:CurWord
+  ranger-open-on-edit-directory
 }
 
 ## show all trailing whispaces red
 #hook -group TrailingWhitespaces global WinCreate .* %{
     #addhl regex '\h+$' 0:default,red
 #}
-
+ 
 # Only shown when not in insert mode so I don’t go insane.
 hook global InsertEnd .* %{
   addhl ref tabs
@@ -195,8 +214,10 @@ hook global WinCreate ^[^*]+$ %{ addhl number_lines -relative }
 # Comment lines
 map global user c :comment-line<ret>
 
-# Exit normal mode using 
-hook global InsertChar j %{ try %{ <esc>
+# Exit normal mode using jj
+hook global InsertChar j %{ try %{
+  exec -draft hH <a-k>jj<ret> d
+  exec <esc>
 }}
 
 # File navigation ───────────────────────────────────────────────────────────────────
