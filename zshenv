@@ -1,22 +1,15 @@
-#
 # Defines environment variables.
-#
 
 export ENABLE_SPRING=1
 export DEFAULT_USER=$USER
-
+export PHANTOMJS_BIN="/usr/local/bin/phantomjs"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-
-# export NODENV_ROOT=/usr/local/var/nodenv
+export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
 
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
   export PATH="/usr/local/sbin:$PATH"
-  eval "$(rbenv init - --no-rehash)"
-  eval "$(nodenv init - --no-rehash)"
-  export NVM_DIR=~/.nvm
-  . $(brew --prefix nvm)/nvm.sh
 # }}}
 
 export PATH="$HOME/.bin:$PATH"
@@ -54,10 +47,10 @@ export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 # --color info:2,prompt:5,spinner:1,pointer:6,marker:255,header:33
 
 # solarized
-export FZF_DEFAULT_OPTS='
-  --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
-  --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
-'
+# export FZF_DEFAULT_OPTS='
+#   --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
+#   --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
+# '
 
 # Cake
 # export FZF_DEFAULT_OPTS='
@@ -78,10 +71,10 @@ export FZF_DEFAULT_OPTS='
 # '
 
 # Gruvbox.vim
-# export FZF_DEFAULT_OPTS='
-#   --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
-#   --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
-# '
+export FZF_DEFAULT_OPTS='
+  --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
+  --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
+'
 
 # }}}
 

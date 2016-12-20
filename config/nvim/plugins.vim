@@ -32,38 +32,29 @@ endif
 " ------------------------------------------------------------------------------
 " AutoCompletion {{{
 " ------------------------------------------------------------------------------
-
   " Plug 'mattn/emmet-vim'
-  " Plug 'Shougo/deoplete.nvim'
-  Plug 'SirVer/ultisnips'
-  Plug 'tomtom/tlib_vim'
-  Plug 'MarcWeber/vim-addon-mw-utils'
-  Plug 'alexanderjeurissen/vim-react-snippets'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/neco-vim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+  Plug 'fishbullet/deoplete-ruby'
+  " Plug 'MarcWeber/vim-addon-mw-utils'
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  " Plug 'chriskempson/base16-vim'
-  " Plug 'mhartington/oceanic-next'
-  " Plug 'morhetz/gruvbox'
+  Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'joshdick/onedark.vim'
-  " Plug 'atelierbram/Base2Tone-vim'
-  " Plug 'junegunn/seoul256.vim'
-  " Plug 'romainl/flattened'
-  Plug 'Samuel-Phillips/nvim-colors-solarized'
-  Plug 'icymind/NeoSolarized'
+  " Plug 'icymind/NeoSolarized'
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Core {{{
 " ------------------------------------------------------------------------------
-  Plug 'tpope/vim-sensible'
-  Plug 'radenling/vim-dispatch-neovim' | Plug 'tpope/vim-dispatch'
-  Plug 'MarcWeber/vim-addon-local-vimrc'
+  Plug 'tpope/vim-dispatch'
   Plug 'xolox/vim-session' | Plug 'xolox/vim-misc'
   Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
 " }}}
@@ -72,17 +63,19 @@ endif
 " ------------------------------------------------------------------------------
 " Editing {{{
 " ------------------------------------------------------------------------------
-  Plug 'tpope/vim-abolish', { 'on': ['Abolish', 'Subvert'] }
-  Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-abolish', { 'on': ['Abolish', 'Subvert'] } " better search
+  Plug 'tpope/vim-endwise' " insert end after certain keywords in ruby
   Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
-  Plug 'benekastah/neomake'
-  Plug 'vim-scripts/tComment'
-  "TODO:remove this: Plug 'osyo-manga/vim-over', { 'on': 'Replace' }
-  Plug 'editorconfig/editorconfig-vim'
+  Plug 'benekastah/neomake' " syntax checking
+  Plug 'vim-scripts/tComment' " easy commenting using vim motions
+  " Plug 'editorconfig/editorconfig-vim'
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'Yggdroot/indentLine' " adds indentation guides
-  Plug 'takac/vim-hardtime'
+  Plug 'takac/vim-hardtime' " forces efficient movement in vim
+  Plug 'eugen0329/vim-esearch' " search replace project wide
+  Plug 'pelodelfuego/vim-swoop' " search replace current buffers
+
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -90,22 +83,13 @@ endif
 " Javascript {{{
 " ------------------------------------------------------------------------------
   " Plug 'kchmck/vim-coffee-script'
-  " Plug 'Raimondi/delimitMate'
-  Plug 'dsawardekar/ember.vim', { 'for': 'Javascript' }
   " Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
   " Plug 'othree/yajs.vim'
-  Plug 'JarrodCTaylor/vim-ember-cli-test-runner', {
-        \'on': [
-        \  'RunAllEmberTests',
-        \  'RunSingleEmberTest',
-        \  'RunSingleEmberTestModule',
-        \  'RerunLastEmberTests'
-        \]}
   " Plug 'isRuslan/vim-es6', { 'for': 'Javascript' }
   " Plug 'mxw/vim-jsx'
-  Plug 'maksimr/vim-jsbeautify', { 'for': 'Javascript' }
-  Plug 'beautify-web/js-beautify', { 'for': 'Javascript' }
-  Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'Javascript' }
+  Plug 'maksimr/vim-jsbeautify'
+  Plug 'beautify-web/js-beautify'
+  " Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'Javascript' }
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -118,20 +102,7 @@ endif
 
   Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-  " unite / denite
-  Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-  " Plug 'Shougo/unite.vim'
-  " Plug 'Shougo/neoyank.vim'
-  " Plug 'basyura/unite-rails'
-  " Plug 'Shougo/unite-session'
-  " Plug 'osyo-manga/unite-quickfix'
-  Plug 'Shougo/neomru.vim'
-  Plug 'Shougo/denite.nvim'
-  " Plug 'Shougo/unite-help'
-  " Plug 'Shougo/vimfiler.vim', { 'on': 'VimFiler' }
-
   " Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'scrooloose/nerdtree'
-  " Plug kien/ctrlp.vim
   Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye'
   Plug 'airblade/vim-rooter'
   Plug 'mhinz/vim-signify'
@@ -143,12 +114,11 @@ endif
 " Ruby {{{
 " ------------------------------------------------------------------------------
   Plug 'tpope/vim-bundler'
-  Plug 'tpope/vim-cucumber'
+  Plug 'tpope/vim-cucumber', { 'for': 'cucumber' }
   Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
   Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
   Plug 'ngmy/vim-rubocop', { 'for': 'ruby' }
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
   Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
 " }}}
 " ------------------------------------------------------------------------------
@@ -159,8 +129,6 @@ endif
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-git' " Vim runtime files and syntax highlighting
   Plug 'int3/vim-extradite'
-  Plug 'mattn/gist-vim', { 'on': 'Gist' }
-  Plug 'jreybert/vimagit', { 'on': 'Magit' }
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -170,8 +138,6 @@ endif
   Plug 'cakebaker/scss-syntax.vim'
   Plug 'hail2u/vim-css3-syntax'
   Plug 'ap/vim-css-color'
-  Plug 'rizzatti/dash.vim', { 'on': 'Dash' }
-  Plug 'tpope/vim-haml'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -187,17 +153,6 @@ endif
 
   " Maximizes windows and restores them afterwards
   Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
-
-  Plug 'zefei/vim-wintabs'
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Misc {{{
-" ------------------------------------------------------------------------------
-  Plug 'junegunn/limelight.vim'
-  Plug 'junegunn/goyo.vim'
-  Plug 'ryanoasis/vim-devicons'
 " }}}
 " ------------------------------------------------------------------------------
 

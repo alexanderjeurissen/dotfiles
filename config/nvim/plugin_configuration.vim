@@ -67,16 +67,6 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" scrooloose/nerdtree {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'nerdtree')
-  let g:NERDTreeDirArrowExpandable = ''
-  let g:NERDTreeDirArrowCollapsible = ''
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " dangerzone/ranger.vim {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'ranger.vim')
@@ -118,54 +108,10 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" zefei/vim-wintabs {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-wintabs')
-  let g:wintabs_ui_sep_leftmost = ' '
-  let g:wintabs_ui_sep_inbetween = '|'
-  let g:wintabs_ui_sep_rightmost = ' '
-  let g:wintabs_ui_active_left = ' '
-  let g:wintabs_ui_active_right = ' '
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" junegunn/goyo.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'goyo.vim')
-  nnoremap <leader>tw :Goyo<cr>
-  let g:goyo_width = 110
-
-  function! s:goyo_enter()
-    " silent !tmux set status off
-    " silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-    set noshowmode
-    set noshowcmd
-    set scrolloff=999
-    Limelight
-  endfunction
-
-  function! s:goyo_leave()
-    " silent !tmux set status on
-    " silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
-    set showmode
-    set showcmd
-    set scrolloff=5
-    Limelight!
-  endfunction
-
-  autocmd! User GoyoEnter nested call <SID>goyo_enter()
-  autocmd! User GoyoLeave nested call <SID>goyo_leave()
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " tpope/vim-rails {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-rails')
-  nnoremap <leader>r <c-u>:Rrunner<CR>
+  nnoremap <leader>mr <c-u>:Rrunner<CR>
   let g:rails_projections = {
     \"app/models/*.rb": {
     \  "alternate": ["spec/integration/models/%s_spec.rb"],
@@ -278,7 +224,8 @@ if has_key(g:plugs, 'fzf.vim')
     " Default fzf layout
     " - down / up / left / right
     " - window (nvim only)
-    let g:fzf_layout = { 'window': 'rightbelow 30new' }
+    " let g:fzf_layout = { 'window': 'rightbelow 100new' }
+    let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_mode = ''
 
     " Customize fzf colors to match your color scheme
@@ -295,6 +242,9 @@ if has_key(g:plugs, 'fzf.vim')
       \ 'marker':  ['fg', 'Keyword'],
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
+
+      imap <c-x><c-f> <plug>(fzf-complete-path)
+      imap <c-x><c-/> <plug>(fzf-complete-file-ag)
 
       function! s:fzf_statusline()
         " Override statusline as you like
@@ -338,6 +288,9 @@ if has_key(g:plugs, 'fzf.vim')
       execute 'normal!' first.col.'|zz'
 
       if len(list) > 1
+        " for item in list
+        "   exec ':argadd ' . item['filename']
+        " endfor
         call setqflist(list)
         copen
         wincmd p
@@ -366,30 +319,6 @@ if has_key(g:plugs, 'fzf.vim')
     \ 'down':    '50%'
     \ })
   " }}}
-  "
-
-  " Jobs {{{
-    function! s:jobs()
-      if len(keys(g:jobs)) > 0
-        return keys(g:jobs)
-      else
-        return []
-      endif
-    endfunction
-
-    function! s:show_output(job)
-      call g:jobs[''.a:job].get_output()
-      wincmd j
-      exec 'startinsert'
-    endfunction
-
-    command! -nargs=* Jobs call fzf#run({
-    \ 'source':  <sid>jobs(),
-    \ 'sink':    function('s:show_output'),
-    \ 'options': '-m -x +s',
-    \ 'down':    '50%'
-    \ })
-  "}}}
 
   " Files + devicons {{{
     function! Fzf_dev()
@@ -436,20 +365,17 @@ if has_key(g:plugs, 'fzf.vim')
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-    nnoremap <silent> <leader>s :<C-u>Windows<CR>
+    nnoremap <silent> <leader>w :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
     nnoremap <silent> <leader>. :<C-u>Lines<CR>
     nnoremap <silent> <leader>o :<C-u>BTags<CR>
     nnoremap <silent> <leader>O :<C-u>Tags<CR>
     nnoremap <silent> <leader>: :<C-u>Commands<CR>
     nnoremap <silent> <leader>? :<C-u>History<CR>
-    nnoremap <silent> <leader>/ :<C-u>Agsearch<CR>
+    nnoremap <silent> <leader>p/ :<C-u>Agsearch<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
-
-    imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-    imap <C-x><C-l> <plug>(fzf-complete-line)
 
     nnoremap <silent> <leader>rm :<C-u>FZF app/models<CR>
     nnoremap <silent> <leader>rc :<C-u>FZF app/controllers<CR>
@@ -465,6 +391,32 @@ if has_key(g:plugs, 'fzf.vim')
 
     nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
   " }}}
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Shougo/denite.nvim {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'denite.nvim')
+  " Change file_rec command.
+  call denite#custom#var('file_rec', 'command',
+  \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
+  " Use C-n and C-p to move between candidates
+  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+
+  " Custom command
+  call denite#custom#var('file_rec/git', 'command',
+          \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
+  " Change default prompt
+  call denite#custom#option('default', 'prompt', '>')
+
+  " Change ignore_globs
+  call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+        \ [ '.git/', 'images/', '*.min.*', 'img/', 'fonts/'])
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -548,7 +500,7 @@ endif
 " benekastah/neomake {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'neomake')
-  autocmd! BufWritePost * Neomake
+  autocmd BufWritePost * Neomake
 
   let g:neomake_warning_sign = {
     \ 'text': '⚠',
@@ -625,128 +577,6 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Shougo/unite.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'unite.vim')
-  let g:unite_data_directory='~/.nvim/.cache/unite'
-  let g:unite_source_history_yank_enable=1
-  let g:unite_prompt='❯ '
-  let g:unite_source_menu_menus = {}
-
-  " Using ag as recursive command.
-  " let g:unite_source_rec_async_command =
-  "       \ ['ag', '--follow', '--nocolor', '--nogroup',
-  "       \  '--hidden', '-g', '']
-  let g:unite_source_rec_async_command=
-        \ ['ag', '--nocolor', '--nogroup',
-        \  '--ignore', '.hg', '--ignore', '.svn', '--ignore', '.git', '--ignore', '.bzr',
-        \  '--hidden', '-g', '']
-
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden --ignore-dir .git --ignore *.log'
-  let g:unite_source_grep_recursive_opt=''
-
-  " bindings {{{
-    nmap <leader>f [unite]
-    nmap [unite] <nop>
-
-    nnoremap <silent> [unite]e  :<C-u>VimFiler -no-split<CR>
-
-    nnoremap <silent> [unite]m  :<C-u>Unite
-          \ -start-insert -no-split file_rec/neovim:! buffer file_mru<CR>
-
-    nnoremap <silent> [unite]r  :<C-u>Unite
-          \ -no-split -buffer-name=recent file_mru<CR>
-
-    nnoremap <silent> [unite]g  :<C-u>Unite
-          \ file_rec/git:--cached:--others:--exclude-standard<CR>
-
-    nnoremap <silenT> <leader>ur :<Plug>(unite_redraw)
-
-    nnoremap <silent> <leader>y :<C-u>Unite
-          \ -auto-resize -direction=botright
-          \ -buffer-name=yanks history/yank<CR>
-
-    nnoremap <silent> <leader>b :<C-u>Unite
-          \ -no-split -buffer-name=buffers buffer<CR>
-
-    nnoremap <silent> <Leader>h :<C-u>Unite
-          \ -auto-resize -buffer-name=help help<CR>
-
-    nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<CR>
-
-  " }}}
-
-  " Git fugitive menu {{{
-    let g:unite_source_menu_menus.git = {
-      \ 'description' : '            Manage Git repositories
-          \                            ⌘ [space]g',
-      \}
-    let g:unite_source_menu_menus.git.command_candidates = [
-      \['▷ tig                                                        ⌘ ,gt',
-          \'normal ,gt'],
-      \['▷ git status       (Fugitive)                                ⌘ ,gs',
-          \'Gstatus'],
-      \['▷ git diff         (Fugitive)                                ⌘ ,gd',
-          \'Gdiff'],
-      \['▷ git commit       (Fugitive)                                ⌘ ,gc',
-          \'Gcommit'],
-      \['▷ git log          (Fugitive)                                ⌘ ,gl',
-          \'exe "silent Glog | Unite quickfix"'],
-      \['▷ git blame        (Fugitive)                                ⌘ ,gb',
-          \'Gblame'],
-      \['▷ git stage        (Fugitive)                                ⌘ ,gw',
-          \'Gwrite'],
-      \['▷ git checkout     (Fugitive)                                ⌘ ,go',
-          \'Gread'],
-      \['▷ git rm           (Fugitive)                                ⌘ ,gr',
-          \'Gremove'],
-      \['▷ git mv           (Fugitive)                                ⌘ ,gm',
-          \'exe "Gmove " input("destination: ")'],
-      \['▷ git push         (Fugitive, output buffer)                 ⌘ ,gp',
-          \'Git! push'],
-      \['▷ git pull         (Fugitive, output buffer)                 ⌘ ,gP',
-          \'Git! pull'],
-      \['▷ git prompt       (Fugitive, output buffer)                 ⌘ ,gi',
-          \'exe "Git! " input("git command: ")'],
-      \['▷ git cd           (Fugitive)',
-          \'Gcd'],
-      \]
-    nnoremap <silent><leader>g :Unite -silent -start-insert menu:git<CR>
-  " }}}
-
-  " Custom mappings for the unite buffer
-  autocmd FileType unite call s:unite_settings()
-
-  function! s:unite_settings() "{{{
-    " Enable navigation with control-n and control-p in insert mode
-    imap <buffer> <C-n>       <Plug>(unite_select_next_line)
-    imap <buffer> <C-p>       <Plug>(unite_select_previous_line)
-
-    imap <buffer> <esc>       <Plug>(unite_exit)
-    nmap <buffer> <esc>       <Plug>(unite_exit)
-
-    nmap <buffer> <left>      <Plug>(unite_exit)
-    nmap <buffer> <right>     <Plug>(unite_do_default_action)
-
-    nmap <buffer><expr> <C-h> unite#do_action('split')
-    imap <buffer><expr> <C-h> unite#do_action('split')
-
-    nmap <buffer><expr> <C-v> unite#do_action('vsplit')
-    imap <buffer><expr> <C-v> unite#do_action('vsplit')
-
-    nmap <buffer><expr> <C-t> unite#do_action('tabopen')
-    imap <buffer><expr> <C-t> unite#do_action('tabopen')
-
-    call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    call unite#filters#sorter_default#use(['sorter_rank'])
-    call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '(\.meta$|\.tmp)')
-  endfunction "}}}
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " morhetz/gruvbox {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'gruvbox')
@@ -759,7 +589,11 @@ if has_key(g:plugs, 'gruvbox')
 
     " Color overides
     let g:indentLine_color_term = 239
-    " hi! Statusline ctermfg=006 ctermbg=066
+    hi! Statusline ctermfg=002 ctermbg=000
+
+    " Transparant background
+    " hi! Normal ctermbg=NONE guibg=NONE
+    " hi! NonText ctermbg=NONE guibg=NONE
   endfunc
 endif
 " }}}
@@ -794,22 +628,6 @@ if has_key(g:plugs, 'onedark.vim')
     set background=dark
     " silent exec ":IndentLinesReset 2<CR>"
   endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Samuel-Phillips/nvim-colors-solarized {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'nvim-colors-solarized')
-  func! ActivateColorScheme()
-    colorscheme solarized
-    set background=dark
-    hi! Normal ctermbg=NONE guibg=NONE
-    hi! NonText ctermbg=NONE guibg=NONE
-  endfunc
-  " should only be enabled if upgrading to master branch of this plugin
-  " \   set termguicolors\n
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -897,7 +715,7 @@ endif
 if has_key(g:plugs, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
-  let g:list_of_insert_keys = ["<Bs>"]
+  " let g:list_of_insert_keys = ["<Bs>"]
   let g:list_of_disabled_keys = ["<up>", "<down>", "<left>", "<right>"]
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
   let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
@@ -905,3 +723,48 @@ if has_key(g:plugs, 'vim-hardtime')
 endif
 " }}}
 " ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" skwp/greplace.vim {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'greplace')
+  set grepprg=ag
+
+  let g:grep_cmd_opts = '--line-numbers --noheading'
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" eugen0329/vim-esearch {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-esearch')
+  let g:esearch = {
+    \ 'adapter':    'ag',
+    \ 'backend':    'nvim',
+    \ 'out':        'win',
+    \ 'batch_size': 1000,
+    \ 'use':        ['visual', 'hlsearch', 'last'],
+    \}
+
+  " let g:esearch#cmdline#dir_icon = ''
+  " let g:esearch#cmdline#dir_icon = 'D'
+  " let g:esearch#cmdline#dir_icon = ''
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" pelodelfuego/vim-swoop {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-swoop')
+  " nnoremap <silent> <Leader>/ :call Swoop()<CR>
+  " vnoremap <silent> <Leader>/ :call SwoopSelection()<CR>
+
+  nnoremap <silent> <Leader>/ :call SwoopMulti()<CR>
+  vnoremap <silent> <Leader>/ :call SwoopMultiSelection()<CR>
+
+  let g:swoopWindowsVerticalLayout = 1
+  let g:swoopPatternSpaceInsertsWildcard = 0
+endif
+" }}}

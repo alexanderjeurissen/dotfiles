@@ -24,6 +24,7 @@ app/languages/*.json
 # vim swap files
 *.swp
 *.swo
-
+swoopBuf
+.tern-port
 # apple temp files
 .DS_Store
