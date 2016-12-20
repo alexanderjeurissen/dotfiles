@@ -8,18 +8,13 @@ get_pane_width() {
   cd "$tmux_path"
 
   local pane_width="$(tmux display-message -p '#{pane_width}')"
-
-  if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
-   export TMUX_PANE_WIDTH=$(($pane_width-30))
-  else
-   export TMUX_PANE_WIDTH=$pane_width
-  fi
+  export TMUX_PANE_WIDTH=$pane_width
 }
 
 # Get the current path in the segment.
 get_tmux_cwd() {
-  local env_name=$(tmux display -p "TMUXPWD_#D" | tr -d %)
-  local env_val=$(tmux show-environment | grep --color=never "$env_name")
+  local env_name=$(tmux display -p "TMUX_PWD_#D" | tr -d %)
+  local env_val=$(tmux show-environment -g "$env_name")
   # The version below is still quite new for tmux. Uncomment this in the future :-)
   #local env_val=$(tmux show-environment "$env_name" 2>&1)
 
@@ -132,8 +127,8 @@ powerline_segment() {
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
   local result=$(run_segment)
 
-  local powerline_prefix="#[fg=${seg_bg}, bg=brightblack]"
-  local powerline_suffix="#[fg=brightblack, bg=${seg_bg}] "
+  local powerline_prefix="#[fg=${seg_bg}, bg=black]"
+  local powerline_suffix="#[fg=black, bg=${seg_bg}] "
 
   output="${powerline_prefix}#[fg=${seg_fg}, bg=${seg_bg}] ${result}${output}${powerline_suffix}"
 

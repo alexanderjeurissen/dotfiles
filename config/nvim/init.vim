@@ -16,7 +16,7 @@
 " ==============================================================================
 " General settings {{{
 " ============================================================================
-"
+
 " Sets the character encoding for the file of this buffer.
 if !&readonly
   set fileencoding=utf-8
@@ -68,7 +68,7 @@ set list
 set listchars=tab:▸\ ,trail:-,extends:>,precedes:<
 
 " location to store tags
-set tags=./tags
+set tags=./TAGS
 
 " unknown
 set re=1
@@ -113,6 +113,9 @@ set splitright
 
 set clipboard=unnamed
 
+" Show visual indication if your using substitute command
+set inccommand=split
+
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
@@ -121,27 +124,19 @@ autocmd BufReadPost *
       \   exe "normal g`\"" |
       \ endif
 
-
-set rtp+=/usr/local/opt/fzf
-
 "open help in a new ventical split instead of vimbuffer
 cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'vert help' : 'h'
 
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+let python3_host_prog = "python3"
+let python_host_prog = "python"
 
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-    let python3_host_prog = "python3"
-    let python_host_prog = "python"
-  endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
+"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+if (has("termguicolors"))
+  if(has("nvim"))
+    " set termguicolors
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
   endif
@@ -167,6 +162,7 @@ command! Qa qa
 
 " Execute macro under key `a` for all buffers and write afterwards
 command! Bufmacro bufdo execute "normal @a" | write
+command! Cmacro cdo execute "normal@a" | write
 
 " Wrapped lines goes down/up to next row, rather than next line in file.
 noremap j gj
@@ -307,7 +303,6 @@ augroup vimrcEx
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
-
 augroup END
 " }}}
 " ==============================================================================
@@ -327,43 +322,6 @@ function! RenameFile()
   endif
 endfunction
 
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-e>"
-    endif
-endfunction
-
-" Set tabstop, softtabstop and shiftwidth to the same value
-command! -nargs=* Stab call Stab()
-    function! Stab()
-      let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-      if l:tabstop > 0
-        let &l:sts = l:tabstop
-        let &l:ts = l:tabstop
-        let &l:sw = l:tabstop
-      endif
-      call SummarizeTabs()
-    endfunction
-
-    function! SummarizeTabs()
-      try
-        echohl ModeMsg
-        echon 'tabstop='.&l:ts
-        echon ' shiftwidth='.&l:sw
-        echon ' softtabstop='.&l:sts
-        if &l:et
-          echon ' expandtab'
-        else
-          echon ' noexpandtab'
-        endif
-      finally
-        echohl None
-      endtry
-    endfunction
-
 function! Preserve(command)
   " Preparation: save last search, and cursor position.
   let _s=@/
@@ -371,7 +329,6 @@ function! Preserve(command)
   let c = col(".")
 
   " Do the business unless filetype is blacklisted
-
   let blacklist = ['sql']
 
   if index(blacklist, &ft) < 0
@@ -407,31 +364,23 @@ function! s:ArcLint(args)
     let &makeprg = oldmakeprg
     copen
 endfunction
-
-function! s:PasteCode()
-  set paste
-  execute "normal! o\<esc>\]p"
-  set nopaste
-endfunction
 " }}}
 " ==============================================================================
 
 " ==============================================================================
-" Start replacing tmux with nvim terminal splits {{{
+" terminal settings {{{
 " ==============================================================================
-  nnoremap <leader>st :botright split<cr>:terminal<cr>
-  nnoremap <leader>stv :botright vsplit<cr>:terminal<cr>
-  tnoremap <leader><ESC> <C-\><C-n>
-  tnoremap <leader>tn <C-\><C-n>:tabnext<CR>
+  " tnoremap <leader><ESC> <C-\><C-n>
+  " tnoremap <leader>tn <C-\><C-n>:tabnext<CR>
 
-  command! -nargs=* T terminal
+  " command! -nargs=* T terminal
 
   " Window navigation between terminal and nonterminal {{{
-    au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-    tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
-    tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
-    tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
-    tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
+    " au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+    " tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
+    " tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
+    " tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
+    " tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
 
     nmap <silent> <leader>wh <C-w>h
     nmap <silent> <leader>wj <C-w>j
@@ -440,28 +389,12 @@ endfunction
   "}}}
 
   " split to tiled windows {{{
+  " TODO: move this to a separate window section
     nmap <silent> <leader>wv :vs<cr>
     nmap <silent> <leader>ws :split<cr>
-    tnoremap <silent> <leader>wv <C-\><C-n>:vs<cr>:startinsert<cr>
-    tnoremap <silent> <leader>ws <C-\><C-n>:split<cr>:startinsert<cr>
+    " tnoremap <silent> <leader>wv <C-\><C-n>:vs<cr>:startinsert<cr>
+    " tnoremap <silent> <leader>ws <C-\><C-n>:split<cr>:startinsert<cr>
   "}}}
-
- function! s:default_workspace()
-    " let g:jobs['zeus'] = a:Shell.new('zeus', 'zeus start')
-    " let g:jobs['frontend'] = a:Shell.new('frontend', 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read')
-    " let g:jobs['services'] = a:Shell.new('services', 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read')
-
-    tabnew term://~/.dotfiles/scripts/startBackend
-    file Backend:daemon
-    "
-    split term://~/.dotfiles/scripts/startServices
-    file Services:daemon
-    "
-    vsp term://~/.dotfiles/scripts/startFrontend
-    file Frontend:daemon
- endfunction
-
- command! -nargs=* StartAll call s:default_workspace()
 " }}}
 " ==============================================================================
 
@@ -489,15 +422,15 @@ source $HOME/.config/nvim/plugin_configuration.vim
     set guioptions-=e
 
     autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
-    let &statusline = " %{SessionFlag()} "
-    let &statusline .= " %<%f "
+    let &statusline = " %{SessionFlag()} "
+    let &statusline .= " %<%f "
     let &statusline .= "%{&readonly ? ' ' : &modified ? '  ' : ''}"
     " let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
     let &statusline .= "%{PasteFlag()}"
     let &statusline .= "%{SpellFlag()}"
     let &statusline .= "%{HardTimeFlag()}"
     let &statusline .= "%=╱ %{&filetype == '' ? 'unknown' : &filetype} "
-    let &statusline .= "╱ %p%% ╱ col %c "
+    let &statusline .= "╱ %p%% ╱%3c "
 
     function! SessionFlag()
       if has_key(g:plugs, 'vim-session')
@@ -513,11 +446,6 @@ source $HOME/.config/nvim/plugin_configuration.vim
         return ' '.session
         " return ' '.session
       endif
-    endfunction
-
-    function! FiletypeFlag()
-      let filename = expand('%F')
-      return WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
     endfunction
 
     function! PasteFlag()
@@ -557,7 +485,6 @@ source $HOME/.config/nvim/plugin_configuration.vim
   " }}}
 " ==============================================================================
 
-" autocmd BufRead,BufNewFile *.* call ActivateColorScheme()
 call ActivateColorScheme()
 " ==============================================================================
 " Include user's local vim config {{{

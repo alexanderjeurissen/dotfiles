@@ -16,9 +16,10 @@ print_powerline() {
   # hidden
   if [ $DEBUG_MODE -ne 1 ]; then
     # double_segment "♫" white blue "now_playing" blue white 143
-    powerline_segment "⬢" green "node" brightgreen black 113
-    powerline_segment "" red "ruby" brightgreen black 113
-    powerline_segment "" black "datetime" brightgreen black 113
+    # double_segment "JS" black green "node" black brightgreen 113
+    # double_segment "RB" black green "ruby" black brightgreen 113
+    # double_segment "" black red "bindoc" black brightred 113
+    # nop
   else
     source "${TMUX_POWERLINE_DIR_HOME}/debug_prompt.sh"
   fi

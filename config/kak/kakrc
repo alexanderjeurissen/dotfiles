@@ -1,0 +1,274 @@
+# Global settings ───────────────────────────────────────────────────────────────────
+set global grepcmd 'ag --column'
+map global normal <c-p> :lint<ret>
+
+set global tabstop     2
+set global indentwidth 2
+
+# Use space as leader key !!
+# map global normal <space> ,
+
+# colorscheme settings ───────────────────────────────────────────────────────────────────
+# colorscheme solarized
+
+# I like Solarized but with dark background
+
+face Default        default,default
+face MenuBackground default,black
+face MenuForeground black,white
+face MenuInfo       default
+face StatusLine     default,black
+face Information    default,black
+face LineNumbers    blue,default
+face BufferPadding  default,default
+
+# Python settings ───────────────────────────────────────────────────────────────────
+hook global WinSetOption filetype=python %{
+    jedi-enable-autocomplete
+    flake8-enable-diagnostics
+    alias window lint flake8-lint
+    alias window lint-next flake8-diagnostics-next
+    %sh{
+        if [ $PWD = "/home/mawww/prj/kakoune/src" ]; then
+           echo "set buffer jedi_python_path '/usr/share/gdb/python'"
+           echo "set buffer path './:/usr/share/gdb/python'"
+        fi
+    }
+}
+
+# Ruby settings ───────────────────────────────────────────────────────────────────
+
+hook global WinSetOption filetype=ruby %{
+  alias window lint rubocop
+}
+
+def rails-alternative-file -docstring 'Jump to the alternate file (implementation ↔ test)' %{ %sh{
+  case $kak_buffile in
+    *lib/support/app/*/*.rb)
+        path=$kak_buffile
+        dirs=$(while [ $path ]; do echo $path; path=${path%/*}; done | tail -n +2)
+        for dir in $dirs; do
+            altdir=$dir/spec/integration
+            if [ -d $altdir ]; then
+                altfile=$altdir/$(realpath $kak_buffile --relative-to $dir | sed s+[^/]'*'/++';'s/.rb$/_spec.rb/ | sed s/app[/]//)
+                break
+            fi
+        done
+        [ ! -d $altdir ] && echo "echo -color Error 'spec/ not found'" && exit
+    ;;
+    *spec/integration/support/*/*_spec.rb)
+      altfile=$(eval echo $(echo $kak_buffile | sed s+spec/integration/support/+'lib/support/app'/+';'s/_spec//))
+      [ ! -f $altfile ] && echo "echo -color Error 'implementation file not found'" && exit
+    ;;
+    *spec/integration/*_spec.rb)
+        altfile=$(eval echo $(echo $kak_buffile | sed s+spec/integration/+'*'/+';'s/_spec//))
+        [ ! -f $altfile ] && echo "echo -color Error 'implementation file not found'" && exit
+    ;;
+    *app/*/*.rb)
+        path=$kak_buffile
+        dirs=$(while [ $path ]; do echo $path; path=${path%/*}; done | tail -n +2)
+        for dir in $dirs; do
+            altdir=$dir/spec/integration
+            if [ -d $altdir ]; then
+                altfile=$altdir/$(realpath $kak_buffile --relative-to $dir | sed s+[^/]'*'/++';'s/.rb$/_spec.rb/)
+                break
+            fi
+        done
+        [ ! -d $altdir ] && echo "echo -color Error 'spec/ not found'" && exit
+    ;;
+    *)
+        echo "echo -color Error 'alternative file not found'" && exit
+    ;;
+  esac
+  echo "edit $altfile"
+}}
+
+alias global A rails-alternative-file
+
+def rspec-current-file -docstring 'run the current spec using bin/rspec or bundle rspec' %{ %sh{
+
+  case $kak_buffile in
+   */*_spec.rb)
+    rspec='./bin/rspec'
+    if [ ! -f $rspec ]; then
+        echo "echo -color red 'You don't have bin/start falling back to bundle exec rspec'"
+        rspec='bundle rspec'
+    fi
+
+    out_fifo=$(mktemp -d -t kak-pylint.XXXXXXXX)/fifo
+    mkfifo ${out_fifo}
+    ( $rspec $kak_buffile > $out_fifo 2>&1 ) > /dev/null 2>&1 < /dev/null &
+
+    printf %s "eval -client '$kak_client' %{
+              edit! -fifo ${out_fifo} *rspec*
+              hook -group rspec_fifo buffer BufCloseFifo .* %{
+                  nop %sh{ rm -r $(dirname ${out_fifo}) }
+                  rmhooks buffer rspec_fifo
+              }
+          }"
+
+
+  ;;
+  *)
+    echo "echo -color Error 'current file is not a spec file try the rails-alternative-file function (:A)'" && exit
+  ;;
+  esac
+}}
+
+alias global Rrunner rspec-current-file
+#}
+
+# highlighting settings ───────────────────────────────────────────────────────────────────
+decl -hidden regex curword
+face CurWord default,rgb:4a4a4a
+
+hook global WinCreate .* %{
+    addhl show_matching
+    addhl dynregex '%reg{/}' 0:+u
+
+    # Highlight the word under the cursor
+    addhl dynregex '%opt{curword}' 0:CurWord
+    ranger-open-on-edit-directory
+}
+
+## show all trailing whispaces red
+#hook -group TrailingWhitespaces global WinCreate .* %{
+    #addhl regex '\h+$' 0:default,red
+#}
+
+# Only shown when not in insert mode so I don’t go insane.
+hook global InsertEnd .* %{
+  addhl ref tabs
+  addhl ref non_breaking_spaces
+  addhl ref trailing_white_spaces
+  addhl ref symbol
+  addhl ref dash
+  addhl ref apostrophe
+  addhl ref character
+  addhl ref space_errors
+}
+
+hook global InsertBegin .* %{
+  rmhl tabs
+  rmhl non_breaking_spaces
+  rmhl trailing_white_spaces
+  rmhl symbol
+  rmhl dash
+  rmhl apostrophe
+  rmhl character
+  rmhl space_errors
+}
+
+# window settings ───────────────────────────────────────────────────────────────────
+map global user s '<esc>:tmux-new-vertical<ret>'
+map global user v '<esc>:tmux-new-horizontal<ret>'
+
+# Editing settings ───────────────────────────────────────────────────────────────────
+# use only spaces do not use tabs
+hook -group TabExpander global InsertChar \t %{ exec -draft h@}
+
+# select all occurrences in this buffer
+map global user a '*%s<c-/><ret>'
+
+# Add autowrap to 72 characters in git-commit
+hook -group GitWrapper global WinSetOption filetype=git-commit %{
+    set buffer autowrap_column 72
+    autowrap-enable
+
+    hook window WinSetOption filetype=(?!git-commit).* %{ autowrap-disable }
+}
+
+
+# text-width
+# hook global WinCreate .* %{addhl regex ^\V{80}(\V) 1:Error}
+# hook buffer InsertChar [^\n] %{exec -draft "gh<a-k>.{80,}<ret><a-;>bi<ret><esc>"}
+
+# Clipboard settings ───────────────────────────────────────────────────────────────────
+map global user n ':lint-next<ret>'
+map global user p '!pbpaste<ret>'
+map global user y '<a-|>pbcopy<ret>; :echo -color Information "copied selection to X11 clipboard"<ret>'
+map global user r ':send-text<ret>:echo -color Information send to REPL<ret>'
+
+# Line numbers
+hook global WinCreate ^[^*]+$ %{ addhl number_lines -relative }
+
+# Comment lines
+map global user c :comment-line<ret>
+
+# Exit normal mode using 
+hook global InsertChar j %{ try %{ <esc>
+}}
+
+# File navigation ───────────────────────────────────────────────────────────────────
+
+# Edit git files
+def -docstring 'Use git ls-files to open a file that is tracked by git' \
+  git-files -params 1 -shell-candidates %{ git ls-files } %{ edit %arg{1} }
+alias global E git-files
+
+decl str fzf_options '-m -d 15'
+
+# fzf fuzzy file search
+def -docstring 'invoke fzf to open a file' \
+  fzf-file %{ %sh{
+    if [ -z "$TMUX" ]; then
+      echo echo only works inside tmux
+    else
+      FILE=`fzf-tmux ${kak_opt_fzf_options} `
+      if [ -n "$FILE" ]; then
+        echo "eval -client '$kak_client' 'edit ${FILE}'" | kak -p ${kak_session}
+      fi
+    fi
+}}
+
+map global user f ':fzf-file<ret>'
+
+# fzf buffer
+def -docstring 'invoke fzf to select a buffer' \
+  fzf-buffer %{ %sh{
+    if [ -z "$TMUX" ]; then
+      echo echo only works inside tmux
+    else
+      BUFFER=`echo ${kak_buflist} | tr : '\n' | fzf-tmux ${kak_opt_fzf_options} `
+      if [ -n "$BUFFER" ]; then
+        echo "eval -client '$kak_client' 'buffer ${BUFFER}'" | kak -p ${kak_session}
+      fi
+    fi
+}}
+
+map global user b ':fzf-buffer<ret>'
+
+# open file using fzf in current or supplied directory
+decl str fzf_filesearch_cmd 'ag -g "" "%s"'
+
+def -params .. -file-completion \
+    -docstring %{fzf-open [<dirs>]: open a file in the given directories
+If no directories are given then the directory in which the current buffer was saved is used} \
+    fzf-open %{ %sh{
+    if [ -z "${TMUX}" ]; then
+        printf 'echo -color Error This function must be run in a `tmux` session\n'
+        exit
+    fi
+
+    if [ $# -ge 1 ]; then
+        cwd=$(printf %s "$@" | sed 's/\//\\\//g')
+    else
+        cwd=$(dirname "${kak_buffile}" | sed 's/\//\\\//g')
+    fi
+    filesearch_cmd=$(printf %s "${kak_opt_fzf_filesearch_cmd}" | sed "s/%s/${cwd}/g")
+    eval "${filesearch_cmd}" | fzf-tmux ${kak_opt_fzf_options} | while read path; do
+        printf "eval -try-client '%s' edit '%s'" "${kak_client}" "${path}" \
+            | kak -p "${kak_session}"
+    done
+}}
+
+map global user o ':fzf-open<ret>'
+
+# Completion ───────────────────────────────────────────────────────────────────
+
+hook global InsertCompletionShow .* %{ map window insert <tab> <c-n>; map window insert <backtab> <c-p> }
+hook global InsertCompletionHide .* %{ unmap window insert <tab> <c-n>; unmap window insert <backtab> <c-p> }
+
+
+# Misc settings ───────────────────────────────────────────────────────────────────
+map global user h ':doc shortcuts<ret>'
