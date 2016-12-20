@@ -6,34 +6,35 @@ fi
 
 # prompt {{{
   autoload -U promptinit && promptinit
-  POWERLEVEL9K_MODE='awesome-patched'
-  POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-  POWERLEVEL9K_DISABLE_RPROMPT=true
-
-  POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\n"
-  POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="❯ "
-
-  POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-  POWERLEVEL9K_SHORTEN_DELIMITER=""
-  POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
-  POWERLEVEL9K_DIR_HOME_BACKGROUND="black"
-  POWERLEVEL9K_DIR_HOME_FOREGROUND="249"
-  POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="black"
-  POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="249"
-  POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="black"
-  POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="249"
-  POWERLEVEL9K_STATUS_OK_BACKGROUND="black"
-  POWERLEVEL9K_STATUS_OK_FOREGROUND="green"
-  POWERLEVEL9K_STATUS_ERROR_BACKGROUND="black"
-  POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
-  POWERLEVEL9K_TIME_BACKGROUND="black"
-  POWERLEVEL9K_TIME_FOREGROUND="249"
-  POWERLEVEL9K_TIME_FORMAT="%D{\UE12E %H:%M \uE868 %d.%m.%y}"
-  POWERLEVEL9K_SHOW_CHANGESET=true
-  POWERLEVEL9K_STATUS_VERBOSE=true
-  POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
-  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=('status' 'context' 'dir' 'vcs')
-# }}}
+  prompt pure
+#   POWERLEVEL9K_MODE='awesome-patched'
+#   POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+#   POWERLEVEL9K_DISABLE_RPROMPT=true
+#
+#   POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\n"
+#   POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="❯ "
+#
+#   POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+#   POWERLEVEL9K_SHORTEN_DELIMITER=""
+#   POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
+#   POWERLEVEL9K_DIR_HOME_BACKGROUND="black"
+#   POWERLEVEL9K_DIR_HOME_FOREGROUND="249"
+#   POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="black"
+#   POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="249"
+#   POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="black"
+#   POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="249"
+#   POWERLEVEL9K_STATUS_OK_BACKGROUND="black"
+#   POWERLEVEL9K_STATUS_OK_FOREGROUND="green"
+#   POWERLEVEL9K_STATUS_ERROR_BACKGROUND="black"
+#   POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
+#   POWERLEVEL9K_TIME_BACKGROUND="black"
+#   POWERLEVEL9K_TIME_FOREGROUND="249"
+#   POWERLEVEL9K_TIME_FORMAT="%D{\UE12E %H:%M \uE868 %d.%m.%y}"
+#   POWERLEVEL9K_SHOW_CHANGESET=true
+#   POWERLEVEL9K_STATUS_VERBOSE=true
+#   POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
+#   POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=('status' 'context' 'dir' 'vcs')
+# # }}}
 
 # Vi mode {{{
   bindkey -v
@@ -46,13 +47,14 @@ fi
 # }}}
 
 # Zplug plugin definitions {{{
-  source ~/.zplug/init.zsh
-  zplug "zsh-users/zsh-syntax-highlighting", nice:10
-  zplug "bhilburn/powerlevel9k"
+  # source ~/.zplug/init.zsh
+  # zplug "zsh-users/zsh-syntax-highlighting", nice:10
+  # zplug "bhilburn/powerlevel9k"
 # }}}
 
 # aliasses {{{
-  alias l="ls -1AG"
+  alias l="ls -AGC"
+  alias ls="ls -G"
   alias up="git up && bundle && yarn && bin/rake db:migrate"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
@@ -61,7 +63,7 @@ fi
   alias commit="git add -A && git commit"
   alias migrations="g up && bin/rake db:migrate"
   alias rails="bin/rails"
-  alias r="rails"
+  alias r="bin/rails"
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
@@ -94,6 +96,21 @@ fi
   # Think something over ? like yes/no ? think alias!!
   alias think='tickle +1d'
 # }}}
+#
+# Alias for kak {{{
+  # kakattach() {
+  #   session_name="${$(basename `PWD`)//./}"
+  #   sessions=$(kak -l | grep $session_name)
+  #   if [[ -n $sessions ]]; then
+  #     kak -d -s $session_name
+  #     kak -c $session_name
+  #   else
+  #     kak -c $session_name
+  #   fi
+  # }
+  #
+  # alias kak='kakattach'
+# }}}
 
 # Aliases for common typo's {{{
   alias cd..='cd ..'
@@ -102,33 +119,15 @@ fi
 # }}}
 
 # Nvim & vim aliases {{{
-  alias vim='nvim'
+  # alias vim='nvim'
   alias vi='nvim'
   alias v='nvim'
+  alias vim='nvim'
   alias oldvim="\vim"
-
-  # Courtesy of Henry Kupty
-  # this makes it so no nested vim sessions are started when editing files in term splits
-  if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
-    alias h='nvr -o'
-    alias v='nvr -O'
-
-    alias vim='nvr -O'
-    alias nvim='nvr -O'
-    alias vi='nvr -O'
-  fi
 # }}}
 
 # Aliases for foreman {{{
-  alias startServices="tmux new-window -n 'Services' 'foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read'"
-  alias startBackend="tmux new-window -n 'Backend' 'foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; read'"
-  alias startFrontend="tmux new-window -n 'Frontend' 'foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read'"
-
-  alias nServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1 ; read"
-  alias nBackend="foreman start -c all=1,redis=0,postgresql=0,mailcatcher=0,sass=0,webpack=0,uidocs=0,karma=0 ; read"
-  alias nFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1 ; read"
-
-  alias startAll="startServices & startBackend & startFrontend"
+  alias fix_arc_single_commit="arc diff `git rev-parse develop`"
 # }}}
 
 # Aliases for Arcanist {{{
@@ -141,18 +140,13 @@ fi
   alias dotfiles="cd ~/.dotfiles/"
 # }}}
 
-alias psqlh1='psql -D "./tmp/postgres" -k . -p 3100'
+alias psqlh1='postgres -U alexanderjeurissen -p 3100 -h localhost -d postgres'
 
 # Alias for clearing the screen
 alias clearScreen="clear && printf '\e[3J'"
 
 # set nvim as defaut editory
 export EDITOR="nvim"
-
-# rbenv and nodeenv init {{{
-  if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-  if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
-# }}}
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -163,31 +157,27 @@ export LANG=en_US.UTF-8
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 
-export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
-
-# added by travis gem
-[ -f /Users/alexander/.travis/travis.sh ] && source /Users/alexander/.travis/travis.sh
 
 # Zplug {{{
 # Can manage local plugins
 # zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-# }}}
-
-# Then, source plugins and add commands to $PATH
-zplug load --verbose
+# if ! zplug check --verbose; then
+#     printf "Install? [y/N]: "
+#     if read -q; then
+#         echo; zplug install
+#     fi
+# fi
+# # }}}
+#
+# # Then, source plugins and add commands to $PATH
+# zplug load
 
 # Gruvbox 256 colors support OSX
 # source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
+source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 # git aliases {{{
   source ~/.gitaliases
@@ -234,7 +224,7 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
 
 # Fzf functions {{{
   # fbr - checkout git branch (including remote branches)
-  fbr() {
+  branch() {
     local branches branch
     branches=$(git branch --all | grep -v HEAD) &&
     branch=$(echo "$branches" |
@@ -243,7 +233,7 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
   }
 
   # fco - checkout git branch/tag
-  fco() {
+  checkout() {
     local tags branches target
     tags=$(
       git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return

@@ -54,8 +54,8 @@
 [github]
   user = alexanderjeurissen
 [core]
-  excludesfile = /Users/alexander/.gitignore
-  editor = nvim
+	excludesfile = /Users/alexanderjeurissen/.gitignore
+  editor = kak
 	pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
