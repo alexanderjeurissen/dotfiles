@@ -73,10 +73,6 @@ set tags=./TAGS
 " unknown
 set re=1
 
-" Indicates a fast terminal connection.  More characters will be sent to
-" the screen for redrawing
-set ttyfast
-
 " When this option is set, the screen will not be redrawn while
 " executing macros, registers and other commands that have not been
 " typed
@@ -178,6 +174,8 @@ inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 noremap <Leader>tn :tabnext<CR>
 noremap <Leader>t :tabnew<CR>
 
+" buffer mappings
+
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
 
@@ -226,9 +224,18 @@ nnoremap <leader>thl :set hlsearch!<CR>
 nnoremap <leader>q :bd<CR>
 nnoremap <leader>wq :w<CR>:bd<CR>
 
+" Tab through open buffers
+noremap <Leader>bn :bn<CR>
+noremap <Leader>bp :bp<CR>
+
 " Call ArcLint using :ArcLint
 command! -nargs=* ArcLint call s:ArcLint("<args>")
+
+" Paste and keep indent
 command! PasteCode call s:PasteCode()
+
+" Paste and keep pasting same thing, don't take what was removed
+vnoremap <Leader>p "_dP
 
 " Go to previous and next item in quickfix list
 noremap <leader>cn :cnext<CR>
