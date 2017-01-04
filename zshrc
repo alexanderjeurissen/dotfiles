@@ -67,7 +67,7 @@ fi
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
-  alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
+  #alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
   alias showDriveUsage='sudo lsof'
@@ -75,10 +75,17 @@ fi
   alias gcc='gcc-5'
   alias c++='c++-5'
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
+  alias kn='kak -d -s "${$(basename `PWD`)//./}"'
   alias attach='tmux attach -t'
   alias findP='ps -ef | grep -v grep | grep '
   alias proselint='PYTHONIOENCODING=utf8 proselint'
 # }}}
+
+# Alias for hackerij {{{
+  alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
+  alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080"
+  alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
+#}}}
 
 # Aliases for TaskWarrior {{{
   alias t="task"
@@ -95,21 +102,6 @@ fi
 
   # Think something over ? like yes/no ? think alias!!
   alias think='tickle +1d'
-# }}}
-#
-# Alias for kak {{{
-  # kakattach() {
-  #   session_name="${$(basename `PWD`)//./}"
-  #   sessions=$(kak -l | grep $session_name)
-  #   if [[ -n $sessions ]]; then
-  #     kak -d -s $session_name
-  #     kak -c $session_name
-  #   else
-  #     kak -c $session_name
-  #   fi
-  # }
-  #
-  # alias kak='kakattach'
 # }}}
 
 # Aliases for common typo's {{{
@@ -228,9 +220,12 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
     local branches branch
     branches=$(git branch --all | grep -v HEAD) &&
     branch=$(echo "$branches" |
-             fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-    git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+             fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m)
+    echo $branch
   }
+
+  zle     -N   branch
+  bindkey '^B' branch
 
   # fco - checkout git branch/tag
   checkout() {
@@ -243,8 +238,9 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
       sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
     target=$(
       (echo "$tags"; echo "$branches") |
-      fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
-    git checkout $(echo "$target" | awk '{print $2}')
+      fzf-tmux -- --no-hscroll --ansi +m -d "\t" -n 2)
+
+    echo "$target"
   }
 #}}}
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
