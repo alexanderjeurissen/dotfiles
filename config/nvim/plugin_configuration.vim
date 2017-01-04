@@ -57,11 +57,25 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Lokaltog/vim-easymotion {{{
+" justinmk/vim-sneak {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-easymotion')
-  map <Leader> <plug>(easymotion-prefix)
-  nmap <leader><leader> <Plug>(easymotion-s)
+if has_key(g:plugs, 'vim-sneak')
+  let g:sneak#label = 1
+  let g:sneak#target_labels = "aoeuhtnsid',.pygcrl12345890[]"
+
+  "fix sneak highlighting
+  autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234
+  autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
+  autocmd ColorScheme * hi SneakLabel cterm=reverse ctermfg=214 ctermbg=234
+  " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
+
+  " hi! link SneakPluginTarget Search
+  " hi! link SneakStreakTarget Search
+  " call s:HL('SneakStreakMask', s:yellow, s:yellow)
+  " hi! link SneakStreakStatusLine Search
+
+  " map <Leader> <plug>(sneak-prefix)
+  " nmap <leader><leader> <Plug>(sneak-s)
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -141,6 +155,9 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'GoldenView.Vim')
     " Settings {{{
+      let g:maximizer_set_default_mapping = 0
+      let g:maximizer_restore_on_winleave = 1
+
       let g:goldenview__enable_default_mapping = 0
       let g:goldenview__enable_at_startup = 0
       let g:goldenview__ignore_urule = {
@@ -186,10 +203,16 @@ if has_key(g:plugs, 'GoldenView.Vim')
       endfunction
     " }}}
 
+      function! MaximiseCurrentWindow()
+        call GoldenView#ToggleAutoResize()
+        exec ":MaximizerToggle"
+      endfunction
+
     " Keybindings {{{
       " 1. quickly switch current window with the main pane and toggle back
       nmap <silent> <leader>wm <Plug>GoldenViewSwitchMain
       nmap <silent> <leader>wt <Plug>GoldenViewSwitchToggle
+      nmap <silent> <leader>wz :call MaximiseCurrentWindow()<cr>
 
       " 2. manipulate splits
       nmap <leader>wt <C-W>T
@@ -268,45 +291,8 @@ if has_key(g:plugs, 'fzf.vim')
   " }}}
 
   " Ag search {{{
-    function! s:ag_to_qf(line)
-      let parts = split(a:line, ':')
-      return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
-            \ 'text': join(parts[3:], ':')}
-    endfunction
-
-    function! s:ag_handler(lines)
-      if len(a:lines) < 2 | return | endif
-
-      let cmd = get({'ctrl-s': 'split',
-                   \ 'ctrl-v': 'vertical split',
-                   \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-      let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
-
-      let first = list[0]
-      execute cmd escape(first.filename, ' %#\')
-      execute first.lnum
-      execute 'normal!' first.col.'|zz'
-
-      if len(list) > 1
-        " for item in list
-        "   exec ':argadd ' . item['filename']
-        " endfor
-        call setqflist(list)
-        copen
-        wincmd p
-      endif
-    endfunction
-
-    command! -nargs=* Agsearch call fzf#run({
-    \ 'source':  printf('ag --nogroup --column --color "%s"',
-    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-    \ 'sink*':    function('<sid>ag_handler'),
-    \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. '.
-    \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
-    \            '--color hl:68,hl+:110',
-    \ 'down':    '50%'
-    \ })
-
+    command! -bang -nargs=* Find call fzf#vim#ag(<q-args>, '--literal --ignore-case ', {'window': 'enew'})
+    command! -bang -nargs=* Locate call fzf#vim#ag(<q-args>, '--literal --ignore-case -l ', {'window': 'enew'})
   " }}}
 
   " rails routes {{{
@@ -353,17 +339,25 @@ if has_key(g:plugs, 'fzf.vim')
     endfunction
   " }}}
 
-  " Files in current directory {{{
-  "   command! -nargs=* FilesInCurrentDir call fzf#run({
-  "           \ 'source': getwinvar(0, 'getcwd', getcwd()),
-  "           \ 'sink':   function('s:edit_file'),
-  "           \ 'options': '-m -x +s',
-  "           \ 'window':  'rightbelow 20new' })
-  " " }}}
+
+  "Files in current directory {{{
+    function! FilesInCwd()
+      let current_file =expand("%")
+      let cwd = fnamemodify(current_file, ':p:h')
+      let command = 'ag -g "" -f ' . cwd . ' --depth 0'
+
+      call fzf#run({
+            \ 'source': command,
+            \ 'sink':   'e',
+            \ 'options': '-m -x +s',
+            \ 'window':  'enew' })
+    endfunction
+  " }}}
 
   " Keybindings {{{
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
+    nnoremap <silent> <leader>fc :<C-u>call FilesInCwd()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>w :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
@@ -372,7 +366,7 @@ if has_key(g:plugs, 'fzf.vim')
     nnoremap <silent> <leader>O :<C-u>Tags<CR>
     nnoremap <silent> <leader>: :<C-u>Commands<CR>
     nnoremap <silent> <leader>? :<C-u>History<CR>
-    nnoremap <silent> <leader>p/ :<C-u>Agsearch<CR>
+    nnoremap <silent> <leader>p/ :<C-u>Ag<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
@@ -500,7 +494,7 @@ endif
 " benekastah/neomake {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'neomake')
-  autocmd BufWritePost * Neomake
+  autocmd! BufWritePost * Neomake
 
   let g:neomake_warning_sign = {
     \ 'text': '⚠',
@@ -512,8 +506,11 @@ if has_key(g:plugs, 'neomake')
     \ 'texthl': 'ErrorMsg',
     \ }
 
+  call neomake#signs#RedefineErrorSign()
+  call neomake#signs#RedefineWarningSign()
   let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
   let g:neomake_javascript_enabled_makers = ['eslint']
+  let g:neomake_jsx_enabled_makers = ['eslint']
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -739,14 +736,14 @@ endif
 " eugen0329/vim-esearch {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-esearch')
-  let g:esearch = {
-    \ 'adapter':    'ag',
-    \ 'backend':    'nvim',
-    \ 'out':        'win',
-    \ 'batch_size': 1000,
-    \ 'use':        ['visual', 'hlsearch', 'last'],
-    \}
-
+  if !exists('g:esearch')
+    let g:esearch = {}
+    let g:esearch.adapter = 'ag'
+    let g:esearch.backend = 'nvim'
+    let g:esearch.out = 'win'
+    let g:esearch.batch_size = 1000
+    let g:esearch.use = ['visual', 'hlsearch', 'last']
+  endif
   " let g:esearch#cmdline#dir_icon = ''
   " let g:esearch#cmdline#dir_icon = 'D'
   " let g:esearch#cmdline#dir_icon = ''
@@ -761,10 +758,10 @@ if has_key(g:plugs, 'vim-swoop')
   " nnoremap <silent> <Leader>/ :call Swoop()<CR>
   " vnoremap <silent> <Leader>/ :call SwoopSelection()<CR>
 
-  nnoremap <silent> <Leader>/ :call SwoopMulti()<CR>
-  vnoremap <silent> <Leader>/ :call SwoopMultiSelection()<CR>
+  " nnoremap <silent> <Leader>/ :call SwoopMulti()<CR>
+  " vnoremap <silent> <Leader>/ :call SwoopMultiSelection()<CR>
 
-  let g:swoopWindowsVerticalLayout = 1
-  let g:swoopPatternSpaceInsertsWildcard = 0
+  " let g:swoopWindowsVerticalLayout = 1
+  " let g:swoopPatternSpaceInsertsWildcard = 0
 endif
 " }}}
