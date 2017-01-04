@@ -37,7 +37,6 @@ endif
   Plug 'Shougo/neco-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   Plug 'fishbullet/deoplete-ruby'
-  " Plug 'MarcWeber/vim-addon-mw-utils'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -67,13 +66,11 @@ endif
   Plug 'tpope/vim-endwise' " insert end after certain keywords in ruby
   Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
-  Plug 'benekastah/neomake' " syntax checking
+  Plug 'neomake/neomake' " syntax checking
   Plug 'vim-scripts/tComment' " easy commenting using vim motions
-  " Plug 'editorconfig/editorconfig-vim'
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'Yggdroot/indentLine' " adds indentation guides
   Plug 'takac/vim-hardtime' " forces efficient movement in vim
-  Plug 'eugen0329/vim-esearch' " search replace project wide
   Plug 'pelodelfuego/vim-swoop' " search replace current buffers
 
 " }}}
@@ -96,9 +93,7 @@ endif
 " ------------------------------------------------------------------------------
 " Navigation {{{
 " ------------------------------------------------------------------------------
-
-  "TODO: replace with vim-sneak
-  Plug 'Lokaltog/vim-easymotion'
+  Plug 'justinmk/vim-sneak'
 
   Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
@@ -107,6 +102,7 @@ endif
   Plug 'airblade/vim-rooter'
   Plug 'mhinz/vim-signify'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'eugen0329/vim-esearch'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -118,7 +114,6 @@ endif
   Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
   Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
-  Plug 'ngmy/vim-rubocop', { 'for': 'ruby' }
   Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
 " }}}
 " ------------------------------------------------------------------------------
