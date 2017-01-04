@@ -47,10 +47,10 @@ export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 # --color info:2,prompt:5,spinner:1,pointer:6,marker:255,header:33
 
 # solarized
-# export FZF_DEFAULT_OPTS='
-#   --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
-#   --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
-# '
+#  export FZF_DEFAULT_OPTS='
+#    --color fg:7,bg:0,hl:12,fg+:7,bg+:10,hl+:1
+#    --color info:3,prompt:5,pointer:1,marker:5,spinner:3,header:8
+#  '
 
 # Cake
 # export FZF_DEFAULT_OPTS='
