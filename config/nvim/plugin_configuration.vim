@@ -359,7 +359,7 @@ if has_key(g:plugs, 'fzf.vim')
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
     nnoremap <silent> <leader>fc :<C-u>call FilesInCwd()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-    nnoremap <silent> <leader>w :<C-u>Windows<CR>
+    nnoremap <silent> <leader>W :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
     nnoremap <silent> <leader>. :<C-u>Lines<CR>
     nnoremap <silent> <leader>o :<C-u>BTags<CR>
@@ -765,3 +765,44 @@ if has_key(g:plugs, 'vim-swoop')
   " let g:swoopPatternSpaceInsertsWildcard = 0
 endif
 " }}}
+
+" ------------------------------------------------------------------------------
+" terryma/vim-expand-region {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-expand-region')
+  vmap v <Plug>(expand_region_expand)
+endif
+" }}}
+
+" ------------------------------------------------------------------------------
+" t9md/vim-choosewin {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-choosewin')
+  let g:choosewin_label = 'aoeuhtns'
+  let g:choosewin_color_label = {
+          \ 'cterm': [2, 16]
+          \ }
+  let g:choosewin_color_label_current = {
+        \ 'cterm': [9, 16]
+        \ }
+
+  nmap <leader>wc :<c-u>:ChooseWin<CR>
+endif
+" }}}
+
+" ------------------------------------------------------------------------------
+" w0rp/ale {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'ale')
+  let g:ale_sign_error = '✖'
+  let g:ale_sign_warning = '⚠'
+  let g:ale_linters = {
+  \   'javascript': ['eslint'],
+  \   'ruby': ['rubocop']
+  \}
+
+  " don't run linters when opening a file
+  let g:ale_lint_on_enter = 0
+endif
+" }}}
+" ------------------------------------------------------------------------------

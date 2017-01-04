@@ -44,9 +44,6 @@ endif
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
   Plug 'morhetz/gruvbox'
-  " Plug 'zefei/cake16'
-  " Plug 'joshdick/onedark.vim'
-  " Plug 'icymind/NeoSolarized'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -54,7 +51,7 @@ endif
 " Core {{{
 " ------------------------------------------------------------------------------
   Plug 'tpope/vim-dispatch'
-  Plug 'xolox/vim-session' | Plug 'xolox/vim-misc'
+  Plug 'xolox/vim-session' | Plug 'xolox/vim-misc' " save current vim session
   Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
 " }}}
 " ------------------------------------------------------------------------------
@@ -66,64 +63,57 @@ endif
   Plug 'tpope/vim-endwise' " insert end after certain keywords in ruby
   Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
-  Plug 'neomake/neomake' " syntax checking
+  " Plug 'neomake/neomake' " syntax checking, TODO: evaluate if can be replaced with ale
+  Plug 'w0rp/ale' " new async syntax checker for neovim
   Plug 'vim-scripts/tComment' " easy commenting using vim motions
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'Yggdroot/indentLine' " adds indentation guides
   Plug 'takac/vim-hardtime' " forces efficient movement in vim
   Plug 'pelodelfuego/vim-swoop' " search replace current buffers
-
+  Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
+	Plug 'terryma/vim-expand-region' " allow expanding visual selection region
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Javascript {{{
 " ------------------------------------------------------------------------------
-  " Plug 'kchmck/vim-coffee-script'
-  " Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
-  " Plug 'othree/yajs.vim'
-  " Plug 'isRuslan/vim-es6', { 'for': 'Javascript' }
-  " Plug 'mxw/vim-jsx'
   Plug 'maksimr/vim-jsbeautify'
   Plug 'beautify-web/js-beautify'
-  " Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'Javascript' }
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Navigation {{{
 " ------------------------------------------------------------------------------
-  Plug 'justinmk/vim-sneak'
-
+  Plug 'justinmk/vim-sneak' " diagonal movements using S + 2 charaters
   Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-  " Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'scrooloose/nerdtree'
-  Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye'
-  Plug 'airblade/vim-rooter'
-  Plug 'mhinz/vim-signify'
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'eugen0329/vim-esearch'
+  Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye' " add ranger as file browser
+  Plug 'airblade/vim-rooter' " change vim root to vcs root when editing a file
+  Plug 'mhinz/vim-signify' " Adds signs in the gutter to indicate vcs changes
+  Plug 'christoomey/vim-tmux-navigator' " easy navigation between tmux and vim splits
+  Plug 'eugen0329/vim-esearch' " project wide search and replace
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " Ruby {{{
 " ------------------------------------------------------------------------------
-  Plug 'tpope/vim-bundler'
-  Plug 'tpope/vim-cucumber', { 'for': 'cucumber' }
-  Plug 'tpope/vim-rails', { 'for': 'ruby' }
+  Plug 'tpope/vim-bundler' " run bundler commands in Vim
+  Plug 'tpope/vim-cucumber', { 'for': 'cucumber' } " fancy cucumber highlighting
+  Plug 'tpope/vim-rails', { 'for': 'ruby' } " rails specific config and highlight
 
-  Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
-  Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' }
+  Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' } " rspec commands and highlight
+  Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' } " ruby beautification
 " }}}
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " VersionControl {{{
 " ------------------------------------------------------------------------------
-  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-fugitive' " adds git commands for checking git status, commit etc.
   Plug 'tpope/vim-git' " Vim runtime files and syntax highlighting
-  Plug 'int3/vim-extradite'
+  Plug 'int3/vim-extradite' "TODO: evaluate usefulness of this plugin
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -139,15 +129,14 @@ endif
 " ------------------------------------------------------------------------------
 " TODO:Window Management {{{
 " ------------------------------------------------------------------------------
-  Plug 'zhaocai/GoldenView.Vim'
+  Plug 'zhaocai/GoldenView.Vim' " dynamic window tiling
 
   " Smarts around killing buffers.
   " will close the split if it's the last buffer in
-  " it, and close vim if it's the last buffer/split. Use ,w
-  Plug 'aaronjensen/vim-command-w', { 'on': 'CommandW' }
-
-  " Maximizes windows and restores them afterwards
+  " it, and close vim if it's the last buffer/split.
+  Plug 'aaronjensen/vim-command-w', { 'on': 'CommandW' } " Maximising windows
   Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
+  Plug 't9md/vim-choosewin' " Allow quick switching between splits using overlay
 " }}}
 " ------------------------------------------------------------------------------
 
