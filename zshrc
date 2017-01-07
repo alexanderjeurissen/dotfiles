@@ -7,33 +7,6 @@ fi
 # prompt {{{
   autoload -U promptinit && promptinit
   prompt pure
-#   POWERLEVEL9K_MODE='awesome-patched'
-#   POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#   POWERLEVEL9K_DISABLE_RPROMPT=true
-#
-#   POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\n"
-#   POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="❯ "
-#
-#   POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-#   POWERLEVEL9K_SHORTEN_DELIMITER=""
-#   POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
-#   POWERLEVEL9K_DIR_HOME_BACKGROUND="black"
-#   POWERLEVEL9K_DIR_HOME_FOREGROUND="249"
-#   POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="black"
-#   POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="249"
-#   POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="black"
-#   POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="249"
-#   POWERLEVEL9K_STATUS_OK_BACKGROUND="black"
-#   POWERLEVEL9K_STATUS_OK_FOREGROUND="green"
-#   POWERLEVEL9K_STATUS_ERROR_BACKGROUND="black"
-#   POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
-#   POWERLEVEL9K_TIME_BACKGROUND="black"
-#   POWERLEVEL9K_TIME_FOREGROUND="249"
-#   POWERLEVEL9K_TIME_FORMAT="%D{\UE12E %H:%M \uE868 %d.%m.%y}"
-#   POWERLEVEL9K_SHOW_CHANGESET=true
-#   POWERLEVEL9K_STATUS_VERBOSE=true
-#   POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
-#   POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=('status' 'context' 'dir' 'vcs')
 # # }}}
 
 # Vi mode {{{
@@ -49,7 +22,6 @@ fi
 # Zplug plugin definitions {{{
   # source ~/.zplug/init.zsh
   # zplug "zsh-users/zsh-syntax-highlighting", nice:10
-  # zplug "bhilburn/powerlevel9k"
 # }}}
 
 # aliasses {{{
@@ -67,11 +39,9 @@ fi
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias bower="noglob bower"
-  #alias rubocop="/Users/alexander/.rbenv/versions/2.1.0/bin/rubocop"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
   alias showDriveUsage='sudo lsof'
-  alias sq='sequelize'
   alias gcc='gcc-5'
   alias c++='c++-5'
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
@@ -115,29 +85,24 @@ fi
   alias vi='nvim'
   alias v='nvim'
   alias vim='nvim'
-  alias oldvim="\vim"
-# }}}
-
-# Aliases for foreman {{{
-  alias fix_arc_single_commit="arc diff `git rev-parse develop`"
 # }}}
 
 # Aliases for Arcanist {{{
   alias diffb="arc diff --browse"
-  # alias difflc="arc diff --browse --message \"$(git log -1 --pretty=%B)\""
 # }}}
 
 # Aliases for directories {{{
   alias h1="cd ~/git/hackerone/"
+  alias payments="cd ~/git/hackerone_payments/"
   alias dotfiles="cd ~/.dotfiles/"
 # }}}
 
-alias psqlh1='postgres -U alexanderjeurissen -p 3100 -h localhost -d postgres'
+alias psql_rails='postgres -U alexanderjeurissen -p 3100 -h localhost -d postgres'
 
 # Alias for clearing the screen
 alias clearScreen="clear && printf '\e[3J'"
 
-# set nvim as defaut editory
+# set nvim as defaut editor
 export EDITOR="nvim"
 
 export LC_ALL=en_US.UTF-8
@@ -180,7 +145,7 @@ source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 # History options {{{
   if [ -z "$HISTFILE" ]; then
-      HISTFILE=$HOME/.zsh_history
+    HISTFILE=$HOME/.zsh_history
   fi
 
   HISTSIZE=10000
@@ -209,7 +174,6 @@ source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
   # Create nginx conf for current git repo
   alias devlink='nginx_setup'
   alias sites='ranger $(brew --prefix)/etc/nginx/sites/'
-
 # }}}
 
 it2prof() { echo -e "\033]50;SetProfile=$1\a" }
@@ -221,26 +185,14 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
     branches=$(git branch --all | grep -v HEAD) &&
     branch=$(echo "$branches" |
              fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m)
-    echo $branch
+    echo -n $branch
+    local ret=$?
+    echo
+    return $ret
   }
 
   zle     -N   branch
   bindkey '^B' branch
+# }}}
 
-  # fco - checkout git branch/tag
-  checkout() {
-    local tags branches target
-    tags=$(
-      git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
-    branches=$(
-      git branch --all | grep -v HEAD             |
-      sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
-      sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
-    target=$(
-      (echo "$tags"; echo "$branches") |
-      fzf-tmux -- --no-hscroll --ansi +m -d "\t" -n 2)
-
-    echo "$target"
-  }
-#}}}
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
