@@ -1,8 +1,16 @@
+#!/bin/bash
 run_segment() {
-  if curl --silent --head http://www.google.com/  |egrep "20[0-9] Found|30[0-9] Found" >/dev/null
-  then
-    echo "☁"
+  wget -q --spider https://github.com
+
+  if [ $? -eq 0 ]; then
+    sleep 10s
+    if curl --silent --head https://hackerone.com/ |egrep "20[0-9] OK" >/dev/null
+    then
+      echo ""
+    else
+      echo "  H1 DOWN!"
+    fi
   else
-    echo "⌔"
+    echo "⌔ WIFI!"
   fi
 }
