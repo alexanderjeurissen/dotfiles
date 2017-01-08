@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-
 export TMUX_POWERLINE_DIR_SEGMENTS="${TMUX_POWERLINE_DIR_HOME}/segments"
-export TMUX_POWERLINE_DIR_LIB="${TMUX_POWERLINE_DIR_HOME}/lib"
 
 get_pane_width() {
   tmux_path=$(get_tmux_cwd)
@@ -33,102 +31,23 @@ get_tmux_cwd() {
 DEFAULT_BACKGROUND_COLOR=255
 DEFAULT_FOREGROUND_COLOR=0
 
-# This function creates the actual segment
 segment() {
   local segment="$1"
-  local foreground="$2"
-  local background="$3"
-  local autohide="$4"
-
-  source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
-  local result=$(run_segment)
-
-  local output="#[fg=${foreground}, bg=${background}, noreverse]${result}"
-
-  local exit_code="$?"
-  unset -f run_segment
-
-  if [ "$exit_code" -ne 0 ]; then
-    echo "Segment '${segment_name}' exited with code ${exit_code}. Aborting."
-    exit 1
-  fi
-
-  # don't show output if the result is empty
-  # or if the screen is small and has autohide enabled
-  if [ $TMUX_PANE_WIDTH -lt $4 ]; then
-    local display="hidden"
-  fi
-
-  if [[ -z "${result// }" || $display == "hidden" ]]; then
-    echo -n ""
-  else
-    echo -n "#[fg=black, bg=black] "
-    echo -n "${output}"
-  fi
-}
-
-double_segment() {
-  local label="$1"
-  local label_fg="$2"
-  local label_bg="$3"
-
-  local segment="$4"
-  local seg_fg="$5"
-  local seg_bg="$6"
-  local collapse_width="$7"
-
-  local output="#[fg=${label_fg}, bg=${label_bg}, noreverse] ${label} "
-
-  source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
-  local result=$(run_segment)
-
-  output="${output}#[fg=${seg_fg}, bg=${seg_bg}, noreverse] ${result} "
-
-  local exit_code="$?"
-  unset -f run_segment
-
-  # Show error when exit code != 0
-  if [ "$exit_code" -ne 0 ]; then
-    echo "Segment '${segment}' exited with code ${exit_code}. Aborting."
-    exit 1
-  fi
-
-  # don't show output if the result is empty
-  # or if the screen is small and has autohide enabled
-
-  if [ $TMUX_PANE_WIDTH -lt $7 ]; then
-    local display="hidden"
-  fi
-
-  if [[ -z "${result// }" || $display == "hidden" ]]; then
-    echo -n ""
-  else
-    echo -n "#[fg=black, bg=black] "
-    echo -n "${output}"
-  fi
-}
-
-
-powerline_segment() {
-  local label="$1"
-  local label_fg="$2"
-
-  local segment="$3"
-  local seg_fg="$4"
-  local seg_bg="$5"
-  local collapse_width="$6"
+  local seg_fg="$2"
+  local seg_bg="$3"
+  local left_most="$4"
+  local collapse_width="$5"
 
   local output = ""
 
-  if [[ -n $label ]]; then
-    output="#[fg=${label_fg}, bg=${seg_bg}, noreverse] ${label} "
-  fi
-
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
   local result=$(run_segment)
 
-  local powerline_prefix="#[fg=${seg_bg}, bg=black]"
-  local powerline_suffix="#[fg=black, bg=${seg_bg}] "
+  local powerline_suffix=" #[fg=${seg_bg}, bg=black]"
+
+  if [[ "$left_most" -ne true ]]; then
+    local powerline_prefix="#[fg=black, bg=${seg_bg}]"
+  fi
 
   output="${powerline_prefix}#[fg=${seg_fg}, bg=${seg_bg}] ${result}${output}${powerline_suffix}"
 
@@ -154,3 +73,22 @@ powerline_segment() {
     echo -ne "${output}"
   fi
 }
+
+# Shell Configuration
+ostype() { echo $OSTYPE | tr '[A-Z]' '[a-z]'; }
+
+export SHELL_PLATFORM='unknown'
+
+case "$(ostype)" in
+  *'linux'* ) SHELL_PLATFORM='linux'  ;;
+  *'darwin'*  ) SHELL_PLATFORM='osx'    ;;
+  *'bsd'*   ) SHELL_PLATFORM='bsd'    ;;
+esac
+
+shell_is_linux() { [[ $SHELL_PLATFORM == 'linux' || $SHELL_PLATFORM == 'bsd' ]]; }
+shell_is_osx()   { [[ $SHELL_PLATFORM == 'osx' ]]; }
+shell_is_bsd()   { [[ $SHELL_PLATFORM == 'bsd' || $SHELL_PLATFORM == 'osx' ]]; }
+
+export -f shell_is_linux
+export -f shell_is_osx
+export -f shell_is_bsd
