@@ -45,7 +45,7 @@
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
 
 [merge]
-  tool = vimdiff
+  tool = diffconflicts
   conflictstyle = diff3
 
 # vim: set et :
@@ -54,14 +54,16 @@
 [github]
   user = alexanderjeurissen
 [core]
-	excludesfile = /Users/alexanderjeurissen/.gitignore
+  excludesfile = /Users/alexanderjeurissen/.gitignore
   editor = nvim
-	pager = diff-so-fancy | less --tabs=1,5 -R
+  pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
 [difftool]
   prompt = false
-[mergetool]
-  path = neovim_nvr
 # [url "git@github.com:"]
 #   insteadOf = "https://github.com/"
+[mergetool "diffconflicts"]
+  cmd = diffconflicts nvim $BASE $LOCAL $REMOTE $MERGED
+  trustExitCode = true
+  keepBackup = false
