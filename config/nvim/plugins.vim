@@ -33,10 +33,10 @@ endif
 " AutoCompletion {{{
 " ------------------------------------------------------------------------------
   " Plug 'mattn/emmet-vim'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'Shougo/neco-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-  Plug 'fishbullet/deoplete-ruby'
+  " Plug 'fishbullet/deoplete-ruby'
 " }}}
 " ------------------------------------------------------------------------------
 
