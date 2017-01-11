@@ -140,9 +140,9 @@ if has_key(g:plugs, 'vim-rails')
     \  "alternate": ["app/controllers/%s.rb"],
     \},
     \"lib/support/app/controllers/support/*.rb": {
-    \  "alternate": ["lib/support/spec/controllers/support/%s_spec.rb"]
+    \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
     \},
-    \"lib/support/spec/controllers/support/*_spec.rb": {
+    \"spec/integration/controllers/support/*_spec.rb": {
     \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
     \},
   \}
@@ -557,11 +557,6 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
-  let g:deoplete#omni#input_patterns = {}
-  let g:deoplete#omni#input_patterns.ruby =
-  \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
-  let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
-
   let g:deoplete#enable_smart_case = 1
 
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
