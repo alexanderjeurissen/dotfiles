@@ -140,7 +140,7 @@ source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
   source ~/.gitaliases
   alias changedfiles= "git diff --name-only | uniq | xargs nvim"
   alias removeArtefacts="git stash -u && git stash drop"
-  # alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
+  alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
 # }}}
 
 # History options {{{

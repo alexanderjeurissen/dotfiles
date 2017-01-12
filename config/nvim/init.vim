@@ -431,8 +431,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
     autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
     let &statusline = " %{SessionFlag()} "
     let &statusline .= " %<%f "
-    let &statusline .= "%{&readonly ? ' ' : &modified ? '  ' : ''}"
-    " let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+    " let &statusline .= "%{&readonly ? ' ' : &modified ? '  ' : ''}"
+    let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
     let &statusline .= "%{PasteFlag()}"
     let &statusline .= "%{SpellFlag()}"
     let &statusline .= "%{HardTimeFlag()}"
@@ -447,18 +447,18 @@ source $HOME/.config/nvim/plugin_configuration.vim
       endif
 
       if empty(session) || session == 'default'
-        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
-        " return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
+        " return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
+        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
       else
-        return ' '.session
-        " return ' '.session
+        " return ' '.session
+        return ' '.session
       endif
     endfunction
 
     function! PasteFlag()
       if &paste
-        return '   '
-        " return '  '
+        " return '   '
+        return '  '
       else
         return ''
       endif
@@ -483,8 +483,8 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
     function! HardTimeFlag()
       if exists("b:hardtime_on") && b:hardtime_on == 1
-        " return '  '
-        return ' '
+        return '  '
+        " return ' '
       else
         return ''
       endif
