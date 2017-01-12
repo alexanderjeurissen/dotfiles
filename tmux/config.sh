@@ -43,10 +43,10 @@ segment() {
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
   local result=$(run_segment)
 
-  local powerline_suffix=" #[fg=${seg_bg}, bg=black]"
+  local powerline_suffix=" #[fg=${seg_bg}, bg=white]"
 
   if [[ "$left_most" -ne true ]]; then
-    local powerline_prefix="#[fg=black, bg=${seg_bg}]"
+    local powerline_prefix="#[fg=white, bg=${seg_bg}]"
   fi
 
   output="${powerline_prefix}#[fg=${seg_fg}, bg=${seg_bg}] ${result}${output}${powerline_suffix}"

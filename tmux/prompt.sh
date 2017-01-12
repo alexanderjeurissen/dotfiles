@@ -10,8 +10,8 @@ print_powerline() {
   # If the required PANE_WIDTH isn't met then the segment will be hidden
 
   if [ $1 == 'left' ]; then
-    segment "hostname" colour000 colour004 true 143
-    segment "username" colour000 colour002 143
+    segment "hostname" colour014 colour004 true 143
+    segment "username" colour014 colour002 143
     segment "uptime" colour0015 colour001 143
     segment "online" colour0015 colour001 143
   # elif [ $1 == 'right' ]; then

@@ -271,8 +271,8 @@ if has_key(g:plugs, 'fzf.vim')
 
       function! s:fzf_statusline()
         " Override statusline as you like
-        highlight! fzf1 ctermfg=243 ctermbg=234
-        setlocal statusline=%#fzf1#
+        highlight! fzf1 ctermfg=15 ctermbg=12
+        setlocal statusline=%#fzf1#\ \\ FZF
 
         if g:fzf_mode == 'Files'
           setlocal statusline=\ \\ Search\ for\ files
@@ -595,8 +595,11 @@ endif
 " zefei/cake16 {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'cake16')
-  colorscheme cake16
-  set background=light
+  func! ActivateColorScheme()
+    colorscheme cake16
+    set background=light
+    " let g:indentLine_color_term = 239
+  endfunc
 endif
 " }}}
 " ------------------------------------------------------------------------------
