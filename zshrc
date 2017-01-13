@@ -49,6 +49,7 @@ fi
   alias attach='tmux attach -t'
   alias findP='ps -ef | grep -v grep | grep '
   alias proselint='PYTHONIOENCODING=utf8 proselint'
+  alias applypatch='git am --signoff <'
 # }}}
 
 # Alias for hackerij {{{
@@ -134,7 +135,7 @@ export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 
 # Gruvbox 256 colors support OSX
 # source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
+# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 # git aliases {{{
   source ~/.gitaliases

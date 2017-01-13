@@ -132,7 +132,7 @@ let python_host_prog = "python"
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
 if (has("termguicolors"))
   if(has("nvim"))
-    " set termguicolors
+    set termguicolors
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
   endif
@@ -279,8 +279,8 @@ augroup vimrcEx
   autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
   " Enable spellchecking for Markdown and git commit
-  autocmd FileType markdown setlocal spell
-  autocmd FileType gitcommit setlocal spell
+  " autocmd FileType markdown setlocal spell
+  " autocmd FileType gitcommit setlocal spell
 
   " Add html highlighting when editing rails views & handlebar templates
   autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
