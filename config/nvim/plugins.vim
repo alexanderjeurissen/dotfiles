@@ -45,7 +45,7 @@ endif
 " ------------------------------------------------------------------------------
   " Plug 'morhetz/gruvbox'
   Plug 'zefei/cake16'
-  " Plug 'zefei/vim-colortuner'
+  Plug 'zefei/vim-colortuner'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -138,7 +138,6 @@ endif
   " it, and close vim if it's the last buffer/split.
   Plug 'aaronjensen/vim-command-w', { 'on': 'CommandW' } " Maximising windows
   Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
-  Plug 't9md/vim-choosewin' " Allow quick switching between splits using overlay
 " }}}
 " ------------------------------------------------------------------------------
 
