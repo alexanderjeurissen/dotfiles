@@ -17,6 +17,6 @@ run_segment() {
       opts="--short"
     fi
   fi
-  echo -n "  $(hostname ${opts})"
+  echo -n "  $(hostname ${opts})"
   return 0
 }
