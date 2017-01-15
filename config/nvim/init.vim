@@ -1,4 +1,4 @@
-"
+
      " E      888                                             888                  d88b
     " d8b     888  e88~~8e  Y88b  /    /~~~8e  888-~88e  e88~\888  e88~~8e  888-~\ Y88P  d88~\
    " /Y88b    888 d888  88b  Y88b/         88b 888  888 d888  888 d888  88b 888    __/  C888
@@ -73,6 +73,10 @@ set tags=./TAGS
 " unknown
 set re=1
 
+" fix suggested in a neovim issue where buffer switching was slow
+" in combination with vim-airline and neovim
+set hid
+
 " When this option is set, the screen will not be redrawn while
 " executing macros, registers and other commands that have not been
 " typed
@@ -123,7 +127,21 @@ autocmd BufReadPost *
 "open help in a new ventical split instead of vimbuffer
 cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'vert help' : 'h'
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+" change cursor shapes according to current mode
+" only works in iTerm. tmux optional.
+" see http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
+if !empty($TMUX)
+  " inside a tmux session
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  " not inside a tmux session
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
 let python3_host_prog = "python3"
 let python_host_prog = "python"
 
@@ -147,6 +165,9 @@ endif
 " Fix annoying typo's of WQ, QA and Q
 command! WQ wq
 command! Wq wq
+
+"w!! to save file with sudo
+cmap w!! w !sudo tee % > /dev/null
 
 command! W w
 command! WW w
@@ -377,120 +398,14 @@ endfunction
 " ==============================================================================
 " terminal settings {{{
 " ==============================================================================
-  " tnoremap <leader><ESC> <C-\><C-n>
-  " tnoremap <leader>tn <C-\><C-n>:tabnext<CR>
-
-  " command! -nargs=* T terminal
-
-  " Window navigation between terminal and nonterminal {{{
-    " au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-    " tnoremap <silent> <leader>wh <C-\><C-n><C-w>h
-    " tnoremap <silent> <leader>wj <C-\><C-n><C-w>j
-    " tnoremap <silent> <leader>wk <C-\><C-n><C-w>k
-    " tnoremap <silent> <leader>wl <C-\><C-n><C-w>l
-
-    nmap <silent> <leader>wh <C-w>h
-    nmap <silent> <leader>wj <C-w>j
-    nmap <silent> <leader>wk <C-w>k
-    nmap <silent> <leader>wl <C-w>l
-  "}}}
-
-  " split to tiled windows {{{
-  " TODO: move this to a separate window section
-    nmap <silent> <leader>wv :vs<cr>
-    nmap <silent> <leader>ws :split<cr>
-    " tnoremap <silent> <leader>wv <C-\><C-n>:vs<cr>:startinsert<cr>
-    " tnoremap <silent> <leader>ws <C-\><C-n>:split<cr>:startinsert<cr>
-  "}}}
+  tnoremap <leader><ESC> <C-\><C-n>
+  command! -nargs=* T terminal
+  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 " }}}
 " ==============================================================================
 
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
-
-" ==============================================================================
-" Statusline {{{
-" ==============================================================================
-"
-" additional symbols that might be usefull in the future:
-"   paste mode  
-"   fzf symbol:   
-"   wifi: 
-"   direction: 
-"   labeled file or sesison?  
-"   warnings:   
-"   info: 
-"   inbox: 
-"   hot: 
-"   time: 
-"   Git icon: 
-
-    set laststatus=2
-    set guioptions-=e
-
-    autocmd BufEnter,WinEnter,VimEnter,BufRead * let w:getcwd = getcwd()
-    let &statusline = " %{SessionFlag()} "
-    let &statusline .= " %<%f "
-    " let &statusline .= "%{&readonly ? ' ' : &modified ? '  ' : ''}"
-    let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
-    let &statusline .= "%{PasteFlag()}"
-    let &statusline .= "%{SpellFlag()}"
-    let &statusline .= "%{HardTimeFlag()}"
-    let &statusline .= "%=╱ %{&filetype == '' ? 'unknown' : &filetype} "
-    let &statusline .= "╱ %p%% ╱%3c "
-
-    function! SessionFlag()
-      if has_key(g:plugs, 'vim-session')
-        let session = xolox#session#find_current_session()
-      else
-        let session = ''
-      endif
-
-      if empty(session) || session == 'default'
-        " return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
-        return ' '.fnamemodify(getwinvar(0, 'getcwd', getcwd()), ':t')
-      else
-        " return ' '.session
-        return ' '.session
-      endif
-    endfunction
-
-    function! PasteFlag()
-      if &paste
-        " return '   '
-        return '  '
-      else
-        return ''
-      endif
-    endfunction
-
-    function! SpellFlag()
-      if &spell
-        return '   '
-        " return '  '
-      else
-        return ''
-      endif
-    endfunction
-
-    function! SyntaxFlag()
-      if has_key(g:plugs, 'neomake')
-        return ' ⚠ '
-      else
-        return ''
-      endif
-    endfunction
-
-    function! HardTimeFlag()
-      if exists("b:hardtime_on") && b:hardtime_on == 1
-        return '  '
-        " return ' '
-      else
-        return ''
-      endif
-    endfunction
-  " }}}
-" ==============================================================================
 
 call ActivateColorScheme()
 " ==============================================================================
