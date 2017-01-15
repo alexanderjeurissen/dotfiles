@@ -235,6 +235,8 @@ if has_key(g:plugs, 'vim-signify')
   let g:signify_sign_delete_first_line = '‾'
   let g:signify_sign_change            = '!'
   let g:signify_sign_changedelete      = g:signify_sign_change
+  let g:signify_update_on_bufenter    = 0
+  let g:signify_update_on_focusgained = 1
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -705,6 +707,18 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
+" joshdick/onedark.vim {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'onehalf')
+  func! ActivateColorScheme()
+    " colorscheme onehalflight
+    colorscheme onehalfdark
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " takac/vim-hardtime {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-hardtime')
@@ -801,6 +815,103 @@ if has_key(g:plugs, 'ale')
 
   " don't run linters when opening a file
   let g:ale_lint_on_enter = 0
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" vim-airline/vim-airline {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-airline')
+  if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+  endif
+
+  let g:airline_powerline_fonts = 0
+  let g:airline_enable_branch     = 1
+  let g:airline_detect_modified=1
+  let g:airline_detect_paste=1
+  let g:airline_detect_spell=1
+  let g:airline_detect_crypt=1
+  let g:airline_inactive_collapse=1
+  let g:airline_skip_empty_sections = 1
+  let g:airline_exclude_preview = 0
+
+  "Vim-powerline symbols
+  let g:airline_symbols.crypt = '🔒'
+  let g:airline_symbols.linenr = '␤'
+  let g:airline_symbols.linenr = '¶'
+  let g:airline_symbols.maxlinenr = ''
+  let g:airline_symbols.branch = '⎇'
+  let g:airline_symbols.paste = ''
+  let g:airline_symbols.spell = 'Ꞩ'
+  let g:airline_symbols.notexists = '∄'
+  let g:airline_symbols.whitespace = 'Ξ'
+  let g:airline_left_sep          = ''
+  let g:airline_left_alt_sep      = ''
+  let g:airline_right_sep         = ''
+  let g:airline_right_alt_sep     = ''
+  let g:airline_symbols.maxlinenr = '☰'
+
+  let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+
+  " extensions {
+    let g:airline#extensions#branch#format = 2
+    let g:airline#extensions#bufferline#enabled = 0
+    let g:airline#extensions#syntastic#enabled = 0
+    let g:airline#extensions#tagbar#enabled = 0
+    let g:airline#extensions#tabline#enabled = 0
+    let g:airline#extensions#eclim#enabled = 0
+    let g:airline#extensions#wordcount#enabled = 0
+    let g:airline#extensions#whitespace#enabled = 1
+    let g:airline#extensions#tmuxline#enabled = 0
+    let g:airline#extensions#ycm#enabled = 0
+  " }
+  " Airline Whitespace {
+    let g:airline#extensions#whitespace#symbol = '..'
+    let g:airline#extensions#whitenpace#checks = [ 'indent', 'trailing' ]
+    let g:airline#extensions#whitespace#show_message = 0
+  " }
+
+  " Modeline mapping {
+    let g:airline_mode_map = {
+        \ '__' : '-',
+        \ 'n'  : 'N',
+        \ 'i'  : 'I',
+        \ 'R'  : 'R',
+        \ 'c'  : 'C',
+        \ 'v'  : 'V',
+        \ 'V'  : 'V',
+        \ '' : 'V',
+        \ 's'  : 'S',
+        \ 'S'  : 'S',
+        \ '' : 'S',
+        \ }
+  " }
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+
+" ------------------------------------------------------------------------------
+" christoomey/vim-tmux-navigator {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-tmux-navigator')
+  let g:tmux_navigator_no_mappings = 1
+  nnoremap <silent> <leader>wh :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <leader>wj :TmuxNavigateDown<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <leader>wk :TmuxNavigateUp<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <leader>wl :TmuxNavigateRight<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <leader>wp :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
+
+  nnoremap <silent> <leader>wv :vs<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <leader>ws :split<cr>:AirlineRefresh<cr>
+
+  tnoremap <silent> <leader>wh <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <leader>wj <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <leader>wk <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <leader>wl <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <leader>wp <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
 endif
 " }}}
 " ------------------------------------------------------------------------------
