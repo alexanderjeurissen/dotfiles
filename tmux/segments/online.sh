@@ -1,16 +1,11 @@
 #!/bin/bash
 run_segment() {
-  wget -q --spider https://github.com
+  nc -z 8.8.8.8 53  >/dev/null 2>&1
+  online=$?
 
-  if [ $? -eq 0 ]; then
-    sleep 10s
-    if curl --silent --head https://hackerone.com/ |egrep "20[0-9] OK" >/dev/null
-    then
-      echo ""
-    else
-      echo "  H1 DOWN!"
-    fi
+  if [ $online -eq 0 ]; then
+    echo ""
   else
-    echo "⌔ WIFI!"
+    echo "⌔ OFFLINE!"
   fi
 }

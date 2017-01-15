@@ -21,6 +21,7 @@ run_segment() {
     d=$(expr $uptime / 86400)
     h=$(expr $uptime / 3600 % 24)
     m=$(expr $uptime / 60 % 60)
-    printf " %sd %sh %sm" "$d" "$h" "$m"
+    # printf " %sd %sh %sm" "$d" "$h" "$m"
+    printf " %sd %sh" "$d" "$h"
     return 0
 }
