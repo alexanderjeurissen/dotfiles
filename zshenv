@@ -25,8 +25,8 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
 # FZF {{{
   export FZF_DEFAULT_OPTS='
-    --color fg:0,bg:15,hl:8,fg+:0,bg+:14,hl+:6
-    --color info:6,prompt:6,pointer:6,marker:6,spinner:6,header:8
+    --color fg:188,bg:237,hl:241,fg+:188,bg+:236,hl+:176
+    --color info:180,prompt:176,pointer:176,marker:168,spinner:176,header:241
   '
 # }}}
 
