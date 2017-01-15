@@ -44,8 +44,9 @@ endif
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
   " Plug 'morhetz/gruvbox'
-  Plug 'zefei/cake16'
-  Plug 'zefei/vim-colortuner'
+  " Plug 'zefei/cake16'
+  Plug 'sonph/onehalf', {'rtp': 'vim/'}
+  " Plug 'zefei/vim-colortuner'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -55,6 +56,7 @@ endif
   Plug 'tpope/vim-dispatch'
   Plug 'xolox/vim-session' | Plug 'xolox/vim-misc' " save current vim session
   Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
+  Plug 'vim-airline/vim-airline'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -73,7 +75,7 @@ endif
   Plug 'takac/vim-hardtime' " forces efficient movement in vim
   Plug 'pelodelfuego/vim-swoop' " search replace current buffers
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
-	Plug 'terryma/vim-expand-region' " allow expanding visual selection region
+  Plug 'terryma/vim-expand-region' " allow expanding visual selection region
 " }}}
 " ------------------------------------------------------------------------------
 
