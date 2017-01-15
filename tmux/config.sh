@@ -22,16 +22,43 @@ get_tmux_cwd() {
   fi
 }
 
-# separator characters
-# SEPARATOR_LEFT_BOLD=""
-# SEPARATOR_LEFT_THIN=""
-# SEPARATOR_RIGHT_BOLD=""
-# SEPARATOR_RIGHT_THIN=""
-
 DEFAULT_BACKGROUND_COLOR=255
 DEFAULT_FOREGROUND_COLOR=0
 
 segment() {
+  local segment="$1"
+  local seg_fg="$2"
+  local seg_bg="$3"
+  local collapse_width="$5"
+
+  source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
+  local result=$(run_segment)
+
+  local output="#[fg=${seg_fg}, bg=${seg_bg}] ${result} #[default]"
+
+  local exit_code="$?"
+  unset -f run_segment
+
+  # Show error when exit code != 0
+  if [ "$exit_code" -ne 0 ]; then
+    echo "Segment '${segment}' exited with code ${exit_code}. Aborting."
+    exit 1
+  fi
+
+  # don't show output if the result is empty
+  # or if the screen is small and has autohide enabled
+  if [ $TMUX_PANE_WIDTH -lt $7 ]; then
+    local display="hidden"
+  fi
+
+  if [[ -z "${result// }" || $display == "hidden" ]]; then
+    echo -n ""
+  else
+    echo -ne "${output}"
+  fi
+}
+
+powerline_segment() {
   local segment="$1"
   local seg_fg="$2"
   local seg_bg="$3"
@@ -43,10 +70,10 @@ segment() {
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
   local result=$(run_segment)
 
-  local powerline_suffix=" #[fg=${seg_bg}, bg=white]"
+  local powerline_suffix=" #[fg=${seg_bg}, bg=black]"
 
   if [[ "$left_most" -ne true ]]; then
-    local powerline_prefix="#[fg=white, bg=${seg_bg}]"
+    local powerline_prefix="#[fg=black, bg=${seg_bg}]"
   fi
 
   output="${powerline_prefix}#[fg=${seg_fg}, bg=${seg_bg}] ${result}${output}${powerline_suffix}"
@@ -62,7 +89,6 @@ segment() {
 
   # don't show output if the result is empty
   # or if the screen is small and has autohide enabled
-
   if [ $TMUX_PANE_WIDTH -lt $7 ]; then
     local display="hidden"
   fi
