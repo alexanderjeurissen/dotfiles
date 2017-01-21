@@ -130,14 +130,20 @@ if has_key(g:plugs, 'vim-rails')
     \"app/models/*.rb": {
     \  "alternate": ["spec/integration/models/%s_spec.rb"],
     \},
-    \"app/controllers/*.rb": {
-    \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
-    \},
     \"spec/integration/models/*_spec.rb": {
     \  "alternate": ["app/models/%s.rb"],
     \},
+    \"app/controllers/*.rb": {
+    \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
+    \},
     \"spec/integration/controllers/*_spec.rb": {
     \  "alternate": ["app/controllers/%s.rb"],
+    \},
+    \"app/backend/*.rb": {
+    \  "alternate": ["spec/integration/backend/%s_spec.rb"],
+    \},
+    \"spec/integration/backend/*_spec.rb": {
+    \  "alternate": ["app/backend/%s.rb"],
     \},
     \"lib/support/app/controllers/support/*.rb": {
     \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
@@ -623,7 +629,6 @@ if has_key(g:plugs, 'onedark.vim')
   func! ActivateColorScheme()
     colorscheme onedark
     set background=dark
-    " silent exec ":IndentLinesReset 2<CR>"
   endfunc
 endif
 " }}}
@@ -707,14 +712,32 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" joshdick/onedark.vim {{{
+" onehalf {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'onehalf')
   func! ActivateColorScheme()
     " colorscheme onehalflight
     colorscheme onehalfdark
+    set background=dark
+    silent exec ':AirlineTheme onehalfdark'
+    hi! link Search PMenu
+    hi! link IncSearch PMenuSel
+    hi! IndentGuidesOdd  guibg=#444444 ctermbg=237
+    hi! IndentGuidesEven guibg=#303030 ctermbg=238
   endfunc
 endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" nathanaelkane/vim-indent-guides {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-indent-guides')
+    let g:indent_guides_auto_colors = 0
+    " let g:indent_guides_color_change_percent = 5
+    let g:indent_guides_start_level = 2
+    let g:indent_guides_enable_on_vim_startup = 1
+  endif
 " }}}
 " ------------------------------------------------------------------------------
 
