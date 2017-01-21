@@ -407,7 +407,7 @@ endfunction
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
 
-call ActivateColorScheme()
+autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
 " ==============================================================================
 " Include user's local vim config {{{
 " ==============================================================================
