@@ -3,7 +3,7 @@ run_segment() {
   cd ~/git/hackerone
   tasks=`arc list | grep 'Needs Revision' | wc -l | tr -d ' '`
 
-  if [[ $tasks > -1 ]]; then
+  if [[ $tasks > 0 ]]; then
     echo " ${tasks}"
   fi
 }
