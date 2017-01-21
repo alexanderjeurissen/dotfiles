@@ -101,6 +101,9 @@ set clipboard=unnamed
 " Show visual indication if your using substitute command
 set inccommand=split
 
+" Disable tabline in favor of using fuzzy search plugins and tab lists.
+set showtabline=0
+
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or when
 " inside an event handler (happens when dropping a file on gvim).
@@ -177,10 +180,8 @@ noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " tabpage mappings
-noremap <Leader>tn :tabnext<CR>
-noremap <Leader>t :tabnew<CR>
-
-" buffer mappings
+" noremap <Leader>tn :tabnext<CR>
+" noremap <Leader>t :tabnew<CR>
 
 " session mappings
 noremap <leader>m :call WriteSession()<CR>

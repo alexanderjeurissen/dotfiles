@@ -877,7 +877,7 @@ if has_key(g:plugs, 'vim-airline')
   let g:airline_detect_crypt=1
   let g:airline_inactive_collapse=1
   let g:airline_skip_empty_sections = 1
-  let g:airline_exclude_preview = 0
+  let g:airline_exclude_preview = 1
 
   "Vim-powerline symbols
   let g:airline_symbols.crypt = '🔒'
@@ -973,5 +973,48 @@ function! s:align()
     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
   endif
 endfunction
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" vim-ctrlspace/vim-ctrlspace {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-ctrlspace')
+  " Settings for MacVim and powerline fonts
+   let g:CtrlSpaceSymbols = {}
+   let g:CtrlSpaceSymbols = {
+   \"CS": "",
+   \"File": " FILES",
+   \"All": "፨ All",
+   \"CTab": "▣ CTAB",
+   \"Tabs": " TABS",
+   \"Sin": " HOME",
+   \"Help": " HELP",
+   \"SLeft": "",
+   \"SRight": " SEARCH ",
+   \"BM": " BOOKMARKS",
+   \"Vis": " visible",
+   \"IV": " invisible"
+   \}
+"                             ○ ◉                      
+    " hi! link CtrlSpaceNormal   Normal
+    " hi! link CtrlSpaceSelected PMenuSbar
+    " hi! link CtrlSpaceSearch   Conditional
+    " hi! link CtrlSpaceStatus   Cursor
+
+  " set ag as command to be used by Ctrl Space
+  if executable("ag")
+      let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+  endif
+
+  " Automatically persist workspace
+  let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+  let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+  let g:CtrlSpaceSaveWorkspaceOnExit = 1
+
+  " disable default mapping
+  let g:CtrlSpaceSetDefaultMapping = 0
+  nmap <leader><leader> <c-u>:CtrlSpace<cr>
+endif
 " }}}
 " ------------------------------------------------------------------------------

@@ -79,7 +79,8 @@ endif
 " Navigation {{{
 " ------------------------------------------------------------------------------
   Plug 'justinmk/vim-sneak' " diagonal movements using S + 2 charaters
-  Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  " Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'vim-ctrlspace/vim-ctrlspace'
   Plug 'dangerzone/ranger.vim' | Plug 'moll/vim-bbye' " add ranger as file browser
   Plug 'airblade/vim-rooter' " change vim root to vcs root when editing a file
   Plug 'mhinz/vim-signify' " Adds signs in the gutter to indicate vcs changes
