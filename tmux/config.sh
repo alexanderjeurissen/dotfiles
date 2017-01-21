@@ -2,9 +2,6 @@
 export TMUX_POWERLINE_DIR_SEGMENTS="${TMUX_POWERLINE_DIR_HOME}/segments"
 
 get_pane_width() {
-  tmux_path=$(get_tmux_cwd)
-  cd "$tmux_path"
-
   local pane_width="$(tmux display-message -p '#{pane_width}')"
   export TMUX_PANE_WIDTH=$pane_width
 }
@@ -29,7 +26,7 @@ segment() {
   local segment="$1"
   local seg_fg="$2"
   local seg_bg="$3"
-  local collapse_width="$5"
+  local collapse_width="$4"
 
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
   local result=$(run_segment)
@@ -47,7 +44,7 @@ segment() {
 
   # don't show output if the result is empty
   # or if the screen is small and has autohide enabled
-  if [ $TMUX_PANE_WIDTH -lt $7 ]; then
+  if [ $TMUX_PANE_WIDTH -lt $collapse_width ]; then
     local display="hidden"
   fi
 
