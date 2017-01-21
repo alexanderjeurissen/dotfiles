@@ -31,6 +31,7 @@ fi
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias spec="bin/rspec"
+  alias cuke="bin/cucumber"
   alias console="bin/rails console"
   alias commit="git add -A && git commit"
   alias migrations="g up && bin/rake db:migrate"
