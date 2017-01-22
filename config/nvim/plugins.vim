@@ -1,9 +1,3 @@
-"                      ____  _             _
-"  _____ _____ _____  |  _ \| |_   _  __ _(_)_ __  ___   _____ _____ _____
-" |_____|_____|_____| | |_) | | | | |/ _` | | '_ \/ __| |_____|_____|_____|
-" |_____|_____|_____| |  __/| | |_| | (_| | | | | \__ \ |_____|_____|_____|
-"                     |_|   |_|\__,_|\__, |_|_| |_|___/
-"                                    |___/
 " ==============================================================================
 " setup vim-plug {{{
 " ==============================================================================
@@ -32,8 +26,7 @@ endif
 " ------------------------------------------------------------------------------
 " AutoCompletion {{{
 " ------------------------------------------------------------------------------
-  " Plug 'mattn/emmet-vim'
-  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'Shougo/neco-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   " Plug 'fishbullet/deoplete-ruby'
@@ -45,6 +38,8 @@ endif
 " ------------------------------------------------------------------------------
   " Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
+  " Plug 'NLKNguyen/papercolor-theme'
+  Plug 'vim-airline/vim-airline-themes'
   Plug 'sonph/onehalf', {'rtp': 'vim/'}
   " Plug 'zefei/vim-colortuner'
 " }}}
@@ -53,8 +48,8 @@ endif
 " ------------------------------------------------------------------------------
 " Core {{{
 " ------------------------------------------------------------------------------
-  Plug 'tpope/vim-dispatch'
-  Plug 'xolox/vim-session' | Plug 'xolox/vim-misc' " save current vim session
+  Plug 'tpope/vim-dispatch' " run tasks in a tmux split to not block vim
+  Plug 'tpope/vim-obsession' " improve vim session handling
   Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
   Plug 'vim-airline/vim-airline'
 " }}}
@@ -67,23 +62,15 @@ endif
   Plug 'tpope/vim-endwise' " insert end after certain keywords in ruby
   Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
-  " Plug 'neomake/neomake' " syntax checking, TODO: evaluate if can be replaced with ale
   Plug 'w0rp/ale' " new async syntax checker for neovim
-  Plug 'vim-scripts/tComment' " easy commenting using vim motions
+  Plug 'tpope/vim-commentary' " easy commenting using vim motions
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'nathanaelkane/vim-indent-guides' " adds indentation guides
   Plug 'takac/vim-hardtime' " forces efficient movement in vim
-  Plug 'pelodelfuego/vim-swoop' " search replace current buffers
+  Plug 'pelodelfuego/vim-swoop' "TODO: search replace current buffers
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
   Plug 'terryma/vim-expand-region' " allow expanding visual selection region
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Javascript {{{
-" ------------------------------------------------------------------------------
-  Plug 'maksimr/vim-jsbeautify'
-  Plug 'beautify-web/js-beautify'
+  Plug 'tpope/vim-sleuth' " smart indent width based on buffer and neigbouring files
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -97,6 +84,9 @@ endif
   Plug 'mhinz/vim-signify' " Adds signs in the gutter to indicate vcs changes
   Plug 'christoomey/vim-tmux-navigator' " easy navigation between tmux and vim splits
   Plug 'eugen0329/vim-esearch' " project wide search and replace
+  Plug 'tpope/vim-unimpaired' " pairs of handy bracket mappings like [f and ]f for file switching
+  Plug 'thinca/vim-visualstar' " allows to use the * motion in visual mode
+  Plug 'tpope/vim-vinegar' " improve default ntrw file explorer
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -106,7 +96,6 @@ endif
   Plug 'tpope/vim-bundler' " run bundler commands in Vim
   Plug 'tpope/vim-cucumber', { 'for': 'cucumber' } " fancy cucumber highlighting
   Plug 'tpope/vim-rails', { 'for': 'ruby' } " rails specific config and highlight
-
   Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' } " rspec commands and highlight
   Plug 'subbarao/vim-rubybeautifier', { 'for': 'ruby' } " ruby beautification
 " }}}
@@ -142,6 +131,14 @@ endif
   Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 " }}}
 " ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Misc {{{
+" ------------------------------------------------------------------------------
+  Plug 'tpope/vim-speeddating' " allows inc and dec of dates etc using C-a and C-x
+" }}}
+" ------------------------------------------------------------------------------
+
 
 " Add plugins to &runtimepath
 call plug#end()
