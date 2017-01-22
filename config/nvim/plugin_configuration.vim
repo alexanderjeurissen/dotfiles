@@ -61,7 +61,7 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-sneak')
   let g:sneak#label = 1
-  let g:sneak#target_labels = "aoeuhtnsid',.pygcrl12345890[]"
+  let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
 
   "fix sneak highlighting
   autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234

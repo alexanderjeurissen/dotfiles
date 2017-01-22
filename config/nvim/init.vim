@@ -282,7 +282,9 @@ augroup vimrcEx
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.md set filetype=markdown
-  autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+  autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
+  autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=2
+  autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=2
 
   " Enable spellchecking for Markdown and git commit
   " autocmd FileType markdown setlocal spell
@@ -312,7 +314,7 @@ augroup vimrcEx
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
   " set foldmethod for vim files
-  autocmd FileType vim set foldmethod=marker
+  autocmd FileType vim setl foldmethod=marker
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
@@ -395,7 +397,6 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
 autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
 
-nmap - <Plug>VinegarUp
 " ==============================================================================
 " Include local vim config {{{
 " ==============================================================================
