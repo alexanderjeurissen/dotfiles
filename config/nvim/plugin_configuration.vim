@@ -722,8 +722,25 @@ if has_key(g:plugs, 'onehalf')
     silent exec ':AirlineTheme onehalfdark'
     hi! link Search PMenu
     hi! link IncSearch PMenuSel
-    hi! IndentGuidesOdd  guibg=#444444 ctermbg=237
-    hi! IndentGuidesEven guibg=#303030 ctermbg=238
+    " hi! IndentGuidesOdd  guibg=#3F3F3F ctermbg=236
+    " hi! IndentGuidesEven guibg=#383838 ctermbg=235
+  endfunc
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" NLKNguyen/papercolor-theme {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'papercolor-theme')
+  func! ActivateColorScheme()
+    colorscheme PaperColor
+    set background=light
+    silent exec ':AirlineTheme papercolor'
+    hi! link Search PMenu
+    hi! link IncSearch PMenuSel
+    " hi! IndentGuidesOdd  guibg=#3F3F3F ctermbg=236
+    " hi! IndentGuidesEven guibg=#383838 ctermbg=235
   endfunc
 endif
 " }}}
@@ -733,8 +750,9 @@ endif
 " nathanaelkane/vim-indent-guides {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-indent-guides')
-    let g:indent_guides_auto_colors = 0
-    " let g:indent_guides_color_change_percent = 5
+    let g:indent_guides_auto_colors = 1
+    let g:indent_guides_color_change_percent = 5
+    let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'terminal']
     let g:indent_guides_start_level = 2
     let g:indent_guides_enable_on_vim_startup = 1
   endif

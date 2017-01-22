@@ -1,18 +1,3 @@
-
-     " E      888                                             888                  d88b
-    " d8b     888  e88~~8e  Y88b  /    /~~~8e  888-~88e  e88~\888  e88~~8e  888-~\ Y88P  d88~\
-   " /Y88b    888 d888  88b  Y88b/         88b 888  888 d888  888 d888  88b 888    __/  C888
-  " /  Y88b   888 8888__888   Y88b    e88~-888 888  888 8888  888 8888__888 888          Y88b
-"  /____Y88b  888 Y888    ,   /Y88b  C888  888 888  888 Y888  888 Y888    , 888           888D
-" /      Y88b 888  '88___/   /  Y88b  `88_-888 888  888  '88_/888  "88___/  888         \_88P
-
-" Y88b      / ,e,
-"  Y88b    /   "  888-~88e-~88e 888-~\  e88~~\
-  " Y88b  /   888 888  888  888 888    d888
-   " Y888/    888 888  888  888 888    8888
-    " Y8/     888 888  888  888 888    Y888
-     " Y      888 888  888  888 888     "88__/
-
 " ==============================================================================
 " General settings {{{
 " ============================================================================
@@ -375,10 +360,11 @@ fun! WriteSession()
   let extension = ".session"
   let fname = cwd . "_" . dateStamp . extension
 
-  silent exe ":SaveSession " . fname
+  silent exe ":mksession " . fname
   echo "Wrote " . fname
 endfun
 
+"FIXME: output is borked.
 function! s:ArcLint(args)
     let olderrorformat = &errorformat
     let oldmakeprg = &makeprg
@@ -408,8 +394,10 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
 
 autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
+
+nmap - <Plug>VinegarUp
 " ==============================================================================
-" Include user's local vim config {{{
+" Include local vim config {{{
 " ==============================================================================
   if filereadable(expand("~/.nvimrc.local"))
     source ~/.nvimrc.local
