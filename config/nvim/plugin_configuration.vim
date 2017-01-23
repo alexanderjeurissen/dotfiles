@@ -893,8 +893,9 @@ if has_key(g:plugs, 'vim-airline')
   let g:airline_right_sep         = ''
   let g:airline_right_alt_sep     = ''
   let g:airline_symbols.maxlinenr = '☰'
-
   let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+  let g:airline_section_y = airline#section#create(["%{ObsessionStatus('', '')}"])
+
 
   " extensions {
     let g:airline#extensions#branch#format = 2
