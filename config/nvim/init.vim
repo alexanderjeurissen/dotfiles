@@ -358,11 +358,11 @@ endfunction
 " save session
 fun! WriteSession()
   let cwd = fnamemodify('.', ':p:h:t')
-  let dateStamp = strftime("%d-%m-%Y_%H:%M")
+  " let dateStamp = strftime("%d-%m-%Y_%H:%M")
   let extension = ".session"
-  let fname = cwd . "_" . dateStamp . extension
-
-  silent exe ":mksession " . fname
+  " let fname = cwd . "_" . dateStamp . extension
+  let fname = cwd . extension
+  silent exe ":Obsession " . fname
   echo "Wrote " . fname
 endfun
 
