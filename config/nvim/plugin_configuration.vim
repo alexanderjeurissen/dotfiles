@@ -990,8 +990,8 @@ if has_key(g:plugs, 'vim-ctrlspace')
    \"Tabs": " TABS",
    \"Sin": " HOME",
    \"Help": " HELP",
-   \"SLeft": "",
-   \"SRight": " SEARCH ",
+   \"SLeft": " : ",
+   \"SRight": "",
    \"BM": " BOOKMARKS",
    \"Vis": " visible",
    \"IV": " invisible"
