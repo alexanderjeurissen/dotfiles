@@ -722,6 +722,7 @@ if has_key(g:plugs, 'onehalf')
     silent exec ':AirlineTheme onehalfdark'
     hi! link Search PMenu
     hi! link IncSearch PMenuSel
+    hi! link Folded Visual
     " hi! IndentGuidesOdd  guibg=#3F3F3F ctermbg=236
     " hi! IndentGuidesEven guibg=#383838 ctermbg=235
   endfunc
