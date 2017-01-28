@@ -28,3 +28,6 @@ swoopBuf
 .tern-port
 # apple temp files
 .DS_Store
+
+# vim sessions
+*.session
