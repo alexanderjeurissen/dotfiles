@@ -283,8 +283,9 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.md set filetype=markdown
   autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
-  autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=2
-  autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=2
+  autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
+  autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=1
+  autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=1
 
   " Enable spellchecking for Markdown and git commit
   " autocmd FileType markdown setlocal spell
