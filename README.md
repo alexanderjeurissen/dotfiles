@@ -7,4 +7,4 @@ Feel free to use the scripts in this repository to fine tune your own dotfiles. 
 2. A lightweight alternative wrapper for tmux-powerline segments. only the ones I use (and some I made myself) are included
    but it should be quite easy to add additional ones.
    
-<img src="http://imgur.com/a/9GYA4"></img>
+<img src="http://i.imgur.com/cVkxLoe.png"></img>
