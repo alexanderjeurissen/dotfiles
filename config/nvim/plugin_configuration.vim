@@ -566,12 +566,28 @@ endif
 if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
+  let g:deoplete#disable_auto_complete = 1 "disable auto autocompletion
+
+  " try to autocomplete with C-e
+  inoremap <silent><expr><C-e> deoplete#mappings#manual_complete()
 
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" SirVer/ultisnips {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'ultisnips')
+  inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 endif
 " }}}
 " ------------------------------------------------------------------------------
