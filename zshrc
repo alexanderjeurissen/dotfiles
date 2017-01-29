@@ -90,13 +90,13 @@ fi
 
 # Aliases for TaskWarrior {{{
   alias t="task"
-  alias in='task add +in'
+  alias todo='task add +in'
 
   # TICKLER file, defer items etc.
   tickle() {
       deadline=$1
       shift
-      in +tickle wait:$deadline $@
+      todo +tickle wait:$deadline $@
   }
 
   alias tick=tickle
@@ -121,21 +121,6 @@ fi
 # Aliases for Arcanist {{{
   alias diffb="arc diff --browse"
   alias diffu="arc diff --no-unit --excuse \"jenkins\" --verbatim"
-
-  nextacc() {
-    next_task=`arc list | grep 'Accepted' | egrep -o 'D\d+' | tail -1`
-    echo $next_task | pbcopy
-  }
-
-  nextrev() {
-    next_task=`arc list | grep 'Needs Review' | egrep -o 'D\d+' | tail -1`
-    echo $next_task | pbcopy
-  }
-
-  nextreq() {
-    next_task=`arc list | grep 'Needs Revision' | egrep -o 'D\d+' | tail -1`
-    echo $next_task | pbcopy
-  }
 
   nexttask() {
     next_task=`arc task | egrep -o 'T\d+' | head -1`
@@ -168,36 +153,6 @@ fi
 
     arc browse $chosen_diff
   }
-
-  land() {
-    diffs=`arc list | grep 'Accepted' | egrep -o 'D\d+: .*'`
-
-    if [ -z $diffs ]; then
-      echo "no diffs available for landing"
-      return 1
-    fi
-
-    chosen_diff=`echo $diffs | fzf | egrep -o 'D\d{5}'`
-
-    if [ -z $chosen_diff ]; then
-      echo "operation cancelled"
-      return 1
-    fi
-
-    stash # stash current working directory
-    # TODO: add item to todolist to continue working on the just stashed changes
-    gco develop
-    arc patch $chosen_diff
-
-    # confirm landing this patch
-    read -p "Continue with landing (y/n)?" choice
-    case "$choice" in
-      y|Y ) arc land $chosen_diff;;
-      n|N ) echo "operation cancelled";;
-      * ) echo "invalid choice, please provide (y/n)";;
-    esac
-  }
-
 # }}}
 
 # Aliases for directories {{{
@@ -248,7 +203,7 @@ zplug load
   source ~/.gitaliases
   alias changedfiles= "git diff --name-only | uniq | xargs nvim"
   alias removeArtefacts="git stash -u && git stash drop"
-  alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
+  # alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
 # }}}
 
 # History options {{{
@@ -289,7 +244,12 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
 # Fzf functions {{{
   # fbr - checkout git branch (including remote branches)
   __fzf_branch() {
-    local cmd="arcbranchansi"
+    local cmd='git branch'
+
+    if which arc > /dev/null; then
+      cmd="arcbranchansi"
+    fi
+
     setopt localoptions pipefail 2> /dev/null
     eval "$cmd" | FZF_DEFAULT_OPTS="--ansi --height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
       echo -n "${(q)item} " | cut -d'\' -f1
