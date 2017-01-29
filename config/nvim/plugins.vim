@@ -71,6 +71,7 @@ endif
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
   Plug 'terryma/vim-expand-region' " allow expanding visual selection region
   Plug 'tpope/vim-sleuth' " smart indent width based on buffer and neigbouring files
+  Plug 'godlygeek/tabular' " re-allignment of text
 " }}}
 " ------------------------------------------------------------------------------
 
