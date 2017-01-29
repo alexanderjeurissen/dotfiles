@@ -112,20 +112,21 @@ autocmd BufReadPost *
 "open help in a new ventical split instead of vimbuffer
 cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'vert help' : 'h'
 
-" change cursor shapes according to current mode
+" change cursor shapes according to current mode {{{
 " only works in iTerm. tmux optional.
 " see http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
-if !empty($TMUX)
-  " inside a tmux session
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  " not inside a tmux session
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+  if !empty($TMUX)
+    " inside a tmux session
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  else
+    " not inside a tmux session
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  endif
+" }}}
 
 let python3_host_prog = "python3"
 let python_host_prog = "python"
@@ -185,13 +186,14 @@ noremap <Leader>t :tabnew<CR>
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
 
-" custom comma motion mapping
-nnoremap di, f,dT,
-nnoremap ci, f,cT,
-nnoremap da, f,ld2F,i,<ESC>l "delete argument
-nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
+" custom comma motion mapping {{{
+  nnoremap di, f,dT,
+  nnoremap ci, f,cT,
+  nnoremap da, f,ld2F,i,<ESC>l "delete argument
+  nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
+" }}}
 
-"Replace mappings
+"FIXME: Replace mappings
 nnoremap <leader>rl 0:s/
 nnoremap <leader>rp {ma}mb:'a,'bs/
 
@@ -208,12 +210,13 @@ nnoremap go o<ESC>k
 " go to create a new line above cursor
 nnoremap gO O<ESC>j
 
-" I really hate that things don't auto-center
-nnoremap G Gzz
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap } }zz
-nnoremap { {zz
+" I really hate that things don't auto-center {{{
+  nnoremap G Gzz
+  nnoremap n nzz
+  nnoremap N Nzz
+  nnoremap } }zz
+  nnoremap { {zz
+" }}}
 
 " open tag in new tab with <C-\>
 noremap <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
@@ -242,6 +245,10 @@ command! PasteCode call s:PasteCode()
 
 " Paste and keep pasting same thing, don't take what was removed
 vnoremap <Leader>p "_dP
+
+" keep selection after indent
+vnoremap < <gv
+vnoremap > >gv
 
 " Go to previous and next item in quickfix list
 noremap <leader>cn :cnext<CR>
@@ -282,14 +289,10 @@ augroup vimrcEx
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.md set filetype=markdown
-  autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
-  autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
-  autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=1
-  autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=1
 
   " Enable spellchecking for Markdown and git commit
-  " autocmd FileType markdown setlocal spell
-  " autocmd FileType gitcommit setlocal spell
+  autocmd FileType markdown setlocal spell
+  autocmd FileType gitcommit setlocal spell
 
   " Add html highlighting when editing rails views & handlebar templates
   autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
@@ -307,15 +310,23 @@ augroup vimrcEx
   " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
-  " Enable omni completion.
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  " Enable omni completion {{{
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  " }}}
 
-  " set foldmethod for vim files
-  autocmd FileType vim setl foldmethod=marker
+  " Fold settings {{{
+    autocmd FileType vim setl foldmethod=marker
+    autocmd FileType zsh setl foldmethod=marker
+    autocmd FileType sh setl foldmethod=marker
+    autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
+    autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
+    autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=1
+    autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=1
+  " }}}
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
