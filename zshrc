@@ -7,7 +7,18 @@ fi
 # prompt {{{
   autoload -U promptinit && promptinit
   prompt pure
-# # }}}
+# }}}
+
+# ZSH highlighting settings {{{
+  ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor root line)
+  ZSH_HIGHLIGHT_PATTERNS+=('Closed' 'fg=cyan,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('Needs Review' 'fg=magenta,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('Needs Revision' 'fg=red,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('Accepted' 'fg=green,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('No Revision' 'fg=blue,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('Abandoned' 'fg=default,bold,bg=default')
+  ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+# }}}
 
 # Vi mode {{{
   bindkey -v
@@ -15,13 +26,31 @@ fi
 # }}}
 
 # completions {{{
+  zmodload zsh/complist
   autoload -U compinit && compinit
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+  # use the tag name as group name
+  zstyle ':completion:*' group-name ''
+  # format all messages not formatted in bold prefixed with ----
+  zstyle ':completion:*' format '%B---- %d%b'
+  # format descriptions (notice the vt100 escapes)
+  zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+  # bold and underline normal messages
+  zstyle ':completion:*:messages' format '%B%U---- %d%u%b'
+  # format in bold red error messages
+  zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white]%d%b"
+  # activate menu selection
+  zstyle ':completion:*' menu select
+  # activate approximate completion, but only after regular completion (_complete)
+  zstyle ':completion:::::' completer _complete _approximate
+  # limit to 2 errors
+  zstyle ':completion:*:approximate:*' max-errors 2
 # }}}
 
 # Zplug plugin definitions {{{
-  # source ~/.zplug/init.zsh
-  # zplug "zsh-users/zsh-syntax-highlighting", nice:10
+  source ~/.zplug/init.zsh
+  zplug "zsh-users/zsh-syntax-highlighting", nice:10
+  zplug "zsh-users/zsh-completions"
 # }}}
 
 # aliasses {{{
@@ -91,6 +120,84 @@ fi
 
 # Aliases for Arcanist {{{
   alias diffb="arc diff --browse"
+  alias diffu="arc diff --no-unit --excuse \"jenkins\" --verbatim"
+
+  nextacc() {
+    next_task=`arc list | grep 'Accepted' | egrep -o 'D\d+' | tail -1`
+    echo $next_task | pbcopy
+  }
+
+  nextrev() {
+    next_task=`arc list | grep 'Needs Review' | egrep -o 'D\d+' | tail -1`
+    echo $next_task | pbcopy
+  }
+
+  nextreq() {
+    next_task=`arc list | grep 'Needs Revision' | egrep -o 'D\d+' | tail -1`
+    echo $next_task | pbcopy
+  }
+
+  nexttask() {
+    next_task=`arc task | egrep -o 'T\d+' | head -1`
+    echo $next_task | pbcopy
+    arc browse $next_task
+  }
+
+  browse() {
+    case $1 in
+      diffs)
+        objects=`arc list`
+        [ -z $objects ] && return 1
+        chosen_object=`echo $objects | fzf | egrep -o 'D\d{5}'`
+        ;;
+
+      tasks)
+        objects=`arc tasks`
+        [ -z $objects ] && return 1
+        chosen_object=`echo $objects | fzf | egrep -o 'T\d{5}'`
+        ;;
+      *)
+        echo "Usage: $0 {diffs|tasks}"
+        return 1
+    esac
+
+    if [ -z $chosen_object ]; then
+      echo "operation cancelled"
+      return 1
+    fi
+
+    arc browse $chosen_diff
+  }
+
+  land() {
+    diffs=`arc list | grep 'Accepted' | egrep -o 'D\d+: .*'`
+
+    if [ -z $diffs ]; then
+      echo "no diffs available for landing"
+      return 1
+    fi
+
+    chosen_diff=`echo $diffs | fzf | egrep -o 'D\d{5}'`
+
+    if [ -z $chosen_diff ]; then
+      echo "operation cancelled"
+      return 1
+    fi
+
+    stash # stash current working directory
+    # TODO: add item to todolist to continue working on the just stashed changes
+    gco develop
+    arc patch $chosen_diff
+
+    # confirm landing this patch
+    read -p "Continue with landing (y/n)?" choice
+    case "$choice" in
+      y|Y ) arc land $chosen_diff;;
+      n|N ) echo "operation cancelled";;
+      * ) echo "invalid choice, please provide (y/n)";;
+    esac
+  }
+
 # }}}
 
 # Aliases for directories {{{
@@ -123,16 +230,15 @@ export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 # zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
-# if ! zplug check --verbose; then
-#     printf "Install? [y/N]: "
-#     if read -q; then
-#         echo; zplug install
-#     fi
-# fi
-# # }}}
-#
-# # Then, source plugins and add commands to $PATH
-# zplug load
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+# }}}
+# Then, source plugins and add commands to $PATH
+zplug load
 
 # Gruvbox 256 colors support OSX
 # source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
@@ -182,19 +288,25 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
 
 # Fzf functions {{{
   # fbr - checkout git branch (including remote branches)
-  branch() {
-    local branches branch
-    branches=$(git branch --all | grep -v HEAD) &&
-    branch=$(echo "$branches" |
-             fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m)
-    echo -n $branch
+  __fzf_branch() {
+    local cmd="arcbranchansi"
+    setopt localoptions pipefail 2> /dev/null
+    eval "$cmd" | FZF_DEFAULT_OPTS="--ansi --height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
+      echo -n "${(q)item} " | cut -d'\' -f1
+    done
     local ret=$?
     echo
     return $ret
   }
 
-  zle     -N   branch
-  bindkey '^B' branch
+  branch-widget() {
+    LBUFFER="${LBUFFER}$(__fzf_branch)"
+    local ret=$?
+    zle redisplay
+    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    return $ret
+  }
+  zle     -N   branch-widget
+  bindkey '^B' branch-widget
 # }}}
-
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
