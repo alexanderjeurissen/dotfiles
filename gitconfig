@@ -5,10 +5,12 @@
   tool = vim-diff-tool
 [difftool "vim-diff-tool"]
   cmd= nvim -d $REMOTE $LOCAL
+[difftool]
+  prompt = false
 [pager]
   diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
- ui = auto
+  ui = auto
 [alias]
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative
   lgo = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --date=relative
@@ -46,8 +48,10 @@
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
 
 [merge]
-  tool = diffconflicts
+  tool = vimdiff
   conflictstyle = diff3
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 # vim: set et :
 [credential]
@@ -60,11 +64,3 @@
   pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
-[difftool]
-  prompt = false
-# [url "git@github.com:"]
-#   insteadOf = "https://github.com/"
-[mergetool "diffconflicts"]
-  cmd = diffconflicts nvim $BASE $LOCAL $REMOTE $MERGED
-  trustExitCode = true
-  keepBackup = false
