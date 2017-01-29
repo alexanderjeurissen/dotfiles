@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ "$1" == "" ]; then
+    echo "Usage: hl PATTERN [COLOR]..."
+elif [ "$2" == "" ]; then
+    perl -pe "s:$1:\033[31;1m$&\033[30;0m:g" /dev/stdin
+else
+    perl -pe "s:$1:\033[3$2;1m$&\033[30;0m:g" /dev/stdin
+fi
