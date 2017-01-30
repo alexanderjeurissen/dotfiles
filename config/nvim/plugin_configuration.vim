@@ -139,6 +139,12 @@ if has_key(g:plugs, 'vim-rails')
     \"spec/integration/controllers/*_spec.rb": {
     \  "alternate": ["app/controllers/%s.rb"],
     \},
+    \"app/mailers/*.rb": {
+    \  "alternate": ["spec/integration/mailers/%s_spec.rb"],
+    \},
+    \"spec/integration/mailers/*_spec.rb": {
+    \  "alternate": ["app/mailers/%s.rb"],
+    \},
     \"app/backend/*.rb": {
     \  "alternate": ["spec/integration/backend/%s_spec.rb"],
     \},
@@ -566,8 +572,8 @@ endif
 if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
-  let g:deoplete#disable_auto_complete = 1 "disable auto autocompletion
-
+  let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
+  call deoplete#custom#set('ultisnips', 'rank', 1000)
   " try to autocomplete with C-e
   inoremap <silent><expr><C-e> deoplete#mappings#manual_complete()
 
@@ -584,7 +590,7 @@ endif
 " SirVer/ultisnips {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'ultisnips')
-  inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+  imap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<tab>"
   let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
