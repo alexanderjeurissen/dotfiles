@@ -31,6 +31,7 @@ endif
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   " Plug 'fishbullet/deoplete-ruby'
   Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
 " }}}
 " ------------------------------------------------------------------------------
 
