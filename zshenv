@@ -3,7 +3,6 @@ export ENABLE_SPRING=1
 export DEFAULT_USER=$USER
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
 
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
