@@ -59,8 +59,6 @@ fi
   alias up="git up && bundle && yarn && bin/rake db:migrate"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
-  alias spec="bin/rspec"
-  alias cuke="bin/cucumber"
   alias console="bin/rails console"
   alias commit="git add -A && git commit"
   alias migrations="g up && bin/rake db:migrate"
@@ -133,13 +131,13 @@ fi
       diffs)
         objects=`arc list`
         [ -z $objects ] && return 1
-        chosen_object=`echo $objects | fzf | egrep -o 'D\d{5}'`
+        chosen_object=`echo $objects | fzf | egrep -o 'D\d+'`
         ;;
 
       tasks)
         objects=`arc tasks`
         [ -z $objects ] && return 1
-        chosen_object=`echo $objects | fzf | egrep -o 'T\d{5}'`
+        chosen_object=`echo $objects | fzf | egrep -o 'T\d+'`
         ;;
       *)
         echo "Usage: $0 {diffs|tasks}"
@@ -151,7 +149,14 @@ fi
       return 1
     fi
 
-    arc browse $chosen_diff
+    arc browse "${chosen_diff}"
+  }
+
+  # Cherrypick diff by applying it without commit and no branch
+  # Then commit it with message: "Patch <diff-id> (TODO: remove this commit before landing)
+  cherrypick() {
+    arc patch --nocommit --nobranch "${1}"
+    git commit -a -m "Patch ${1} (TODO: remove this commit before landing)"
   }
 # }}}
 
@@ -270,3 +275,5 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
   bindkey '^B' branch-widget
 # }}}
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+source "$HOME/Development/arcanist/resources/shell/bash-completion"
+export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
