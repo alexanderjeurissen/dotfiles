@@ -9,6 +9,18 @@ fi
   prompt pure
 # }}}
 
+# general functions {{{
+  silent_source() {
+    path="$1"
+
+    [ -n "$path" ] && return 1
+
+    if [ -f "$path" ]; then
+      source "$path"
+    fi
+  }
+# }}}
+
 # ZSH highlighting settings {{{
   ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor root line)
   ZSH_HIGHLIGHT_PATTERNS+=('Closed' 'fg=cyan,bold,bg=default')
@@ -275,5 +287,6 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
   bindkey '^B' branch-widget
 # }}}
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
-source "$HOME/Development/arcanist/resources/shell/bash-completion"
-export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
+
+$(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
+export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
