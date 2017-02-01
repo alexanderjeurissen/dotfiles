@@ -100,16 +100,64 @@ fi
 
 # Aliases for TaskWarrior {{{
   alias t="task"
-  alias todo='task add +in'
+  alias in='task add +in'
 
-  # TICKLER file, defer items etc.
-  tickle() {
-      deadline=$1
+  # TICKLER file, snooze inbox items {{{
+    tickle() {
+        local deadline=$1
+        shift
+        in +tickle wait:$deadline $@
+    }
+    alias tick=tickle
+  # }}}
+
+  # Waiting for/ delegate items {{{
+    waiting_for() {
+      local task_nr=$1
       shift
-      todo +tickle wait:$deadline $@
-  }
+      task modify $task_nr -inbox +waiting $@
+    }
+    alias delegate=waiting_for
+  # }}}
 
-  alias tick=tickle
+  # Defer tasks {{{
+    defer() {
+      local task_nr=$1
+      local deadline=$2
+      task modify $task_nr +defered # add defered tag
+      shift 2
+      task $task_nr annotate wait:$deadline "DEFER REASON: $@" # add annotation
+    }
+  # }}}
+
+  # New project {{{
+    tnewproj() {
+      local project_name=$1
+      shift
+      task add +next pro:$project_name "$@" # add next action and create project
+    }
+  # }}}
+
+  # Research {{{
+    alias research='task add +research +next +@computer +@online'
+  # }}}
+
+  # Read and review {{{
+    webpage_title (){
+        wget -qO- "$*" | hxselect -s '\n' -c  'title' 2>/dev/null
+    }
+
+    read_and_review (){
+      local link="$1"
+      local title=$(webpage_title $link)
+      echo $title
+      local descr="\"Read and review: $title\""
+      local id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
+      task "$id" annotate "$link"
+    }
+
+    alias rnr=read_and_review
+  # }}}
 
   # Think something over ? like yes/no ? think alias!!
   alias think='tickle +1d'
