@@ -31,3 +31,7 @@ swoopBuf
 
 # vim sessions
 *.session
+
+# Intheam config files
+*.pem
+.intheam/*
