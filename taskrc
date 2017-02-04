@@ -39,10 +39,17 @@ uda.brainpower.default=M
 
 # Next report
 # report.next.description     = Most urgent tasks
-# report.next.columns         = id, started, age, Urgency, depends, priority, project,tags, recur, scheduled.countdown, due.remaining, until.remaining, description, brainpower
+# report.next.columns         = id, start.age, entry.age, urgency, depends, priority, project,tags, recur, scheduled.countdown, due.remaining, until.remaining, description, brainpower
 # report.next.filter          = status:pending and +next
 # report.next.labels          = ID,Active,Age,Urgency,Deps,P,Project,Tag,Recur,S,Due,Until,Description,Brainpower
 # report.next.sort            = brainpower-,priority-,urgency-
+
+taskd.certificate=~/.intheam/private.certificate.pem
+taskd.key=~/.intheam/private.key.pem
+taskd.ca=~/.intheam/ca.cert.pem
+taskd.server=taskwarrior.inthe.am:53589
+taskd.credentials=inthe_am/alexanderjeurissen/b2b697c1-772b-4058-af65-7fcebd0024da
+taskd.trust=ignore hostname
 
 # Color theme (uncomment one to use)
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/light-16.theme
