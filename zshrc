@@ -19,6 +19,16 @@ fi
       source "$path"
     fi
   }
+
+  # Run command n-times
+  # http://serverfault.com/questions/273238/how-to-run-a-command-multiple-times
+  times() {
+    number=$1
+    shift
+    for i in `seq $number`; do
+      $@
+    done
+  }
 # }}}
 
 # ZSH highlighting settings {{{
@@ -72,30 +82,29 @@ fi
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
-  alias commit="git add -A && git commit"
   alias migrations="g up && bin/rake db:migrate"
-  alias rails="bin/rails"
   alias r="bin/rails"
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
-  alias bower="noglob bower"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
   alias showDriveUsage='sudo lsof'
-  alias gcc='gcc-5'
-  alias c++='c++-5'
+  # alias gcc='gcc-5'
+  # alias c++='c++-5'
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
   alias kn='kak -d -s "${$(basename `PWD`)//./}"'
-  alias attach='tmux attach -t'
-  alias findP='ps -ef | grep -v grep | grep '
-  alias proselint='PYTHONIOENCODING=utf8 proselint'
-  alias applypatch='git am --signoff <'
+  alias attach="tmux attach -t"
+  alias findP="ps -ef | grep -v grep | grep "
+  alias proselint="PYTHONIOENCODING=utf8 proselint"
+  alias applypatch="git am --signoff <"
+  alias reload_profile="source ~/.zshrc"
 # }}}
 
 # Alias for hackerij {{{
   alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
   alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080"
   alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
+  alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
 #}}}
 
 # Aliases for TaskWarrior {{{
@@ -174,6 +183,15 @@ fi
   alias vi='nvim'
   alias v='nvim'
   alias vim='nvim'
+
+  alias -s php=$EDITOR
+  alias -s rb=$EDITOR
+  alias -s txt=$EDITOR
+  alias -s py=$EDITOR
+  alias -s sh=$EDITOR
+  alias -s md=$EDITOR
+  alias -s vim=$EDITOR
+  alias -s java=$EDITOR
 # }}}
 
 # Aliases for Arcanist {{{
@@ -226,10 +244,16 @@ fi
   alias dotfiles="cd ~/.dotfiles/"
 # }}}
 
-alias psql_rails='postgres -U alexanderjeurissen -p 3100 -h localhost -d postgres'
+# Aliases for foreman and psql {{{
+  alias psql_rails='psql -U alexanderjeurissen -p 3100 -h localhost -d postgres'
+  alias startServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1,payments_dev=1,payments_test=1,sidekiq=1"
+  alias startBackend="rails s"
+  alias startFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1"
+  alias startAll="startServices && startBackend && startFrontend"
+# }}}
 
 # Alias for clearing the screen
-alias clearScreen="clear && printf '\e[3J'"
+alias clearTmux="clear && printf '\e[3J'"
 
 # set nvim as defaut editor
 export EDITOR="nvim"
@@ -262,7 +286,7 @@ zplug load
 
 # Gruvbox 256 colors support OSX
 # source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette.sh"
+source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
 
 # git aliases {{{
   source ~/.gitaliases
@@ -333,6 +357,35 @@ it2prof() { echo -e "\033]50;SetProfile=$1\a" }
   }
   zle     -N   branch-widget
   bindkey '^B' branch-widget
+
+  __fzf_tasks() {
+    if ! which arc > /dev/null; then
+      return 1
+    fi
+
+    local cmd="arctasksansi"
+
+    setopt localoptions pipefail 2> /dev/null
+    eval "$cmd" | FZF_DEFAULT_OPTS="--ansi --height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
+      echo -n "${(q)item} " | cut -d'\' -f1
+    done
+    local ret=$?
+    echo
+    return $ret
+  }
+
+  tasks-widget() {
+    LBUFFER="${LBUFFER}$(__fzf_tasks)"
+    local ret=$?
+    zle redisplay
+    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    return $ret
+  }
+
+  bindkey '^F' fzf-file-widget # use ^F for file completion insetad of ^T which I use for tasks
+  zle     -N   tasks-widget
+  bindkey '^T' tasks-widget
+
 # }}}
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 

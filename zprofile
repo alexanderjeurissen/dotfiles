@@ -5,4 +5,3 @@ if which rbenv > /dev/null; then eval "$(rbenv init - --no-rehash)"; fi
 
 export NVM_DIR=~/.nvm
 . $(brew --prefix nvm)/nvm.sh
-export PATH="$HOME/.yarn/bin:$PATH"
