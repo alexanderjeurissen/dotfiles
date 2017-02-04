@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+lines=$(cat /dev/stdin)
+for line in $lines;
+do
+  ping -c 1 -t 1 -W 0.1 -s 5 $line > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    echo "$line"
+  fi
+done
