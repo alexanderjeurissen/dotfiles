@@ -33,7 +33,7 @@ __get_task_number() {
   cd "$tmux_path"
   local task_number=`git rev-parse --abbrev-ref HEAD | egrep -o 'T\d+'`
 
-  if [ -n $task_number ]; then
+  if [[ -n $task_number ]]; then
     echo "  $task_number"
   fi
 }
