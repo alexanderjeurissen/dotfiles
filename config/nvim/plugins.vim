@@ -38,11 +38,12 @@ endif
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  Plug 'morhetz/gruvbox'
+  " Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'NLKNguyen/papercolor-theme'
   " Plug 'vim-airline/vim-airline-themes'
   " Plug 'sonph/onehalf', {'rtp': 'vim/'}
+  Plug '~/git/opensource/vim-gotham/'
   " Plug 'zefei/vim-colortuner'
 " }}}
 " ------------------------------------------------------------------------------
