@@ -137,6 +137,7 @@ let python_host_prog = "python"
 if (has("termguicolors"))
   if(has("nvim"))
     set termguicolors
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
   endif
@@ -152,9 +153,6 @@ endif
 command! WQ wq
 command! Wq wq
 
-"w!! to save file with sudo
-cmap w!! w !sudo tee % > /dev/null
-
 command! W w
 command! WW w
 
@@ -162,6 +160,12 @@ command! Q q
 
 command! QA qa
 command! Qa qa
+
+"w!! to save file with sudo
+cmap w!! w !sudo tee % > /dev/null
+
+"E to Explore
+command! E Explore
 
 " Execute macro under key `a` for all buffers and write afterwards
 command! Bufmacro bufdo execute "normal @a" | write
@@ -269,6 +273,8 @@ nnoremap <leader>feR :source $MYVIMRC<CR>
 " Rename current file with <leader>fr
 noremap <leader>fr :call RenameFile()<CR>
 
+" Get a vimdiff of all approvals
+map <leader>v :!approvals verify -d vimdiff -a<cr>
 " }}}
 " ==============================================================================
 
@@ -330,6 +336,9 @@ augroup vimrcEx
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
+
+  " make q exit netrw
+  autocmd FileType netrw nmap Q <C-^>
 augroup END
 " }}}
 " ==============================================================================

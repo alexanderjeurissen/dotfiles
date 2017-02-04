@@ -572,7 +572,8 @@ endif
 if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
-  let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
+  let g:deoplete#disable_auto_complete = 1 "disable auto autocompletion
+  let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
   call deoplete#custom#set('ultisnips', 'rank', 1000)
   " try to autocomplete with C-e
   inoremap <silent><expr><C-e> deoplete#mappings#manual_complete()
@@ -608,10 +609,10 @@ if has_key(g:plugs, 'gruvbox')
     let g:gruvbox_contrast_dark='hard'
     colorscheme gruvbox
     set background=dark
-
+    silent exec ':AirlineTheme gruvbox'
     " Color overides
     let g:indentLine_color_term = 239
-    hi! Statusline ctermfg=002 ctermbg=000
+    " hi! Statusline ctermfg=002 ctermbg=000
 
     " Transparant background
     " hi! Normal ctermbg=NONE guibg=NONE
