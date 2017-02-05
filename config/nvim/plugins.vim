@@ -38,12 +38,12 @@ endif
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  " Plug 'morhetz/gruvbox'
+  Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'NLKNguyen/papercolor-theme'
   " Plug 'vim-airline/vim-airline-themes'
   " Plug 'sonph/onehalf', {'rtp': 'vim/'}
-  Plug '~/git/opensource/vim-gotham/'
+  " Plug '~/git/opensource/vim-gotham/'
   " Plug 'zefei/vim-colortuner'
 " }}}
 " ------------------------------------------------------------------------------
@@ -87,7 +87,6 @@ endif
   Plug 'airblade/vim-rooter' " change vim root to vcs root when editing a file
   Plug 'mhinz/vim-signify' " Adds signs in the gutter to indicate vcs changes
   Plug 'christoomey/vim-tmux-navigator' " easy navigation between tmux and vim splits
-  Plug 'eugen0329/vim-esearch' " project wide search and replace
   Plug 'tpope/vim-unimpaired' " pairs of handy bracket mappings like [f and ]f for file switching
   Plug 'thinca/vim-visualstar' " allows to use the * motion in visual mode
   Plug 'tpope/vim-vinegar' " improve default ntrw file explorer

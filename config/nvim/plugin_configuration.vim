@@ -572,11 +572,10 @@ endif
 if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
-  let g:deoplete#disable_auto_complete = 1 "disable auto autocompletion
+  let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
   let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
+
   call deoplete#custom#set('ultisnips', 'rank', 1000)
-  " try to autocomplete with C-e
-  inoremap <silent><expr><C-e> deoplete#mappings#manual_complete()
 
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -591,10 +590,13 @@ endif
 " SirVer/ultisnips {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'ultisnips')
-  imap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:ulti_expand_or_jump_res = 0
+  let g:UltiSnipsEnableSnipMate = 1
   let g:UltiSnipsJumpForwardTrigger="<tab>"
   let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+  let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
+
+  imap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 endif
 " }}}
 " ------------------------------------------------------------------------------
