@@ -234,7 +234,7 @@ nnoremap <leader>thl :set hlsearch!<CR>
 
 " close buffer with leader-q
 " and safe & close buffer with leader-wq
-nnoremap <leader>q :bd<CR>
+nnoremap <leader>q :Bdelete<CR>
 nnoremap <leader>wq :w<CR>:bd<CR>
 
 " Tab through open buffers
@@ -336,9 +336,6 @@ augroup vimrcEx
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
-
-  " make q exit netrw
-  autocmd FileType netrw nmap Q <C-^>
 augroup END
 " }}}
 " ==============================================================================
@@ -408,8 +405,6 @@ endfunction
 " terminal settings {{{
 " ==============================================================================
   tnoremap <leader><ESC> <C-\><C-n>
-  command! -nargs=* T terminal
-  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 " }}}
 " ==============================================================================
 
