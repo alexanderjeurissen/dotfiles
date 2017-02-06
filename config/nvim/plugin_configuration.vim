@@ -91,6 +91,18 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
+" tpope/vim-vinegar {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-vinegar')
+  let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
+  no <silent> <leader>fe :Explore<CR>
+  no <silent> <leader>wv :Sexplore!<CR>:AirlineRefresh<CR>
+  no <silent> <leader>ws :Sexplore<CR>:AirlineRefresh<CR>
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " vim-ruby/vim-ruby {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-ruby')
@@ -215,6 +227,7 @@ if has_key(g:plugs, 'GoldenView.Vim')
       endfunction
     " }}}
 
+      "TODO: currently unused
       function! MaximiseCurrentWindow()
         call GoldenView#ToggleAutoResize()
         exec ":MaximizerToggle"
@@ -224,11 +237,12 @@ if has_key(g:plugs, 'GoldenView.Vim')
       " 1. quickly switch current window with the main pane and toggle back
       nmap <silent> <leader>wm <Plug>GoldenViewSwitchMain
       nmap <silent> <leader>wt <Plug>GoldenViewSwitchToggle
-      nmap <silent> <leader>wz :call MaximiseCurrentWindow()<cr>
+      nmap <silent> <leader>wz :MaximizerToggle<cr>
 
       " 2. manipulate splits
       nmap <leader>wt <C-W>T
-      nmap <leader>wd :q<CR>
+      nmap <leader>wd :Bdelete!<CR>
+      nmap <leader>wc :q<CR>
 
       " 3. toggle auto resize
       nmap <silent> <leader>tg :ToggleGoldenViewAutoResize<CR>
@@ -978,20 +992,21 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-tmux-navigator')
   let g:tmux_navigator_no_mappings = 1
-  nnoremap <silent> <leader>wh :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <leader>wj :TmuxNavigateDown<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <leader>wk :TmuxNavigateUp<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <leader>wl :TmuxNavigateRight<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <leader>wp :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
 
-  nnoremap <silent> <leader>wv :vs<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <leader>ws :split<cr>:AirlineRefresh<cr>
+  " Fix in neovim where c-h doesn't work :sadpanda:
+  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
 
-  tnoremap <silent> <leader>wh <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <leader>wj <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <leader>wk <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <leader>wl <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <leader>wp <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
+  nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <c-j> :TmuxNavigateDown<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <c-k> :TmuxNavigateUp<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <c-l> :TmuxNavigateRight<cr>:AirlineRefresh<cr>
+  nnoremap <silent> <c-p> :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
+
+  tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <c-k> <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <c-l> <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
+  tnoremap <silent> <c-p> <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
 endif
 " }}}
 " ------------------------------------------------------------------------------
