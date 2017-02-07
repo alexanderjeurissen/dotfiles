@@ -257,6 +257,12 @@ vnoremap > >gv
 " Go to previous and next item in quickfix list
 noremap <leader>cn :cnext<CR>
 noremap <leader>cp :cprev<CR>
+
+" window resizing
+nmap <left> <C-w>5<
+nmap <up> <C-w>5+
+nmap <down> <C-w>5-
+nmap <right> <C-w>5>
 " }}}
 " ==============================================================================
 
