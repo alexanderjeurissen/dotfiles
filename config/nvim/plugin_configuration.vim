@@ -96,8 +96,8 @@ endif
 if has_key(g:plugs, 'vim-vinegar')
   let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
   no <silent> <leader>fe :Explore<CR>
-  no <silent> <leader>wv :Sexplore!<CR>:AirlineRefresh<CR>
-  no <silent> <leader>ws :Sexplore<CR>:AirlineRefresh<CR>
+  no <silent> <leader>wv :Sexplore!<CR>
+  no <silent> <leader>ws :Sexplore<CR>
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -991,22 +991,36 @@ endif
 " christoomey/vim-tmux-navigator {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-tmux-navigator')
-  let g:tmux_navigator_no_mappings = 1
-
+  let g:tmux_navigator_no_mappings = 0
+  let g:tmux_navigator_save_on_switch = 1
   " Fix in neovim where c-h doesn't work :sadpanda:
-  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <BS> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
 
-  nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <c-j> :TmuxNavigateDown<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <c-k> :TmuxNavigateUp<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <c-l> :TmuxNavigateRight<cr>:AirlineRefresh<cr>
-  nnoremap <silent> <c-p> :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <c-j> :TmuxNavigateDown<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <c-k> :TmuxNavigateUp<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <c-l> :TmuxNavigateRight<cr>:AirlineRefresh<cr>
+  " nnoremap <silent> <c-p> :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
 
-  tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <c-k> <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <c-l> <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
-  tnoremap <silent> <c-p> <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
+  " tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
+  " tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
+  " tnoremap <silent> <c-k> <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
+  " tnoremap <silent> <c-l> <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
+  " tnoremap <silent> <c-p> <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
+
+  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+
+  " nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+  " nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+  " nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+  " nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+  " nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
+
+  tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr>
+  tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr>
+  tnoremap <silent> <c-k> <C-\><C-n>:TmuxNavigateUp<cr>
+  tnoremap <silent> <c-l> <C-\><C-n>:TmuxNavigateRight<cr>
+  tnoremap <silent> <c-\> <C-\><C-n>:TmuxNavigatePrevious<cr>
 endif
 " }}}
 " ------------------------------------------------------------------------------
