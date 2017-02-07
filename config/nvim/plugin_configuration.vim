@@ -95,9 +95,14 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-vinegar')
   let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
-  no <silent> <leader>fe :Explore<CR>
-  no <silent> <leader>wv :Sexplore!<CR>
-  no <silent> <leader>ws :Sexplore<CR>
+  " TODO: evaluate if we actually need this with `-` quick netrw access
+  " no <silent> <leader>wv :Sexplore!<CR>
+  " no <silent> <leader>ws :Sexplore<CR>
+  no <silent> <leader>wv <C-w>v
+  no <silent> <leader>ws <C-w>s
+
+  " Esc exits netrw and goes back to alternate buffer
+  autocmd Filetype netrw no <buffer> <silent> <Esc> <c-^>
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -774,9 +779,40 @@ endif
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'vim-gotham')
     func! ActivateColorScheme()
-      colorscheme gotham
+      colorscheme gotham256
       set background=dark
       silent exec ':AirlineTheme gotham'
+    endfunc
+  endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" mswift42/vim-themes {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-themes')
+    func! ActivateColorScheme()
+      colorscheme white-sand
+      set background=light
+      silent exec ':AirlineTheme solarized'
+      hi! link Search PMenu
+      hi! link IncSearch PMenuSel
+      hi! link SignColumn CursorColumn
+      hi! link Todo Underlined
+      hi! clear SpecialKey
+    endfunc
+  endif
+" }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" reedes/vim-colors-pencil {{{
+" ------------------------------------------------------------------------------
+if has_key(g:plugs, 'vim-colors-pencil')
+    func! ActivateColorScheme()
+      colorscheme pencil
+      set background=light
+      " silent exec ':AirlineTheme solarized'
     endfunc
   endif
 " }}}
@@ -792,8 +828,6 @@ if has_key(g:plugs, 'papercolor-theme')
     silent exec ':AirlineTheme papercolor'
     hi! link Search PMenu
     hi! link IncSearch PMenuSel
-    " hi! IndentGuidesOdd  guibg=#3F3F3F ctermbg=236
-    " hi! IndentGuidesEven guibg=#383838 ctermbg=235
   endfunc
 endif
 " }}}

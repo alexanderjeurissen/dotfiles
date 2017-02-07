@@ -41,9 +41,12 @@ endif
   Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'NLKNguyen/papercolor-theme'
-  " Plug 'vim-airline/vim-airline-themes'
+  " Plug 'reedes/vim-colors-pencil'
+  Plug 'vim-airline/vim-airline-themes'
   " Plug 'sonph/onehalf', {'rtp': 'vim/'}
   " Plug '~/git/opensource/vim-gotham/'
+  " Plug 'whatyouhide/vim-gotham'
+  " Plug 'mswift42/vim-themes'
   " Plug 'zefei/vim-colortuner'
 " }}}
 " ------------------------------------------------------------------------------
@@ -69,7 +72,7 @@ endif
   Plug 'tpope/vim-commentary' " easy commenting using vim motions
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'nathanaelkane/vim-indent-guides' " adds indentation guides
-  Plug 'takac/vim-hardtime' " forces efficient movement in vim
+  " Plug 'takac/vim-hardtime' " forces efficient movement in vim
   Plug 'pelodelfuego/vim-swoop' "TODO: search replace current buffers
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
   Plug 'terryma/vim-expand-region' " allow expanding visual selection region
@@ -83,7 +86,6 @@ endif
 " ------------------------------------------------------------------------------
   Plug 'justinmk/vim-sneak' " diagonal movements using S + 2 charaters
   Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  " Plug 'dangerzone/ranger.vim' " add ranger as file browser
   Plug 'moll/vim-bbye' " add nice buffer deleting
   Plug 'airblade/vim-rooter' " change vim root to vcs root when editing a file
   Plug 'mhinz/vim-signify' " Adds signs in the gutter to indicate vcs changes
