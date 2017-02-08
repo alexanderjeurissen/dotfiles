@@ -1,7 +1,0 @@
-" set runtime path for easier loading
-" the runtime command lookups the file from
-" $HOME/.vim/settings/plugins/Core
-set runtimepath+=$HOME/.vim/settings/plugins/Core
-
-runtime airline.plugin
-runtime sensible.plugin
