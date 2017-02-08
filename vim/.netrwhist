@@ -1,4 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/Users/alexander/Git/Defacto/LearningSpaces/learning-spaces/app/controllers'
-let g:netrw_dirhist_2='/Users/alexander/dotfiles/.git'

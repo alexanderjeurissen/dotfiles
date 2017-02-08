@@ -1,6 +1,0 @@
-" set runtime path for easier loading
-" the runtime command lookups the file from
-" $HOME/.vim/settings/plugins/Indentation/
-set runtimepath+=$HOME/.vim/settings/plugins/Indentation/
-
-runtime editorconfig.plugin
