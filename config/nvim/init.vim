@@ -353,11 +353,11 @@ augroup vimrcEx
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
 
-  " Only have cursorline and column in current window and in normal window
-  autocmd WinLeave * set nocursorline nocursorcolumn
-  autocmd WinEnter * set cursorline cursorcolumn
-  autocmd InsertEnter * set nocursorline nocursorcolumn
-  autocmd InsertLeave * set cursorline cursorcolumn
+  " Only have cursorline in current window and in normal window
+  autocmd WinLeave * set nocursorline
+  autocmd WinEnter * set cursorline
+  autocmd InsertEnter * set nocursorline
+  autocmd InsertLeave * set cursorline
 augroup END
 " }}}
 " ==============================================================================
