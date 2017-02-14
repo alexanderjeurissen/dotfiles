@@ -93,6 +93,7 @@ endif
   Plug 'thinca/vim-visualstar' " allows to use the * motion in visual mode
   Plug 'tpope/vim-vinegar' " improve default ntrw file explorer
   Plug 'kepbod/quick-scope' " fast left/right movement by highlighting F,f,T,t targets
+  Plug 'yuttie/comfortable-motion.vim' " Smooth scrolling
 " }}}
 " ------------------------------------------------------------------------------
 
