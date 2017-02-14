@@ -25,6 +25,9 @@ set nowrap
 " search case incensitive with /
 set smartcase
 
+" highlight incremental matches when searching /
+set incsearch
+
 " Maximum width of text that is being inserted.  A longer line will be
 " broken after white space to get this width.
 set textwidth=100
@@ -184,8 +187,6 @@ inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 noremap <Leader>tn :tabnext<CR>
 noremap <Leader>t :tabnew<CR>
 
-" buffer mappings
-
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
 
@@ -205,7 +206,8 @@ nnoremap g^ gUiW
 nnoremap gv guiW
 
 " default to very magic
-no / :Subvert/
+no / /\v
+no ? ?\v
 
 " gO to create a new line below cursor in normal mode
 nnoremap go o<ESC>k
@@ -230,6 +232,15 @@ nnoremap Y y$
 
 " Toggle highlight search with <leader>thl
 nnoremap <leader>thl :set hlsearch!<CR>
+
+" Toggle relative line number
+nnoremap <leader>trn :set relativenumber!<CR>
+
+" Toggle cursor column
+nnoremap <leader>tcc :set cursorcolumn!<CR>
+
+" Toggle cursor line
+nnoremap <leader>tcl :set cursorline!<CR>
 
 " close buffer with leader-q
 " and safe & close buffer with leader-wq
@@ -341,6 +352,12 @@ augroup vimrcEx
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
+
+  " Only have cursorline and column in current window and in normal window
+  autocmd WinLeave * set nocursorline nocursorcolumn
+  autocmd WinEnter * set cursorline cursorcolumn
+  autocmd InsertEnter * set nocursorline nocursorcolumn
+  autocmd InsertLeave * set cursorline cursorcolumn
 augroup END
 " }}}
 " ==============================================================================
