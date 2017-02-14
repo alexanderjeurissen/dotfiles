@@ -759,17 +759,6 @@ endif
 " onehalf {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'onehalf')
-  func! ActivateColorScheme()
-    " colorscheme onehalflight
-    colorscheme onehalfdark
-    set background=dark
-    silent exec ':AirlineTheme onehalfdark'
-    hi! link Search PMenu
-    hi! link IncSearch PMenuSel
-    hi! link Folded Visual
-    " hi! IndentGuidesOdd  guibg=#3F3F3F ctermbg=236
-    " hi! IndentGuidesEven guibg=#383838 ctermbg=235
-  endfunc
 endif
 " }}}
 " ------------------------------------------------------------------------------

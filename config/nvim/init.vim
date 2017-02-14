@@ -433,8 +433,11 @@ endfunction
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
 
-autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
-
+" autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
+colorscheme onehalfdark
+hi! link Search PMenu
+hi! link IncSearch PMenuSel
+hi! link Folded Visual
 " ==============================================================================
 " Include local vim config {{{
 " ==============================================================================
