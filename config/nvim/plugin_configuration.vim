@@ -852,11 +852,12 @@ if has_key(g:plugs, 'vim-indent-guides')
 if has_key(g:plugs, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
-  " let g:list_of_insert_keys = ["<Bs>"]
-  let g:list_of_disabled_keys = ["<up>", "<down>", "<left>", "<right>"]
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
   let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
-  let g:hardtime_timeout = 500
+  let g:hardtime_timeout = 250
+
+  let g:list_of_normal_keys = ["h", "j", "k", "l", "+"]
+  let g:list_of_visual_keys = ["h", "j", "k", "l", "+"]
 endif
 " }}}
 " ------------------------------------------------------------------------------
