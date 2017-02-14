@@ -38,12 +38,12 @@ endif
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-  Plug 'morhetz/gruvbox'
+  " Plug 'morhetz/gruvbox'
   " Plug 'zefei/cake16'
   " Plug 'NLKNguyen/papercolor-theme'
   " Plug 'reedes/vim-colors-pencil'
   Plug 'vim-airline/vim-airline-themes'
-  " Plug 'sonph/onehalf', {'rtp': 'vim/'}
+  Plug 'sonph/onehalf', {'rtp': 'vim/'}
   " Plug '~/git/opensource/vim-gotham/'
   " Plug 'whatyouhide/vim-gotham'
   " Plug 'mswift42/vim-themes'
@@ -72,7 +72,7 @@ endif
   Plug 'tpope/vim-commentary' " easy commenting using vim motions
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
   Plug 'nathanaelkane/vim-indent-guides' " adds indentation guides
-  " Plug 'takac/vim-hardtime' " forces efficient movement in vim
+  Plug 'takac/vim-hardtime' " forces efficient movement in vim
   Plug 'pelodelfuego/vim-swoop' "TODO: search replace current buffers
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
   Plug 'terryma/vim-expand-region' " allow expanding visual selection region
@@ -93,6 +93,7 @@ endif
   Plug 'tpope/vim-unimpaired' " pairs of handy bracket mappings like [f and ]f for file switching
   Plug 'thinca/vim-visualstar' " allows to use the * motion in visual mode
   Plug 'tpope/vim-vinegar' " improve default ntrw file explorer
+  Plug 'kepbod/quick-scope' " fast left/right movement by highlighting F,f,T,t targets
 " }}}
 " ------------------------------------------------------------------------------
 
