@@ -71,7 +71,6 @@ endif
   Plug 'w0rp/ale' " new async syntax checker for neovim
   Plug 'tpope/vim-commentary' " easy commenting using vim motions
   Plug 'AndrewRadev/splitjoin.vim' "switch between singel and multiline blocks
-  Plug 'nathanaelkane/vim-indent-guides' " adds indentation guides
   Plug 'takac/vim-hardtime' " forces efficient movement in vim
   Plug 'pelodelfuego/vim-swoop' "TODO: search replace current buffers
   Plug 'bogado/file-line' " allow opening files with line number e.g. file.txt:30
