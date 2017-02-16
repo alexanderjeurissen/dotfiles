@@ -1,8 +1,9 @@
-# Displays the number of taskwarrior tasks in the inbox
+# Displays the number of Maniphest tasks
 run_segment() {
-  tasks=`task +in +PENDING count`
+  cd ~/git/hackerone
+  tasks=`arc tasks | egrep -o 'Normal | High | Unbreak Now' | wc -l | tr -d ' '`
 
   if [[ $tasks > 0 ]]; then
-    echo " INBOX #[bold]${tasks}"
+    echo " TASKS #[bold]${tasks}"
   fi
 }
