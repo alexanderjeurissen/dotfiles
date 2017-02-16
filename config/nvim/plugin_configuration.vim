@@ -759,6 +759,57 @@ endif
 " onehalf {{{
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'onehalf')
+  let g:dark_colorscheme = "onehalfdark"
+  let g:light_colorscheme = "onehalflight"
+  let g:airline_dark_theme = "onehalfdark"
+  let g:airline_light_theme = "onehalflight"
+
+  let &background="light"
+  let g:airline_theme = "onehalfdark"
+
+  func! ActivateColorScheme()
+    hi! link Search PMenu
+    hi! link IncSearch PMenuSel
+    hi! link Folded Visual
+  endfunc
+
+  function! s:toggleBG()
+    " swap background
+    let &background = (&background == "dark"? "light" : "dark")
+
+    " set colorscheme
+    exec 'colorscheme '.(&background == "dark"? g:dark_colorscheme : g:light_colorscheme)
+
+    " set airline theme
+    exec 'AirlineTheme '.(&background == "dark"? g:airline_dark_theme : g:airline_light_theme)
+
+    " set tmux status and iterm
+    if &background == "light"
+      "tmux fg and bg
+      if exists('$TMUX')
+        call jobstart("tmux set -g status-fg 'black'")
+        call jobstart("tmux set -g status-bg 'brightwhite'")
+        call jobstart('echo -e "\033Ptmux;\033\033]50;SetProfile=Light\a\033\\"')
+      else
+        call jobstart('echo -e "\033]50;SetProfile=Light\a"')
+      endif
+
+    elseif &background == "dark"
+      "tmux fg and bg
+      if exists('$TMUX')
+        call jobstart("tmux set -g status-fg 'brightblack'")
+        call jobstart("tmux set -g status-bg 'black'")
+        call jobstart('zsh toggleBG')
+      else
+        call jobstart('zsh toggleBG')
+      endif
+    endif
+
+    " call overwrites
+    call ActivateColorScheme()
+  endfunc
+
+  nnoremap <leader>tb :call <SID>toggleBG()<cr>
 endif
 " }}}
 " ------------------------------------------------------------------------------
