@@ -20,6 +20,15 @@ if has('vim_starting')
   call plug#begin()
 endif
 
+" browse plug {{{
+function! s:complete_plug(...)
+  return sort(filter(keys(g:plugs), '!stridx(v:val, a:1)'))
+endfunction
+
+command! -nargs=1 -bang -complete=customlist,s:complete_plug PlugOpen
+  \ execute <bang>0 ? 'vsplit' : 'split' g:plugs[<q-args>].dir
+"}}}
+
 " }}}
 " ==============================================================================
 
