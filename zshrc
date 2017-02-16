@@ -70,9 +70,11 @@ fi
 # }}}
 
 # Zplug plugin definitions {{{
+  unset ZPLUG_CACHE_FILE # Fix for ZPLUG_CACHE_FILE deprecation
   source ~/.zplug/init.zsh
-  zplug "zsh-users/zsh-syntax-highlighting", nice:10
+  zplug "zsh-users/zsh-syntax-highlighting"
   zplug "zsh-users/zsh-completions"
+  zplug "zsh-users/zsh-autosuggestions"
 # }}}
 
 # aliasses {{{
@@ -89,8 +91,6 @@ fi
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
   alias showDriveUsage='sudo lsof'
-  # alias gcc='gcc-5'
-  # alias c++='c++-5'
   alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
   alias kn='kak -d -s "${$(basename `PWD`)//./}"'
   alias attach="tmux attach -t"
@@ -98,6 +98,7 @@ fi
   alias proselint="PYTHONIOENCODING=utf8 proselint"
   alias applypatch="git am --signoff <"
   alias reload_profile="source ~/.zshrc"
+  alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
 # }}}
 
 # Alias for hackerij {{{
@@ -188,7 +189,6 @@ fi
   alias -s rb=$EDITOR
   alias -s txt=$EDITOR
   alias -s py=$EDITOR
-  alias -s sh=$EDITOR
   alias -s md=$EDITOR
   alias -s vim=$EDITOR
   alias -s java=$EDITOR
@@ -279,13 +279,19 @@ if ! zplug check --verbose; then
     if read -q; then
         echo; zplug install
     fi
+  fi
+
+# Then, source plugins and add commands to $PATH
+# Only source zplugins when a new terminal is opened not when source ~/.zshrc
+# This is due to conflict between some plugins that causes a crash
+# https://github.com/zsh-users/zsh-autosuggestions/issues/205
+if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
+  zplug load
 fi
 # }}}
-# Then, source plugins and add commands to $PATH
-zplug load
 
 # Gruvbox 256 colors support OSX
-# source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
+# scurce "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
 
 # git aliases {{{
@@ -328,6 +334,10 @@ source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
   alias sites='ranger $(brew --prefix)/etc/nginx/sites/'
 # }}}
 
+# Auto suggestions {{{
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+bindkey '^e' autosuggest-accept
+# }}}
 it2prof() { echo -e "\033]50;SetProfile=$1\a" }
 
 # Fzf functions {{{
@@ -391,3 +401,5 @@ export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
+
+showCukeScreenshot() { open "./tmp/capybara/"."`ls ./tmp/capybara | grep \".png\" | tail -1`" }
