@@ -1,0 +1,35 @@
+snippet rcc "React ES6 class" b
+import React from "react";
+
+export default class ${1:componentClassName} extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      ${2:stateVarName}: props.${3:propName}
+    };
+  }
+
+  render() {
+    return <div></div>
+  }
+}
+
+$1.propTypes = {
+  propName: React.PropTypes.instanceOf(x).isRequired
+};
+endsnippet
+
+snippet pcc "Pure react component" b
+const React = require("react");
+const Dependency = require("dependency");
+
+const ${1:ComponentClassName} = ({ ${2:proptypes}) =>
+	<div>{dependency.attribute}</div>
+
+$1.propTypes = {
+
+};
+
+module.exports = $1
+endsnippet
