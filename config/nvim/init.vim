@@ -437,7 +437,7 @@ source $HOME/.config/nvim/plugin_configuration.vim
 " colorscheme onehalfdark
 colorscheme onehalflight
 set background=light
-exe ":AirlineTheme onehalflight"
+let g:airline_theme = "onehalflight"
 " hi! link Search PMenu
 hi! link IncSearch PMenuSel
 hi! link Folded Visual
