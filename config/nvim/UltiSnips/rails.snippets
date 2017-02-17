@@ -1,0 +1,36 @@
+snippet pp "pretty print variable" b
+pp "${1}"$0
+endsnippet
+
+snippet expjson "expect subject body to include json" b
+expect(${1:subject.body}).to include_json(
+	${2:key: prop}
+)$0
+endsnippet
+
+snippet itget "it GET, expect response, thoughtbot style" b
+it '${1:returns the expected json response}' do
+	# 1. setup
+	${2: ${3:variable_name} = create :$3 }
+	${4}
+
+	# 2. Action
+	${5:get :${6:show}${7}}}
+	${8}
+
+	# 3. Expectation
+	expect(${9:response.body}).to include_json(
+		${10:key: prop}$0
+	)
+end
+endsnippet
+
+snippet validator "Introduce a custom ActiveModel::Validator" b
+# frozen_string_literal: true
+class ${1:ModelAttribute}Validator < ActiveModel::Validator
+	def validate(record)
+		return if record.${2:attribute}.nil?
+		record.errors.add(:$2, "'#{record.$2}' is not valid")
+	end
+end$0
+endsnippet
