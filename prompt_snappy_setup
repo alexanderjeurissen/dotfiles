@@ -1,0 +1,210 @@
+#/usr/bin/env zsh
+# vim: set foldlevel=0 foldmethod=marker 
+
+# For my own and others sanity
+# git:
+# %b => current branch
+# %a => current action (rebase/merge)
+# prompt:
+# %F => color dict
+# %f => reset color
+# %~ => current path
+# %* => time
+# %n => username
+# %m => shortname host
+# %(?..) => prompt conditional - %(condition.true.false)
+# terminal codes:
+# \e7   => save cursor position
+# \e[2A => move cursor 2 lines up
+# \e[1G => go to position 1 in terminal
+# \e8   => restore cursor position
+# \e[K  => clears everything after the cursor on the current line
+# \e[2K => clear everything on the current line
+
+
+# battery info (osx)
+_batery_info() {
+  #
+  #
+  #
+  #
+  #
+}
+
+_pomodoro_info() {
+# 
+}
+
+# set this in zshenv: export DEFAULT_USER="username"
+_username() {
+  if [[ "$SSH_CONNECTION" != '' ]]; then
+    # show current user if we are in a ssh session
+    echo "%F{yellow} ${USER}%f "
+  elif [[ "$USER" == "root" ]]; then
+    # show username in red if the user is ROOT
+    echo "%F{red} ${USER}%f "
+  elif [ -n "$DEFAULT_USER" ] && [[ "$USER" != "$DEFAULT_USER" ]]; then
+    # show username if the user differs from the exported DEFAULT_USER variable
+    echo "%F{yellow} ${USER}%f "
+  fi
+}
+
+# Only print host name when connected through ssh
+_hostname() {
+  if [[ "$SSH_CONNECTION" != '' ]]; then
+    echo "%F{yellow} %m%f "
+  fi
+}
+
+# Git hooks {{{
+  ### Compare local changes to remote changes
+  # Make sure you have added misc to your 'formats':  %m
+  +vi-git-st() {
+    local ahead behind 
+    local -a gitstatus
+
+    # check if there is an upstream configured for this branch
+    command git rev-parse --abbrev-ref @'{u}' &>/dev/null || return
+
+    # for git prior to 1.7
+    # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+    ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
+    (( $ahead )) && gitstatus="↑"
+
+    # for git prior to 1.7
+    # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+    behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
+    (( $behind )) && gitstatus="↓"
+
+    (( $behind && $ahead )) && gitstatus="⥮"
+
+    hook_com[misc]+="${gitstatus}"
+  }
+
+  # Show count of stashed changes
+  +vi-git-stash() {
+      local -a stashes
+      local -a stash_commits
+
+      if [[ -s $(git rev-parse --git-dir) ]] ; then
+          stashes=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+          stash_commits=$(git log -5 | egrep -o "TEMP_COMMIT" | wc -l | tr -d ' ')
+          (($stash_commits)) && hook_com[misc]+="%F{red} %f" && return
+          (($stashes)) && hook_com[misc]+="%F{red} %f" && return
+      fi
+  }
+
+  ### Display the existence of files not yet known to VCS
+  +vi-git-untracked(){
+      if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+          git status --porcelain | grep '??' &> /dev/null ; then
+          # This will show the marker if there are any untracked files in repo.
+          # If instead you want to show the marker only if there are untracked
+          # files in $PWD, use:
+          #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
+          hook_com[unstaged]='%F{cyan} %f'
+      fi
+  }
+# }}}
+
+_precmd_notification() {
+  # precmd_notification {
+}
+
+# preprompt, the generation of the lines is based on 
+# https://github.com/chauncey-garrett/zsh-prompt-garrett
+_generate_preprompt() {
+  host_name=$(_hostname)
+  user_name=$(_username)
+  local pre_prompt_content
+
+  (($host_name)) && pre_prompt_content+="$host_name"
+  (($user_name)) && pre_prompt_content+="$user_name"
+
+  # store working_tree without the "x" prefix
+  local working_tree="${vcs_info_msg_1_#x}"
+
+  # construct prompt, beginning with path
+  if [[ -z $working_tree ]]; then
+    pre_prompt_content+="%F{blue} %~%f"
+    # pre_prompt_content+="%F{blue} %c%f "
+  fi
+
+  # get git info
+  if [[ -n $working_tree ]]; then
+    pre_prompt_content+="${vcs_info_msg_0_}"
+  fi
+
+  print -P "\n╭─ ${pre_prompt_content}"
+}
+
+_generate_prompt() {
+  # check that no command is currently running, 
+  # the preprompt will otherwise be rendered in the wrong place
+
+  # usefull symbols:
+  #─
+  #
+  #
+  #
+  #
+  #
+  #💩
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  # 
+
+  # exit code (first uses sad/smile face the other checkmark/cross
+  # exit_code="%(?.%F{green}%f.%F{red}%f)"
+  exit_code="%(?.%F{green}─%f.%F{red}─%f)"
+  # exit_code="%(?.%F{green}●%f.%F{red}●%f)"
+  # exit_code="%(?.%F{green}.%F{red}%f) "
+
+  PROMPT="╰${exit_code}"
+
+  RPROMPT="%F{243}%*%f"
+}
+
+prompt_snappy_setup() {
+  # prevent percentage showing up
+  # if output doesn't end with a newline
+  export PROMPT_EOL_MARK=''
+  setopt prompt_subst
+  setopt autonamedirs
+
+  zmodload zsh/datetime
+  zmodload zsh/zle
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
+  zstyle ':vcs_info:git*' stagedstr '%F{green}✚%f'
+  zstyle ':vcs_info:git*' unstagedstr '%F{cyan} %f'
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' get-revision true
+  zstyle ':vcs_info:*' use-simple true
+  zstyle ':vcs_info:git*' formats '%F{blue} %S%f %F{yellow} %r  %0.12b %f%m%u%c' 'x%R'
+  zstyle ':vcs_info:git*' actionformats '%F{blue} %S%f %F{yellow} %r  %0.12b%f %F{magenta} %0.7i%f %F{red} %a%f' 'x%R'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash git-untracked
+  zstyle ':vcs_info:*' enable git
+  # zstyle ':vcs_info:*+*:*' debug true
+
+  add-zsh-hook precmd vcs_info
+  add-zsh-hook precmd _generate_preprompt # generate preprompt
+  add-zsh-hook precmd _generate_prompt # generate prompt
+}
+
+prompt_snappy_setup "$@"
