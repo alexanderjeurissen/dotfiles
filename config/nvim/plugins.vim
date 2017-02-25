@@ -122,8 +122,7 @@
     call dein#add('tpope/vim-unimpaired') " pairs of handy bracket mappings like [f and ]f for file switching
     call dein#add('thinca/vim-visualstar', { 'on_map': '*' }) " allows to use the * motion in visual mode
     call dein#add('tpope/vim-vinegar', { 'on_map': '-' }) " improve default ntrw file explorer
-    call dein#add('kepbod/quick-scope', { 'on_map': ['f', 'F', 't', 'T'] }) " fast left/right movement by highlighting F,f,T,t targets
-    " call dein#add('yuttie/comfortable-motion.vim') " Smooth scrolling
+    call dein#add('kepbod/quick-scope') " fast left/right movement by highlighting F,f,T,t targets
 " }}}
 " ------------------------------------------------------------------------------
 
