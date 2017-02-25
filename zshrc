@@ -6,7 +6,8 @@ fi
 
 # prompt {{{
   autoload -U promptinit && promptinit
-  prompt pure
+  # prompt pure
+  prompt snappy
 # }}}
 
 # general functions {{{
@@ -84,7 +85,7 @@ fi
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
-  alias migrations="g up && bin/rake db:migrate"
+  alias migrate="g up && bin/rake db:migrate && RAILS_ENV=test bin/rake db:migrate"
   alias r="bin/rails"
   alias routes="zeus rake routes | fzf"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
