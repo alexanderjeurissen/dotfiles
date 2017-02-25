@@ -1,7 +1,7 @@
 " ------------------------------------------------------------------------------
 " SirVer/ultisnips {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'Ultisnips')
+if dein#tap('Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -19,7 +19,7 @@ endif
 " ------------------------------------------------------------------------------
 " xolox/vim-session {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-session')
+if dein#tap('vim-session')
   let g:session_autoload = 'no'
   let g:session_autosave = 'yes'
   let g:session_autosave_periodic = 30
@@ -32,19 +32,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" osyo-manga/vim-over {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-over')
-  let g:over#command_line#paste_escape_chars = '/.*$^~'
-  command! Replace OverCommandLine %s/
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " Yggdroot/indentLine {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'indentLine')
+if dein#tap('indentLine')
   let g:indentLine_char = '┆'
   let g:indentLine_indentLevel = 20
   let g:indentLine_bufNameExclude = ['terminal']
@@ -55,7 +45,7 @@ endif
 " ------------------------------------------------------------------------------
 " othree/javascript-libraries-syntax.vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'javascript-libraries-syntax.vim')
+if dein#tap('javascript-libraries-syntax.vim')
   let g:used_javascript_libs = 'underscore,backbone,react,flux'
 endif
 " }}}
@@ -64,7 +54,7 @@ endif
 " ------------------------------------------------------------------------------
 " justinmk/vim-sneak {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-sneak')
+if dein#tap('vim-sneak')
   let g:sneak#label = 1
   let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
 
@@ -86,19 +76,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" dangerzone/ranger.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'ranger.vim')
-  command! Ranger call OpenRanger()
-  no <silent> <leader>fe :call OpenRanger()<CR>
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " tpope/vim-vinegar {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-vinegar')
+if dein#tap('vim-vinegar')
   let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
   " TODO: evaluate if we actually need this with `-` quick netrw access
   " no <silent> <leader>wv :Sexplore!<CR>
@@ -115,7 +95,7 @@ endif
 " ------------------------------------------------------------------------------
 " vim-ruby/vim-ruby {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-ruby')
+if dein#tap('vim-ruby')
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails = 1
 endif
@@ -125,7 +105,7 @@ endif
 " ------------------------------------------------------------------------------
 " int3/vim-extradite {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-extradite')
+if dein#tap('vim-extradite')
   let g:gitgutter_eager=0
 endif
 " }}}
@@ -134,7 +114,7 @@ endif
 " ------------------------------------------------------------------------------
 " mattn/gist-vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'gist-vim')
+if dein#tap('gist-vim')
   let g:gist_clip_command = 'pbcopy'
   let g:gist_detect_filetype = 1
   let g:gist_show_privates = 1
@@ -146,7 +126,7 @@ endif
 " ------------------------------------------------------------------------------
 " tpope/vim-rails {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-rails')
+if dein#tap('vim-rails')
   nnoremap <leader>mr <c-u>:Rrunner<CR>
   let g:rails_projections = {
     \"app/models/*.rb": {
@@ -187,76 +167,20 @@ endif
 " ------------------------------------------------------------------------------
 " zhaocai/GoldenView.Vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'GoldenView.Vim')
-    " Settings {{{
-      let g:maximizer_set_default_mapping = 0
-      let g:maximizer_restore_on_winleave = 1
+if dein#tap('vim-maximizer')
+  " Settings {{{
+    let g:maximizer_set_default_mapping = 0
+    let g:maximizer_restore_on_winleave = 1
 
-      let g:goldenview__enable_default_mapping = 0
-      let g:goldenview__enable_at_startup = 0
-      let g:goldenview__ignore_urule = {
-      \  'filetype': [
-      \    'nerdtree',
-      \    'nerd',
-      \    'unite',
-      \    'gitcommit'
-      \  ],
-      \  'buftype': [
-      \    'nofile',
-      \    'nerd',
-      \    'nerdtree',
-      \    'terminal',
-      \    'gitcommit'
-      \  ]
-      \}
+  " Keybindings {{{
+    " 1. quickly switch current window with the main pane and toggle back
+    nmap <silent> <leader>wz :MaximizerToggle<cr>
 
-      let g:goldenview__restore_urule= {
-      \  'filetype': [
-      \    'nerdtree',
-      \    'nerd',
-      \    'unite',
-      \    'gitcommit'
-      \  ],
-      \  'buftype': [
-      \    'nofile',
-      \    'nerd',
-      \    'nerdtree',
-      \    'terminal',
-      \    'gitcommit'
-      \  ]
-      \}
-    " }}}
-
-    " Functions {{{
-      function! GoldenViewNext()
-        execute "normal \<Plug>GoldenViewNext"
-      endfunction
-
-      function! GoldenViewPrevious()
-        execute "normal \<Plug>GoldenViewPrevious"
-      endfunction
-    " }}}
-
-      "TODO: currently unused
-      function! MaximiseCurrentWindow()
-        call GoldenView#ToggleAutoResize()
-        exec ":MaximizerToggle"
-      endfunction
-
-    " Keybindings {{{
-      " 1. quickly switch current window with the main pane and toggle back
-      nmap <silent> <leader>wm <Plug>GoldenViewSwitchMain
-      nmap <silent> <leader>wt <Plug>GoldenViewSwitchToggle
-      nmap <silent> <leader>wz :MaximizerToggle<cr>
-
-      " 2. manipulate splits
-      nmap <leader>wt <C-W>T
-      nmap <leader>wd :Bdelete!<CR>
-      nmap <leader>wc :q<CR>
-
-      " 3. toggle auto resize
-      nmap <silent> <leader>tg :ToggleGoldenViewAutoResize<CR>
-    " }}}
+    " 2. manipulate splits
+    nmap <leader>wt <C-W>T
+    nmap <leader>wd :Bdelete!<CR>
+    nmap <leader>wc :q<CR>
+  " }}}
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -264,7 +188,7 @@ endif
 " ------------------------------------------------------------------------------
 " mhinz/vim-signify {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-signify')
+if dein#tap('vim-signify')
   let g:signify_vcs_list = ['git']
   let g:signify_sign_add               = '+'
   let g:signify_sign_delete            = '_'
@@ -280,7 +204,7 @@ endif
 " ------------------------------------------------------------------------------
 " junegunn/fzf.vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'fzf.vim')
+if dein#tap('fzf.vim')
   " Color/display options {{{
     " Default fzf layout
     " - down / up / left / right
@@ -430,7 +354,7 @@ endif
 " ------------------------------------------------------------------------------
 " Shougo/denite.nvim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'denite.nvim')
+if dein#tap('denite.nvim')
   " Change file_rec command.
   call denite#custom#var('file_rec', 'command',
   \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
@@ -454,65 +378,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" kien/ctrlp.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'ctrlp.vim')
-    Plug 'FelikZ/ctrlp-py-matcher' "faster matcher for ctrlp
-    Plug 'sgur/ctrlp-extensions.vim' "provides yankring and CMDline history
-    Plug 'iurifq/ctrlp-rails.vim' "provides rails.vim modes
-
-    " Settings {{{
-      let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-      let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-        \ --ignore .git
-        \ --ignore .svn
-        \ --ignore .hg
-        \ --ignore .DS_Store
-        \ --ignore "**/*.pyc"
-        \ -g ""'
-
-      " let g:ctrlp_regexp = 1
-      "
-      let g:ctrlp_custom_ignore = {
-        \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-        \ 'file': '\v\.(exe|so|dll)$',
-        \ 'link': 'some_bad_symbolic_links',
-        \ }
-
-      let g:ctrlp_prompt_mappings = {
-        \ 'PrtSelectMove("j")':   ['<c-n>'],
-        \ 'PrtSelectMove("k")':   ['<c-p>'],
-        \ 'PrtHistory(-1)':       ['<down>'],
-        \ 'PrtHistory(1)':        ['<up>'],
-        \}
-    "}}}
-
-    " Keybindings {{{
-      nnoremap <leader>fm :<C-u>CtrlPMixed<CR>
-      nnoremap <leader>ff :<C-u>CtrlP<CR>
-      nnoremap <leader>b :<C-u>CtrlPBuffer<CR>
-      nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-
-      nnoremap <leader>y :<C-u>CtrlPYankring<CR>
-      nnoremap <leader>u :<C-u>CtrlPUndo<CR>
-      nnoremap <leader>l :<C-u>CtrlPLine<CR>
-
-      " CtrlP-Rails.vim bindings
-      nnoremap <leader>rm :<C-u>CtrlPModels<CR>
-      nnoremap <leader>rmi :<C-u>CtrlPMigrations<CR>
-      nnoremap <leader>rc :<C-u>CtrlPControllers<CR>
-      nnoremap <leader>rv :<C-u>CtrlPViews<CR>
-      nnoremap <leader>rs :<C-u>CtrlPSpecs<CR>
-      nnoremap <leader>rl :<C-u>CtrlPLibs<CR>
-    "}}}
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " maksimr/vim-jsbeautify {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-jsbeautify')
+if dein#tap('vim-jsbeautify')
   "for Javascript
   autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
   autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
@@ -529,34 +397,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" benekastah/neomake {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'neomake')
-  autocmd! BufWritePost * Neomake
-
-  let g:neomake_warning_sign = {
-    \ 'text': '⚠',
-    \ 'texthl': 'WarningMsg',
-    \ }
-
-  let g:neomake_error_sign = {
-    \ 'text': '✖',
-    \ 'texthl': 'ErrorMsg',
-    \ }
-
-  call neomake#signs#RedefineErrorSign()
-  call neomake#signs#RedefineWarningSign()
-  let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-  let g:neomake_javascript_enabled_makers = ['eslint']
-  let g:neomake_jsx_enabled_makers = ['eslint']
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " tpope/vim-fugitive {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-fugitive')
+if dein#tap('vim-fugitive')
   nnoremap <silent> <leader>gs  :Gstatus<CR>
   nnoremap <silent> <leader>gd  :Gvdiff<CR>
   nnoremap <silent> <leader>gc  :Gcommit<CR>
@@ -576,7 +419,7 @@ endif
 " ------------------------------------------------------------------------------
 " mattn/emmet-vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'emmet-vim')
+if dein#tap('emmet-vim')
   imap <expr> <C-e> emmet#expandAbbrIntelligent("\<C-e>")
   let g:user_emmet_next_key='<C-n>'
   let g:user_emmet_install_global = 1
@@ -593,13 +436,11 @@ endif
 " ------------------------------------------------------------------------------
 " TODO:Shougo/deoplete.nvim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'deoplete.nvim')
+if dein#tap('deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
-  let g:deoplete#auto_complete_start_length = 2 "also show completion with single character
-
-  call deoplete#custom#set('ultisnips', 'rank', 1000)
+  let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
 
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -630,7 +471,7 @@ endif
 " ------------------------------------------------------------------------------
 " SirVer/ultisnips {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'ultisnips')
+if dein#tap('ultisnips')
   let g:ulti_expand_or_jump_res = 0
   let g:UltiSnipsEnableSnipMate = 1
   let g:UltiSnipsJumpForwardTrigger="<C-n>"
@@ -643,7 +484,7 @@ endif
 " ------------------------------------------------------------------------------
 " morhetz/gruvbox {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'gruvbox')
+if dein#tap('gruvbox')
   func! ActivateColorScheme()
     let g:gruvbox_italic=1
     let g:gruvbox_italicize_strings=1
@@ -666,7 +507,7 @@ endif
 " ------------------------------------------------------------------------------
 " zefei/cake16 {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'cake16')
+if dein#tap('cake16')
   func! ActivateColorScheme()
     colorscheme cake16
     set background=light
@@ -679,7 +520,7 @@ endif
 " ------------------------------------------------------------------------------
 " mhartington/oceanic-next {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'oceanic-next')
+if dein#tap('oceanic-next')
   colorscheme OceanicNext
   set background=dark
 endif
@@ -687,56 +528,13 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" joshdick/onedark.vim {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'onedark.vim')
-  func! ActivateColorScheme()
-    colorscheme onedark
-    set background=dark
-  endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " atelierbram/Base2Tone-vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'Base2Tone-vim---')
+if dein#tap('Base2Tone-vim---')
   func! ActivateColorScheme()
     " Base2Tone Dark
     set background=dark
     colorscheme Base2Tone-Evening-dark
-    " or any of the other schemes:
-    " colorscheme Base2Tone-Morning-dark
-    " colorscheme Base2Tone-Sea-dark
-    " colorscheme Base2Tone-Space-dark
-    " colorscheme Base2Tone-Earth-dark
-    " colorscheme Base2Tone-Forest-dark
-    " colorscheme Base2Tone-Desert-dark
-    " colorscheme Base2Tone-Lake-dark
-    " colorscheme Base2Tone-Meadow-dark
-    " colorscheme Base2Tone-Drawbridge-dark
-    " colorscheme Base2Tone-Pool-dark
-    " colorscheme Base2Tone-Heath-dark
-    " colorscheme Base2Tone-Cave-dark
-
-    " Base2Tone Light
-    "
-    " set background=light
-    " colorscheme Base2Tone-Evening-light
-    " colorscheme Base2Tone-Morning-light
-    " colorscheme Base2Tone-Sea-light
-    " colorscheme Base2Tone-Space-light
-    " colorscheme Base2Tone-Earth-light
-    " colorscheme Base2Tone-Forest-light
-    " colorscheme Base2Tone-Desert-light
-    " colorscheme Base2Tone-Lake-light
-    " colorscheme Base2Tone-Meadow-light
-    " colorscheme Base2Tone-Drawbridge-light
-    " colorscheme Base2Tone-Pool-light
-    " colorscheme Base2Tone-Heath-light
-    " colorscheme Base2Tone-Cave-light
-
     hi! StatusLine ctermbg=001 ctermfg=015
     hi User1 ctermfg=10
   endfunc
@@ -747,7 +545,7 @@ endif
 " ------------------------------------------------------------------------------
 " morhetz/flattened {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'flattened')
+if dein#tap('flattened')
   func! ActivateColorScheme()
     colorscheme flattened_dark
     set background=dark
@@ -759,7 +557,7 @@ endif
 " ------------------------------------------------------------------------------
 " icymind/NeoSolarized {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'NeoSolarized')
+if dein#tap('NeoSolarized')
   func! ActivateColorScheme()
     colorscheme NeoSolarized
     let g:neosolarized_contrast = "high"
@@ -776,127 +574,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" onehalf {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'onehalf')
-  let g:dark_colorscheme = "onehalfdark"
-  let g:light_colorscheme = "onehalflight"
-  let g:airline_dark_theme = "onehalfdark"
-  let g:airline_light_theme = "onehalflight"
-
-  let &background="light"
-  let g:airline_theme = "onehalfdark"
-
-  func! ActivateColorScheme()
-    hi! link Search PMenu
-    hi! link IncSearch PMenuSel
-    hi! link Folded Visual
-  endfunc
-
-  function! s:toggleBG()
-    " swap background
-    let &background = (&background == "dark"? "light" : "dark")
-
-    " set colorscheme
-    exec 'colorscheme '.(&background == "dark"? g:dark_colorscheme : g:light_colorscheme)
-
-    " set airline theme
-    exec 'AirlineTheme '.(&background == "dark"? g:airline_dark_theme : g:airline_light_theme)
-
-    " set tmux status and iterm
-    if &background == "light"
-      "tmux fg and bg
-      if exists('$TMUX')
-        call jobstart("tmux set -g status-fg 'black'")
-        call jobstart("tmux set -g status-bg 'brightwhite'")
-        call jobstart('echo -e "\033Ptmux;\033\033]50;SetProfile=Light\a\033\\"')
-      else
-        call jobstart('echo -e "\033]50;SetProfile=Light\a"')
-      endif
-
-    elseif &background == "dark"
-      "tmux fg and bg
-      if exists('$TMUX')
-        call jobstart("tmux set -g status-fg 'brightblack'")
-        call jobstart("tmux set -g status-bg 'black'")
-        call jobstart('zsh toggleBG')
-      else
-        call jobstart('zsh toggleBG')
-      endif
-    endif
-
-    " call overwrites
-    call ActivateColorScheme()
-  endfunc
-
-  nnoremap <leader>tb :call <SID>toggleBG()<cr>
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" gotham {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-gotham')
-    func! ActivateColorScheme()
-      colorscheme gotham256
-      set background=dark
-      silent exec ':AirlineTheme gotham'
-    endfunc
-  endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" mswift42/vim-themes {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-themes')
-    func! ActivateColorScheme()
-      colorscheme white-sand
-      set background=light
-      silent exec ':AirlineTheme solarized'
-      hi! link Search PMenu
-      hi! link IncSearch PMenuSel
-      hi! link SignColumn CursorColumn
-      hi! link Todo Underlined
-      hi! clear SpecialKey
-    endfunc
-  endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" reedes/vim-colors-pencil {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-colors-pencil')
-    func! ActivateColorScheme()
-      colorscheme pencil
-      set background=light
-      " silent exec ':AirlineTheme solarized'
-    endfunc
-  endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" NLKNguyen/papercolor-theme {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'papercolor-theme')
-  func! ActivateColorScheme()
-    colorscheme PaperColor
-    set background=light
-    silent exec ':AirlineTheme papercolor'
-    hi! link Search PMenu
-    hi! link IncSearch PMenuSel
-  endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " nathanaelkane/vim-indent-guides {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-indent-guides')
+if dein#tap('vim-indent-guides')
     let g:indent_guides_auto_colors = 1
     let g:indent_guides_color_change_percent = 5
     let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'terminal']
@@ -909,12 +589,12 @@ if has_key(g:plugs, 'vim-indent-guides')
 " ------------------------------------------------------------------------------
 " takac/vim-hardtime {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-hardtime')
+if dein#tap('vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
   let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
-  let g:hardtime_timeout = 250
+  let g:hardtime_timeout = 100
 
   let g:list_of_normal_keys = ["h", "j", "k", "l", "+"]
   let g:list_of_visual_keys = ["h", "j", "k", "l", "+"]
@@ -925,7 +605,7 @@ endif
 " ------------------------------------------------------------------------------
 " skwp/greplace.vim {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'greplace')
+if dein#tap('greplace')
   set grepprg=ag
 
   let g:grep_cmd_opts = '--line-numbers --noheading'
@@ -934,43 +614,9 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" eugen0329/vim-esearch {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-esearch')
-  if !exists('g:esearch')
-    let g:esearch = {}
-    let g:esearch.adapter = 'ag'
-    let g:esearch.backend = 'nvim'
-    let g:esearch.out = 'win'
-    let g:esearch.batch_size = 1000
-    let g:esearch.use = ['visual', 'hlsearch', 'last']
-  endif
-  " let g:esearch#cmdline#dir_icon = ''
-  " let g:esearch#cmdline#dir_icon = 'D'
-  " let g:esearch#cmdline#dir_icon = ''
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" pelodelfuego/vim-swoop {{{
-" ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-swoop')
-  " nnoremap <silent> <Leader>/ :call Swoop()<CR>
-  " vnoremap <silent> <Leader>/ :call SwoopSelection()<CR>
-
-  " nnoremap <silent> <Leader>/ :call SwoopMulti()<CR>
-  " vnoremap <silent> <Leader>/ :call SwoopMultiSelection()<CR>
-
-  " let g:swoopWindowsVerticalLayout = 1
-  " let g:swoopPatternSpaceInsertsWildcard = 0
-endif
-" }}}
-
-" ------------------------------------------------------------------------------
 " terryma/vim-expand-region {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-expand-region')
+if dein#tap('vim-expand-region')
   vmap v <Plug>(expand_region_expand)
 endif
 " }}}
@@ -978,7 +624,7 @@ endif
 " ------------------------------------------------------------------------------
 " t9md/vim-choosewin {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-choosewin')
+if dein#tap('vim-choosewin')
   let g:choosewin_label = 'aoeuhtns'
   let g:choosewin_color_label = {
           \ 'cterm': [2, 16]
@@ -994,7 +640,7 @@ endif
 " ------------------------------------------------------------------------------
 " w0rp/ale {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'ale')
+if dein#tap('ale')
   let g:ale_sign_error = '✖'
   let g:ale_sign_warning = '⚠'
   let g:ale_linters = {
@@ -1011,7 +657,7 @@ endif
 " ------------------------------------------------------------------------------
 " vim-airline/vim-airline {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-airline')
+if dein#tap('vim-airline')
   if !exists('g:airline_symbols')
       let g:airline_symbols = {}
   endif
@@ -1085,31 +731,11 @@ endif
 " ------------------------------------------------------------------------------
 " christoomey/vim-tmux-navigator {{{
 " ------------------------------------------------------------------------------
-if has_key(g:plugs, 'vim-tmux-navigator')
+if dein#tap('vim-tmux-navigator')
   let g:tmux_navigator_no_mappings = 0
   let g:tmux_navigator_save_on_switch = 1
-  " Fix in neovim where c-h doesn't work :sadpanda:
-  " nnoremap <silent> <BS> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
-
-  " nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>:AirlineRefresh<cr>
-  " nnoremap <silent> <c-j> :TmuxNavigateDown<cr>:AirlineRefresh<cr>
-  " nnoremap <silent> <c-k> :TmuxNavigateUp<cr>:AirlineRefresh<cr>
-  " nnoremap <silent> <c-l> :TmuxNavigateRight<cr>:AirlineRefresh<cr>
-  " nnoremap <silent> <c-p> :TmuxNavigatePrevious<cr>:AirlineRefresh<cr>
-
-  " tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr><C-\><C-n>:AirlineRefresh<cr>
-  " tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr><C-\><C-n>:AirlineRefresh<cr>
-  " tnoremap <silent> <c-k> <C-\><C-n>:TmuxNavigateUp<cr><C-\><C-n>:AirlineRefresh<cr>
-  " tnoremap <silent> <c-l> <C-\><C-n>:TmuxNavigateRight<cr><C-\><C-n>:AirlineRefresh<cr>
-  " tnoremap <silent> <c-p> <C-\><C-n>:TmuxNavigatePrevious<cr><C-\><C-n>:AirlineRefresh<cr>
 
   nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
-
-  " nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-  " nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-  " nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-  " nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-  " nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
 
   tnoremap <silent> <c-h> <C-\><C-n>:TmuxNavigateLeft<cr>
   tnoremap <silent> <c-j> <C-\><C-n>:TmuxNavigateDown<cr>

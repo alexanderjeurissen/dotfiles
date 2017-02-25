@@ -104,16 +104,8 @@ set clipboard=unnamed
 " Show visual indication if your using substitute command
 set inccommand=split
 
-" When editing a file, always jump to the last known cursor position.
-" Don't do it for commit messages, when the position is invalid, or when
-" inside an event handler (happens when dropping a file on gvim).
-autocmd BufReadPost *
-      \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
-      \ endif
-
-"open help in a new ventical split instead of vimbuffer
-cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'vert help' : 'h'
+"open help in a new split instead of vimbuffer
+cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
 " change cursor shapes according to current mode {{{
 " only works in iTerm. tmux optional.
@@ -166,8 +158,8 @@ command! Qa qa
 "w!! to save file with sudo
 cmap w!! w !sudo tee % > /dev/null
 
-"E to Explore
-command! E Explore
+" toggle background
+nnoremap <leader>tb :call <SID>toggleBG()<cr>
 
 " Execute macro under key `a` for all buffers and write afterwards
 command! Bufmacro bufdo execute "normal @a" | write
@@ -332,6 +324,10 @@ augroup vimrcEx
   " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
+  " Run specs under cursor if saving a rspec or cucumber file
+  autocmd BufWritePost *._spec.rb :.Rrunner
+  autocmd BufWritePost *.feature :.Rrunner
+
   " Enable omni completion {{{
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -406,6 +402,45 @@ fun! WriteSession()
   echo "Wrote " . fname
 endfun
 
+func! s:colorSchemeOverides()
+  hi! link Search PMenu
+  hi! link IncSearch PMenuSel
+  hi! link Folded Visual
+endfunc
+
+function! s:toggleBG()
+  " swap background
+  let &background = (&background == "dark"? "light" : "dark")
+
+  " set colorscheme
+  exec 'colorscheme '.(&background == "dark"? g:dark_colorscheme : g:light_colorscheme)
+
+  " set tmux status and iterm
+  if &background == "light"
+    "tmux fg and bg
+    if exists('$TMUX')
+      call jobstart("tmux set -g status-fg 'black'")
+      call jobstart("tmux set -g status-bg 'brightwhite'")
+      call jobstart('echo -e "\033Ptmux;\033\033]50;SetProfile=Light\a\033\\"')
+    else
+      call jobstart('echo -e "\033]50;SetProfile=Light\a"')
+    endif
+
+  elseif &background == "dark"
+    "tmux fg and bg
+    if exists('$TMUX')
+      call jobstart("tmux set -g status-fg 'brightblack'")
+      call jobstart("tmux set -g status-bg 'black'")
+      call jobstart('zsh toggleBG')
+    else
+      call jobstart('zsh toggleBG')
+    endif
+  endif
+
+  " call overwrites
+  call s:colorSchemeOverides()
+endfunc
+
 "FIXME: output is borked.
 function! s:ArcLint(args)
     let olderrorformat = &errorformat
@@ -432,15 +467,6 @@ endfunction
 
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
-
-" autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
-" colorscheme onehalfdark
-colo onehalfdark
-set background=dark
-let g:airline_theme = "onehalfdark"
-" hi! link Search PMenu
-hi! link IncSearch PMenuSel
-hi! link Folded Visual
 " ==============================================================================
 " Include local vim config {{{
 " ==============================================================================
