@@ -8,7 +8,7 @@ if ! [ -f $file_path ]; then
 fi
 
 cucumber_command='bin/cucumber'
-rspec_command='bin/rspec'
+rspec_command='bin/rspec --color --fail-fast'
 
 ! [ -f 'bin/cucumber' ] && cucumber_command='bundle exec cucumber' 
 ! [ -f 'bin/rspec' ] && rspec_command='bundle exec rspec' 
