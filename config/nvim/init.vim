@@ -470,10 +470,10 @@ endfunction
   "∄ not exist
   "¶ line number
   "␤ line number r2
-  hi! link User1 PMenuSel
+  hi! link User1 Cursor
 
   set statusline=
-  let &statusline = "%1* %n %{ObsessionStatus('', '')} %*"
+  let &statusline = "%1* %n %{ObsessionStatus(' ', ' ')}%*"
   let &statusline .= "  %<%f "
   let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
   let &statusline .= "%{PasteFlag()}"
