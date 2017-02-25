@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
 
-# This script uses the hl script to highlight certain
+# This script uses the hl function to highlight certain
 # keywords in the arc branch output
 # The color output of arc branch is lost when it's piped
 # this makes sure that ansi colors are returned 
 # which won't get lost when piped to fzf --ansi
+hl() {
+  if [ "$1" == "" ]; then
+      echo "Usage: hl PATTERN [COLOR]..."
+  elif [ "$2" == "" ]; then
+      perl -pe "s:$1:\033[31;1m$&\033[30;0m:g" /dev/stdin
+  else
+      perl -pe "s:$1:\033[3$2;1m$&\033[30;0m:g" /dev/stdin
+  fi
+}
+
 arc branch --view-all | 
 hl 'Closed' 2 |
 hl 'Needs Review' 5 |
