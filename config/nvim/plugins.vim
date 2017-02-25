@@ -41,6 +41,7 @@ command! -nargs=1 -bang -complete=customlist,s:complete_plug PlugOpen
   " Plug 'fishbullet/deoplete-ruby'
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
+  " Plug 'letientai299/vim-react-snippets/'
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ command! -nargs=1 -bang -complete=customlist,s:complete_plug PlugOpen
   " Plug 'zefei/cake16'
   " Plug 'NLKNguyen/papercolor-theme'
   " Plug 'reedes/vim-colors-pencil'
-  Plug 'vim-airline/vim-airline-themes'
+  " Plug 'vim-airline/vim-airline-themes'
   Plug 'sonph/onehalf', {'rtp': 'vim/'}
   " Plug '~/git/opensource/vim-gotham/'
   " Plug 'whatyouhide/vim-gotham'
@@ -66,7 +67,7 @@ command! -nargs=1 -bang -complete=customlist,s:complete_plug PlugOpen
   Plug 'tpope/vim-dispatch' " run tasks in a tmux split to not block vim
   Plug 'tpope/vim-obsession' " improve vim session handling
   Plug 'sheerun/vim-polyglot' " Syntax highlighting, indent, etc. for various file types
-  Plug 'vim-airline/vim-airline'
+  " Plug 'vim-airline/vim-airline'
 " }}}
 " ------------------------------------------------------------------------------
 

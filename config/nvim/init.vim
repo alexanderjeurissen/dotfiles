@@ -435,9 +435,9 @@ source $HOME/.config/nvim/plugin_configuration.vim
 
 " autocmd VimEnter,Colorscheme * :call ActivateColorScheme()
 " colorscheme onehalfdark
-colorscheme onehalflight
-set background=light
-let g:airline_theme = "onehalflight"
+colo onehalfdark
+set background=dark
+let g:airline_theme = "onehalfdark"
 " hi! link Search PMenu
 hi! link IncSearch PMenuSel
 hi! link Folded Visual
