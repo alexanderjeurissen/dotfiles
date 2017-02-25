@@ -459,6 +459,65 @@ endfunction
 " ==============================================================================
 
 " ==============================================================================
+" statusline settings {{{
+" ==============================================================================
+  set laststatus=2
+  set guioptions-=e
+
+  " additional symbols:
+  "Ξ Whitespace
+  "☰ max line number
+  "∄ not exist
+  "¶ line number
+  "␤ line number r2
+  hi! link User1 PMenuSel
+
+  set statusline=
+  let &statusline = "%1* %n %{ObsessionStatus('', '')} %*"
+  let &statusline .= "  %<%f "
+  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+  let &statusline .= "%{PasteFlag()}"
+  let &statusline .= "%{SpellFlag()}"
+  let &statusline .= "%{HardTimeFlag()}"
+  let &statusline .= "%=%{&fenc!='utf-8'?&fenc:''}" " show file encoding unless utf-8
+  let &statusline .= " %{&filetype == '' ? 'unknown' : &filetype} "
+  let &statusline .= "%1*\%3c\ %*"
+
+  function! PasteFlag()
+    if &paste
+      return '  '
+    else
+      return ''
+    endif
+  endfunction
+
+  function! SpellFlag()
+    if &spell
+      return ' Ꞩ '
+    else
+      return ''
+    endif
+  endfunction
+
+  function! SyntaxFlag()
+    if dein#tap('ale')
+      return ' ⚠ '
+    else
+      return ''
+    endif
+  endfunction
+
+  function! HardTimeFlag()
+    if exists("b:hardtime_on") && b:hardtime_on == 1
+      return '  '
+    else
+      return ''
+    endif
+  endfunction
+" }}}
+" ==============================================================================
+
+" ==============================================================================
 " terminal settings {{{
 " ==============================================================================
   tnoremap <leader><ESC> <C-\><C-n>
