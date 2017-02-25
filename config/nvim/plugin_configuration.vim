@@ -3,10 +3,15 @@
 " ------------------------------------------------------------------------------
 if has_key(g:plugs, 'Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
-  let g:UltiSnipsExpandTrigger='<tab>'
-  let g:UltiSnipsJumpForwardTrigger='<c-n>'
-  let g:UltiSnipsJumpBackwardTrigger='<c-p>'
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
   let g:UltiSnipsEditSplit='vertical'
+  " let g:UltiSnipsExpandTrigger = ""
+  let g:ulti_expand_or_jump_res = 0
+  " let g:UltiSnipsEnableSnipMate = 1
+  imap <expr><tab> pumvisible() ? "\<C-n>" : "\<TAB>"
+  imap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<TAB>"
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -592,7 +597,7 @@ if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
-  let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
+  let g:deoplete#auto_complete_start_length = 2 "also show completion with single character
 
   call deoplete#custom#set('ultisnips', 'rank', 1000)
 
@@ -601,6 +606,23 @@ if has_key(g:plugs, 'deoplete.nvim')
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  " Make <cr> select the candidate and if it's a snippet expand it.
+  inoremap <silent> <CR> <C-r>=<SID>trySelectCandidate()<CR>
+
+  function! s:trySelectCandidate()
+    if pumvisible()
+      call deoplete#mappings#close_popup() "close deoplete
+      let snippet = UltiSnips#ExpandSnippetOrJump()
+      if g:ulti_expand_or_jump_res > 0
+        return snippet
+      else
+        return "\<CR>"
+      endif
+    else
+     return "\<CR>"
+    endif
+  endfunction
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -611,11 +633,9 @@ endif
 if has_key(g:plugs, 'ultisnips')
   let g:ulti_expand_or_jump_res = 0
   let g:UltiSnipsEnableSnipMate = 1
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+  let g:UltiSnipsJumpForwardTrigger="<C-n>"
+  let g:UltiSnipsJumpBackwardTrigger="<C-p>"
   let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
-
-  imap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 endif
 " }}}
 " ------------------------------------------------------------------------------
