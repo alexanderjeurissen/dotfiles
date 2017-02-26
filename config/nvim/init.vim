@@ -339,6 +339,7 @@ augroup vimrcEx
   " Fold settings {{{
     autocmd FileType vim setl foldmethod=marker
     autocmd FileType zsh setl foldmethod=marker
+    autocmd FileType tmux setl foldmethod=marker
     autocmd FileType sh setl foldmethod=marker
     autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
     autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
@@ -475,7 +476,7 @@ endfunction
   set statusline=
   let &statusline = "%1* %n %{ObsessionStatus(' ', ' ')}%*"
   let &statusline .= "  %<%f "
-  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
   let &statusline .= "%{PasteFlag()}"
   let &statusline .= "%{SpellFlag()}"
   let &statusline .= "%{HardTimeFlag()}"
