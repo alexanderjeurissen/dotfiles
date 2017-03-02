@@ -24,9 +24,14 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 # }}}
 
 # FZF {{{
+  # export FZF_DEFAULT_OPTS='
+  #   --color fg:188,bg:237,hl:241,fg+:188,bg+:236,hl+:176
+  #   --color info:180,prompt:176,pointer:176,marker:168,spinner:176,header:241
+  # '
+
   export FZF_DEFAULT_OPTS='
-    --color fg:188,bg:237,hl:241,fg+:188,bg+:236,hl+:176
-    --color info:180,prompt:176,pointer:176,marker:168,spinner:176,header:241
+    --color fg:237,bg:231,hl:247,fg+:237,bg+:255,hl+:127
+    --color info:136,prompt:127,pointer:127,marker:167,spinner:127,header:247
   '
 # }}}
 
