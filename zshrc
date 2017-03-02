@@ -228,7 +228,7 @@ fi
       return 1
     fi
 
-    arc browse "${chosen_diff}"
+    arc browse "${chosen_object}"
   }
 
   # Cherrypick diff by applying it without commit and no branch
@@ -241,7 +241,7 @@ fi
 
 # Aliases for directories {{{
   alias h1="cd ~/git/hackerone/"
-  alias payments="cd ~/git/hackerone_payments/"
+  alias payments="cd ~/git/hackerone-payments/"
   alias dotfiles="cd ~/.dotfiles/"
 # }}}
 
@@ -293,7 +293,7 @@ fi
 
 # Gruvbox 256 colors support OSX
 # scurce "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
+# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
 
 # git aliases {{{
   source ~/.gitaliases
