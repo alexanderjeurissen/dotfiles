@@ -1,0 +1,156 @@
+#cVim-command-frame {
+  display: none;
+  border: 0;
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  z-index: 2147483647 !important;
+}
+
+#cVim-link-container {
+  transition: opacity 0.1s ease;
+  opacity: 0;
+}
+
+.cVim-hint-scale {
+  -webkit-animation: scale 0.25s;
+}
+
+@keyframes scale {
+  0%   { transform: scale(0)   perspective(1px); }
+  60%  { transform: scale(1.15) perspective(1px); }
+  100% { transform: scale(1)   perspective(0px); }
+}
+
+.cVim-link-hint_match {
+  opacity: 0.6;
+}
+
+.cVim-link-hint_match_hidden {
+  display: none;
+}
+
+.cVim-link-hint {
+  line-height: 1;
+}
+
+#cVim-command-bar {
+}
+
+#cVim-command-bar-mode {
+}
+#cVim-command-bar-input {
+  box-sizing: border-box;
+  outline-style: none;
+  border: 0;
+}
+
+#cVim-command-bar-search-results {
+}
+
+.cVim-completion-item {
+}
+
+.cVim-completion-item .cVim-full {
+}
+
+.cVim-completion-item .cVim-left {
+}
+
+.cVim-completion-item .cVim-right {
+}
+
+.cVim-highlight {
+  min-height: 0 !important;background-repeat: none !important;background-position: none !important;border-radius: 0 !important;outline: 0 !important;border: 0 !important;text-shadow: none !important;outline: 0 !important;outline-style: none !important;
+  background-color: yellow;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#cVim-hud {
+  min-height: 0 !important;background-repeat: none !important;background-position: none !important;border-radius: 0 !important;box-sizing: border-box !important;vertical-align: none !important;box-shadow: none !important;margin: 0 !important;-webkit-appearance: none !important;letter-spacing: normal !important;word-spacing: normal !important;text-transform: none !important;text-indent: 0px !important;text-shadow: none !important;text-align: start !important;outline: 0 !important;border: 0 !important;outline-style: none !important;line-height: 1 !important; font-style: normal !important;
+  bottom: 0;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  position: fixed !important;
+  z-index: 24724289 !important;
+}
+
+#cVim-hud span {
+  display: inline-block !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+}
+
+#cVim-status-bar {
+  min-height: 0 !important;background-repeat: none !important;background-position: none !important;border-radius: 0 !important;box-sizing: content-box !important;vertical-align: none !important;outline: 0 !important;border: 0 !important;-webkit-appearance: none !important;letter-spacing: normal !important;word-spacing: normal !important;text-transform: none !important;text-indent: 0px !important;text-shadow: none !important;text-align: start !important;outline: 0 !important;margin: 0 !important;outline-style: none !important;font-style: normal !important;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  background-color: #1b1d1e !important;
+  color: #bbb !important;
+  display: none;
+  vertical-align: middle;
+  padding-left: 2px;
+  padding-top: 2px;
+  box-sizing: border-box !important;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  left: 0 !important;
+  width: 100% !important;
+  height: 20px !important;
+}
+
+.cVim-error {
+  min-height: 0 !important;background-repeat: none !important;background-position: none !important;border-radius: 0 !important;box-sizing: content-box !important;vertical-align: none !important;box-shadow: none !important;margin: 0 !important;-webkit-appearance: none !important;letter-spacing: normal !important;word-spacing: normal !important;text-transform: none !important;text-indent: 0px !important;text-shadow: none !important;text-align: start !important;outline: 0 !important;border: 0 !important;outline-style: none !important;line-height: 1 !important; font-style: normal !important;
+}
+
+#cVim-cursor {
+  min-height: 0 !important;background-repeat: none !important;background-position: none !important;border-radius: 0 !important;box-sizing: content-box !important;vertical-align: none !important;box-shadow: none !important;margin: 0 !important;-webkit-appearance: none !important;letter-spacing: normal !important;word-spacing: normal !important;text-transform: none !important;text-indent: 0px !important;text-shadow: none !important;text-align: start !important;outline: 0 !important;border: 0 !important;outline-style: none !important;line-height: 1 !important; font-style: normal !important;
+  position: fixed !important; background: none !important; background-image: none !important;
+  left: 0 !important;
+  width: 100% !important;
+  top: 0 !important;
+  height: 100% !important;
+  z-index: 999999999999 !important;
+  cursor: none !important;
+  display: none;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+.cVim-find-mark {
+  all: unset;
+  background-color: #ffff00;
+  color: #111;
+}
+
+.cVim-find-mark[active] {
+  background-color: #ff9632;
+}
+
+/* {{ Delete these later */
+#cVim-frames-outline {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 9999999999;
+  box-sizing: border-box;
+  border: 3px solid yellow;
+}
+
+.cVim-completion-item[active] {
+  width: 100%; left: 0;
+  color: #1b1d1e;
+  background-color: #f1f1f1;
+}
+
+.cVim-completion-item[active] span {
+  color: #1b1d1e;
+}
+/* }} Delete these later */

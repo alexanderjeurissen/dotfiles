@@ -1,0 +1,50 @@
+:uri-asciidoctor: http://asciidoctor.org
+:icons: font
+:source-highlighter: pygments
+:nofooter:
+link:index.html[Home]
+
+== Mouseless
+
+
+== What is it?
+
+Chrome extension empowering users to browse more with the keyboard  and less with the mouse.
+It is a cVim fork adding more features (view link:changelog.html[changelog])
+
+
+
+== Who is it for?
+
+Mouseless is dedicated to power users. 
+
+It follows Arch Linux philosophy by being *user-centric* not user-friendly. It is intended to fill the needs of those contributing to it rather than appeal to as many users as possible.
+
+If you are familiar with vimperator/pentadactyl/vim, you will feel right at home. Otherwise, please consider using a beginner extension like vimium https://vimium.github.io/
+
+== Installation
+
+link:installation.html[install instructions]
+
+
+== Commands and settings
+
+link:commands.html[All commands]
+
+link:settings.html[All settings]
+
+
+== Contribute
+
+Mouseless is always hungry for contributions and seeking improvements.
+
+There are plenty of ways to link:contribute.html[contribute]
+
+== Thanks
+
+These contributors shared their time and expertise freely. link:thanks.html[Thank you!]
+
+== Help
+
+link:tips.html[FAQ & Tips]
+

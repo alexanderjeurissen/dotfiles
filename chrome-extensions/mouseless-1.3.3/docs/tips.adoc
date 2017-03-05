@@ -1,0 +1,171 @@
+:uri-asciidoctor: http://asciidoctor.org
+:icons: font
+:source-highlighter: pygments
+:nofooter:
+link:index.html[Home]
+
+== Tips (wip)
+
+. <<Cool custom scripts>> (Contribute more)
+. <<General tips>>
+.. <<How to use python server for extra commands?>>
+. <<Example config>>
+.. <<hbt cvimrc configuration example>>
+.. <<How to find more examples?>>
+. <<Developer tips>>
+.. <<What do the branches mean?>>
+.. <<How to instant reload extension while developing?>>
+.. <<How to generate the documentation?>>
+.. <<How to review pull request?>>
+.. <<How to do a release?>>
+. <<FAQ>>
+
+
+
+== Cool custom scripts
+
+=== reload configuration on demand
+
+[source,javascript]
+----
+reloadcvim() -> {{
+console.log('reloading cvim ' + (new Date()));
+var value = "call :source /home/hassen/.cvimrc<CR>";
+Mappings.parseLine(value);
+window.location.reload(true);
+}}
+----
+
+
+=== copy link description 
+
+[source,javascript]
+----
+copyDescription(elem) -> {{
+var text = elem.innerText || elem.value;
+RUNTIME('copy', {text: text});
+}}
+map yd createScriptHint(copyDescription)
+----
+
+=== focus on element
+
+[source,javascript]
+----
+focusElem(elem) -> {{
+elem.focus();
+}}
+map ys createScriptHint(focusElem)
+----
+
+== open link in incognito 
+
+[source,javascript]
+----
+openLinkIncognito(link) -> {{
+var value = "call :tabopen " + link.href + " |<CR>"
+Mappings.parseLine(value);
+}}
+----
+
+== reopen current tab in incognito
+
+[source,javascript]
+----
+reopenInIncognito(link) -> {{
+var value = "call :tabopen " + window.location.href + " |<CR>"
+Mappings.parseLine(value);
+}}
+----
+
+
+== turn current youtube in fullscreen 
+
+(bypassing age restriction when not authenticated)
+
+
+[source,javascript]
+----
+" youtube
+youtubeFullscreen() -> {{
+        var location=window.location.href;
+        location = location.replace('watch', 'watch_popup')
+        window.location.href=location;
+}}
+map ;yt :call youtubeFullscreen<CR>
+----
+
+
+== General tips
+
+=== How to use python server for extra commands?
+
+A python server is required. 
+Start it using `nohup python /home/hassen/workspace/mouseless/cvim_server.py > /dev/null 2>&1 &` on boot 
+
+== Example config
+
+=== hbt cvimrc configuration example
+
+link:https://gist.github.com/hbt/b3d6b753c5a060667582327b85300ba1[cvimrc]
+
+=== How to find more examples?
+
+link:https://github.com/search?utf8=%E2%9C%93&q=filename%3A.pentadactyl+map&type=Code&ref=searchresults[github search pentadactyl examples]
+
+link:https://github.com/search?utf8=%E2%9C%93&q=filename%3A.cvimrc+map&type=Code&ref=searchresults[github search cvimrc examples]
+
+
+== Developer tips
+
+=== What do the branches mean?
+
+- dev = active development branch and could be unstable
+- master = stable code and latest stable release
+
+=== How to instant reload extension while developing?
+
+- `./scripts/watch.sh`
+- Uncomment loop in  background_scripts/extension-reloader.js:25
+- reload extension or restart browser
+- tabs reload whenever a file is saved
+
+=== How to generate the documentation?
+
+Original files are in adoc, generated files are in HTML. We store both instead of relying on github pages.
+
+```
+cd docs
+bundle 
+asciidoctor -v  -B docs/ *.adoc  
+```
+
+=== How to review pull request?
+
+. review diffs + quality
+. merge on dev branch
+.. git checkout -b rosshadden-fix/editing-divs master
+.. git pull git://github.com/rosshadden/mouseless.git fix/editing-divs
+.. git co dev
+.. git merge fix/editing-divs
+.. rebase + amend if needed - verify ticket number + code quality
+. add to commands.adoc 
+. update changelog.adoc
+. add user to thanks.adoc
+
+
+=== How to do a release?
+
+. merge dev into master
+. edit manifest.json
+. update changelog.adoc
+. tag and release
+.. git tag -a 1.3.0
+.. git push origin 1.3.0
+
+
+== FAQ
+
+Check issues labeled link:https://github.com/hbt/mouseless/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Aquestion[question]
+
+

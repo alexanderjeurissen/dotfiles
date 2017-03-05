@@ -1,0 +1,84 @@
+:uri-asciidoctor: http://asciidoctor.org
+:icons: font
+:source-highlighter: pygments
+:nofooter:
+link:index.html[Home]
+
+== Contribution guideline
+
+
+== Types of contributions
+
+- <<Enhancements>>
+- <<Bug reports>>
+- <<Ideas>>
+- <<Code review>>
+- <<Community support>>
+- <<Documentation>>
+
+
+== Enhancements
+
+. search existing tickets (labeled #enhancement) for similar ideas and comment there https://github.com/hbt/mouseless/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement
+. log a ticket in https://github.com/hbt/mouseless/issues 
+. propose a command explaining how it would enhance your workflow 
+. propose ways of building it or refer to existing implementation if already done in other software
+. fork it and build it for yourself
+. send pull request <<Pull request guideline>>
+
+== Bug reports
+
+. search existing tickets (labeled as #bug) for similar bugs and comment there or upvote it https://github.com/hbt/mouseless/issues?q=is%3Aissue+is%3Aopen+label%3Abug
+. log a ticket in https://github.com/hbt/mouseless/issues 
+. write steps to reproduce the bug with URLs if needed
+. write the result you *expected* and what happened instead
+. share your configuration if you believe it to be the source
+. propose a way of fixing the issue 
+. send pull request <<Pull request guideline>>
+:uri-asciidoctor: http://asciidoctor.org
+:icons: font
+:source-highlighter: pygments
+:nofooter:
+link:index.html[Home]
+
+== Ideas
+
+it is fine to log tickets (labeled #idea) to brainstorm ideas and suggest workflows. Take the time to clear it your head first.
+https://github.com/hbt/mouseless/issues?q=is%3Aissue+is%3Aopen+label%3Aidea
+
+Unlike enhancement requests, idea requests are vague and often lack a design proposal on how to implement it. 
+
+== Code review
+
+. watch the repository https://github.com/hbt/mouseless
+. comment on pull request and what needs to be done to meet guideline <<Pull request guideline>>
+. comment on implementation, potential bugs, performance issues, code quality etc.
+
+
+== Community support
+
+This is the most time consuming of all and any help is appreciated.
+
+. watch the repository https://github.com/hbt/mouseless
+. answer tickets label as #question to the best of your ability https://github.com/hbt/mouseless/issues?q=is%3Aissue+is%3Aopen+label%3Aquestion 
+. don't let shitty people get to you ;-) They are a tiny minority but your brain will exaggerate their effect
+
+
+== Documentation
+
+Improving documentation by:
+
+- fixing typos
+- sharing tips like cool configuration tricks, mappings etc. link:tips.html[view tips]
+- doing other type of grunt work which is appreciated but time consuming https://github.com/hbt/mouseless/issues?q=is%3Aissue+is%3Aopen+label%3Agrunt_work
+
+== Pull request guideline
+
+. create branch and commit work referring to ticket
+. commits should refer to ticket number created in https://github.com/hbt/mouseless/issues 
+. minimal changes in diffs
+. update docs/commands.md docs/settings.md if relevant
+. wait at least a week for a maintainer to review and merge your changes
+
+NOTE: Do not bother proposing a mapping. It will be ignored. Add the new function as an isolated module and it will be merged.
+
