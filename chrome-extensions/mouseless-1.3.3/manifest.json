@@ -1,0 +1,132 @@
+{
+  "manifest_version": 2,
+  "name": "cVim",
+  "version": "1.3.3",
+  "description": "An extension adding Vim-like bindings to Google Chrome",
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "icons": {
+    "128": "icons/128.png",
+    "48":  "icons/48.png",
+    "16":  "icons/16.png"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+   "commands": {
+      "nextTab": {
+         "description": "Go to the next tab"
+      },
+      "previousTab": {
+         "description": "Go to the previous tab"
+      },
+      "togglecVim": {
+         "description": "Toggle the enabled state of cVim"
+      },
+      "toggleBlacklisted": {
+        "description": "Toggle the blacklist for the domain in the current tab"
+      },
+      "nextCompletionResult": {
+        "description": "Let Chrome use <C-n> for cncpcompletion setting (see Help file)"
+      },
+      "deleteBackWord": {
+        "description": "Let Chrome use <C-w> for the deleteBackWord insert mapping"
+      },
+      "closeTab": {
+         "description": "Close the current tab"
+      },
+      "reloadTab": {
+        "description": "Reload the current tab"
+      },
+      "newTab": {
+        "description": "Open a new tab to a blank page"
+      },
+      "restartcVim": {
+        "description": "Restart the background scripts (pages will need a refresh)"
+      }
+   },
+  "browser_action": {
+    "default_icon": {
+      "19": "icons/disabled.png",
+      "38": "icons/disabled-38.png"
+    },
+    "default_title": "cVim",
+    "default_popup": "pages/popup.html"
+  },
+  "author": "Jake Eaton",
+  "permissions": [
+    "<all_urls>",
+    "tabs",
+    "history",
+    "bookmarks",
+    "storage",
+    "sessions",
+    "downloads",
+    "downloads.open",
+    "downloads.shelf",
+    "topSites",
+    "clipboardRead",
+    "clipboardWrite",
+    "webNavigation"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "background": {
+    "persistant": false,
+    "scripts": [
+      "vendor/jquery.js",
+      "vendor/underscore-min.js",
+      "content_scripts/utils.js",
+      "content_scripts/cvimrc_parser.js",
+      "background_scripts/clipboard.js",
+      "background_scripts/bookmarks.js",
+      "background_scripts/sites.js",
+      "background_scripts/files.js",
+      "background_scripts/links.js",
+      "background_scripts/history.js",
+      "background_scripts/actions.js",
+      "background_scripts/main.js",
+      "background_scripts/options.js",
+      "background_scripts/sessions.js",
+      "background_scripts/popup.js",
+      "background_scripts/update.js",
+      "background_scripts/tab_creation_order.js",
+      "background_scripts/extension-reloader.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>", "chrome://*/*"],
+      "js": [
+        "vendor/jquery.js",
+        "vendor/underscore-min.js",
+        "vendor/linkify.min.js",
+        "vendor/linkify-jquery.min.js",
+        "vendor/linkify-element.min.js",
+        "content_scripts/cvimrc_parser.js",
+        "content_scripts/session.js",
+        "content_scripts/utils.js",
+        "content_scripts/dom.js",
+        "content_scripts/hints.js",
+        "content_scripts/bookmarks.js",
+        "content_scripts/command.js",
+        "content_scripts/keys.js",
+        "content_scripts/clipboard.js",
+        "content_scripts/complete.js",
+        "content_scripts/mappings.js",
+        "content_scripts/find.js",
+        "content_scripts/cursor.js",
+        "content_scripts/status.js",
+        "content_scripts/hud.js",
+        "content_scripts/visual.js",
+        "content_scripts/scroll.js",
+        "content_scripts/search.js",
+        "content_scripts/frames.js",
+        "content_scripts/messenger.js"
+      ],
+      "css": ["content_scripts/main.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "options_page": "pages/options.html",
+  "web_accessible_resources": ["cmdline_frame.html"]
+}
