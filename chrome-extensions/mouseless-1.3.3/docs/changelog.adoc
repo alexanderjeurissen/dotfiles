@@ -1,0 +1,344 @@
+:uri-asciidoctor: http://asciidoctor.org
+:icons: font
+:source-highlighter: pygments
+:nofooter:
+link:index.html[Home]
+
+== Mouseless Changelog
+
+
+
+## 1.3.3
+
+ . Added multithreaded support for external editor https://github.com/hbt/mouseless/issues/81
+ . Fixed undefined settings.mouselesshintcharacters error https://github.com/hbt/mouseless/issues/82
+ . Merged fix for  `nextCompletionResults` https://github.com/1995eaton/chromium-vim/pull/502 https://github.com/1995eaton/chromium-vim/issues/390 https://github.com/1995eaton/chromium-vim/pull/502
+ . Merged fix for clicking dropdowns https://github.com/1995eaton/chromium-vim/commit/aebe4469892100cb005ca582d91357f50b0ae57f https://github.com/1995eaton/chromium-vim/issues/504
+ . Merged fix for globals format for pegjs https://github.com/1995eaton/chromium-vim/pull/491
+
+## 1.3.2
+
+ . Fixed contentEditable elements not being editable using external editor https://github.com/hbt/mouseless/issues/75
+ . added `previousDomain` `nextDomain` commands https://github.com/hbt/mouseless/issues/79
+
+
+## 1.3.1
+
+ . Added `openLastDownload` command https://github.com/hbt/mouseless/issues/60
+ . Added alias `incrementURLFirstPath` to command `incrementURLPath` and `decrementURLFirstPath` to `decrementURLPath` https://github.com/hbt/mouseless/issues/59
+ . Added `incrementURLLastPath` `decrementURLLastPath` commands  https://github.com/hbt/mouseless/issues/59
+ . Added `viewSourceExternalEditor` command https://github.com/hbt/mouseless/issues/57
+ . Enhanced documentation and released on http://mouseless.hbtlabs.com and https://hbt.github.io/mouseless 
+  
+## 1.3.0
+
+New Settings: 
+
+- ignorenumerickeys - https://github.com/hbt/mouseless/commit/145126dd83edd6b05b780e7245bf1988d2c26bb9
+- debug - https://github.com/hbt/mouseless/commit/3dbbfe831412c44ec16ba5dea6411514b56e48a0
+- experimental  - turns on experiments (view below)
+- mouselesshintcharacters = "dsafrewq,tgcx" - https://github.com/hbt/mouseless/commit/acd2c474ee940872500aca98a75648d0bf4d3efa 
+- newtabalwaysontheright https://github.com/hbt/mouseless/commit/a17f3e3f0c9917af1f944b4d5ff21ccc30da7085
+- automakelinks https://github.com/hbt/mouseless/commit/ba34618a09fd78f9aed3c22c0708aeb0ac02bcdc
+- newtaburl https://github.com/hbt/mouseless/commit/2ea0bcf53df09cc83edf0dcea278f9965212abef
+
+
+
+New Commands:
+
+- enterPassMode - https://github.com/hbt/mouseless/commit/de428a2e6030d75bf564a5dda400b6e3c4c5e40a
+- exitPassMode - https://github.com/hbt/mouseless/commit/de428a2e6030d75bf564a5dda400b6e3c4c5e40a
+- openUrlExternalEditor - https://github.com/hbt/mouseless/commit/b9f811e2fbdc89ab80039431af6d894dadec8c2c
+- toggleDomainStylesheets - https://github.com/hbt/mouseless/commit/8368a0821665d1f4dd5e899e39dc2e0ec6be8912
+- toggleBookmark - https://github.com/hbt/mouseless/commit/f3dbf256777b0c946565ec64a9949d546a672718
+- https://github.com/hbt/mouseless/commit/e4da57c1841fa5214db02562094b2c813b7b82f6
+- pauseDownloads
+- resumeDownloads
+- cancelDownloads
+- restartLastDownload
+- copyURLDownloads
+
+
+New Commands (wip):
+
+    - https://github.com/hbt/mouseless/commit/97533a4787a7b50e233fe6879d0c8c5707fd71d6 (wip)
+    - myCloseTabsOthers
+    - myCloseTabsAllExcept
+    - myCloseTabsRight
+    - myCloseTabsLeft
+    - windowUnpinAllTabs
+    - browserUnpinAllTabs
+    - https://github.com/hbt/mouseless/commit/a21ae2067ff9faa2d09b9649034e910f64f0e8ab (wip)
+    - markMergeTab
+    - markMergeWindow
+    - putMergeTabs
+
+- makeLinks https://github.com/hbt/mouseless/commit/ba34618a09fd78f9aed3c22c0708aeb0ac02bcdc
+
+
+
+Features:
+
+- enabled on chrome:// pages https://github.com/hbt/mouseless/commit/5d30159913f5acd0c1277e2d06e1ff46521a22e1
+- unmap removes keys recursively https://github.com/hbt/mouseless/commit/53053184d32529d1b60e1396fee1b134c6b8f1ef
+- external editor set cursor position https://github.com/hbt/mouseless/commit/d1ae58d5c283bcbca581772d8caed798a47de760
+- windows are maximized instead of natural height/width https://github.com/hbt/mouseless/commit/90ae0986bd28e08c6b2d3e54533242be22dd965d 
+- #515 #3 custom hinttags - https://github.com/hbt/mouseless/commit/486dc99bc36ac9c53d548a7b4c5b9692af446144
+- #18 custom hints generation algo - https://github.com/hbt/mouseless/commit/acd2c474ee940872500aca98a75648d0bf4d3efa 
+- #5 save local marks per domain - https://github.com/hbt/mouseless/commit/82e342948bc5eb1dafaeff64a40d405b90f0930d
+- #23 stylesheet toggler https://github.com/hbt/mouseless/commit/8368a0821665d1f4dd5e899e39dc2e0ec6be8912
+- #24 bookmarks toggler https://github.com/hbt/mouseless/commit/f3dbf256777b0c946565ec64a9949d546a672718
+- #27 downloads manipulation https://github.com/hbt/mouseless/commit/e4da57c1841fa5214db02562094b2c813b7b82f6
+- #38 always open new tabs on the right https://github.com/hbt/mouseless/commit/a17f3e3f0c9917af1f944b4d5ff21ccc30da7085
+- #14 transform plain text URL into clickable links https://github.com/hbt/mouseless/commit/ba34618a09fd78f9aed3c22c0708aeb0ac02bcdc
+- #2 specify custom new tab url https://github.com/hbt/mouseless/commit/2ea0bcf53df09cc83edf0dcea278f9965212abef
+
+
+
+Fixes:
+
+- #20 escape key not sent to page - https://github.com/hbt/mouseless/commit/b95912f512dec8334f196ed667395551d98a7835
+- #498 viewsource not working - https://github.com/hbt/mouseless/commit/958d0b0c6cbb439649b8404cd591f7d214b19319
+- #25 stop numeric keys propagation https://github.com/hbt/mouseless/commit/19c3d9cb64c2db2ff4bd299f82938128f5befaa6
+- #42 fix dropdown doing nothing on click https://github.com/hbt/mouseless/commit/94767903708ddfa747cce3c303c1a50fd476385a
+- #41 settings overwritten by local config when reloaded instead of merging https://github.com/hbt/mouseless/commit/defb4bd48234e7dd2ff82160c327f267963acb0d
+
+
+Experiments:
+
+- #17 - hints appear over visible elements even when they are floating (css property) and their height/width might be 0px 
+https://github.com/hbt/mouseless/commit/d016e6e1d968fc09e22ab657dddbb931833207ef
+
+
+== cVim Changelog prior to forking
+
+## 1.2.86
+ * Add `openQuickMarkWindowed` command
+
+## 1.2.85
+ * Bug fixes
+
+## 1.2.84
+ * Bug fixes
+
+## 1.2.83
+ * Fix bug in Chrome 50+
+
+## 1.2.82
+ * Fix `:new`/`:winopen` bug
+ * Fix scrolling bug when experimental JavaScript features are enabled
+ * Fix several insert mapping bugs
+ * Allow multiple unmaps using a single statement (e.g. `unmap h j k l`)
+ * Added new window modifier for `:tabnew` and related commands
+
+## 1.2.81
+ * Smooth scrolling is now disabled by default (add `set smoothscroll` to your settings to get it back)
+ * Bug fixes
+
+## 1.2.80
+ * Scrolling improvements
+ * Bug fixes
+
+## 1.2.79
+ * Content scripts will now be reloaded if they lose connection to the
+   background scripts (e.g. restarting the extension)
+
+## 1.2.78
+ * Default completion engines are now only `["google", "duckduckgo", "wikipedia", "amazon"]`.
+   The other engines still exist, but you'll need to enable them with the `completionengines` option.
+   * See [mappings.html#completion-engines](./mappings.html#completion-engines) for more info.
+ * Added "themoviedb" to completion engines
+
+## 1.2.77
+ * Bug fixes
+ * Add support for local ".cvimrc" files
+
+## 1.2.76
+ * Fixed issue with buffer switching. Partially breaks fix from last version
+
+## 1.2.75
+ * Fixed issue where cVim sometimes stops responding after opening the command bar
+
+## 1.2.74
+ * Bug fixes
+ * Added `sortlinkhints` setting
+
+## 1.2.73
+ * Link hint / command bar redesign (may need to reset CSS for this to take effect)
+ * Improved autocompletion matching
+ * Several bugfixes
+
+## 1.2.72
+ * Fix an issue with command bar z-index on YouTube: [#237](https://github.com/1995eaton/chromium-vim/issues/237)
+ * Fix an issue with tab completion with the `:buffer` command: [#238](https://github.com/1995eaton/chromium-vim/issues/238)
+
+## 1.2.71
+ * Fix incompatibilities with some non-American keyboard layouts
+
+## 1.2.70
+ * Fix a cncpcompletion bug
+ * Added the `createScriptHint` command
+ * Multiple bugfixes
+
+## 1.2.69
+ * Fix a bug with text areas ([#231](https://github.com/1995eaton/chromium-vim/issues/231))
+
+## 1.2.68
+ * Bug fixes from iframe addition in 1.2.68
+ * Added code block feature
+
+## 1.2.67
+ * Moved command bar to separate frame (issue [#85](https://github.com/1995eaton/chromium-vim/issues/85)).
+ * Several security patches
+
+## 1.2.66
+ * Added `nativelinkeorder`, `vimcommand`, and `vimport` options
+ * `cvim_socket.py` is now `cvim_server.py`
+ * Bug fixes
+
+## 1.2.65
+ * Better smooth scrolling performance
+ * Fix a URI encoding bug with search engines
+
+## 1.2.64
+ * Improved cVimrc parsing (with [PEG.js](http://pegjs.majda.cz/))
+  * The options page will now report errors on which line has improper syntax.
+You can check Chrome's JavaScript console for more info on what the error was
+and why it occurred.
+ * Better history searching
+ * Several bug fixes
+
+## 1.2.63
+ * Fix for Google search and the `:` key (and some others)
+
+## 1.2.62
+ * Added autoupdategist option
+ * Added lastUsedTab command
+ * The goToSource command is now `:viewsource&<CR>`
+ * Removed the mapping blacklist feature for the blacklists array (e.g. `let blacklists = ["*://*.reddit.com/* <Up> <Down>])
+  * The syntax for an extended version of this feature can now be found [here](https://github.com/1995eaton/chromium-vim#site-specific-configuration)
+
+## 1.2.61
+ * Minor bug fixes from last update
+ * Fix issue [#120](https://github.com/1995eaton/chromium-vim/issues/120)
+
+## 1.2.60
+ * Removed the toggleImages command
+ * Remove the `:date` command
+ * Performance optimizations + bugfixes
+
+## 1.2.59
+ * Various bug fixes
+ * Improved smooth-scrolling
+
+## 1.2.58
+ * Fixed issues with certain keys not working with certain keyboard layouts
+ * `<C-a>` insert mapping is now `<C-i>`
+
+## 1.2.57
+ * Miscellaneous bug fixes
+
+## 1.2.56
+ * **Important!** The behavior of commands that open links (`:open`, `:tabnew`, `:history`, etc) has changed. See [the mappings page](./mappings.html#tabs) for more information.
+ * Awesome new feature! It's now possible to use Vim to edit text boxes. All that is needed is a python script that can be found [here](https://github.com/1995eaton/chromium-vim/blob/master/cvim_server.py)
+  * To get things running, just run the script: `python cvim_socket.py` and press `<C-i>` inside a text box.
+ * As a result of the above, the insert mapping `<C-i>` (beginningOfLine) is now `<C-a>`.
+ * Smoother scrolling
+ * Added `:tabattach` command
+ * Settings defined via the command bar (e.g. `:set nosmoothscroll`) will become active in all other tabs and all new tabs until either the browser is restarted or the settings is flipped
+ * Page searches are now synced with other tabs
+ * Performance enhancements
+
+## 1.2.55
+ * In order to make cVim as "vim-like" as possible, some commands have been added, and others have changed (the old ones will continue to work). `:tabopen` is now `:tabnew` and `:closetab` is now `:quit`
+ * The `C-z` toggleCvim mapping is now `A-z` due to conflicts with the default undo-text Chrome shortcut.
+ * Added `goToLastInput` command (`gI`)
+ * The yank-link hint mode binding has changed from `Y` to `gy`
+ * Yank link hint mode will now copy text box values/placeholders in addition to link URLs.
+
+## 1.2.54
+ * The ```ignorediacritics``` option has been removed due to its large performance impact
+ * Added the ```*``` modifier to the open group of commands (e.g. ```:tabopen http://www.google.com*``` will open Google in a pinned state)
+   * This can be used in addition to the ```&``` modifier (e.g. ```:tabopen http://www.google.com*&``` or ```:tabopen http://www.google.com&*``` will open Google in a pinned background tab
+ * Fixed a CSS style injection bug on some sites
+ * Improved keyboard key support
+ * Added experimental GitHub autocomplete search engine (e.g. ```:tabopen github @1995eaton/```)
+
+## 1.2.53
+ * **Important!** cVimrc blacklists are now a part of the cVimrc. Previous blacklists should carry over to the cVimrc text area. New blacklists can be declared like this:
+```vim
+let blacklists = ["https://www.google.com"]
+```
+ * When defining custom search engines, you can now add the string ```%s``` somewhere inside the URL to indicate that the query should be inserted in this place. This is useful for search engines with URLs that have non-standard structures. For instance:
+
+```vim
+" If you search for 'test' using this engine, cVim
+" will open this link -> http://www.example.com/test?type=search
+let searchengine example = "http://www.example.com/%s?type=search"
+
+" In the case below, '%s' is optional. If it is not included, your search query will be appended to the URL
+let searchengine example = "http://www.example.com/search?query="
+let searchengine example = "http://www.example.com/search?query=%s" "This is no different from the above case
+```
+ * Added lastScrollPosition ```''```, goToMark ```'<*>```, and setMark ```;<*>``` mappings
+ * Find-mode is much, much faster (outperforms Google's search mode when looking for the letter 'a' in a text copy of *The Great Gatsby*)
+ * Several bugfixes
+ * Added searchalias and locale variables (see help file ```:help```)
+
+## 1.2.52
+ * Added the ```file``` command
+ * Added the ```date``` command
+ * Improved link hint performance
+ * The reverseImageSearch mapping can now parse base64 images (thanks to Google's "Search by Image" extension)
+ * Added the closeTab command to the chrome://extensions -&gt; Keyboard Shortcuts page
+ * Improved cVim response time on initial page load
+ * Minor bugfixes
+
+## 1.2.51
+ * **Important!** cVimrc setting are now stricter. You must use 'let' instead of set when using options requiring an equal symbol. For example:
+```vim
+set hintcharacters = abc123 "Incorrect!
+let hintcharacters = "abc123" "Correct
+```
+ * Added completionengines option to cVimrc (choose which completion engines to display). For example:
+```vim
+let completionengines = ["google", "imdb"] "Only these engines will appear in the search autocomplete menu
+```
+ * Added autohidecursor option (useful for Linux operating systems, which don't automatically hide the mouse cursor when a key is pressed). You can test this out by running the command ```:set autohidecursor``` and scrolling with j/k (might have to nudge mouse cursor then scroll to see it disappear initially).
+ * Bug fixes
+
+## 1.2.50
+ * ```map``` automatically unmaps the existing binding if a conflict occurs (e.g. same key mapped to multiple functions). ```unmap``` is no longer necessary unless you wish to disable a default mapping
+ * ```map``` can now point to other mappings as a reference (e.g. ```map j k```)
+ * Improved mapping key compatibility
+ * Minor CSS tweaks in the options page
+
+## 1.2.49
+ * Reworked domain blacklists engine. See https://developer.chrome.com/extensions/match_patterns for a description of the new URL match syntax
+ * Fixed some iframe bugs
+
+## 1.2.48
+ * Fixed an issue where quickmarks wouldn't save
+ * Minor bugfixes
+ * Added basic support for Visual Line mode (V)
+ * Updated DuckDuckGo search engine for completion
+ * Added a restart chrome shortcut (zr). The same could be accomplished with the config ```map zr :chrome://restart&<CR>```
+ * reloadAllTabs is still available for mapping, but the key binding ```cr``` now defaults to reloadAllButCurrent
+
+## 1.2.47
+ * Several bugfixes
+ * Added reloadAllTabs (cr), toggleImages (ci), zoomPageIn (zi), zoomPageOut (zo), zoomOrig (z0), zoomImage (z&lt;Enter&gt;), and toggleCvim (&lt;C-z&gt;) mappings
+
+## 1.2.46
+ * Fixed a bug where bookmarks would be displayed multiple times on some sites
+
+## 1.2.45
+ * Fixed a CSS issue with the default font (if your font looks ugly, reset cVim to see changes).
+
+## 1.2.44
+ * Tiny bugfix
+
+## 1.2.43
+ * Added this changelog
+ * Minor bugfixes
+ * Fixed conflicting CSS styles

@@ -1,0 +1,216 @@
+{
+  var autoJsLength = 0;
+  function merge(a, b) {
+    for (var p in b) {
+      if (typeof b[p] === 'object' && !Array.isArray(b[p])) {
+        if (!a.hasOwnProperty(p)) {
+          a[p] = {};
+        }
+        merge(a[p], b[p]);
+      } else {
+        a[p] = b[p];
+      }
+    }
+  }
+  function parseScope(data) {
+    var result = {MAPPINGS: []};
+    data.forEach(function(e) {
+      if (e === null)
+        return;
+      if (e.MAPPINGS) {
+        result.MAPPINGS.push(e.MAPPINGS);
+      } else {
+        merge(result, e);
+      }
+    });
+    result.MAPPINGS = result.MAPPINGS.join('\n');
+    return result;
+  }
+  function objectPlural(key) {
+    var replacements = {
+      qmark: 's',
+      searchengine: 's',
+      searchalias: 'es'
+    };
+    if (replacements.hasOwnProperty(key))
+      key += replacements[key];
+    return key;
+  }
+}
+
+Start
+  = a:Scope { return a; }
+
+EOF = !.
+EOL = [\n\r]
+WhiteSpace = [ \t]
+__ = (EOL / WhiteSpace)*
+MapIdentifier = a:(!WhiteSpace !EOL .)+ { return text(); }
+MapValue
+  = ':' [^\n]* { return text(); }
+  / Identifier
+SEPVAL
+  = WhiteSpace* EOL+ WhiteSpace* "\\" WhiteSpace* { return null; }
+  / WhiteSpace+ { return null; }
+SEP
+  = SEPVAL+
+
+Identifier = ([@][@])?[a-zA-Z_$][a-zA-Z_$0-9]* { return text(); }
+
+LET     = 'let'
+SET     = 'set'
+SITE    = 'site'
+CALL    = 'call'
+MAP     = 'map'
+IMAP    = 'imap'
+UNMAP   = 'unmap'
+IUNMAP  = 'iunmap'
+COMMAND = 'command'
+
+Comment
+  = WhiteSpace* '"' [^\n]+ { return null; }
+
+StringCharacter
+  = '\\' a:[^\n] { return a; }
+  / [^\n]
+  / SEP { return ''; }
+
+DoubleStringCharacter
+  = !'"' a:StringCharacter { return a; }
+SingleStringCharacter
+  = !'\'' a:StringCharacter { return a; }
+
+StringLiteral
+  = '"' a:DoubleStringCharacter* '"' { return a.join(''); }
+  / '\'' a:SingleStringCharacter* '\'' { return a.join(''); }
+
+FloatingPointLiteral
+  = IntegerLiteral '.' ('0'* IntegerLiteral / '0'+)? {
+    return parseFloat(text());
+  }
+  / '.' ('0'* IntegerLiteral / '0'+) { return parseFloat(text()); }
+
+IntegerLiteral
+  = '0' { return 0; }
+  / [1-9][0-9]* { return parseInt(text(), 10); }
+
+NumberLiteral
+  = FloatingPointLiteral
+  / IntegerLiteral
+
+ArrayList
+  = SEP? a:Expression SEP? ',' b:ArrayList SEP? { return [a].concat(b); }
+  / SEP? a:Expression SEP? { return [a]; }
+
+ArrayLiteral
+  = '[' a:ArrayList ']' { return a; }
+  / '[' SEP? ']' { return []; }
+
+Expression
+  = StringLiteral
+  / NumberLiteral
+  / ArrayLiteral
+
+LetStatement
+  = LET SEP a:Identifier SEP? '=' SEP? b:Expression {
+    var r = {}; r[a] = b; return r;
+  }
+  / LET SEP a:Identifier SEP b:(Identifier / NumberLiteral) SEP? '=' SEP? c:Expression {
+    a = objectPlural(a);
+    var r = {}; r[a] = {}; r[a][b] = c; return r;
+  }
+
+SetStatement
+  = SET SEP 'no' a:Identifier { var r = {}; r[a] = false; return r; }
+  / SET SEP !'no' a:Identifier { var r = {}; r[a] = true; return r; }
+
+SiteStatement
+  = SITE SEP a:StringLiteral SEP? '{' WhiteSpace* EOL b:Scope '}' {
+    var r = {sites: {}}; r.sites[a] = b; return r;
+  }
+
+UnmapIdentifierList
+  = SEP? a:MapIdentifier SEP b:UnmapIdentifierList SEP? { return [a].concat(b); }
+  / SEP? a:MapIdentifier SEP? { return [a]; }
+
+UnmapStatement
+  = a:(UNMAP / IUNMAP) SEP b:UnmapIdentifierList {
+    return { MAPPINGS: a + ' ' + b.join(' ') };
+  }
+
+MapStatement
+  = a:(MAP / IMAP) SEP b:MapIdentifier SEP c:[^\n]* {
+    return { MAPPINGS: [a, b, c.join('')].join(' ') };
+  }
+
+CallStatement
+  = CALL SEP a:[^\n]* {
+    return { MAPPINGS: 'call ' + a.join('') };
+  }
+
+CommandStatement
+  = COMMAND SEP a:[a-zA-Z]+ SEP b:[^\n]+ {
+    var r = { COMMANDS: {} };
+    r.COMMANDS[a.join('')] = b.join('');
+    return r;
+  }
+
+JavaScriptBlockChar
+ = (!'}}' .) { return text(); }
+
+Parameters
+  = a:Identifier SEP? ',' SEP? b:Parameters {
+    return [a].concat(b);
+  }
+  / a:Identifier { return [a]; }
+
+ParameterList
+  = '(' SEP? a:Parameters? SEP? ')' { return a || []; }
+
+JavaScriptBlock
+  = '{{' EOL* a:JavaScriptBlockChar* '}}' {
+    return a.join('');
+  }
+
+AutoRunJavaScriptBlock
+  = '->' SEP? a:JavaScriptBlock {
+    var result = {
+      AUTOFUNCTIONS: {}
+    };
+    result.AUTOFUNCTIONS[autoJsLength] = a;
+    autoJsLength++;
+    return result;
+  }
+
+JavaScriptBlockDefinition
+  = a:Identifier SEP? b:ParameterList? SEP? '->' SEP? c:JavaScriptBlock {
+    var result = {
+      FUNCTIONS: {
+      }
+    };
+    result.FUNCTIONS[a] = '(function(' + (b || []).join(',') + ')' +
+                          '{' + c + '})';
+    return result;
+  }
+
+StatementValue
+  = LetStatement
+  / JavaScriptBlockDefinition
+  / AutoRunJavaScriptBlock
+  / SetStatement
+  / SiteStatement
+  / ('unmapAll' / 'iunmapAll') {
+    return {MAPPINGS: text() };
+  }
+  / CallStatement
+  / CommandStatement
+  / MapStatement
+  / UnmapStatement
+  / Comment
+
+Statement
+  = __ a:StatementValue Comment? WhiteSpace* (EOF / EOL __) { return a; }
+
+Scope
+  = (WhiteSpace / EOL)* EOF { return parseScope([]); }
+  / a:Statement* { return parseScope(a); }
