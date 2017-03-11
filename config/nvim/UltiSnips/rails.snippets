@@ -41,3 +41,18 @@ class ${1:modelClassName} < ActiveRecord::Base
 $0
 end
 endsnippet
+
+snippet modelspec "Description" b
+# frozen_string_literal: true
+require 'integration/spec_helper'
+
+describe ${1:model_class_name} do
+$0
+end
+endsnippet
+
+snippet mailspec "Expect ActionMailer::Deliveries deliver" b
+sent_mail = ActionMailer::Base.deliveries.last
+expect(sent_mail).to be_present
+verify(format: :html) { sent_mail.html_part.body }
+endsnippet
