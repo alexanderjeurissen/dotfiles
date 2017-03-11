@@ -305,6 +305,15 @@ autocmd BufReadPost *
       \   exe "normal g`\"" |
       \ endif
 
+" Disable linting and syntax highlighting for large files
+autocmd BufReadPre * if getfsize(expand("%")) > 25000 |
+      \   syntax off |
+      \   let g:ale_enabled = 0 |
+      \ else |
+      \   syntax enable |
+      \   let g:ale_enabled = 1 |
+      \ endif
+
 augroup vimrcEx
   autocmd!
   " Set syntax highlighting for specific file types
@@ -332,7 +341,7 @@ augroup vimrcEx
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
   " Run specs under cursor if saving a rspec or cucumber file
-  autocmd BufWritePost *._spec.rb :.Rrunner
+  autocmd BufWritePost *_spec.rb :.Rrunner
   autocmd BufWritePost *.feature :.Rrunner
 
   " Enable omni completion {{{

@@ -57,8 +57,8 @@
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-"   " call dein#add('morhetz/gruvbox'
-"   " call dein#add('zefei/cake16'
+   call dein#add('morhetz/gruvbox', { 'hook_post_source': "colorscheme gruvbox" })
+   " call dein#add('zefei/cake16')
    call dein#add('sonph/onehalf', {
          \ 'rtp': 'vim/',
          \ 'hook_post_source': "
