@@ -465,7 +465,7 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" TODO:Shougo/deoplete.nvim {{{
+" Shougo/deoplete.nvim {{{
 " ------------------------------------------------------------------------------
 if dein#tap('deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
@@ -479,8 +479,10 @@ if dein#tap('deoplete.nvim')
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
+  " TODO: sometimes this behaviour is broken and makes it impossible to enter a \n if the last word
+  " of a sentence is a trigger for a snippet
   " Make <cr> select the candidate and if it's a snippet expand it.
-  inoremap <silent> <CR> <C-r>=<SID>trySelectCandidate()<CR>
+  " inoremap <silent> <CR> <C-r>=<SID>trySelectCandidate()<CR>
 
   function! s:trySelectCandidate()
     if pumvisible()
