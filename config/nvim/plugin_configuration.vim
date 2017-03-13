@@ -173,13 +173,8 @@ if dein#tap('vim-maximizer')
     let g:maximizer_restore_on_winleave = 1
 
   " Keybindings {{{
-    " 1. quickly switch current window with the main pane and toggle back
     nmap <silent> <leader>wz :MaximizerToggle<cr>
-
-    " 2. manipulate splits
-    nmap <leader>wt <C-W>T
-    nmap <leader>wd :Bdelete!<CR>
-    nmap <leader>wc :q<CR>
+    nmap <leader>bd :Bdelete!<CR>
   " }}}
 endif
 " }}}
