@@ -57,22 +57,45 @@
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-   call dein#add('morhetz/gruvbox', { 'hook_post_source': "colorscheme gruvbox" })
-   " call dein#add('zefei/cake16')
-   call dein#add('sonph/onehalf', {
-         \ 'rtp': 'vim/',
+   " call dein#add('morhetz/gruvbox', { 'hook_post_source': "colorscheme gruvbox" })
+   call dein#add('zefei/cake16', {
          \ 'hook_post_source': "
-         \   colorscheme onehalflight\n
-         \
-         \   let g:dark_colorscheme='onehalfdark'\n
-         \   let g:light_colorscheme='onehalflight'\n
-         \   let &background='yolo'\n
-         \
-         \   hi! link Search PMenu\n
-         \   hi! link IncSearch PMenuSel\n
-         \   hi! link Folded Visual\n
+         \   colorscheme cake16\n
+         \   set background=light\n
+         \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
+         \   hi! User2 ctermfg=10 ctermbg=15 guifg=#82a3b3 guibg=bg\n
          \ "
          \})
+
+   " call dein#add('liuchengxu/space-vim-dark', {
+   "       \ 'hook_post_source': "
+   "       \   colorscheme space-vim-dark\n
+   "       \   set background=dark\n
+   "       \   hi Comment cterm=italic\n
+   "       \   hi! User1 cterm=bold ctermfg=232 ctermbg=97  gui=Bold guifg=#333300 guibg=#875FAF\n
+   "       \   hi! User2 cterm=None ctermfg=214 ctermbg=243 gui=None guifg=#FFBB7D guibg=#666666\n
+   "       \   hi! User3 cterm=None ctermfg=251 ctermbg=241 gui=None guifg=#c6c6c6 guibg=#585858\n
+   "       \   hi! User4 cterm=Bold ctermfg=177 ctermbg=239 gui=Bold guifg=#d75fd7 guibg=#4e4e4e\n
+   "       \   hi! User5 cterm=None ctermfg=250 ctermbg=238 gui=None guifg=#bcbcbc guibg=#444444\n
+   "       \   hi! User6 cterm=None ctermfg=249 ctermbg=239 gui=None guifg=#b2b2b2 guibg=#4e4e4e\n
+   "       \   hi! User7 cterm=None ctermfg=249 ctermbg=241 gui=None guifg=#b2b2b2 guibg=#606060\n
+   "       \ "
+   "       \})
+
+   " call dein#add('sonph/onehalf', {
+   "       \ 'rtp': 'vim/',
+   "       \ 'hook_post_source': "
+   "       \   colorscheme onehalflight\n
+   "       \
+   "       \   let g:dark_colorscheme='onehalfdark'\n
+   "       \   let g:light_colorscheme='onehalflight'\n
+   "       \   let &background='yolo'\n
+   "       \
+   "       \   hi! link Search PMenu\n
+   "       \   hi! link IncSearch PMenuSel\n
+   "       \   hi! link Folded Visual\n
+   "       \ "
+   "       \})
 "   " call dein#add('~/git/opensource/vim-gotham/'
 "   " call dein#add('whatyouhide/vim-gotham'
 "   " call dein#add('mswift42/vim-themes'
@@ -114,7 +137,10 @@
 " ------------------------------------------------------------------------------
 "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
     call dein#add('~/.fzf', { 'build': './install --all' })
-    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    " call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    call dein#add('shougo/denite.nvim')
+    " call dein#add('~/git/denite.nvim')
+    call dein#add('mhinz/vim-grepper') " add grepper for ag/ack etc.
     call dein#add('moll/vim-bbye') " add nice buffer deleting
     call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
     call dein#add('mhinz/vim-signify') " Adds signs in the gutter to indicate vcs changes
@@ -163,6 +189,7 @@
 "   " it, and close vim if it's the last buffer/split.
 "   call dein#add('aaronjensen/vim-command-w', { 'on': 'CommandW' } " Maximising windows
     call dein#add('szw/vim-maximizer')
+    call dein#add('zefei/vim-wintabs')
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -172,7 +199,6 @@
     call dein#add('tpope/vim-speeddating') " allows inc and dec of dates etc using C-a and C-x
 " }}}
 " ------------------------------------------------------------------------------
-
 
 " ==============================================================================
 " Dein.vim end {{{
