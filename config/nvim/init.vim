@@ -482,20 +482,18 @@ endfunction
   "Ξ Whitespace
   "☰ max line number
   "∄ not exist
-  "¶ line number
+  "¶ line numberz
   "␤ line number r2
-  hi! link User1 Cursor
 
   set statusline=
-  let &statusline = "%1* %n %{ObsessionStatus(' ', ' ')}%*"
-  let &statusline .= "  %<%f "
-  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+  let &statusline = " %{winnr()}"
+  let &statusline .= " %<%f"
+  let &statusline .= "%{&readonly ? '  ' : &modified ? '  ' : ''}"
   let &statusline .= "%{PasteFlag()}"
   let &statusline .= "%{SpellFlag()}"
   let &statusline .= "%{HardTimeFlag()}"
-  let &statusline .= "%=%{&fenc!='utf-8'?&fenc:''}" " show file encoding unless utf-8
-  let &statusline .= " %{&filetype == '' ? 'unknown' : &filetype} "
-  let &statusline .= "%1*\%3c\ %*"
+  let &statusline .= "%=%{&filetype == '' ? 'unknown' : &filetype}"
+  let &statusline .= " %2c "
 
   function! PasteFlag()
     if &paste
@@ -515,7 +513,12 @@ endfunction
 
   function! SyntaxFlag()
     if dein#tap('ale')
-      return ' ⚠ '
+      let l:res = ale#statusline#Status()
+      if l:res ==# 'OK'
+        return '  '
+      else
+        return '  '
+      end
     else
       return ''
     endif
@@ -523,7 +526,7 @@ endfunction
 
   function! HardTimeFlag()
     if exists("b:hardtime_on") && b:hardtime_on == 1
-      return '  '
+      return ' '
     else
       return ''
     endif
