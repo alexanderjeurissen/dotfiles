@@ -12,6 +12,7 @@ export LANG=en_US.UTF-8
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 export TERM=xterm-256color-italic
 export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
