@@ -118,8 +118,8 @@ _generate_preprompt() {
   user_name=$(_username)
   local pre_prompt_content
 
-  (($host_name)) && pre_prompt_content+="$host_name"
-  (($user_name)) && pre_prompt_content+="$user_name"
+  pre_prompt_content+="$host_name"
+  pre_prompt_content+="$user_name"
 
   # store working_tree without the "x" prefix
   local working_tree="${vcs_info_msg_1_#x}"
@@ -191,8 +191,8 @@ prompt_snappy_setup() {
   zstyle ':vcs_info:git*' unstagedstr '%F{cyan} %f'
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' get-revision true
-  zstyle ':vcs_info:git*' formats '  %0.40b %f%m%u%c' 'x%R'
-  zstyle ':vcs_info:git*' actionformats '  %0.20b%f %F{magenta} %0.7i%f %F{red} %a%f' 'x%R'
+  zstyle ':vcs_info:git*' formats ' %F{yellow} %0.40b%f %m%u%c' 'x%R'
+  zstyle ':vcs_info:git*' actionformats ' %F{yellow} %0.20b%f %F{magenta} %0.7i%f %F{red} %a%f' 'x%R'
   zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash git-untracked
   zstyle ':vcs_info:*' enable git
   # zstyle ':vcs_info:*+*:*' debug true
