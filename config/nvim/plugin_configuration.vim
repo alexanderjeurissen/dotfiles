@@ -165,7 +165,7 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" zhaocai/GoldenView.Vim {{{
+" vim-maximizer {{{
 " ------------------------------------------------------------------------------
 if dein#tap('vim-maximizer')
   " Settings {{{
@@ -360,19 +360,50 @@ if dein#tap('denite.nvim')
   \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
   " Use C-n and C-p to move between candidates
-  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+
+  " Select all candidates with C-a
+  call denite#custom#map('insert', '<C-a>', '<denite:toggle_select_all>', 'noremap')
 
   " Custom command
   call denite#custom#var('file_rec/git', 'command',
           \ ['git', 'ls-files', '-co', '--exclude-standard'])
 
-  " Change default prompt
-  call denite#custom#option('default', 'prompt', '>')
+  " Change default prompt based on denite source
+  call denite#custom#option('default', 'prompt', '  ')
+  call denite#custom#option('files', 'prompt', '  ')
+  call denite#custom#option('grep', 'prompt', '  ')
+  call denite#custom#option('buffers', 'prompt', '  ')
+  call denite#custom#option('mru', 'prompt', '  ')
+  call denite#custom#option('registers', 'prompt', '  ')
+  call denite#custom#option('changes', 'prompt', '  ')
+  call denite#custom#option('help', 'prompt', '  ')
+  call denite#custom#option('dein', 'prompt', '  ')
 
+
+"  line
+" func
+" git
+" workset
+"
+"
+"
+"
+"
+"
+"
+"
   " Change ignore_globs
   call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
         \ [ '.git/', 'images/', '*.min.*', 'img/', 'fonts/'])
+
+  nnoremap <silent> <leader>ff :<C-u>Denite file_rec -buffer-name=files<CR>
+  nnoremap <silent> <leader>fo :<C-u>Denite file_old -buffer-name=mru<CR>
+  nnoremap <silent> <leader>fr :<C-u>Denite register -buffer-name=registers<CR>
+  nnoremap <silent> <leader>/ :<C-u>Denite grep -buffer-name=grep<CR>
+  nnoremap <silent> <leader>fh :<C-u>Denite help -buffer-name=help<CR>
+  nnoremap <silent> <leader>bb :<C-u>Denite buffer -buffer-name=buffers<CR>
 endif
 " }}}
 " ------------------------------------------------------------------------------
