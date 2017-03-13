@@ -102,6 +102,14 @@ set! devtools.theme="dark"
 " disable cache with devtools open
 set! devtools.cache.disabled=true
 
+" Search stack overflow with :stack or :duck
+command! -nargs=* stack open stack-overflow <args>
+command! -nargs=* duck open duckduckgo <args>
+
+" Open Gsuite applications with quick commands:
+command! calendar open https://calendar.google.com
+command! inbox open https://inbox.google.com
+command! keep open https://keep.google.com
 
 " Plugins/Extension settings:
 
