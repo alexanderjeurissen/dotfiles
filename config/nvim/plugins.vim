@@ -63,7 +63,7 @@
          \   colorscheme cake16\n
          \   set background=light\n
          \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
-         \   hi! User2 ctermfg=10 ctermbg=15 guifg=#82a3b3 guibg=bg\n
+         \   hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797\n
          \ "
          \})
 
@@ -189,7 +189,18 @@
 "   " it, and close vim if it's the last buffer/split.
 "   call dein#add('aaronjensen/vim-command-w', { 'on': 'CommandW' } " Maximising windows
     call dein#add('szw/vim-maximizer')
-    call dein#add('zefei/vim-wintabs')
+    call dein#add('zefei/vim-wintabs', {
+          \ 'hook_add': "
+          \   nmap <Leader>bn <plug>(wintabs_next)\n
+          \   nmap <Leader>bp <plug>(wintabs_previous)\n
+          \   nmap <Leader>wn <plug>(wintabs_next)\n
+          \   nmap <Leader>wp <plug>(wintabs_previous)\n
+          \   nmap <Leader>wc <plug>(wintabs_close)\n
+          \   nmap <Leader>wt <plug>(wintabs_maximize)\n
+          \   nmap <Leader>wa <plug>(wintabs_all)\n
+          \   nmap <Leader>tc <plug>(wintabs_close_vimtab)\n
+          \"
+          \})
 " }}}
 " ------------------------------------------------------------------------------
 
