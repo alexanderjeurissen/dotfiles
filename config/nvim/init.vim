@@ -160,8 +160,7 @@ noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " tabpage mappings
-noremap <Leader>tn :tabnext<CR>
-noremap <Leader>t :tabnew<CR>
+noremap <Leader>tn :tabnew<CR>
 
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
@@ -222,10 +221,6 @@ nnoremap <leader>tcl :set cursorline!<CR>
 " and safe & close buffer with leader-wq
 nnoremap <leader>q :Bdelete<CR>
 nnoremap <leader>wq :w<CR>:bd<CR>
-
-" Tab through open buffers
-noremap <Leader>bn :bn<CR>
-noremap <Leader>bp :bp<CR>
 
 " Call ArcLint using :ArcLint
 command! -nargs=* ArcLint call s:ArcLint("<args>")
