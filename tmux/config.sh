@@ -55,6 +55,44 @@ segment() {
   fi
 }
 
+flat_segment() {
+  local segment="$1"
+  local collapse_width="$2"
+  local separator_side="$3"
+
+  source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
+
+  local result=$(run_segment)
+  local output="#[fg=default, bg=default]${result}#[bg=default]"
+
+  if [[ $separator_side == "left" ]]; then
+    output=" ${output}"
+  else
+    output=" ${output} "
+  fi
+
+  local exit_code="$?"
+  unset -f run_segment
+
+  # Show error when exit code != 0
+  if [ "$exit_code" -ne 0 ]; then
+    echo "Segment '${segment}' exited with code ${exit_code}. Aborting."
+    exit 1
+  fi
+
+  # don't show output if the result is empty
+  # or if the screen is small and has autohide enabled
+  if [ $TMUX_PANE_WIDTH -lt $collapse_width ]; then
+    local display="hidden"
+  fi
+
+  if [[ -z "${result// }" || $display == "hidden" ]]; then
+    echo -n ""
+  else
+    echo -ne "${output}"
+  fi
+}
+
 powerline_segment() {
   local segment="$1"
   local seg_fg="$2"
