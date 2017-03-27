@@ -24,7 +24,7 @@ run_segment() {
     session_name=${session_name:0:length}
   fi
 
-  echo "#[bold] ${session_name}${maniphest_task} #[default] "
+  echo "#[bold] ${session_name}${maniphest_task}#[default]"
   return 0
 }
 
@@ -34,6 +34,6 @@ __get_task_number() {
   local task_number=`git rev-parse --abbrev-ref HEAD | egrep -o 'T\d+'`
 
   if [[ -n $task_number ]]; then
-    echo "  $task_number"
+    echo "  $task_number "
   fi
 }
