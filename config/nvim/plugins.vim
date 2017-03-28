@@ -64,6 +64,8 @@
          \   set background=light\n
          \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
          \   hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797\n
+         \   hi! link TabLineSel Diffdelete\n
+         \   hi! link QuickFixMenuLine PMenuSel\n
          \ "
          \})
 
@@ -106,7 +108,7 @@
 " Core {{{
 " ------------------------------------------------------------------------------
  call dein#add('tpope/vim-dispatch') " run tasks in a tmux split to not block vim
- call dein#add('radenling/vim-dispatch-neovim', {'depends': 'tpope/vim-dispatch'})
+ " call dein#add('radenling/vim-dispatch-neovim', {'depends': 'tpope/vim-dispatch'})
  call dein#add('tpope/vim-obsession') " improve vim session handling
  call dein#add('tpope/vim-scriptease')
  call dein#add('sheerun/vim-polyglot') " Syntax highlighting, indent, etc. for various file types
@@ -137,10 +139,15 @@
 " ------------------------------------------------------------------------------
 "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
     call dein#add('~/.fzf', { 'build': './install --all' })
-    " call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-    call dein#add('shougo/denite.nvim')
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    " call dein#add('shougo/denite.nvim')
     " call dein#add('~/git/denite.nvim')
-    call dein#add('mhinz/vim-grepper') " add grepper for ag/ack etc.
+    call dein#add('mhinz/vim-grepper', {
+          \  'hook_add': "
+          \    command! Ag :Grepper\n
+          \    nnoremap <silent> <leader>/ :<C-u>Grepper<CR>\n
+          \  "
+          \}) " add grepper for ag/ack etc.
     call dein#add('moll/vim-bbye') " add nice buffer deleting
     call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
     call dein#add('mhinz/vim-signify') " Adds signs in the gutter to indicate vcs changes
@@ -148,7 +155,6 @@
     call dein#add('tpope/vim-unimpaired') " pairs of handy bracket mappings like [f and ]f for file switching
     call dein#add('thinca/vim-visualstar', { 'on_map': '*' }) " allows to use the * motion in visual mode
     call dein#add('tpope/vim-vinegar', { 'on_map': '-' }) " improve default ntrw file explorer
-    call dein#add('kepbod/quick-scope') " fast left/right movement by highlighting F,f,T,t targets
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -195,9 +201,11 @@
           \   nmap <Leader>bp <plug>(wintabs_previous)\n
           \   nmap <Leader>wn <plug>(wintabs_next)\n
           \   nmap <Leader>wp <plug>(wintabs_previous)\n
-          \   nmap <Leader>wc <plug>(wintabs_close)\n
+          \   nmap <Leader>wc :q<cr>\n
+          \   nmap <Leader>wd <plug>(wintabs_close)\n
           \   nmap <Leader>wt <plug>(wintabs_maximize)\n
           \   nmap <Leader>wa <plug>(wintabs_all)\n
+          \   nmap <Leader>wo <plug>(wintabs_only)\n
           \   nmap <Leader>tc <plug>(wintabs_close_vimtab)\n
           \"
           \})
