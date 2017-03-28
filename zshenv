@@ -24,16 +24,10 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
   export PATH=$PATH:$GOROOT/bin
 # }}}
 
-# FZF {{{
-  # export FZF_DEFAULT_OPTS='
-  #   --color fg:188,bg:237,hl:241,fg+:188,bg+:236,hl+:176
-  #   --color info:180,prompt:176,pointer:176,marker:168,spinner:176,header:241
-  # '
-
-  export FZF_DEFAULT_OPTS='
-    --color fg:237,bg:231,hl:247,fg+:237,bg+:255,hl+:127
-    --color info:136,prompt:127,pointer:127,marker:167,spinner:127,header:247
-  '
+# FZF settings {{{
+export FZF_DEFAULT_OPTS='
+   --color fg:0,bg:15,hl:8,fg+:0,bg+:14,hl+:6
+   --color info:6,prompt:6,pointer:6,marker:6,spinner:6,header:8'
 # }}}
 
 # Ensure that a non-login, non-interactive shell has a defined environment.
