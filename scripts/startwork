@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/git/hackerone
+task_number=`git rev-parse --abbrev-ref HEAD | egrep -o 'T\d+'`
+timew start "$task_number"
