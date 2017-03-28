@@ -160,7 +160,8 @@ noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " tabpage mappings
-noremap <Leader>tn :tabnew<CR>
+noremap <Leader>t :tabnew<CR>
+noremap <Leader>tn :tabnext<CR>
 
 " session mappings
 noremap <leader>m :call WriteSession()<CR>
@@ -337,10 +338,11 @@ augroup ALEXANDER_BASIC
     autocmd FileType zsh setl foldmethod=marker
     autocmd FileType tmux setl foldmethod=marker
     autocmd FileType sh setl foldmethod=marker
-    autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent foldlevel=2
     autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
-    autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=1
-    autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=1
+
+    " I want to fold be able to fold ruby and javascript files, but don't do it on enter
+    autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=999
+    autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=999
   " }}}
 
   " set text_width for git buffers

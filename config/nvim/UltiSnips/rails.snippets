@@ -2,6 +2,10 @@ snippet pp "pretty print variable" b
 pp "${1}"$0
 endsnippet
 
+snippet bb "byebug" b
+byebug$0
+endsnippet
+
 snippet expjson "expect subject body to include json" b
 expect(${1:subject.body}).to include_json(
 	${2:key: prop}
