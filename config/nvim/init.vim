@@ -104,6 +104,9 @@ set clipboard=unnamed
 " Show visual indication if your using substitute command
 set inccommand=split
 
+" open all folds
+set nofoldenable
+
 " Disable visual bell
 set t_vb=
 autocmd GUIEnter * set t_vb=
@@ -322,8 +325,8 @@ augroup ALEXANDER_BASIC
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
   " Run specs under cursor if saving a rspec or cucumber file
-  autocmd BufWritePost *_spec.rb :.Rrunner
-  autocmd BufWritePost *.feature :.Rrunner
+  autocmd BufWritePost *_spec.rb :.Runner
+  autocmd BufWritePost *.feature :.Runner
 
   " Enable omni completion {{{
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -338,15 +341,15 @@ augroup ALEXANDER_BASIC
     autocmd FileType zsh setl foldmethod=marker
     autocmd FileType tmux setl foldmethod=marker
     autocmd FileType sh setl foldmethod=marker
-    autocmd BufNewFile,BufReadPost *.feature setl foldmethod=indent foldlevel=1
 
     " I want to fold be able to fold ruby and javascript files, but don't do it on enter
-    autocmd BufNewFile,BufReadPost *.rb setl foldmethod=syntax foldlevel=999
-    autocmd BufNewFile,BufReadPost *.js setl foldmethod=syntax foldlevel=999
+    " autocmd Syntax ruby,javascript,cucumber setl foldmethod=syntax foldlevel=1
+    " autocmd Syntax ruby,javascript,cucumber normal zR
   " }}}
 
   " set text_width for git buffers
   autocmd FileType gitcommit setlocal textwidth=70
+  autocmd FileType vimdiff setlocal nocursorcolumn
 
   " Only have cursorline/cursorcolumn in current window and in normal window
   autocmd WinLeave * set nocursorline nocursorcolumn
@@ -405,39 +408,6 @@ func! s:colorSchemeOverides()
   hi! link Search PMenu
   hi! link IncSearch PMenuSel
   hi! link Folded Visual
-endfunc
-
-function! s:toggleBG()
-  " swap background
-  let &background = (&background == "dark"? "light" : "dark")
-
-  " set colorscheme
-  exec 'colorscheme '.(&background == "dark"? g:dark_colorscheme : g:light_colorscheme)
-
-  " set tmux status and iterm
-  if &background == "light"
-    "tmux fg and bg
-    if exists('$TMUX')
-      call jobstart("tmux set -g status-fg 'black'")
-      call jobstart("tmux set -g status-bg 'brightwhite'")
-      call jobstart('echo -e "\033Ptmux;\033\033]50;SetProfile=Light\a\033\\"')
-    else
-      call jobstart('echo -e "\033]50;SetProfile=Light\a"')
-    endif
-
-  elseif &background == "dark"
-    "tmux fg and bg
-    if exists('$TMUX')
-      call jobstart("tmux set -g status-fg 'brightblack'")
-      call jobstart("tmux set -g status-bg 'black'")
-      call jobstart('zsh toggleBG')
-    else
-      call jobstart('zsh toggleBG')
-    endif
-  endif
-
-  " call overwrites
-  call s:colorSchemeOverides()
 endfunc
 
 "FIXME: output is borked.
