@@ -159,6 +159,12 @@ if dein#tap('vim-rails')
     \"spec/integration/controllers/support/*_spec.rb": {
     \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
     \},
+    \"lib/api/app/controllers/*.rb": {
+    \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
+    \},
+    \"lib/api/spec/controllers/*_spec.rb": {
+    \  "alternate": ["lib/api/app/controllers/%s.rb"]
+    \},
   \}
 endif
 " }}}
