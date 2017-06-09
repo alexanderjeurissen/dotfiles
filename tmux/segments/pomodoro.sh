@@ -15,7 +15,6 @@ _display_progress() {
 
   if (($time_val == 0)); then
     echo "☕POMO COMPLETE"
-    $(tmux display-message -p "☕POMO COMPLETE")
   else
     if (($remainder > 0)); then
       empty_segments=$(($empty_segments-1))
@@ -34,6 +33,7 @@ run_segment() {
 
   if [[ $time_remaining == '--:--' ]]; then
     echo " NO POMODORO"
+    tmux clock-mode -t 1
   else
     echo "$(_display_progress $time_remaining)"
     # Include minutes:seconds section
