@@ -32,6 +32,21 @@ fi
   }
 # }}}
 
+#  {{{
+  find_random_fail() {
+    command="$1"
+    while true; do
+      if [[ $command == "cucumber" ]]; then
+        echo "running cukes"
+        bundle exec cucumber -p parallel
+      elif [[ $command == "rspec" ]]; then
+        echo "running rspec"
+        bin/rescue rspec --order random
+      fi
+    done
+  }
+# }}}
+
 # ZSH highlighting settings {{{
   ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor root line)
   ZSH_HIGHLIGHT_PATTERNS+=('Closed' 'fg=cyan,bold,bg=default')
@@ -81,13 +96,16 @@ fi
 # aliasses {{{
   alias l="ls -AGC"
   alias ls="ls -G"
+  alias murder="kill -9"
+  alias fixtestdb="bin/rake db:test:prepare"
   alias up="git up && bundle && yarn && bin/rake db:migrate"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
-  alias migrate="g up && bin/rake db:migrate && RAILS_ENV=test bin/rake db:migrate"
+  alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
+  alias migrate_redo="bin/rake db:migrate:redo VERSION="
   alias r="bin/rails"
-  alias routes="zeus rake routes | fzf"
+  alias routes="rails_routes | fzf | pbcopy"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
@@ -111,7 +129,8 @@ fi
 
 # Aliases for TaskWarrior {{{
   alias t="task"
-  alias in='task add +in'
+  alias todo='task add'
+  alias today='task today'
 
   # TICKLER file, snooze inbox items {{{
     tickle() {
@@ -120,15 +139,6 @@ fi
         in +tickle wait:$deadline $@
     }
     alias tick=tickle
-  # }}}
-
-  # Waiting for/ delegate items {{{
-    waiting_for() {
-      local task_nr=$1
-      shift
-      task modify $task_nr -inbox +waiting $@
-    }
-    alias delegate=waiting_for
   # }}}
 
   # Defer tasks {{{
@@ -141,37 +151,20 @@ fi
     }
   # }}}
 
-  # New project {{{
-    tnewproj() {
-      local project_name=$1
-      shift
-      task add +next pro:$project_name "$@" # add next action and create project
-    }
-  # }}}
-
-  # Research {{{
-    alias research='task add +research +next +@computer +@online'
-  # }}}
-
-  # Read and review {{{
-    webpage_title (){
-        wget -qO- "$*" | hxselect -s '\n' -c  'title' 2>/dev/null
-    }
-
-    read_and_review (){
-      local link="$1"
-      local title=$(webpage_title $link)
-      echo $title
-      local descr="\"Read and review: $title\""
-      local id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
-      task "$id" annotate "$link"
-    }
-
-    alias rnr=read_and_review
-  # }}}
-
   # Think something over ? like yes/no ? think alias!!
   alias think='tickle +1d'
+# }}}
+
+# Aliases / functions for TimeWarrior {{{
+  alias twt='timew today'
+  alias tww='timew week'
+
+  #default pomodoro session (minutes)
+  export POMODORO_TIMEOUT=25
+  #default pomodoro short break (minutes)
+  export POMODORO_STIMEOUT=5
+  #default pomodoro long break (minutes)
+  export POMODORO_LTIMEOUT=15
 # }}}
 
 # Aliases for common typo's {{{
@@ -186,13 +179,12 @@ fi
   alias v='nvim'
   alias vim='nvim'
 
-  alias -s php=$EDITOR
-  alias -s rb=$EDITOR
-  alias -s txt=$EDITOR
-  alias -s py=$EDITOR
-  alias -s md=$EDITOR
-  alias -s vim=$EDITOR
-  alias -s java=$EDITOR
+  # alias -s php=$EDITOR
+  # alias -s rb=$EDITOR
+  # alias -s txt=$EDITOR
+  # alias -s md=$EDITOR
+  # alias -s vim=$EDITOR
+  # alias -s java=$EDITOR
 # }}}
 
 # Aliases for Arcanist {{{

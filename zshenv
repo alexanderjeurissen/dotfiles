@@ -3,6 +3,7 @@ export ENABLE_SPRING=1
 export DEFAULT_USER=$USER
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+export NO_SUGGESTED_REVIEWERS=yes
 
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
@@ -25,9 +26,10 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 # }}}
 
 # FZF settings {{{
-export FZF_DEFAULT_OPTS='
-   --color fg:0,bg:15,hl:8,fg+:0,bg+:14,hl+:6
-   --color info:6,prompt:6,pointer:6,marker:6,spinner:6,header:8'
+ export FZF_DEFAULT_OPTS='
+   --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
+   --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
+ '
 # }}}
 
 # Ensure that a non-login, non-interactive shell has a defined environment.
