@@ -35,3 +35,14 @@ swoopBuf
 # Intheam config files
 *.pem
 .intheam/*
+
+# Visual studio code
+.vscode/*
+
+# Gitlab cli config
+~/.config/gitlab-cli/default.js
+
+
+
+.byebug_history
+
