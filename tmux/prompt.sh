@@ -19,6 +19,8 @@ print_powerline() {
     # segment "online" colour000 colour009 110
     # segment "now_playing" colour000 colour243 140
     # segment "uptime" colour000 colour010 143
+    # flat_segment "vpn" 100 "right"
+    flat_segment "online" 100 "right"
     flat_segment "pomodoro" 100 "right"
     flat_segment "datetime" 100 "right"
   fi
