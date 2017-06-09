@@ -57,17 +57,26 @@
 " ------------------------------------------------------------------------------
 " ColorSchemes {{{
 " ------------------------------------------------------------------------------
-   " call dein#add('morhetz/gruvbox', { 'hook_post_source': "colorscheme gruvbox" })
-   call dein#add('zefei/cake16', {
+   call dein#add('morhetz/gruvbox', {
          \ 'hook_post_source': "
-         \   colorscheme cake16\n
-         \   set background=light\n
-         \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
-         \   hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797\n
-         \   hi! link TabLineSel Diffdelete\n
-         \   hi! link QuickFixMenuLine PMenuSel\n
+         \    colorscheme gruvbox\n
+         \    set background=dark\n
+         \    let g:gruvbox_italic=1\n
+         \    let g:gruvbox_italicize_strings=1\n
+         \    let g:gruvbox_contrast_dark='soft'\n
+         \    let g:gruvbox_contrast_light='soft'\n
          \ "
-         \})
+         \ })
+   " call dein#add('zefei/cake16', {
+   "       \ 'hook_post_source': "
+   "       \   colorscheme cake16\n
+   "       \   set background=light\n
+   "       \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
+   "       \   hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797\n
+   "       \   hi! link TabLineSel Diffdelete\n
+   "       \   hi! link QuickFixMenuLine PMenuSel\n
+   "       \ "
+   "       \})
 
    " call dein#add('liuchengxu/space-vim-dark', {
    "       \ 'hook_post_source': "
