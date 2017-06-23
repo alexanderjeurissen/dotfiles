@@ -1,0 +1,2 @@
+PIDS_TO_MURDER=`2>/dev/null  ps aux | grep -E "(sidekiq|redis-server|postgres|mailcatcher)" | awk '{ print $2; }' | grep -Eo '[0-9]+'`
+kill -9 ${PIDS_TO_MURDER}
