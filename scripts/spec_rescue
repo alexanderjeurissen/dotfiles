@@ -7,16 +7,21 @@ if ! [ -f $file_path ]; then
   exit 1
 fi
 
-cucumber_command='bin/cucumber'
-rspec_command='bin/rspec --color --fail-fast'
+cucumber_command='bin/rescue bin/cucumber'
+rspec_command='bin/rescue bin/rspec --color'
 
+# Don't use the bin/rescue stub if it does not exist
+bin_rescue_command='bin/rescue'
+! [ -f 'bin/rescue' ] && bin_rescue_command=''
+
+# Use bundle if the bin stubs don't exist
 ! [ -f 'bin/cucumber' ] && cucumber_command='bundle exec cucumber' 
 ! [ -f 'bin/rspec' ] && rspec_command='bundle exec rspec --color --fail-fast' 
 
 if [[ $file_path == *.feature ]]; then
-  $cucumber_command $spec
+  $bin_rescue_command $cucumber_command $spec
 elif [[ $file_path == *_spec.rb ]]; then
-  $rspec_command $spec
+  $bin_rescue_command $rspec_command $spec
 else
   echo "Invalid spec file given."
   exit 1
