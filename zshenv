@@ -10,6 +10,9 @@ export NO_SUGGESTED_REVIEWERS=yes
   export PATH="/usr/local/sbin:$PATH"
 # }}}
 
+
+# export PATH="/usr/local/opt/postgresql@9.5/bin:$PATH"
+
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
