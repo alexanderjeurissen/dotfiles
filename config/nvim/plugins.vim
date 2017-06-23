@@ -49,7 +49,7 @@
           \})
     call dein#add('fishbullet/deoplete-ruby', { 'on_ft': 'ruby' })
     call dein#add('SirVer/ultisnips')
-    call dein#add('honza/vim-snippets')
+    " call dein#add('honza/vim-snippets')
 "   " call dein#add('letientai299/vim-react-snippets/'
 " }}}
 " ------------------------------------------------------------------------------
