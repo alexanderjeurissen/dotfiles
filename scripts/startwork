@@ -1,5 +1,15 @@
 #!/bin/bash
 
 cd ~/git/hackerone
-task_number=`git rev-parse --abbrev-ref HEAD | egrep -o 'T\d+'`
-timew start "$task_number"
+
+branch_name=`git rev-parse --abbrev-ref HEAD`
+# task_number=`echo $branch_name | egrep -o 'T\d+'`
+
+# if [[ -z $task_number ]]; then
+#   label=$branch-name
+# else
+
+# fi
+
+timew start "$branch_name"
+tmux send-keys -t 1 ' '

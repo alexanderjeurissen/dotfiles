@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd ~/git/hackerone
-task_number=`git rev-parse --abbrev-ref HEAD | egrep -o 'T\d+'`
-timew stop "$task_number"
+branch_name=`git rev-parse --abbrev-ref HEAD`
+timew stop "$branch_name"
