@@ -89,6 +89,7 @@ alias glc='git shortlog --summary --numbered'
 
 # Merge (m)
 alias gm='git merge'
+alias gmc='git merge --continue'
 alias gmC='git merge --no-commit'
 alias gmF='git merge --no-ff'
 alias gma='git merge --abort'
