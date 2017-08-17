@@ -14,18 +14,22 @@
 data.location=~/.task
 
 # INBOX overview / report
-report.in.columns           = id,description
+report.in.columns           = id,description,estimate,totalactivetime
 report.in.description       = Inbox
 report.in.filter            = status:pending limit:page (+in)
-report.in.labels            = ID,Description
+report.in.labels            = ID,Description,Estimate,Duration
+report.in.sort              = brainpower-,priority-,urgency-,estimate-,duration-
 
-uda.reviewed.type=date
-uda.reviewed.label=Reviewed
+# Next overview / report
+report.next.columns           = id,description,estimate,totalactivetime
+report.next.description       = Next tasks
+report.next.labels            = ID,Description,Estimate,Duration
+report.next.sort              = brainpower-,priority-,urgency-,estimate-,totalactivetime-
 
-report._reviewed.description=Tasksh review report.  Adjust the filter to your needs.
-report._reviewed.columns=uuid
-report._reviewed.sort=reviewed+,modified+
-report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
+# all
+report.all.columns          = id,description,estimate,totalactivetime
+report.all.labels           = ID,Description,Estimate,Duration
+report.all.sort             = brainpower-,priority-,urgency-,estimate-,totalactivetime-
 
 # Brainpower
 uda.brainpower.type=string
@@ -33,27 +37,21 @@ uda.brainpower.label=Brainpower
 uda.brainpower.values=H,M,L
 uda.brainpower.default=M
 
-#Estimate
-# uda.estimate.type=numeric
-# uda.estimate.label=Estimate
+# Estimate
+uda.estimate.type=numeric
+uda.estimate.label=Estimated pomodoros
+uda.estimate.default=1
 
-# Next report
-# report.next.description     = Most urgent tasks
-# report.next.columns         = id, start.age, entry.age, urgency, depends, priority, project,tags, recur, scheduled.countdown, due.remaining, until.remaining, description, brainpower
-# report.next.filter          = status:pending and +next
-# report.next.labels          = ID,Active,Age,Urgency,Deps,P,Project,Tag,Recur,S,Due,Until,Description,Brainpower
+# Duration
+uda.totalactivetime.type=duration
+uda.totalactivetime.label=Duration
+uda.totalactivetime.values=
+
 # report.next.sort            = brainpower-,priority-,urgency-
-
-taskd.certificate=~/.intheam/private.certificate.pem
-taskd.key=~/.intheam/private.key.pem
-taskd.ca=~/.intheam/ca.cert.pem
-taskd.server=taskwarrior.inthe.am:53589
-taskd.credentials=inthe_am/alexanderjeurissen/b2b697c1-772b-4058-af65-7fcebd0024da
-taskd.trust=ignore hostname
 
 # Color theme (uncomment one to use)
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/light-16.theme
-#include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/light-256.theme
+include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/light-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-16.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-red-256.theme
@@ -64,6 +62,5 @@ taskd.trust=ignore hostname
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-gray-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-gray-blue-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/solarized-dark-256.theme
-#include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/solarized-light-256.theme
+# include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/solarized-light-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/no-color.theme
-
