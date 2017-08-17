@@ -29,8 +29,9 @@ swoopBuf
 # apple temp files
 .DS_Store
 
-# vim sessions
+# vim sessions and log files
 *.session
+logfile.log
 
 # Intheam config files
 *.pem
