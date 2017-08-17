@@ -7,112 +7,52 @@ if !&readonly
   set fileencoding=utf-8
 endif
 
-" Don't use swapfiles.. use a vcs like git instead
-set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
 
-" Automatically :write before running commands
-set autowrite
+" set re=1 " what regexpengine to use TODO: probably don't need this
+set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
+set autowrite                                      " Write before running commands.
+set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
+set cmdheight=2                                    " Number of screen lines for the command-line.
+set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
+set smartcase                                      " Search case incensitive.
+set incsearch                                      " Highlight incremental matches.
+set textwidth=100                                  " Set maximum number of characters per line
+set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
+set completeopt=menu                               " Use popup menu for insert mode completion
+set cc=+1,+2                                       " Highlight first 2 columns after 'textwidth'
 
-" This option helps to avoid all the |hit-enter| prompts caused by file messages
-set shortmess=aAIsT
+set list                                           " TODO: not sure why this is required.
+set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
+set fillchars=vert:¦                               " Strings in statuslines and vert separators.
 
-" Number of screen lines to use for the command-line.
-set cmdheight=2
+set tags=./TAGS                                    " Location to store tags.
 
-" Don't wrap lines as it behaves acqward while moving between lines
-set nowrap
+set hid                                            " Allow for more then one unsaved buffer.
+set lazyredraw                                     " Don't unnecessarily redraw screen.
 
-" search case incensitive with /
-set smartcase
+set undofile                                       " Save undo's after file closes.
+set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
+set undolevels=1000                                " Number of changes to be saved.
+set undoreload=10000                               " Save whole buffer to undohist when reloading.
+set backup                                         " enable backupcopy.
+set backupdir=$HOME/.config/nvim/tmp               " directory to save backup files.
 
-" highlight incremental matches when searching /
-set incsearch
+set tabstop=2 shiftwidth=2 softtabstop=2           " set softtabs and width of 2.
+set expandtab                                      " use spaces instead of tabs for indentation.
+set number relativenumber numberwidth=5            " Numbers + relative numbers.
+set splitbelow splitright                          " Open new split panes to right and bottom.
+set inccommand=split                               " Show visual indication when using substitute.
+set nofoldenable                                   " collapse all folds.
+" set backspace=indent,eol,start                     " Proper backspace behavior.
 
-" Maximum width of text that is being inserted.  A longer line will be
-" broken after white space to get this width.
-set textwidth=100
+set t_vb=                                          " Disable visual bell.
 
-" Changes the effect of the |:mksession| command.
-set sessionoptions+=resize
-
-" Use a popup menu to show the possible completions in Insert mode
-set completeopt=menu
-
-" popup  Right mouse button pops up a menu.  The shifted left
-" mouse button extends a selection.  This works like
-" with Microsoft Windows.
-set mousemodel=popup
-
-" Characters to fill the statuslines and vertical separators.
-set fillchars=vert:¦
-
-" unknown
-set cc=+1,+2
-
-" Strings to use in 'list' mode and for the |:list| command.
-set list
-
-" set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,eol:¬
-set listchars=tab:▸\ ,trail:-,extends:>,precedes:<
-
-" location to store tags
-set tags=./TAGS
-
-" unknown
-set re=1
-
-" fix suggested in a neovim issue where buffer switching was slow
-" in combination with vim-airline and neovim
-set hid
-
-" When this option is set, the screen will not be redrawn while
-" executing macros, registers and other commands that have not been
-" typed
-set lazyredraw
+" Open help in a new split instead of vimbuffer
+cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
 " Use <space> as leader
 let mapleader="\<Space>"
 let g:mapleader="\<Space>"
-
-"Undo & backup
-set undofile                        " Save undo's after file closes
-set undodir=$HOME/.config/nvim/UndoHistory/ " where to save undo histories
-set undolevels=1000                 " How many undos
-set undoreload=10000                " number of lines to save for undo
-
-set backup "
-set backupdir=$HOME/.config/nvim/tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set directory=$HOME/.config/nvim/tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-
-" Softtabs, 2 spaces
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-
-" Numbers
-set number
-set relativenumber
-set numberwidth=5
-
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
-
-set clipboard=unnamed
-
-" Show visual indication if your using substitute command
-set inccommand=split
-
-" open all folds
-set nofoldenable
-
-" Disable visual bell
-set t_vb=
-autocmd GUIEnter * set t_vb=
-
-"open help in a new split instead of vimbuffer
-cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
 let python3_host_prog = "python3"
 let python_host_prog = "python"
@@ -144,9 +84,6 @@ command! Qa qa
 
 "w!! to save file with sudo
 cmap w!! w !sudo tee % > /dev/null
-
-" toggle background
-nnoremap <leader>tb :call <SID>toggleBG()<cr>
 
 " Execute macro under key `a` for all buffers and write afterwards
 command! Bufmacro bufdo execute "normal @a" | write
@@ -225,12 +162,6 @@ nnoremap <leader>tcl :set cursorline!<CR>
 " and safe & close buffer with leader-wq
 nnoremap <leader>q :Bdelete<CR>
 nnoremap <leader>wq :w<CR>:bd<CR>
-
-" Call ArcLint using :ArcLint
-command! -nargs=* ArcLint call s:ArcLint("<args>")
-
-" Paste and keep indent
-command! PasteCode call s:PasteCode()
 
 " Paste and keep pasting same thing, don't take what was removed
 vnoremap <Leader>p "_dP
@@ -324,9 +255,11 @@ augroup ALEXANDER_BASIC
   " Automatically remove trailing whitespaces unless file is blacklisted
   autocmd BufWritePre *.* :call Preserve("%s/\\s\\+$//e")
 
-  " Run specs under cursor if saving a rspec or cucumber file
-  autocmd BufWritePost *_spec.rb :.Runner
-  autocmd BufWritePost *.feature :.Runner
+  nnoremap <leader>fR :.Runner<cr>
+
+  " This copies current file path + line number to system clipboard
+  " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
+  nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
 
   " Enable omni completion {{{
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -341,10 +274,7 @@ augroup ALEXANDER_BASIC
     autocmd FileType zsh setl foldmethod=marker
     autocmd FileType tmux setl foldmethod=marker
     autocmd FileType sh setl foldmethod=marker
-
-    " I want to fold be able to fold ruby and javascript files, but don't do it on enter
-    " autocmd Syntax ruby,javascript,cucumber setl foldmethod=syntax foldlevel=1
-    " autocmd Syntax ruby,javascript,cucumber normal zR
+    autocmd FileType sql setl nofoldenable foldmethod=manual
   " }}}
 
   " set text_width for git buffers
