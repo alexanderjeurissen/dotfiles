@@ -6,7 +6,6 @@ fi
 
 # prompt {{{
   autoload -U promptinit && promptinit
-  # prompt pure
   prompt snappy
 # }}}
 
@@ -30,9 +29,8 @@ fi
       $@
     done
   }
-# }}}
 
-#  {{{
+  # Keep running cucumber or rspec till
   find_random_fail() {
     command="$1"
     while true; do
@@ -96,7 +94,6 @@ fi
 # aliasses {{{
   alias l="ls -AGC"
   alias ls="ls -G"
-  alias murder="kill -9"
   alias fixtestdb="bin/rake db:test:prepare"
   alias up="git up && bundle && yarn && bin/rake db:migrate"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
@@ -114,9 +111,8 @@ fi
   alias kn='kak -d -s "${$(basename `PWD`)//./}"'
   alias attach="tmux attach -t"
   alias findP="ps -ef | grep -v grep | grep "
-  alias proselint="PYTHONIOENCODING=utf8 proselint"
   alias applypatch="git am --signoff <"
-  alias reload_profile="source ~/.zshrc"
+  alias prof="source ~/.zshrc && source ~/.zprofile && source ~/.zshenv"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
 # }}}
 
@@ -125,34 +121,34 @@ fi
   alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080"
   alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
   alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
-#}}}
+# }}}
 
 # Aliases for TaskWarrior {{{
-  alias t="task"
-  alias todo='task add'
-  alias today='task today'
+  # alias t="task"
+  # alias todo='task add'
+  # alias today='task today'
 
   # TICKLER file, snooze inbox items {{{
-    tickle() {
-        local deadline=$1
-        shift
-        in +tickle wait:$deadline $@
-    }
-    alias tick=tickle
+    # tickle() {
+    #     local deadline=$1
+    #     shift
+    #     in +tickle wait:$deadline $@
+    # }
+    # alias tick=tickle
   # }}}
 
   # Defer tasks {{{
-    defer() {
-      local task_nr=$1
-      local deadline=$2
-      task modify $task_nr +defered # add defered tag
-      shift 2
-      task $task_nr annotate wait:$deadline "DEFER REASON: $@" # add annotation
-    }
+    # defer() {
+    #   local task_nr=$1
+    #   local deadline=$2
+    #   task modify $task_nr +defered # add defered tag
+    #   shift 2
+    #   task $task_nr annotate wait:$deadline "DEFER REASON: $@" # add annotation
+    # }
   # }}}
 
   # Think something over ? like yes/no ? think alias!!
-  alias think='tickle +1d'
+  # alias think='tickle +1d'
 # }}}
 
 # Aliases / functions for TimeWarrior {{{
@@ -332,6 +328,7 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 bindkey '^e' autosuggest-accept
 # }}}
 it2prof() { echo -e "\033]50;SetProfile=$1\a" }
+port() { lsof -n -i:$@ | grep LISTEN; }
 
 # Fzf functions {{{
   # fbr - checkout git branch (including remote branches)
@@ -394,5 +391,3 @@ export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
-
-showCukeScreenshot() { open "./tmp/capybara/"."`ls ./tmp/capybara | grep \".png\" | tail -1`" }
