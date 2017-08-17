@@ -1,9 +1,12 @@
 "3.8.2 (created: 2014/02/13 23:52:43)
 
+set visualbell
 set toolbars=nonavigation,tabs
 set maxitems=10
 set status=input,ssl,location,bookmark
-set showstatuslinks=1
+" set showstatuslinks=1
+set showstatuslinks=2
+
 set animations
 set titlestring="Firefox"
 
@@ -23,6 +26,7 @@ set smartcase
 
 " autocomplete with smart Firefox stuff and open tabs
 
+" set complete=hbsf
 set complete=lt
 
 " keep messages around for 2 seconds
