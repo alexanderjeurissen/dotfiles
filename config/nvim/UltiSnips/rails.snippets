@@ -54,6 +54,15 @@ $0
 end
 endsnippet
 
+snippet factory "A new FactoryGirl factory" b
+# frozen_string_literal: true
+FactoryGirl.define do
+  factory :${1:model_class_name} do
+  $0
+  end
+end
+endsnippet
+
 snippet modelspec "Description" b
 # frozen_string_literal: true
 require 'integration/spec_helper'
@@ -81,4 +90,27 @@ snippet vcr "Add VCR cassette statement"
 VCR.use_cassette('${1:cassette_name}') do |_cassette|
   ${0:${VISUAL:# content...}}
 end
+endsnippet
+
+snippet	tt "Timecop travel"
+Timecop.travel 45.days.from_now$0
+endsnippet
+
+snippet	tf "Timecop freeze"
+Timecop.freeze 'August 3, 2013 3:00 +0200' do
+  ${0:${VISUAL:# content...}}
+end
+endsnippet
+
+snippet command "Pavlov Command" b
+# frozen_string_literal: true
+module Commands
+  class ${1:command_class_name} < HackeroneCommand
+    attribute :team, Object
+  end
+end
+endsnippet
+
+snippet frozen "frozen string literal" b
+# frozen_string_literal: true
 endsnippet
