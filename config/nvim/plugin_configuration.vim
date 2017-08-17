@@ -80,9 +80,6 @@ endif
 " ------------------------------------------------------------------------------
 if dein#tap('vim-vinegar')
   let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
-  " TODO: evaluate if we actually need this with `-` quick netrw access
-  " no <silent> <leader>wv :Sexplore!<CR>
-  " no <silent> <leader>ws :Sexplore<CR>
   no <silent> <leader>wv <C-w>v
   no <silent> <leader>ws <C-w>s
 
@@ -131,8 +128,12 @@ if dein#tap('vim-rails')
   let g:rails_projections = {
     \"app/models/*.rb": {
     \  "alternate": ["spec/integration/models/%s_spec.rb"],
+    \  "related": ["spec/factories/%s.rb"],
     \},
     \"spec/integration/models/*_spec.rb": {
+    \  "alternate": ["app/models/%s.rb"],
+    \},
+    \"spec/factories/*.rb": {
     \  "alternate": ["app/models/%s.rb"],
     \},
     \"app/controllers/*.rb": {
@@ -164,6 +165,12 @@ if dein#tap('vim-rails')
     \},
     \"lib/api/spec/controllers/*_spec.rb": {
     \  "alternate": ["lib/api/app/controllers/%s.rb"]
+    \},
+    \"db/migrate/*.rb": {
+    \  "alternate": ["spec/integration/migrations/%s_spec.rb"]
+    \},
+    \"spec/integration/migrations/*_spec.rb": {
+    \  "alternate": ["db/migrate/%s.rb"]
     \},
   \}
 endif
@@ -330,6 +337,7 @@ if dein#tap('fzf.vim')
     nnoremap <silent> <leader>: :<C-u>Commands<CR>
     nnoremap <silent> <leader>? :<C-u>History<CR>
     nnoremap <silent> <leader>p/ :<C-u>Ag<CR>
+    nnoremap <silent> <leader>/ :<C-u>Ag<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
@@ -348,63 +356,6 @@ if dein#tap('fzf.vim')
 
     nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
   " }}}
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" Shougo/denite.nvim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('denite.nvim')
-  " Change file_rec command.
-  call denite#custom#var('file_rec', 'command',
-  \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-
-  " Use C-n and C-p to move between candidates
-  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
-  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
-
-  " Select all candidates with C-a
-  call denite#custom#map('insert', '<C-a>', '<denite:toggle_select_all>', 'noremap')
-
-  " Custom command
-  call denite#custom#var('file_rec/git', 'command',
-          \ ['git', 'ls-files', '-co', '--exclude-standard'])
-
-  " Change default prompt based on denite source
-  call denite#custom#option('default', 'prompt', '  ')
-  call denite#custom#option('files', 'prompt', '  ')
-  call denite#custom#option('grep', 'prompt', '  ')
-  call denite#custom#option('buffers', 'prompt', '  ')
-  call denite#custom#option('mru', 'prompt', '  ')
-  call denite#custom#option('registers', 'prompt', '  ')
-  call denite#custom#option('changes', 'prompt', '  ')
-  call denite#custom#option('help', 'prompt', '  ')
-  call denite#custom#option('dein', 'prompt', '  ')
-
-
-"  line
-" func
-" git
-" workset
-"
-"
-"
-"
-"
-"
-"
-"
-  " Change ignore_globs
-  call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-        \ [ '.git/', 'images/', '*.min.*', 'img/', 'fonts/'])
-
-  nnoremap <silent> <leader>ff :<C-u>Denite file_rec -buffer-name=files<CR>
-  nnoremap <silent> <leader>fo :<C-u>Denite file_old -buffer-name=mru<CR>
-  nnoremap <silent> <leader>fr :<C-u>Denite register -buffer-name=registers<CR>
-  nnoremap <silent> <leader>/ :<C-u>Denite grep -buffer-name=grep<CR>
-  nnoremap <silent> <leader>fh :<C-u>Denite help -buffer-name=help<CR>
-  nnoremap <silent> <leader>bb :<C-u>Denite buffer -buffer-name=buffers<CR>
 endif
 " }}}
 " ------------------------------------------------------------------------------
@@ -632,7 +583,7 @@ if dein#tap('vim-choosewin')
         \ 'cterm': [9, 16]
         \ }
 
-  nmap <leader>wc :<c-u>:ChooseWin<CR>
+  nnoremap <leader>wc :<c-u>:ChooseWin<CR>
 endif
 " }}}
 
@@ -684,17 +635,65 @@ endif
 " ------------------------------------------------------------------------------
 " godlygeek/tabular {{{
 " ------------------------------------------------------------------------------
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+if dein#tap('tabular')
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
+  function! s:align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
+endif
 " }}}
 " ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" vim-ctrlspace/vim-ctrlspace {{{
+" ------------------------------------------------------------------------------
+if dein#tap('vim-ctrlspace')
+  " Settings for MacVim and powerline fonts
+   let g:CtrlSpaceSymbols = {}
+   let g:CtrlSpaceSymbols = {
+   \"CS": "",
+   \"File": " FILES",
+   \"All": "፨ All",
+   \"CTab": "▣ CTAB",
+   \"Tabs": " TABS",
+   \"Sin": " HOME",
+   \"Help": " HELP",
+   \"SLeft": " : ",
+   \"SRight": "",
+   \"BM": " BOOKMARKS",
+   \"Vis": " visible",
+   \"IV": " invisible"
+   \}
+"                             ○ ◉                      
+    " hi! link CtrlSpaceNormal   Normal
+    " hi! link CtrlSpaceSelected PMenuSbar
+    " hi! link CtrlSpaceSearch   Conditional
+    " hi! link CtrlSpaceStatus   Cursor
+
+  " set ag as command to be used by Ctrl Space
+  if executable("ag")
+      let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+  endif
+
+  " Automatically persist workspace
+  let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+  let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+  let g:CtrlSpaceSaveWorkspaceOnExit = 1
+
+  " disable default mapping
+  let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+  " let g:CtrlSpaceSetDefaultMapping = 0
+  " nmap <leader><leader> <c-u>:CtrlSpace<cr>
+  "
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
