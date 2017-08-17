@@ -36,18 +36,18 @@
 " ------------------------------------------------------------------------------
 " AutoCompletion {{{
 " ------------------------------------------------------------------------------
-    call dein#add('Shougo/deoplete.nvim', {
-          \ 'on_i': 1,
-          \ 'hook_post_source': "
-          \   call deoplete#custom#set('ultisnips', 'rank', 1000)\n
-          \ "
-          \})
-    call dein#add('Shougo/neco-vim', { 'on_ft': 'vim' })
-    call dein#add('carlitux/deoplete-ternjs', {
-          \'on_ft': 'javascript',
-          \'build': 'npm install -g tern'
-          \})
-    call dein#add('fishbullet/deoplete-ruby', { 'on_ft': 'ruby' })
+    " call dein#add('Shougo/deoplete.nvim', {
+    "       \ 'on_i': 1,
+    "       \ 'hook_post_source': "
+    "       \   call deoplete#custom#set('ultisnips', 'rank', 1000)\n
+    "       \ "
+    "       \})
+    " call dein#add('Shougo/neco-vim', { 'on_ft': 'vim' })
+    " call dein#add('carlitux/deoplete-ternjs', {
+    "       \'on_ft': 'javascript',
+    "       \'build': 'npm install -g tern'
+    "       \})
+    " call dein#add('fishbullet/deoplete-ruby', { 'on_ft': 'ruby' })
     call dein#add('SirVer/ultisnips')
     " call dein#add('honza/vim-snippets')
 "   " call dein#add('letientai299/vim-react-snippets/'
@@ -67,6 +67,7 @@
          \    let g:gruvbox_contrast_light='soft'\n
          \ "
          \ })
+
    " call dein#add('zefei/cake16', {
    "       \ 'hook_post_source': "
    "       \   colorscheme cake16\n
@@ -96,17 +97,23 @@
    " call dein#add('sonph/onehalf', {
    "       \ 'rtp': 'vim/',
    "       \ 'hook_post_source': "
-   "       \   colorscheme onehalflight\n
+   "       \   colorscheme onehalfdark\n
    "       \
-   "       \   let g:dark_colorscheme='onehalfdark'\n
-   "       \   let g:light_colorscheme='onehalflight'\n
-   "       \   let &background='yolo'\n
+   "       \   let &background='dark'\n
    "       \
    "       \   hi! link Search PMenu\n
    "       \   hi! link IncSearch PMenuSel\n
    "       \   hi! link Folded Visual\n
    "       \ "
    "       \})
+
+   " call dein#add('whatyouhide/vim-gotham', {
+   "       \ 'hook_post_source': "
+   "       \    colorscheme gotham\n
+   "       \    set background=dark\n
+   "       \ "
+   "       \ })
+   "
 "   " call dein#add('~/git/opensource/vim-gotham/'
 "   " call dein#add('whatyouhide/vim-gotham'
 "   " call dein#add('mswift42/vim-themes'
@@ -119,7 +126,7 @@
  call dein#add('tpope/vim-dispatch') " run tasks in a tmux split to not block vim
  " call dein#add('radenling/vim-dispatch-neovim', {'depends': 'tpope/vim-dispatch'})
  call dein#add('tpope/vim-obsession') " improve vim session handling
- call dein#add('tpope/vim-scriptease')
+ call dein#add('tpope/vim-scriptease') " a Vim plugin for making Vim plugins.
  call dein#add('sheerun/vim-polyglot') " Syntax highlighting, indent, etc. for various file types
 " }}}
 " ------------------------------------------------------------------------------
@@ -127,17 +134,15 @@
 " ------------------------------------------------------------------------------
 " Editing {{{
 " ------------------------------------------------------------------------------
-    call dein#add('tpope/vim-abolish', { 'on_cmd': ['Abolish', 'Subvert'] }) " better search
+    " call dein#add('tpope/vim-abolish', { 'on_cmd': ['Abolish', 'Subvert'] }) " better search
     call dein#add('tpope/vim-endwise') " insert end after certain keywords in ruby
     call dein#add('tommcdo/vim-exchange')
     call dein#add('tpope/vim-repeat')
     call dein#add('tpope/vim-surround', { 'depends': 'tpope/vim-repeat' })
     call dein#add('w0rp/ale') " new async syntax checker for neovim
     call dein#add('tpope/vim-commentary') " easy commenting using vim motions
-    call dein#add('AndrewRadev/splitjoin.vim') "switch between singel and multiline blocks
     " call dein#add('takac/vim-hardtime') " forces efficient movement in vim
     call dein#add('bogado/file-line') " allow opening files with line number e.g. file.txt:30
-    call dein#add('terryma/vim-expand-region') " allow expanding visual selection region
     call dein#add('tpope/vim-sleuth') " smart indent width based on buffer and neigbouring files
     call dein#add('godlygeek/tabular') " re-allignment of text
 " }}}
@@ -149,8 +154,6 @@
 "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
     call dein#add('~/.fzf', { 'build': './install --all' })
     call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-    " call dein#add('shougo/denite.nvim')
-    " call dein#add('~/git/denite.nvim')
     call dein#add('mhinz/vim-grepper', {
           \  'hook_add': "
           \    command! Ag :Grepper\n
@@ -173,8 +176,6 @@
   call dein#add('tpope/vim-bundler') " run bundler commands in Vim
   call dein#add('tpope/vim-cucumber', { 'on_ft': 'cucumber' }) " fancy cucumber highlighting
   call dein#add('tpope/vim-rails', { 'on_ft': ['ruby', 'cucumber'] }) " rails specific config and highlight
-  call dein#add('thoughtbot/vim-rspec', { 'for': 'ruby' }) " rspec commands and highlight
-  call dein#add('subbarao/vim-rubybeautifier', { 'for': 'ruby' }) " ruby beautification
 " }}}
 " ------------------------------------------------------------------------------
 
@@ -183,15 +184,13 @@
 " ------------------------------------------------------------------------------
   call dein#add('tpope/vim-fugitive') " adds git commands for checking git status, commit etc.
   call dein#add('tpope/vim-git') " Vim runtime files and syntax highlighting
-  call dein#add('int3/vim-extradite') "TODO: evaluate usefulness of this plugin
 " }}}
 " ------------------------------------------------------------------------------
 
 " " ------------------------------------------------------------------------------
 " " Web {{{
 " " ------------------------------------------------------------------------------
-    call dein#add('cakebaker/scss-syntax.vim', {'on_ft': ['scss', 'css']})
-    call dein#add('hail2u/vim-css3-syntax', {'on_ft': ['css', 'scss']})
+    " call dein#add('cakebaker/scss-syntax.vim', {'on_ft': ['scss', 'css']})
     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss']})
 " " }}}
 " " ------------------------------------------------------------------------------
@@ -206,16 +205,16 @@
     call dein#add('szw/vim-maximizer')
     call dein#add('zefei/vim-wintabs', {
           \ 'hook_add': "
-          \   nmap <Leader>bn <plug>(wintabs_next)\n
-          \   nmap <Leader>bp <plug>(wintabs_previous)\n
-          \   nmap <Leader>wn <plug>(wintabs_next)\n
-          \   nmap <Leader>wp <plug>(wintabs_previous)\n
-          \   nmap <Leader>wc :q<cr>\n
-          \   nmap <Leader>wd <plug>(wintabs_close)\n
-          \   nmap <Leader>wt <plug>(wintabs_maximize)\n
-          \   nmap <Leader>wa <plug>(wintabs_all)\n
-          \   nmap <Leader>wo <plug>(wintabs_only)\n
-          \   nmap <Leader>tc <plug>(wintabs_close_vimtab)\n
+          \   nmap <leader>bn <plug>(wintabs_next)\n
+          \   nmap <leader>bp <plug>(wintabs_previous)\n
+          \   nmap <leader>wn <plug>(wintabs_next)\n
+          \   nmap <leader>wp <plug>(wintabs_previous)\n
+          \   nmap <leader>wc :q<cr>\n
+          \   nmap <leader>wd <plug>(wintabs_close)\n
+          \   nmap <leader>wt <plug>(wintabs_maximize)\n
+          \   nmap <leader>wa <plug>(wintabs_all)\n
+          \   nmap <leader>wo <plug>(wintabs_only)\n
+          \   nmap <leader>tc <plug>(wintabs_close_vimtab)\n
           \"
           \})
 " }}}
@@ -224,7 +223,6 @@
 " ------------------------------------------------------------------------------
 " Misc {{{
 " ------------------------------------------------------------------------------
-    call dein#add('tpope/vim-speeddating') " allows inc and dec of dates etc using C-a and C-x
 " }}}
 " ------------------------------------------------------------------------------
 
