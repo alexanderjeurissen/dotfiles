@@ -14,10 +14,6 @@
    autocmd VimEnter * source $MYVIMRC
   endif
 
-  if &compatible
-   set nocompatible
-  endif
-
   " Add dein.vim to runtimepath
   set runtimepath^=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 
@@ -154,12 +150,7 @@
 "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
     call dein#add('~/.fzf', { 'build': './install --all' })
     call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-    call dein#add('mhinz/vim-grepper', {
-          \  'hook_add': "
-          \    command! Ag :Grepper\n
-          \    nnoremap <silent> <leader>/ :<C-u>Grepper<CR>\n
-          \  "
-          \}) " add grepper for ag/ack etc.
+    call dein#add('mhinz/vim-grepper') " add grepper for ag/ack etc.
     call dein#add('moll/vim-bbye') " add nice buffer deleting
     call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
     call dein#add('mhinz/vim-signify') " Adds signs in the gutter to indicate vcs changes
