@@ -239,25 +239,7 @@ if dein#tap('fzf.vim')
       imap <c-x><c-f> <plug>(fzf-complete-path)
       imap <c-x><c-/> <plug>(fzf-complete-file-ag)
 
-      function! s:fzf_statusline()
-        " Override statusline as you like
-        highlight! fzf1 ctermfg=15 ctermbg=12
-        setlocal statusline=%#fzf1#\ \\ FZF
-
-        if g:fzf_mode == 'Files'
-          setlocal statusline=\ \\ Search\ for\ files
-        elseif g:fzf_mode == 'Ag'
-          setlocal statusline=\ \\ Search\ in\ files
-        elseif g:fzf_mode == 'Mru'
-          setlocal statusline=\ \\ Recent\ files
-        elseif g:fzf_mode == 'Commands'
-          setlocal statusline=\ \\ Commands
-        elseif g:fzf_mode == 'Commands'
-          setlocal statusline=\ \\ Killring
-        endif
-      endfunction
-
-      autocmd! User FzfStatusLine call <SID>fzf_statusline()
+      autocmd! User FzfStatusLine call fzf#Statusline()
   " }}}
 
   " Ag search {{{
@@ -265,69 +247,10 @@ if dein#tap('fzf.vim')
     command! -bang -nargs=* Locate call fzf#vim#ag(<q-args>, '--literal --ignore-case -l ', {'window': 'enew'})
   " }}}
 
-  " rails routes {{{
-    command! -nargs=* RailsRoutes call fzf#run({
-    \ 'source':  'rails_routes',
-    \ 'sink*':    function('<sid>ag_handler'),
-    \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 3.. '.
-    \            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all '.
-    \            '--color hl:68,hl+:110',
-    \ 'down':    '50%'
-    \ })
-  " }}}
-
-  " Files + devicons {{{
-    function! Fzf_dev()
-      function! s:files()
-        let files = split(system($FZF_DEFAULT_COMMAND), '\n')
-        let g:fzf_mode = 'Files'
-        return s:prepend_icon(files)
-      endfunction
-
-      function! s:prepend_icon(candidates)
-        let result = []
-        for candidate in a:candidates
-          let filename = fnamemodify(candidate, ':p:t')
-          let icon = WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
-          call add(result, printf("%s %s", icon, candidate))
-        endfor
-
-        return result
-      endfunction
-
-      function! s:edit_file(item)
-        let parts = split(a:item, ' ')
-        let file_path = get(parts, 1, '')
-        execute 'silent e' file_path
-      endfunction
-
-      call fzf#run({
-            \ 'source': <sid>files(),
-            \ 'sink':   function('s:edit_file'),
-            \ 'options': '-m -x +s',
-            \ 'window':  'rightbelow 20new' })
-    endfunction
-  " }}}
-
-
-  "Files in current directory {{{
-    function! FilesInCwd()
-      let current_file =expand("%")
-      let cwd = fnamemodify(current_file, ':p:h')
-      let command = 'ag -g "" -f ' . cwd . ' --depth 0'
-
-      call fzf#run({
-            \ 'source': command,
-            \ 'sink':   'e',
-            \ 'options': '-m -x +s',
-            \ 'window':  'enew' })
-    endfunction
-  " }}}
-
   " Keybindings {{{
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
-    nnoremap <silent> <leader>fc :<C-u>call FilesInCwd()<CR>
+    nnoremap <silent> <leader>fc :<C-u>call fzf#FilesInCwd()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>W :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
@@ -424,12 +347,6 @@ if dein#tap('deoplete.nvim')
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
   let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
-
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
   " TODO: sometimes this behaviour is broken and makes it impossible to enter a \n if the last word
   " of a sentence is a trigger for a snippet
@@ -551,6 +468,16 @@ if dein#tap('vim-hardtime')
 endif
 " }}}
 " ------------------------------------------------------------------------------
+
+if dein#tap('vim-grepper')
+  let g:grepper = {} " initialize g:grepper with empty dictionary
+  let g:grepper.tools = ['ag', 'git', 'grep']
+  let g:grepper.jump = 1
+  let g:grepper.stop = 500
+
+  command! Ag :Grepper
+  nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
+endif
 
 " ------------------------------------------------------------------------------
 " skwp/greplace.vim {{{
