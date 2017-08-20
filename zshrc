@@ -113,6 +113,7 @@ fi
   alias findP="ps -ef | grep -v grep | grep "
   alias applypatch="git am --signoff <"
   alias prof="source ~/.zshrc && source ~/.zprofile && source ~/.zshenv"
+  alias structuresql="g difftool develop -- db/structure.sql"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
 # }}}
 
