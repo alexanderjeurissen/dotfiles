@@ -1,4 +1,12 @@
-[ -n "$TMUX" ] && export TERM=screen-256color
+# Start tmux by default and exit terminal if tmux exits. {{{
+
+if [ -n "$TMUX" ]; then
+  export TERM=screen-256color-italic
+else
+  tmux attach-session || exec tmux new-session && exit;
+fi
+# }}}
+
 
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
