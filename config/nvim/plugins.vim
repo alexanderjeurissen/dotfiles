@@ -55,12 +55,12 @@
 " ------------------------------------------------------------------------------
    call dein#add('morhetz/gruvbox', {
          \ 'hook_post_source': "
-         \    colorscheme gruvbox\n
-         \    set background=dark\n
          \    let g:gruvbox_italic=1\n
          \    let g:gruvbox_italicize_strings=1\n
          \    let g:gruvbox_contrast_dark='soft'\n
          \    let g:gruvbox_contrast_light='soft'\n
+         \    colorscheme gruvbox\n
+         \    set background=dark\n
          \ "
          \ })
 
