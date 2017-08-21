@@ -2,11 +2,6 @@
 " General settings {{{
 " ============================================================================
 
-" Sets the character encoding for the file of this buffer.
-" if !&readonly
-"   set fileencoding=utf-8
-" endif
-
 set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
 set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
 set noshowmode                                     " No to showing mode in bottom-left corner
@@ -34,15 +29,19 @@ set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
 set undolevels=1000                                " Number of changes to be saved.
 set undoreload=10000                               " Save whole buffer to undohist when reloading.
 
-set tabstop=2 shiftwidth=2 softtabstop=2           " Set softtabs and width of 2.
-set expandtab                                      " Use spaces instead of tabs for indentation.
+set tabstop=2                                      " Number of spaces existing <Tab> is rendered as.
+set shiftwidth=2                                   " Number of spaces that >> and << count for.
+set softtabstop=2                                  " Number of spaces of <Tab> while editing.
+set expandtab                                      " Use spaces instead of <Tab> for indentation.
 set number                                         " Enable line numbers
 set relativenumber                                 " Make line numbers relative
 set numberwidth=5                                  " Set width of number column
-set splitbelow splitright                          " Open new split panes to right and bottom.
+set splitbelow                                     " Open new split panes at bottommost position
+set splitright                                     " Open new split panes at rightmost position
 set inccommand=split                               " Show visual indication when using substitute.
 set nofoldenable                                   " collapse all folds.
 
+set confirm                                        " Makes operations like qa ask for confirmation.
 set t_vb=                                          " Disable visual bell.
 
 " Open help in a new split instead of vimbuffer
@@ -77,8 +76,8 @@ command! WW w
 
 command! Q q
 
-command! QA qa
-command! Qa qa
+command! QA qall
+command! Qa qall
 
 " Safely exit neovim
 noremap <C-q> :confirm qall<CR>
@@ -98,7 +97,7 @@ noremap k gk
 noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 
 " Spelling mapping
-inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+" imap <c-c> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " tabpage mappings
 noremap <Leader>t :tabnew<CR>
