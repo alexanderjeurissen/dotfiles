@@ -9,7 +9,8 @@ print_powerline() {
   # segment "segment_file_name" foreground background outer_most_segment? min_pane_width
   # If the required PANE_WIDTH isn't met then the segment will be hidden
   if [[ $1 == "left" ]]; then
-    flat_segment "session_info" 100 "left"
+    flat_segment "session_info" 100 "left" " "
+    flat_segment "pomodoro" 100 "left"
     # segment "session_info" colour015 colour01 100
     # segment "arc_accepted" colour014 colour000 120
     # segment "arc_needs_revision" colour014 colour000 120
@@ -20,9 +21,8 @@ print_powerline() {
     # segment "now_playing" colour000 colour243 140
     # segment "uptime" colour000 colour010 143
     # flat_segment "vpn_status" 100 "right"
-    flat_segment "online" 100 "right"
-    flat_segment "pomodoro" 100 "right"
-    flat_segment "datetime" 100 "right"
+    flat_segment "online" 100 "right" " "
+    flat_segment "datetime" 100 "right" " "
   fi
 
   exit 0

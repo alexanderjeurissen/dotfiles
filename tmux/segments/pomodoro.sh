@@ -9,12 +9,16 @@ _display_progress() {
   local remainder=$(($time_val % $divider))
 
   # The glyphs that will be used to indicate the progress
-  local filled_glyph=' '
-  local empty_glyph=' '
-  local active_glyph=' '
+  # local filled_glyph=' '
+  # local empty_glyph=' '
+  # local active_glyph=' '
+  local filled_glyph='■'
+  local empty_glyph='□'
+  local active_glyph='◧'
+
 
   if (($time_val == 0)); then
-    echo "☕POMO COMPLETE"
+    echo "☕POMO !"
   else
     if (($remainder > 0)); then
       empty_segments=$(($empty_segments-1))
@@ -32,7 +36,7 @@ run_segment() {
   time_remaining=`pom status`
 
   if [[ $time_remaining == '--:--' ]]; then
-    echo " NO POMODORO"
+    echo " POMO!"
     tmux clock-mode -t 1
   else
     echo "$(_display_progress $time_remaining)"
