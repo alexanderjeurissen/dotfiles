@@ -42,21 +42,21 @@ draw_bold_text_with_bright_colors: false
 font:
   # The normal (roman) font face to use.
   normal:
-    family: SauceCodePro Nerd Font
+    family: OperatorMono Nerd Font
     # Style can be specified to pick a specific face.
-    style: Regular
+    style: Book
 
   # The bold font face
   bold:
-    family: SauceCodePro Nerd Font
+    family: OperatorMono Nerd Font
     # Style can be specified to pick a specific face.
     style: Bold
 
   # The italic font face
   italic:
-    family: SauceCodePro Nerd Font
+    family: OperatorMono Nerd Font
     # Style can be specified to pick a specific face.
-    style: Light
+    style: Book Italic
 
   # Point size of the font
   size: 18.0
@@ -239,6 +239,8 @@ visual_bell:
 #   `command` must be a map containing a `program` string, and `args` array of
 #     strings. For example:
 #     - { ... , command: { program: "alacritty", args: ["-e", "vttest"] } }
+#
+  # - { key: V,        mods: Command, action: Paste                        }
 key_bindings:
   - { key: V,        mods: Command, action: Paste                        }
   - { key: C,        mods: Command, action: Copy                         }
