@@ -384,63 +384,6 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" morhetz/gruvbox {{{
-" ------------------------------------------------------------------------------
-if dein#tap('gruvbox')
-  func! ActivateColorScheme()
-    let g:gruvbox_italic=1
-    let g:gruvbox_italicize_strings=1
-    let g:gruvbox_contrast_dark='hard'
-    colorscheme gruvbox
-    set background=dark
-    silent exec ':AirlineTheme gruvbox'
-    " Color overides
-    let g:indentLine_color_term = 239
-    " hi! Statusline ctermfg=002 ctermbg=000
-
-    " Transparant background
-    " hi! Normal ctermbg=NONE guibg=NONE
-    " hi! NonText ctermbg=NONE guibg=NONE
-  endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" atelierbram/Base2Tone-vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('Base2Tone-vim---')
-  func! ActivateColorScheme()
-    " Base2Tone Dark
-    set background=dark
-    colorscheme Base2Tone-Evening-dark
-    hi! StatusLine ctermbg=001 ctermfg=015
-    hi User1 ctermfg=10
-  endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
-" icymind/NeoSolarized {{{
-" ------------------------------------------------------------------------------
-if dein#tap('NeoSolarized')
-  func! ActivateColorScheme()
-    colorscheme NeoSolarized
-    let g:neosolarized_contrast = "high"
-    let g:neosolarized_visibility = "high"
-    let g:neosolarized_diffmode = "high"
-    set background=dark
-
-    " Transparant background
-    hi! Normal ctermbg=NONE guibg=NONE
-    hi! NonText ctermbg=NONE guibg=NONE
-  endfunc
-endif
-" }}}
-" ------------------------------------------------------------------------------
-
-" ------------------------------------------------------------------------------
 " nathanaelkane/vim-indent-guides {{{
 " ------------------------------------------------------------------------------
 if dein#tap('vim-indent-guides')
