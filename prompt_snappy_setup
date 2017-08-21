@@ -1,27 +1,6 @@
 #/usr/bin/env zsh
 #vim: set foldlevel=0 foldmethod=marker 
 
-# For my own and others sanity
-# git:
-# %b => current branch
-# %a => current action (rebase/merge)
-# prompt:
-# %F => color dict
-# %f => reset color
-# %~ => current path
-# %* => time
-# %n => username
-# %m => shortname host
-# %(?..) => prompt conditional - %(condition.true.false)
-# terminal codes:
-# \e7   => save cursor position
-# \e[2A => move cursor 2 lines up
-# \e[1G => go to position 1 in terminal
-# \e8   => restore cursor position
-# \e[K  => clears everything after the cursor on the current line
-# \e[2K => clear everything on the current line
-
-
 # battery info (osx)
 _batery_info() {
   #
@@ -29,54 +8,46 @@ _batery_info() {
   #
   #
   #
+  #
 }
 
 _pomodoro_info() {
 # 
 }
 
-# set this in zshenv: export DEFAULT_USER="username"
-_username() {
-  if [[ "$SSH_CONNECTION" != '' ]]; then
-    # show current user if we are in a ssh session
-    echo "%F{yellow} ${USER}%f "
-  elif [[ "$USER" == "root" ]]; then
-    # show username in red if the user is ROOT
-    echo "%F{red} ${USER}%f "
-  elif [ -n "$DEFAULT_USER" ] && [[ "$USER" != "$DEFAULT_USER" ]]; then
-    # show username if the user differs from the exported DEFAULT_USER variable
-    echo "%F{yellow} ${USER}%f "
-  fi
-}
-
 # Only print host name when connected through ssh
 _hostname() {
   if [[ "$SSH_CONNECTION" != '' ]]; then
-    echo "%F{yellow} %m%f "
+    local segment_color="yellow"
+
+    if [[ "$USER" == "root" ]]; then
+      segment_color="red"
+    fi
+
+    echo "%F{$segment_color} %m%f "
   fi
 }
 
 # Git hooks {{{
   ### Compare local changes to remote changes
   # Make sure you have added misc to your 'formats':  %m
-  +vi-git-st() {
+  +vi-git-status() {
     local ahead behind 
     local -a gitstatus
 
     # check if there is an upstream configured for this branch
-    command git rev-parse --abbrev-ref @'{u}' &>/dev/null || return
-
+# 
     # for git prior to 1.7
     # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
     ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
-    (( $ahead )) && gitstatus="↑"
+    (( $ahead )) && gitstatus="%F{green}%f "
 
     # for git prior to 1.7
     # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
     behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
-    (( $behind )) && gitstatus="↓"
+    (( $behind )) && gitstatus="%F{red}%f "
 
-    (( $behind && $ahead )) && gitstatus="⥮"
+    (( $behind && $ahead )) && gitstatus="%F{yellow}%f "
 
     hook_com[misc]+="${gitstatus}"
   }
@@ -88,9 +59,9 @@ _hostname() {
 
       if [[ -s $(git rev-parse --git-dir) ]] ; then
           stashes=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
-          stash_commits=$(git log -5 | egrep -o "TEMP_COMMIT" | wc -l | tr -d ' ')
-          (($stash_commits)) && hook_com[misc]+="%F{red} %f" && return
-          (($stashes)) && hook_com[misc]+="%F{red} %f" && return
+          stash_commits=$(git log -1 | egrep -o "TEMP_COMMIT" | wc -l | tr -d ' ')
+          (($stash_commits)) && hook_com[misc]+="%F{magenta} %f" && return
+          (($stashes)) && hook_com[misc]+="%F{magenta} %f" && return
       fi
   }
 
@@ -114,12 +85,10 @@ _precmd_notification() {
 # preprompt, the generation of the lines is based on 
 # https://github.com/chauncey-garrett/zsh-prompt-garrett
 _generate_preprompt() {
-  host_name=$(_hostname)
-  user_name=$(_username)
   local pre_prompt_content
+  local host_name="$(_hostname)"
 
   pre_prompt_content+="$host_name"
-  pre_prompt_content+="$user_name"
 
   # store working_tree without the "x" prefix
   local working_tree="${vcs_info_msg_1_#x}"
@@ -132,7 +101,7 @@ _generate_preprompt() {
     pre_prompt_content+="${vcs_info_msg_0_}"
   fi
 
-  print -P "\n╭─ ${pre_prompt_content}"
+  print -P "\n╭ ${pre_prompt_content}"
 }
 
 _generate_prompt() {
@@ -146,7 +115,6 @@ _generate_prompt() {
   #
   #
   #
-  #💩
   #
   #
   #
@@ -157,20 +125,12 @@ _generate_prompt() {
   #
   #
   #
-  #
-  #
   #
   #
-  #
   #
   #
-  # 
 
-  # exit code (first uses sad/smile face the other checkmark/cross
-  # exit_code="%(?.%F{green}%f.%F{red}%f)"
-  exit_code="%(?.%F{green}─%f.%F{red}─%f)"
-  # exit_code="%(?.%F{green}●%f.%F{red}●%f)"
-  # exit_code="%(?.%F{green}.%F{red}%f) "
+  exit_code="%(?.%F{green}  %f.%F{red}  %f)"
 
   PROMPT="╰${exit_code}"
 
@@ -191,9 +151,9 @@ prompt_snappy_setup() {
   zstyle ':vcs_info:git*' unstagedstr '%F{cyan} %f'
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' get-revision true
-  zstyle ':vcs_info:git*' formats ' %F{yellow} %0.40b%f %m%u%c' 'x%R'
-  zstyle ':vcs_info:git*' actionformats ' %F{yellow} %0.20b%f %F{magenta} %0.7i%f %F{red} %a%f' 'x%R'
-  zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash git-untracked
+  zstyle ':vcs_info:git*' formats ' %F{default} %0.40b%f %m%u%c' 'x%R'
+  zstyle ':vcs_info:git*' actionformats ' %F{default} %0.20b%f %F{yellow} %0.7i%f %F{magenta} %a%f' 'x%R'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-status git-stash git-untracked
   zstyle ':vcs_info:*' enable git
   # zstyle ':vcs_info:*+*:*' debug true
 
