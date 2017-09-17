@@ -12,10 +12,12 @@ _display_progress() {
   # local filled_glyph=' '
   # local empty_glyph=' '
   # local active_glyph=' '
-  local filled_glyph='■'
-  local empty_glyph='□'
-  local active_glyph='◧'
-
+  # local filled_glyph='■'
+  # local empty_glyph='□'
+  # local active_glyph='◧'
+  local filled_glyph=''
+  local empty_glyph=''
+  local active_glyph=''
 
   if (($time_val == 0)); then
     echo "☕POMO !"
@@ -37,7 +39,7 @@ run_segment() {
 
   if [[ $time_remaining == '--:--' ]]; then
     echo " POMO!"
-    tmux clock-mode -t 1
+    # tmux clock-mode -t 1
   else
     echo "$(_display_progress $time_remaining)"
     # Include minutes:seconds section
@@ -52,6 +54,7 @@ run_segment() {
   # squares:       □ ■
   # stars:   
   # fills / progressbar ▓▓▒▒▒▒ ░
+  # progress █▓░
   # times $filled_segments echo 'str'
   # echo "$filled_segments"
 }
