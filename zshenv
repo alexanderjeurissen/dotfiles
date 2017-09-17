@@ -1,9 +1,9 @@
 # Defines environment variables.
-export ENABLE_SPRING=1
+export ENABLE_SPRING=0
 export DEFAULT_USER=$USER
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export NO_SUGGESTED_REVIEWERS=yes
+# export NO_SUGGESTED_REVIEWERS=no
 
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
@@ -18,6 +18,9 @@ export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# workaround for fontforge compilation error
+export PATH="$PATH:/Applications/FontForge.app/Contents/Resources/opt/local/bin"
+
 export TERM=xterm-256color-italic
 export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
@@ -30,7 +33,7 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
 # FZF settings {{{
  export FZF_DEFAULT_OPTS='
-   --color fg:223,bg:234,hl:245,fg+:223,bg+:237,hl+:11
+   --color fg:223,bg:236,hl:245,fg+:223,bg+:237,hl+:11
    --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
  '
 # }}}
