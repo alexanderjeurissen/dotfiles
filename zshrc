@@ -121,9 +121,15 @@ fi
   alias attach="tmux attach -t"
   alias findP="ps -ef | grep -v grep | grep "
   alias applypatch="git am --signoff <"
-  alias prof="source ~/.zshrc && source ~/.zprofile && source ~/.zshenv"
+  alias create_commit_range_patch="git format-patch"
+  alias prof="source ~/.zshrc && source ~/.zshenv && source ~/.zprofile"
   alias structuresql="g difftool develop -- db/structure.sql"
+  alias devdiff="g difftool develop --"
+  alias check_failing_jenkins_specs="bin/rspec $(pbpaste)"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
+  alias verify_approvals="approvals verify -d nvim -d  -a"
+  alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
+  alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
 # }}}
 
 # Alias for hackerij {{{
@@ -194,6 +200,7 @@ fi
 # }}}
 
 # Aliases for Arcanist {{{
+  alias diff="arc diff --no-unit --excuse \"jenkins\""
   alias diffb="arc diff --browse"
   alias diffu="arc diff --no-unit --excuse \"jenkins\" --verbatim"
 
