@@ -571,3 +571,22 @@ endif
 " }}}
 " ------------------------------------------------------------------------------
 
+" ------------------------------------------------------------------------------
+" christoomey/vim-tmux-navigator {{{
+" ------------------------------------------------------------------------------
+if dein#tap('vim-polyglot')
+  let g:javascript_conceal_function             = "ƒ"
+  let g:javascript_conceal_this                 = "@"
+  let g:javascript_conceal_return               = "⏎"
+  let g:javascript_conceal_undefined            = "¿"
+  let g:javascript_conceal_arrow_function       = "⇒"
+  " let g:javascript_conceal_noarg_arrow_function = "⇒"
+  syntax match Operator "<=" conceal cchar=≤
+  syntax match Operator ">=" conceal cchar=≥
+  syntax match Operator "!=" conceal cchar=≢
+
+  set conceallevel=1
+endif
+" }}}
+" ------------------------------------------------------------------------------
+
