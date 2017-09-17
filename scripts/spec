@@ -7,11 +7,13 @@ if ! [ -f $file_path ]; then
   exit 1
 fi
 
-cucumber_command='bin/cucumber'
-rspec_command='bin/rspec --color --fail-fast'
+# cucumber_command='bin/cucumber'
+# rspec_command='bin/rspec --color --fail-fast'
 
-! [ -f 'bin/cucumber' ] && cucumber_command='bundle exec cucumber' 
-! [ -f 'bin/rspec' ] && rspec_command='bundle exec rspec --color --fail-fast' 
+# ! [ -f 'bin/cucumber' ] && 
+cucumber_command='bundle exec cucumber' 
+# ! [ -f 'bin/rspec' ] && 
+rspec_command='bundle exec rspec --color --fail-fast' 
 
 if [[ $file_path == *.feature ]]; then
   $cucumber_command $spec
