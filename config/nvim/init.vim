@@ -22,7 +22,8 @@ set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
 set fillchars=vert:¦                               " Strings in statuslines and vert separators.
 
 set hid                                            " Allow for more then one unsaved buffer.
-set lazyredraw                                     " Don't unnecessarily redraw screen.
+set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+" set lazyredraw                                   " Don't unnecessarily redraw screen.
 
 set undofile                                       " Save undo's after file closes.
 set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.

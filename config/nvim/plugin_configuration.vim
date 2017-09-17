@@ -264,6 +264,7 @@ if dein#tap('fzf.vim')
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
+    nnoremap <silent> <leader>gF :<C-u>call fzf#FilesChangedInBranch()<CR>
 
     nnoremap <silent> <leader>rm :<C-u>FZF app/models<CR>
     nnoremap <silent> <leader>rc :<C-u>FZF app/controllers<CR>
@@ -467,6 +468,7 @@ if dein#tap('ale')
   let g:ale_sign_warning = '•'
   let g:ale_linters = {
   \   'javascript': ['eslint'],
+  \   'jsx': ['stylelint', 'eslint'],
   \   'ruby': ['rubocop'],
   \   'sh' : ['shellcheck'],
   \   'vim' : ['vint'],
@@ -474,6 +476,8 @@ if dein#tap('ale')
   \   'python' : ['flake8'],
   \   'markdown' : ['mdl']
   \}
+
+  let g:ale_linter_aliases = {'jsx': 'css'}
 
   let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
 

@@ -75,21 +75,6 @@
    "       \ "
    "       \})
 
-   " call dein#add('liuchengxu/space-vim-dark', {
-   "       \ 'hook_post_source': "
-   "       \   colorscheme space-vim-dark\n
-   "       \   set background=dark\n
-   "       \   hi Comment cterm=italic\n
-   "       \   hi! User1 cterm=bold ctermfg=232 ctermbg=97  gui=Bold guifg=#333300 guibg=#875FAF\n
-   "       \   hi! User2 cterm=None ctermfg=214 ctermbg=243 gui=None guifg=#FFBB7D guibg=#666666\n
-   "       \   hi! User3 cterm=None ctermfg=251 ctermbg=241 gui=None guifg=#c6c6c6 guibg=#585858\n
-   "       \   hi! User4 cterm=Bold ctermfg=177 ctermbg=239 gui=Bold guifg=#d75fd7 guibg=#4e4e4e\n
-   "       \   hi! User5 cterm=None ctermfg=250 ctermbg=238 gui=None guifg=#bcbcbc guibg=#444444\n
-   "       \   hi! User6 cterm=None ctermfg=249 ctermbg=239 gui=None guifg=#b2b2b2 guibg=#4e4e4e\n
-   "       \   hi! User7 cterm=None ctermfg=249 ctermbg=241 gui=None guifg=#b2b2b2 guibg=#606060\n
-   "       \ "
-   "       \})
-
    " call dein#add('sonph/onehalf', {
    "       \ 'rtp': 'vim/',
    "       \ 'hook_post_source': "
@@ -110,9 +95,6 @@
    "       \ "
    "       \ })
    "
-"   " call dein#add('~/git/opensource/vim-gotham/'
-"   " call dein#add('whatyouhide/vim-gotham'
-"   " call dein#add('mswift42/vim-themes'
 " " }}}
 " " ------------------------------------------------------------------------------
 
@@ -178,13 +160,16 @@
 " }}}
 " ------------------------------------------------------------------------------
 
-" " ------------------------------------------------------------------------------
-" " Web {{{
-" " ------------------------------------------------------------------------------
+" ------------------------------------------------------------------------------
+" Web {{{
+" ------------------------------------------------------------------------------
     " call dein#add('cakebaker/scss-syntax.vim', {'on_ft': ['scss', 'css']})
+    "
+    " call dein#add('pangloss/vim-javascript', {'on_ft': ['js', 'jsx']})
+    " call dein#add('othree/yajs.vim')
     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss']})
-" " }}}
-" " ------------------------------------------------------------------------------
+" }}}
+" ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
 " TODO:Window Management {{{
