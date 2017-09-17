@@ -86,8 +86,6 @@ render_timer: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: true
 
-
-
 # Colors (Gruvbox)
 colors:
   # Default colors
@@ -122,17 +120,39 @@ colors:
     cyan:    '0x9ec98e'
     white:   '0xefe1bf'
 
-  # Dim colors (Optional)
-  # dim:
-# ￼   black:   '0x'
-# ￼   red:     '0x'
-# ￼   green:   '0x'
-# ￼   yellow:  '0x'
-# ￼   blue:    '0x'
-# ￼   magenta: '0x'
-# ￼   cyan:    '0x'
-# ￼   white:   '0x'
+# # Colors (onehalf)
+# colors:
+#   # Default colors
+#   primary:
+#     background: '0x353a44'
+#     foreground: '0xe3e5e9'
 
+#   # Colors the cursor will use if `custom_cursor_colors` is true
+#   cursor:
+#     text: '0xe3e5e9'
+#     cursor: '0xb2c1d6'
+
+#   # Normal colors
+#   normal:
+#     black:   '0x353a44'
+#     red:     '0xe88388'
+#     green:   '0xa7cc8c'
+#     yellow:  '0xebca8d'
+#     blue:    '0x72bef2'
+#     magenta: '0xd291e4'
+#     cyan:    '0x65c2cd'
+#     white:   '0xe3e5e9'
+
+#   # Bright colors
+#   bright:
+#     black:   '0x353a44'
+#     red:     '0xe88388'
+#     green:   '0xa7cc8c'
+#     yellow:  '0xebca8d'
+#     blue:    '0x72bef2'
+#     magenta: '0xd291e4'
+#     cyan:    '0x65c2cd'
+#     white:   '0xe3e5e9'
 
 
 # Colors (Tomorrow Night Bright)
