@@ -64,6 +64,15 @@
          \ "
          \ })
 
+   " call dein#add('mhartington/oceanic-next', {
+   "       \ 'hook_post_source': "
+   "       \    syntax enable\n
+   "       \    let g:oceanic_next_terminal_bold = 1\n
+   "       \    let g:oceanic_next_terminal_italic = 1\n
+   "       \    colorscheme OceanicNext\n
+   "       \ "
+   "       \ })
+
    " call dein#add('zefei/cake16', {
    "       \ 'hook_post_source': "
    "       \   colorscheme cake16\n
