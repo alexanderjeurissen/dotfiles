@@ -260,7 +260,7 @@ if dein#tap('fzf.vim')
     nnoremap <silent> <leader>: :<C-u>Commands<CR>
     nnoremap <silent> <leader>? :<C-u>History<CR>
     nnoremap <silent> <leader>p/ :<C-u>Ag<CR>
-    nnoremap <silent> <leader>/ :<C-u>Ag<CR>
+    " nnoremap <silent> <leader>/ :<C-u>Ag<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
     nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
@@ -417,7 +417,7 @@ if dein#tap('vim-grepper')
   let g:grepper = {} " initialize g:grepper with empty dictionary
   let g:grepper.tools = ['ag', 'git', 'grep']
   let g:grepper.jump = 1
-  let g:grepper.stop = 500
+  let g:grepper.stop = 100
 
   command! Ag :Grepper
   nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
@@ -576,16 +576,15 @@ endif
 " ------------------------------------------------------------------------------
 if dein#tap('vim-polyglot')
   let g:javascript_conceal_function             = "ƒ"
-  let g:javascript_conceal_this                 = "@"
-  let g:javascript_conceal_return               = "⏎"
-  let g:javascript_conceal_undefined            = "¿"
+  let g:javascript_conceal_return               = "⬅"
   let g:javascript_conceal_arrow_function       = "⇒"
-  " let g:javascript_conceal_noarg_arrow_function = "⇒"
-  syntax match Operator "<=" conceal cchar=≤
-  syntax match Operator ">=" conceal cchar=≥
-  syntax match Operator "!=" conceal cchar=≢
+  let g:javascript_conceal_noarg_arrow_function = "➡"
+  syntax match jsOperator /<=/ conceal cchar=≤
+  syntax match jsOperator />=/ conceal cchar=≥
+  syntax match jsOperator /!=/ conceal cchar=≢
+  syntax keyword Statement lambda conceal cchar=λ
 
-  set conceallevel=1
+  set conceallevel=2
 endif
 " }}}
 " ------------------------------------------------------------------------------
