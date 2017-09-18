@@ -297,9 +297,15 @@ augroup END
   tnoremap <leader><ESC> <C-\><C-n>
 " }}}
 " ==============================================================================
+call vimplug#CheckInstall()
+call plug#begin()
+  source $HOME/.config/nvim/plugins.vim
+  source $HOME/.config/nvim/plugin_configuration.vim
+call plug#end()
 
-source $HOME/.config/nvim/plugins.vim
-source $HOME/.config/nvim/plugin_configuration.vim
+colo desert " fallback incase colorscheme can't be found
+call ActivateColorScheme()
+
 " ==============================================================================
 " Include local vim config {{{
 " ==============================================================================
