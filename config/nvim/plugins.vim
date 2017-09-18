@@ -1,5 +1,9 @@
 " PLUGIN_GROUP: AutoCompletion {{{
   Plug 'SirVer/ultisnips'
+  Plug 'roxma/nvim-completion-manager'
+    Plug 'calebeby/ncm-css', { 'for': ['css', 'scss']}
+    Plug 'roxma/nvim-cm-tern',  {'for': 'javascript', 'do': 'npm install'}
+    Plug 'Shougo/neco-vim', { 'for': 'vim' }
 " }}}
 
 

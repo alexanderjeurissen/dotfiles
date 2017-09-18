@@ -481,7 +481,7 @@ endif
 " }}}
 
 
-" PLUGIN_WIP: vim-ctrlspace/vim-ctrlspace {{{
+" PLUGIN: TODO:vim-ctrlspace/vim-ctrlspace {{{
 if has_key(g:plugs, 'vim-ctrlspace')
   " Settings for MacVim and powerline fonts
    let g:CtrlSpaceSymbols = {}
