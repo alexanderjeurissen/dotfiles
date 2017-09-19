@@ -567,3 +567,12 @@ if has_key(g:plugs, 'gruvbox')
   endfunction
 endif
 " }}}
+
+
+" PLUGIN: roxma/nvim-completion-manager {{{
+if has_key(g:plugs, 'nvim-completion-manager')
+  set shortmess+=c
+  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+endif
+" }}}
