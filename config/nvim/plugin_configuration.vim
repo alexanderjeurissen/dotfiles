@@ -1,7 +1,5 @@
-" ------------------------------------------------------------------------------
-" SirVer/ultisnips {{{
-" ------------------------------------------------------------------------------
-if dein#tap('Ultisnips')
+" PLUGIN: SirVer/ultisnips {{{
+if has_key(g:plugs, 'Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -14,12 +12,10 @@ if dein#tap('Ultisnips')
   imap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<TAB>"
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" xolox/vim-session {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-session')
+
+" PLUGIN: xolox/vim-session {{{
+if has_key(g:plugs, 'vim-session')
   let g:session_autoload = 'no'
   let g:session_autosave = 'yes'
   let g:session_autosave_periodic = 30
@@ -29,32 +25,26 @@ if dein#tap('vim-session')
   let g:session_directory = '~/.config/nvim/sessions'
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" Yggdroot/indentLine {{{
-" ------------------------------------------------------------------------------
-if dein#tap('indentLine')
+
+" PLUGIN: Yggdroot/indentLine {{{
+if has_key(g:plugs, 'indentLine')
   let g:indentLine_char = '┆'
   let g:indentLine_indentLevel = 20
   let g:indentLine_bufNameExclude = ['terminal']
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" othree/javascript-libraries-syntax.vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('javascript-libraries-syntax.vim')
+
+" PLUGIN: othree/javascript-libraries-syntax.vim {{{
+if has_key(g:plugs, 'javascript-libraries-syntax.vim')
   let g:used_javascript_libs = 'underscore,backbone,react,flux'
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" justinmk/vim-sneak {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-sneak')
+
+" PLUGIN: justinmk/vim-sneak {{{
+if has_key(g:plugs, 'vim-sneak')
   let g:sneak#label = 1
   let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
 
@@ -73,12 +63,10 @@ if dein#tap('vim-sneak')
   " nmap <leader><leader> <Plug>(sneak-s)
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" tpope/vim-vinegar {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-vinegar')
+
+" PLUGIN: tpope/vim-vinegar {{{
+if has_key(g:plugs, 'vim-vinegar')
   let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
   no <silent> <leader>wv <C-w>v
   no <silent> <leader>ws <C-w>s
@@ -87,43 +75,36 @@ if dein#tap('vim-vinegar')
   autocmd Filetype netrw no <buffer> <silent> <Esc> <c-^>
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" vim-ruby/vim-ruby {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-ruby')
+
+" PLUGIN: vim-ruby/vim-ruby {{{
+if has_key(g:plugs, 'vim-ruby')
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails = 1
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" int3/vim-extradite {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-extradite')
+
+" PLUGIN: int3/vim-extradite {{{
+if has_key(g:plugs, 'vim-extradite')
   let g:gitgutter_eager=0
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" mattn/gist-vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('gist-vim')
+
+
+" PLUGIN: mattn/gist-vim {{{
+if has_key(g:plugs, 'gist-vim')
   let g:gist_clip_command = 'pbcopy'
   let g:gist_detect_filetype = 1
   let g:gist_show_privates = 1
   let g:gist_update_on_write = 1
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" tpope/vim-rails {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-rails')
+
+" PLUGIN: tpope/vim-rails {{{
+if has_key(g:plugs, 'vim-rails')
   nnoremap <leader>mr <c-u>:Rrunner<CR>
   let g:rails_projections = {
     \"app/models/*.rb": {
@@ -175,12 +156,10 @@ if dein#tap('vim-rails')
   \}
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" vim-maximizer {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-maximizer')
+
+" PLUGIN: vim-maximizer {{{
+if has_key(g:plugs, 'vim-maximizer')
   " Settings {{{
     let g:maximizer_set_default_mapping = 0
     let g:maximizer_restore_on_winleave = 1
@@ -191,12 +170,10 @@ if dein#tap('vim-maximizer')
   " }}}
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" mhinz/vim-signify {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-signify')
+
+" PLUGIN: mhinz/vim-signify {{{
+if has_key(g:plugs, 'vim-signify')
   let g:signify_vcs_list = ['git']
   let g:signify_sign_add               = '+'
   let g:signify_sign_delete            = '_'
@@ -207,12 +184,10 @@ if dein#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" junegunn/fzf.vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('fzf.vim')
+
+" PLUGIN: junegunn/fzf.vim {{{
+if has_key(g:plugs, 'fzf.vim')
   " Color/display options {{{
     " Default fzf layout
     " - down / up / left / right
@@ -282,12 +257,11 @@ if dein#tap('fzf.vim')
   " }}}
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" maksimr/vim-jsbeautify {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-jsbeautify')
+
+
+" PLUGIN: maksimr/vim-jsbeautify {{{
+if has_key(g:plugs, 'vim-jsbeautify')
   "for Javascript
   autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
   autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
@@ -301,12 +275,10 @@ if dein#tap('vim-jsbeautify')
   autocmd FileType css,scss vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" tpope/vim-fugitive {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-fugitive')
+
+" PLUGIN: tpope/vim-fugitive {{{
+if has_key(g:plugs, 'vim-fugitive')
   nnoremap <silent> <leader>gs  :Gstatus<CR>
   nnoremap <silent> <leader>gd  :Gvdiff<CR>
   nnoremap <silent> <leader>gc  :Gcommit<CR>
@@ -321,12 +293,10 @@ if dein#tap('vim-fugitive')
   autocmd BufReadPost fugitive://* set bufhidden=delete
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" mattn/emmet-vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('emmet-vim')
+
+" PLUGIN: mattn/emmet-vim {{{
+if has_key(g:plugs, 'emmet-vim')
   imap <expr> <C-e> emmet#expandAbbrIntelligent("\<C-e>")
   let g:user_emmet_next_key='<C-n>'
   let g:user_emmet_install_global = 1
@@ -338,12 +308,10 @@ if dein#tap('emmet-vim')
       \}
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" Shougo/deoplete.nvim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('deoplete.nvim')
+
+" PLUGIN: Shougo/deoplete.nvim {{{
+if has_key(g:plugs, 'deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
@@ -369,12 +337,10 @@ if dein#tap('deoplete.nvim')
   endfunction
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" SirVer/ultisnips {{{
-" ------------------------------------------------------------------------------
-if dein#tap('ultisnips')
+
+" PLUGIN: SirVer/ultisnips {{{
+if has_key(g:plugs, 'ultisnips')
   let g:ulti_expand_or_jump_res = 0
   let g:UltiSnipsEnableSnipMate = 1
   let g:UltiSnipsJumpForwardTrigger="<C-n>"
@@ -382,12 +348,10 @@ if dein#tap('ultisnips')
   let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" nathanaelkane/vim-indent-guides {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-indent-guides')
+
+" PLUGIN: nathanaelkane/vim-indent-guides {{{
+if has_key(g:plugs, 'vim-indent-guides')
     let g:indent_guides_auto_colors = 1
     let g:indent_guides_color_change_percent = 5
     let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'terminal']
@@ -395,12 +359,10 @@ if dein#tap('vim-indent-guides')
     let g:indent_guides_enable_on_vim_startup = 1
   endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" takac/vim-hardtime {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-hardtime')
+
+" PLUGIN: takac/vim-hardtime {{{
+if has_key(g:plugs, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
@@ -411,9 +373,10 @@ if dein#tap('vim-hardtime')
   let g:list_of_visual_keys = ["h", "j", "k", "l", "+"]
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-if dein#tap('vim-grepper')
+
+" PLUGIN: mhinz/vim-grepper {{{
+if has_key(g:plugs, 'vim-grepper')
   let g:grepper = {} " initialize g:grepper with empty dictionary
   let g:grepper.tools = ['ag', 'git', 'grep']
   let g:grepper.jump = 1
@@ -422,30 +385,27 @@ if dein#tap('vim-grepper')
   command! Ag :Grepper
   nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
 endif
+" }}}
 
-" ------------------------------------------------------------------------------
-" skwp/greplace.vim {{{
-" ------------------------------------------------------------------------------
-if dein#tap('greplace')
+
+" PLUGIN: skwp/greplace.vim {{{
+if has_key(g:plugs, 'greplace')
   set grepprg=ag
 
   let g:grep_cmd_opts = '--line-numbers --noheading'
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" terryma/vim-expand-region {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-expand-region')
+
+" PLUGIN: terryma/vim-expand-region {{{
+if has_key(g:plugs, 'vim-expand-region')
   vmap v <Plug>(expand_region_expand)
 endif
 " }}}
 
-" ------------------------------------------------------------------------------
-" t9md/vim-choosewin {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-choosewin')
+
+" PLUGIN: t9md/vim-choosewin {{{
+if has_key(g:plugs, 'vim-choosewin')
   let g:choosewin_label = 'aoeuhtns'
   let g:choosewin_color_label = {
           \ 'cterm': [2, 16]
@@ -458,10 +418,9 @@ if dein#tap('vim-choosewin')
 endif
 " }}}
 
-" ------------------------------------------------------------------------------
-" w0rp/ale {{{
-" ------------------------------------------------------------------------------
-if dein#tap('ale')
+
+" PLUGIN: w0rp/ale {{{
+if has_key(g:plugs, 'ale')
   " let g:ale_sign_error = '✖'
   " let g:ale_sign_warning = '⚠'
   let g:ale_sign_error = '•'
@@ -486,12 +445,10 @@ if dein#tap('ale')
   let g:ale_lint_on_save = 1
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" christoomey/vim-tmux-navigator {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-tmux-navigator')
+
+" PLUGIN: christoomey/vim-tmux-navigator {{{
+if has_key(g:plugs, 'vim-tmux-navigator')
   let g:tmux_navigator_no_mappings = 0
   let g:tmux_navigator_save_on_switch = 1
 
@@ -504,12 +461,10 @@ if dein#tap('vim-tmux-navigator')
   tnoremap <silent> <c-\> <C-\><C-n>:TmuxNavigatePrevious<cr>
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" godlygeek/tabular {{{
-" ------------------------------------------------------------------------------
-if dein#tap('tabular')
+
+" PLUGIN: godlygeek/tabular {{{
+if has_key(g:plugs, 'tabular')
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
   function! s:align()
@@ -524,12 +479,10 @@ if dein#tap('tabular')
   endfunction
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" vim-ctrlspace/vim-ctrlspace {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-ctrlspace')
+
+" PLUGIN: TODO:vim-ctrlspace/vim-ctrlspace {{{
+if has_key(g:plugs, 'vim-ctrlspace')
   " Settings for MacVim and powerline fonts
    let g:CtrlSpaceSymbols = {}
    let g:CtrlSpaceSymbols = {
@@ -569,12 +522,10 @@ if dein#tap('vim-ctrlspace')
   "
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
-" ------------------------------------------------------------------------------
-" christoomey/vim-tmux-navigator {{{
-" ------------------------------------------------------------------------------
-if dein#tap('vim-polyglot')
+
+" PLUGIN: christoomey/vim-tmux-navigator {{{
+if has_key(g:plugs, 'vim-polyglot')
   let g:javascript_conceal_function             = "ƒ"
   let g:javascript_conceal_return               = "⬅"
   let g:javascript_conceal_arrow_function       = "⇒"
@@ -587,5 +538,41 @@ if dein#tap('vim-polyglot')
   set conceallevel=2
 endif
 " }}}
-" ------------------------------------------------------------------------------
 
+" PLUGIN: zefei/vim-wintabs {{{
+if has_key(g:plugs, 'vim-wintabs')
+  nmap <leader>bn <plug>(wintabs_next)
+  nmap <leader>bp <plug>(wintabs_previous)
+  nmap <leader>wn <plug>(wintabs_next)
+  nmap <leader>wp <plug>(wintabs_previous)
+  nmap <leader>wc :q<cr>
+  nmap <leader>wd <plug>(wintabs_close)
+  nmap <leader>wt <plug>(wintabs_maximize)
+  nmap <leader>wa <plug>(wintabs_all)
+  nmap <leader>wo <plug>(wintabs_only)
+  nmap <leader>tc <plug>(wintabs_close_vimtab)
+endif
+" }}}
+
+
+" PLUGIN: morhetz/gruvbox{{{
+if has_key(g:plugs, 'gruvbox')
+  let g:gruvbox_italic=1
+  let g:gruvbox_italicize_strings=1
+  let g:gruvbox_contrast_dark='soft'
+  let g:gruvbox_contrast_light='soft'
+
+  function! ActivateColorScheme()
+    colorscheme gruvbox
+  endfunction
+endif
+" }}}
+
+
+" PLUGIN: roxma/nvim-completion-manager {{{
+if has_key(g:plugs, 'nvim-completion-manager')
+  set shortmess+=c
+  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+endif
+" }}}
