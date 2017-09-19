@@ -8,7 +8,7 @@ dist
 .tmp
 npm-debug.log
 app/bower_components
-*.tern.project
+.tern-project
 
 # ruby
 *.ruby-version
