@@ -288,7 +288,7 @@ if has_key(g:plugs, 'vim-fugitive')
   nnoremap <silent> <leader>gw  :Gwrite<CR>
   nnoremap <silent> <leader>gwq :Gwrite<CR>:qa<CR>
   nnoremap <silent> <leader>ge  :Gedit<CR>
-
+  command! GreadDevelop Gread! show develop:%
   " Automatically remove fugitive buffers
   autocmd BufReadPost fugitive://* set bufhidden=delete
 endif
