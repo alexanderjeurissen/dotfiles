@@ -1,0 +1,3 @@
+PIDS_TO_MURDER=`2>/dev/null  ps aux | grep -E "(sidekiq|redis-server|unicorn|puma|spring|postgres|mailcatcher|phantomjs|karma|webpack|node)" | awk '{ print $2; }' | grep -Eo '[0-9]+'`
+echo "killing following pids: ${PIDS_TO_MURDER}"
+kill -9 ${PIDS_TO_MURDER}
