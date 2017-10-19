@@ -130,6 +130,7 @@ fi
   alias verify_approvals="approvals verify -d nvim -d  -a"
   alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
   alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
+  alias eslintspecific="yarn run eslint:specific -- --fix"
 # }}}
 
 # Alias for hackerij {{{
@@ -255,6 +256,7 @@ fi
   alias startServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1,payments_dev=1,payments_test=1,sidekiq=1"
   alias startBackend="rails s"
   alias startFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1"
+  alias startGuard="bundle exec guard -d --no-interactions"
   alias startAll="startServices && startBackend && startFrontend"
 # }}}
 
