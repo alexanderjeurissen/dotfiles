@@ -10,15 +10,6 @@
 " PLUGIN_GROUP: ColorSchemes {{{
   Plug 'morhetz/gruvbox'
 
-  " Plug 'mhartington/oceanic-next', {
-  "       \ 'hook_post_source': "
-  "       \    syntax enable\n
-  "       \    let g:oceanic_next_terminal_bold = 1\n
-  "       \    let g:oceanic_next_terminal_italic = 1\n
-  "       \    colorscheme OceanicNext\n
-  "       \ "
-  "       \ }
-
   " Plug 'zefei/cake16', {
   "       \ 'hook_post_source': "
   "       \   colorscheme cake16\n
@@ -42,14 +33,6 @@
   "       \   hi! link Folded Visual\n
   "       \ "
   "       \}
-
-  " Plug 'whatyouhide/vim-gotham', {
-  "       \ 'hook_post_source': "
-  "       \    colorscheme gotham\n
-  "       \    set background=dark\n
-  "       \ "
-  "       \ }
-  "
 " }}}
 
 
@@ -90,7 +73,8 @@
   Plug 'christoomey/vim-tmux-navigator' " tmux <-> vim navigation
   Plug 'tpope/vim-unimpaired' " Handy bracket mappings
   Plug 'thinca/vim-visualstar'  " Allows * motion in visual mode
-  Plug 'tpope/vim-vinegar'  " improve ntrw
+  Plug 'justinmk/vim-dirvish' " file browser
+  Plug 'tpope/vim-eunuch' " UNIX file helpers
 " }}}
 
 
@@ -109,14 +93,11 @@
 
 " PLUGIN_GROUP: Web {{{
   " Plug 'cakebaker/scss-syntax.vim', {'for': ['scss', 'css']}
-  "
-  " Plug 'pangloss/vim-javascript', {'for': ['js', 'jsx']}
-  " Plug 'othree/yajs.vim'
   Plug 'ap/vim-css-color', {'for': ['css', 'scss']}
 " }}}
 
 
 " PLUGIN_GROUP: Window Management {{{
   Plug 'szw/vim-maximizer'
-  Plug 'zefei/vim-wintabs'
+  " Plug 'zefei/vim-wintabs'
 " }}}
