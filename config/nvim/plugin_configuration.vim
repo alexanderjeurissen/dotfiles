@@ -27,22 +27,6 @@ endif
 " }}}
 
 
-" PLUGIN: Yggdroot/indentLine {{{
-if has_key(g:plugs, 'indentLine')
-  let g:indentLine_char = '┆'
-  let g:indentLine_indentLevel = 20
-  let g:indentLine_bufNameExclude = ['terminal']
-endif
-" }}}
-
-
-" PLUGIN: othree/javascript-libraries-syntax.vim {{{
-if has_key(g:plugs, 'javascript-libraries-syntax.vim')
-  let g:used_javascript_libs = 'underscore,backbone,react,flux'
-endif
-" }}}
-
-
 " PLUGIN: justinmk/vim-sneak {{{
 if has_key(g:plugs, 'vim-sneak')
   let g:sneak#label = 1
@@ -76,6 +60,21 @@ if has_key(g:plugs, 'vim-vinegar')
 endif
 " }}}
 
+" PLUGIN: justinmk/vim-dirvish {{{
+if has_key(g:plugs, 'vim-dirvish')
+
+  no <silent> <leader>wv <C-w>v
+  no <silent> <leader>ws <C-w>s
+
+  " Disable Netrw
+  let g:loaded_netrw       = 1
+  let g:loaded_netrwPlugin = 1
+
+  " Enable fugitive in dirvish buffers
+  autocmd Filetype dirvish call fugitive#detect(@%)
+endif
+" }}}
+
 
 " PLUGIN: vim-ruby/vim-ruby {{{
 if has_key(g:plugs, 'vim-ruby')
@@ -90,7 +89,6 @@ if has_key(g:plugs, 'vim-extradite')
   let g:gitgutter_eager=0
 endif
 " }}}
-
 
 
 " PLUGIN: mattn/gist-vim {{{
@@ -295,50 +293,6 @@ endif
 " }}}
 
 
-" PLUGIN: mattn/emmet-vim {{{
-if has_key(g:plugs, 'emmet-vim')
-  imap <expr> <C-e> emmet#expandAbbrIntelligent("\<C-e>")
-  let g:user_emmet_next_key='<C-n>'
-  let g:user_emmet_install_global = 1
-  let g:user_emmet_settings = {
-        \'html.javascript' : {
-          \'extends' : 'html',
-          \'filters' : 'html'
-        \}
-      \}
-endif
-" }}}
-
-
-" PLUGIN: Shougo/deoplete.nvim {{{
-if has_key(g:plugs, 'deoplete.nvim')
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#enable_smart_case = 1
-  let g:deoplete#disable_auto_complete = 0 "disable auto autocompletion
-  let g:deoplete#auto_complete_start_length = 1 "also show completion with single character
-
-  " TODO: sometimes this behaviour is broken and makes it impossible to enter a \n if the last word
-  " of a sentence is a trigger for a snippet
-  " Make <cr> select the candidate and if it's a snippet expand it.
-  " inoremap <silent> <CR> <C-r>=<SID>trySelectCandidate()<CR>
-
-  function! s:trySelectCandidate()
-    if pumvisible()
-      call deoplete#mappings#close_popup() "close deoplete
-      let snippet = UltiSnips#ExpandSnippetOrJump()
-      if g:ulti_expand_or_jump_res > 0
-        return snippet
-      else
-        return "\<CR>"
-      endif
-    else
-     return "\<CR>"
-    endif
-  endfunction
-endif
-" }}}
-
-
 " PLUGIN: SirVer/ultisnips {{{
 if has_key(g:plugs, 'ultisnips')
   let g:ulti_expand_or_jump_res = 0
@@ -347,17 +301,6 @@ if has_key(g:plugs, 'ultisnips')
   let g:UltiSnipsJumpBackwardTrigger="<C-p>"
   let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
 endif
-" }}}
-
-
-" PLUGIN: nathanaelkane/vim-indent-guides {{{
-if has_key(g:plugs, 'vim-indent-guides')
-    let g:indent_guides_auto_colors = 1
-    let g:indent_guides_color_change_percent = 5
-    let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'terminal']
-    let g:indent_guides_start_level = 2
-    let g:indent_guides_enable_on_vim_startup = 1
-  endif
 " }}}
 
 
@@ -384,15 +327,6 @@ if has_key(g:plugs, 'vim-grepper')
 
   command! Ag :Grepper
   nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
-endif
-" }}}
-
-
-" PLUGIN: skwp/greplace.vim {{{
-if has_key(g:plugs, 'greplace')
-  set grepprg=ag
-
-  let g:grep_cmd_opts = '--line-numbers --noheading'
 endif
 " }}}
 
