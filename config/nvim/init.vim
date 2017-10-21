@@ -115,6 +115,10 @@
   noremap j gj
   noremap k gk
 
+  " Move visual block
+  vnoremap J :m '>+1<CR>gv=gv
+  vnoremap K :m '<-2<CR>gv=gv
+
   " Find merge conflict markers
   noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
 
