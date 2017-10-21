@@ -173,10 +173,10 @@ endif
 " PLUGIN: mhinz/vim-signify {{{
 if has_key(g:plugs, 'vim-signify')
   let g:signify_vcs_list = ['git']
-  let g:signify_sign_add               = '+'
-  let g:signify_sign_delete            = '_'
-  let g:signify_sign_delete_first_line = '‾'
-  let g:signify_sign_change            = '!'
+  let g:signify_sign_add               = '∙'
+  let g:signify_sign_delete            = '∙'
+  let g:signify_sign_delete_first_line = '∙'
+  let g:signify_sign_change            = '∙'
   let g:signify_sign_changedelete      = g:signify_sign_change
   let g:signify_update_on_bufenter    = 0
   let g:signify_update_on_focusgained = 1
@@ -338,27 +338,12 @@ endif
 " }}}
 
 
-" PLUGIN: t9md/vim-choosewin {{{
-if has_key(g:plugs, 'vim-choosewin')
-  let g:choosewin_label = 'aoeuhtns'
-  let g:choosewin_color_label = {
-          \ 'cterm': [2, 16]
-          \ }
-  let g:choosewin_color_label_current = {
-        \ 'cterm': [9, 16]
-        \ }
-
-  nnoremap <leader>wc :<c-u>:ChooseWin<CR>
-endif
-" }}}
-
-
 " PLUGIN: w0rp/ale {{{
 if has_key(g:plugs, 'ale')
   " let g:ale_sign_error = '✖'
   " let g:ale_sign_warning = '⚠'
-  let g:ale_sign_error = '•'
-  let g:ale_sign_warning = '•'
+  let g:ale_sign_error = '◆'
+  let g:ale_sign_warning = '◇'
   let g:ale_linters = {
   \   'javascript': ['eslint'],
   \   'jsx': ['stylelint', 'eslint'],
@@ -415,51 +400,9 @@ endif
 " }}}
 
 
-" PLUGIN: TODO:vim-ctrlspace/vim-ctrlspace {{{
-if has_key(g:plugs, 'vim-ctrlspace')
-  " Settings for MacVim and powerline fonts
-   let g:CtrlSpaceSymbols = {}
-   let g:CtrlSpaceSymbols = {
-   \"CS": "",
-   \"File": " FILES",
-   \"All": "፨ All",
-   \"CTab": "▣ CTAB",
-   \"Tabs": " TABS",
-   \"Sin": " HOME",
-   \"Help": " HELP",
-   \"SLeft": " : ",
-   \"SRight": "",
-   \"BM": " BOOKMARKS",
-   \"Vis": " visible",
-   \"IV": " invisible"
-   \}
-"                             ○ ◉                      
-    " hi! link CtrlSpaceNormal   Normal
-    " hi! link CtrlSpaceSelected PMenuSbar
-    " hi! link CtrlSpaceSearch   Conditional
-    " hi! link CtrlSpaceStatus   Cursor
-
-  " set ag as command to be used by Ctrl Space
-  if executable("ag")
-      let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
-  endif
-
-  " Automatically persist workspace
-  let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
-  let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
-  let g:CtrlSpaceSaveWorkspaceOnExit = 1
-
-  " disable default mapping
-  let g:CtrlSpaceDefaultMappingKey = "<C-space> "
-  " let g:CtrlSpaceSetDefaultMapping = 0
-  " nmap <leader><leader> <c-u>:CtrlSpace<cr>
-  "
-endif
-" }}}
-
-
 " PLUGIN: christoomey/vim-tmux-navigator {{{
 if has_key(g:plugs, 'vim-polyglot')
+  let g:used_javascript_libs = 'underscore,backbone,react,flux'
   let g:javascript_conceal_function             = "ƒ"
   let g:javascript_conceal_return               = "⬅"
   let g:javascript_conceal_arrow_function       = "⇒"
