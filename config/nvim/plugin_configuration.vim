@@ -411,13 +411,16 @@ if has_key(g:plugs, 'vim-polyglot')
   syntax match jsOperator />=/ conceal cchar=≥
   syntax match jsOperator /!=/ conceal cchar=≢
   syntax keyword Statement lambda conceal cchar=λ
-
   set conceallevel=2
 endif
 " }}}
 
 " PLUGIN: zefei/vim-wintabs {{{
 if has_key(g:plugs, 'vim-wintabs')
+  let g:wintabs_display = 'statusline'
+  let g:wintabs_ui_sep_inbetween = ''
+  let g:wintabs_ui_sep_rightmost = ''
+  let g:wintabs_ui_active_higroup = 'TabLineSel'
   nmap <leader>bn <plug>(wintabs_next)
   nmap <leader>bp <plug>(wintabs_previous)
   nmap <leader>wn <plug>(wintabs_next)
