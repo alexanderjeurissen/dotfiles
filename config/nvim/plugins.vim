@@ -69,11 +69,11 @@
 
 " PLUGIN_GROUP: Web {{{
   " Plug 'cakebaker/scss-syntax.vim', {'for': ['scss', 'css']}
-  Plug 'ap/vim-css-color', {'for': ['css', 'scss']}
+  Plug 'ap/vim-css-color', {'for': ['css', 'scss', 'vim']}
 " }}}
 
 
 " PLUGIN_GROUP: Window Management {{{
   Plug 'szw/vim-maximizer'
-  " Plug 'zefei/vim-wintabs'
+  Plug 'zefei/vim-wintabs'
 " }}}
