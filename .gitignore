@@ -4,6 +4,5 @@ config/nvim/sessions/
 config/nvim/UndoHistory/
 config/nvim/.netrwhist
 config/nvim/plugged/
-config/nvim/autoload/
 config/nvim/spell/
 *~
