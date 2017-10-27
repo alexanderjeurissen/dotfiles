@@ -8,33 +8,9 @@
 
 
 " PLUGIN_GROUP: ColorSchemes {{{
-  Plug 'morhetz/gruvbox'
-
-  " Plug 'zefei/cake16', {
-  "       \ 'hook_post_source': "
-  "       \   colorscheme cake16\n
-  "       \   set background=light\n
-  "       \   hi! User1 ctermfg=15 ctermbg=10 guifg=bg guibg=#82a3b3\n
-  "       \   hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797\n
-  "       \   hi! link TabLineSel Diffdelete\n
-  "       \   hi! link QuickFixMenuLine PMenuSel\n
-  "       \ "
-  "       \}
-
-  " Plug 'sonph/onehalf', {
-  "       \ 'rtp': 'vim/',
-  "       \ 'hook_post_source': "
-  "       \   colorscheme onehalfdark\n
-  "       \
-  "       \   let &background='dark'\n
-  "       \
-  "       \   hi! link Search PMenu\n
-  "       \   hi! link IncSearch PMenuSel\n
-  "       \   hi! link Folded Visual\n
-  "       \ "
-  "       \}
-" }}}
-
+  " Plug 'morhetz/gruvbox'
+  Plug 'zefei/cake16'
+  Plug 'zefei/vim-colortuner'
 
 " PLUGIN_GROUP: Core {{{
   Plug 'tpope/vim-dispatch' " run tasks in a tmux split to not block vim
