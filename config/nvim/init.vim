@@ -129,6 +129,20 @@
   noremap <Leader>t :tabnew<CR>
   noremap <Leader>tn :tabnext<CR>
 
+  " Buffer mappings
+  " Move to the previous buffer
+  nnoremap H :bprevious<CR>
+
+  " Move to the next buffer
+  nnoremap L :bnext<CR>
+
+  " Replace H and L
+  nnoremap zh H
+  nnoremap zm M
+  nnoremap zl L
+
+  nnoremap gb :Buffers<CR>
+
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>
 
