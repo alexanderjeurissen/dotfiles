@@ -294,7 +294,7 @@
 
     " Only have cursorline/cursorcolumn in current window and in normal window
     autocmd WinLeave * set nocursorline nocursorcolumn
-    autocmd WinEnter * set cursorline cursorcolumn
+    autocmd VimEnter,WinEnter * set cursorline cursorcolumn
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
