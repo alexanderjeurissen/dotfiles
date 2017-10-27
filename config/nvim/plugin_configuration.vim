@@ -173,10 +173,10 @@ endif
 " PLUGIN: mhinz/vim-signify {{{
 if has_key(g:plugs, 'vim-signify')
   let g:signify_vcs_list = ['git']
-  let g:signify_sign_add               = '∙'
-  let g:signify_sign_delete            = '∙'
-  let g:signify_sign_delete_first_line = '∙'
-  let g:signify_sign_change            = '∙'
+  let g:signify_sign_add               = '+'
+  let g:signify_sign_delete            = '_'
+  let g:signify_sign_delete_first_line = '‾'
+  let g:signify_sign_change            = '!'
   let g:signify_sign_changedelete      = g:signify_sign_change
   let g:signify_update_on_bufenter    = 0
   let g:signify_update_on_focusgained = 1
@@ -417,10 +417,15 @@ endif
 
 " PLUGIN: zefei/vim-wintabs {{{
 if has_key(g:plugs, 'vim-wintabs')
-  let g:wintabs_display = 'statusline'
-  let g:wintabs_ui_sep_inbetween = ''
-  let g:wintabs_ui_sep_rightmost = ''
-  let g:wintabs_ui_active_higroup = 'TabLineSel'
+  let g:wintabs_display = 'none'
+
+  let g:wintabs_ui_modified = ''
+  let g:wintabs_ui_readonly = ''
+
+  " style active wintab for gruvbox
+  " autocmd ColorScheme gruvbox hi User1 guifg=#353535 guibg=#7aab7d
+  let g:wintabs_ui_active_higroup = 'DiffDelete'
+
   nmap <leader>bn <plug>(wintabs_next)
   nmap <leader>bp <plug>(wintabs_previous)
   nmap <leader>wn <plug>(wintabs_next)
@@ -435,7 +440,7 @@ endif
 " }}}
 
 
-" PLUGIN: morhetz/gruvbox{{{
+" PLUGIN: morhetz/gruvbox {{{
 if has_key(g:plugs, 'gruvbox')
   let g:gruvbox_italic=1
   let g:gruvbox_italicize_strings=1
@@ -447,6 +452,21 @@ if has_key(g:plugs, 'gruvbox')
   endfunction
 endif
 " }}}
+
+" PLUGIN: zefei/cake16 {{{
+if has_key(g:plugs, 'cake16')
+  function! ActivateColorScheme()
+    colorscheme cake16
+    set background=light
+    hi! User1 guifg=#d0c7b8 guibg=#FFFFFF
+    " hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797
+    hi! link vertsplit cursorlinenr
+    hi! link TabLineFill DiffText
+    hi! link QuickFixMenuLine PMenuSel
+  endfunction
+endif
+" }}}
+
 
 
 " PLUGIN: roxma/nvim-completion-manager {{{

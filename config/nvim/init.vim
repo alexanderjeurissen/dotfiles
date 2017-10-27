@@ -5,18 +5,19 @@
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
   set autowrite                                      " Write before running commands.
   set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
-  set cmdheight=2                                    " Number of screen lines for the command-line.
+  set cmdheight=1                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
   set textwidth=100                                  " Set maximum number of characters per line
   set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
+  set sessionoptions+=globals                        " Persist global variables in vim session
   set completeopt=menu                               " Use popup menu for insert mode completion
   set cc=+1,+2                                       " Highlight first 2 columns after 'textwidth'
   set iskeyword-=_                                   " Treat underscore as a word boundary.
 
-  set list                                           " TODO: not sure why this is required.
+  set list
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
-  set fillchars=vert:¦                               " Strings in statuslines and vert separators.
+  set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
   set hid                                            " Allow for more then one unsaved buffer.
   set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
@@ -72,16 +73,15 @@
   "␤ line number r2
 
   set statusline=
-  let &statusline = " %{winnr()}"
-  let &statusline .= " %<%f"
+  let &statusline = " %{statusline#PasteFlag()}"
+  let &statusline .= "%{statusline#SyntaxFlag()}"
+  let &statusline .= "%{statusline#SpellFlag()}"
+  let &statusline .= "%{statusline#HardTimeFlag()}"
+  let &statusline .= "\u2502 %<%f"
   let &statusline .= "%{&readonly ? '  ' : &modified ? '  ' : ''}"
-  let &statusline .= "%{status_line#PasteFlag()}"
-  let &statusline .= "%{status_line#SpellFlag()}"
-  " let &statusline .= \"%{status_line#HardTimeFlag()}"
-  let &statusline .= "%=%{&filetype == '' ? 'unknown' : &filetype}"
-  let &statusline .= " %2c "
+  let &statusline .= "%=\u2502 %{&filetype == '' ? 'unknown' : &filetype} "
+  let &statusline .= "\u2502%3p%% \u2502%3c "
 " }}}
-
 
 " SETTINGS: terminal {{{
   tnoremap <leader><ESC> <C-\><C-n>
