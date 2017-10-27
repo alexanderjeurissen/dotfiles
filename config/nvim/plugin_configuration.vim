@@ -220,12 +220,13 @@ if has_key(g:plugs, 'fzf.vim')
     command! -bang -nargs=* Locate call fzf#vim#ag(<q-args>, '--literal --ignore-case -l ', {'window': 'enew'})
   " }}}
 
+    command! -nargs=* WintabsChose call fzf#WintabsBuffers()
+
   " Keybindings {{{
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
     nnoremap <silent> <leader>fc :<C-u>call fzf#FilesInCwd()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-    nnoremap <silent> <leader>W :<C-u>Windows<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
     nnoremap <silent> <leader>. :<C-u>Lines<CR>
     nnoremap <silent> <leader>o :<C-u>BTags<CR>
