@@ -28,17 +28,17 @@ function! fzf#NeighbouringFiles()
         \ 'window':  'enew' })
 endfunction
 
-function! fzf#WinTabBuffers()
-  if exists("w:wintabs_buflist")
-    call fzf#run({
-      \ 'source': map(copy(w:wintabs_buflist), 'bufname(v:val)'),
-      \ 'sink':   'e',
-      \ 'options': '-m -x +s',
-      \ 'window':  'enew' })
-  else
-    echo "ERROR: wintabs not loaded"
-  endif
-endfunction
+" function! fzf#WinTabBuffers()
+"   if exists("w:wintabs_buflist")
+"     call fzf#run({
+"       \ 'source': map(copy(w:wintabs_buflist), 'bufname(v:val)'),
+"       \ 'sink':   'e',
+"       \ 'options': '-m -x +s',
+"       \ 'window':  'enew' })
+"   else
+"     echo "ERROR: wintabs not loaded"
+"   endif
+" endfunction
 
 
 " Fuzzy search all files changed in this branch (compared to develop)

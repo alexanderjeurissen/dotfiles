@@ -225,7 +225,7 @@ if has_key(g:plugs, 'fzf.vim')
   " Keybindings {{{
     " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
-    nnoremap <silent> <leader>fc :<C-u>call fzf#FilesInCwd()<CR>
+    nnoremap <silent> <leader>fc :<C-u>call fzf#NeighbouringFiles()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
     nnoremap <silent> <leader>. :<C-u>Lines<CR>
