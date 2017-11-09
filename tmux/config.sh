@@ -64,7 +64,7 @@ flat_segment() {
   source "${TMUX_POWERLINE_DIR_HOME}/segments/${segment}.sh"
 
   local result=$(run_segment)
-  local output="#[fg=#d0c7b8, bg=colour0]${result}#[bg=colour0]"
+  local output="#[fg=colour07, bg=colour04]${result}#[bg=colour04]"
 
   if [[ $separator_side == "left" ]]; then
     output="${padding}${output}│"
