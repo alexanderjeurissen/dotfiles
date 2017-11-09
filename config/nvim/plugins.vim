@@ -44,6 +44,7 @@
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'mhinz/vim-grepper' " add grepper for ag/ack etc.
   Plug 'moll/vim-bbye' " buffer deleting
+  Plug 'arithran/vim-delete-hidden-buffers' " delete all hidden buffers
   Plug 'airblade/vim-rooter' " change vim root to vcs root when editing a file
   Plug 'mhinz/vim-signify' " vcs changes sign column indicators
   Plug 'christoomey/vim-tmux-navigator' " tmux <-> vim navigation
@@ -75,5 +76,5 @@
 
 " PLUGIN_GROUP: Window Management {{{
   Plug 'szw/vim-maximizer'
-  Plug 'zefei/vim-wintabs'
+  " Plug 'zefei/vim-wintabs'
 " }}}
