@@ -66,21 +66,15 @@
   set guioptions-=e
 
   " additional symbols:
-  "Ξ Whitespace
-  "☰ max line number
-  "∄ not exist
-  "¶ line numberz
-  "␤ line number r2
-
   set statusline=
-  let &statusline = " %{statusline#PasteFlag()}"
+  let &statusline = ' '
+  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
+  let &statusline .= " %<%t"
+  let &statusline .= "%=%{statusline#PasteFlag()}"
   let &statusline .= "%{statusline#SyntaxFlag()}"
   let &statusline .= "%{statusline#SpellFlag()}"
   let &statusline .= "%{statusline#HardTimeFlag()}"
-  let &statusline .= "\u2502 %<%f"
-  let &statusline .= "%{&readonly ? '  ' : &modified ? '  ' : ''}"
-  let &statusline .= "%=\u2502 %{&filetype == '' ? 'unknown' : &filetype} "
-  let &statusline .= "\u2502%3p%% \u2502%3c "
+  let &statusline .= "%{statusline#BranchFlag()}"
 " }}}
 
 " SETTINGS: terminal {{{
