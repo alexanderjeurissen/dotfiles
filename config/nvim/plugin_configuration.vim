@@ -440,6 +440,30 @@ if has_key(g:plugs, 'vim-wintabs')
 endif
 " }}}
 
+" PLUGIN: moll/vim-bbye {{{
+if has_key(g:plugs, 'vim-bbye')
+  nmap <leader>bn :bnext<CR>
+  nmap <leader>bp :beprevious<CR>
+  nmap <leader>wc :q<cr>
+  nmap <leader>bd :Bdelete<CR>
+
+  " Move to the previous buffer
+  nnoremap H :bprevious<CR>
+
+  " Move to the next buffer
+  nnoremap L :bnext<CR>
+
+  " Delete all hidden buffers
+  nnoremap <leader>bo :DeleteHiddenBuffers<CR>
+
+  " Delete all buffers, but keep windows open
+  nnoremap <leader>bw :bufdo :Bdelete<CR>
+
+  " fuzzy search for a buffer
+  nnoremap gb :Buffers<CR>
+endif
+" }}}
+
 
 " PLUGIN: morhetz/gruvbox {{{
 if has_key(g:plugs, 'gruvbox')
