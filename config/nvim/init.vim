@@ -20,8 +20,8 @@
   set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
   set hid                                            " Allow for more then one unsaved buffer.
-  set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
-  " set lazyredraw                                   " Don't unnecessarily redraw screen.
+  " set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+  set lazyredraw                                   " Don't unnecessarily redraw screen.
 
   set undofile                                       " Save undo's after file closes.
   set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
@@ -129,19 +129,10 @@
   noremap <Leader>t :tabnew<CR>
   noremap <Leader>tn :tabnext<CR>
 
-  " Buffer mappings
-  " Move to the previous buffer
-  nnoremap H :bprevious<CR>
-
-  " Move to the next buffer
-  nnoremap L :bnext<CR>
-
   " Replace H and L
   nnoremap zh H
   nnoremap zm M
   nnoremap zl L
-
-  nnoremap gb :Buffers<CR>
 
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>

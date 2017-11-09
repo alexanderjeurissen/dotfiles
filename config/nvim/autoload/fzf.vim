@@ -48,6 +48,6 @@ function! fzf#FilesChangedInBranch()
   call fzf#run({
         \ 'source': command,
         \ 'sink':   'e',
-        \ 'options': '-m -x +s',
+        \ 'options': '-m -x +s --bind=ctrl-a:select-all,ctrl-d:deselect-all',
         \ 'window':  'enew' })
 endfunction
