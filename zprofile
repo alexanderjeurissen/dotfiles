@@ -7,3 +7,5 @@ export NVM_DIR=~/.nvm
 . $(brew --prefix nvm)/nvm.sh
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+export PATH="$HOME/.cargo/bin:$PATH"
