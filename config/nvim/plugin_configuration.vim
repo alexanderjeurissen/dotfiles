@@ -478,6 +478,7 @@ if has_key(g:plugs, 'gruvbox')
 endif
 " }}}
 
+
 " PLUGIN: zefei/cake16 {{{
 if has_key(g:plugs, 'cake16')
   function! ActivateColorScheme()
@@ -492,6 +493,17 @@ if has_key(g:plugs, 'cake16')
 endif
 " }}}
 
+
+" PLUGIN: Zabanaa/neuromancer.vim {{{
+if has_key(g:plugs, 'neuromancer.vim')
+  function! ActivateColorScheme()
+    colorscheme neuromancer
+    " hi! link vertsplit cursorlinenr
+    " hi! link TabLineFill DiffText
+    " hi! link QuickFixMenuLine PMenuSel
+  endfunction
+endif
+" }}}
 
 
 " PLUGIN: roxma/nvim-completion-manager {{{

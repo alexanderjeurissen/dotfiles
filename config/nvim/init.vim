@@ -20,8 +20,8 @@
   set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
   set hid                                            " Allow for more then one unsaved buffer.
-  " set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
-  set lazyredraw                                   " Don't unnecessarily redraw screen.
+  set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+  " set lazyredraw                                   " Don't unnecessarily redraw screen.
 
   set undofile                                       " Save undo's after file closes.
   set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
@@ -278,8 +278,8 @@
     " }}}
 
     " Only have cursorline/cursorcolumn in current window and in normal window
-    autocmd WinLeave * set nocursorline nocursorcolumn
-    autocmd VimEnter,WinEnter * set cursorline cursorcolumn
+    " autocmd WinLeave * set nocursorline nocursorcolumn
+    " autocmd VimEnter,WinEnter * set cursorline cursorcolumn
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
