@@ -2,61 +2,26 @@
   "env": {
     "commonjs": true,
   },
+  "extends": [
+    "prettier",
+    "prettier/react",
+  ],
+  "plugins": [
+    "prettier",
+  ],
   "globals": {},
-  "parser": null,
+  "parser": "babel-eslint",
   "rules": {
+    "prettier/prettier": 2,
     "accessor-pairs": 0,
-    "array-bracket-spacing": [
-      2,
-      "never"
-    ],
-    "arrow-parens": 2,
     "block-scoped-var": 0,
-    "block-spacing": [
-      2,
-      "always"
-    ],
-    "brace-style": [
-      2,
-      "1tbs",
-      {
-          "allowSingleLine": true
-      }
-    ],
     "callback-return": 0,
     "camelcase": 0,
-    "comma-dangle": [
-      2,
-      "always-multiline"
-    ],
-    "comma-spacing": [
-      1,
-      {
-          "after": true
-      }
-    ],
-    "comma-style": [
-      2,
-      "last"
-    ],
     "complexity": 0,
-    "computed-property-spacing": [
-      2,
-      "never"
-    ],
     "consistent-return": 0,
     "consistent-this": 0,
-    "curly": 2,
     "default-case": 2,
-    "dot-location": [
-      1,
-      "property"
-    ],
     "dot-notation": 0,
-    "eol-last": [
-      1,
-      "unix"
-    ],
     "eqeqeq": [
       2,
       "allow-null"
@@ -74,30 +39,7 @@
     "handle-callback-err": 0,
     "id-length": 0,
     "id-match": 0,
-    "indent": [
-      2,
-      2
-    ],
     "init-declarations": 0,
-    "jsx-quotes": [
-      2,
-      "prefer-double"
-    ],
-    "key-spacing": [
-      2,
-      {
-          "afterColon": true,
-          "mode": "strict"
-      }
-    ],
-    "keyword-spacing": [
-      2,
-      {
-          "after": true,
-          "before": true,
-          "overrides": {}
-      }
-    ],
     "linebreak-style": [
       2,
       "unix"
@@ -107,7 +49,6 @@
       1,
       4
     ],
-    "max-len": 0,
     "max-nested-callbacks": 2,
     "max-params": 0,
     "max-statements": 0,
@@ -117,7 +58,6 @@
           "capIsNew": false
       }
     ],
-    "new-parens": 2,
     "newline-after-var": 0,
     "no-alert": 0,
     "no-array-constructor": 0,
@@ -151,11 +91,6 @@
     "no-extend-native": 2,
     "no-extra-bind": 2,
     "no-extra-boolean-cast": 2,
-    "no-extra-parens": [
-      2,
-      "all"
-    ],
-    "no-extra-semi": 2,
     "no-fallthrough": 2,
     "no-floating-decimal": 2,
     "no-func-assign": 2,
@@ -168,7 +103,7 @@
       }
     ],
     "no-implied-eval": 2,
-    "no-inline-comments": 2,
+    "no-inline-comments": 0,
     "no-inner-declarations": [
       1,
       "functions"
@@ -184,10 +119,7 @@
     "no-loop-func": 2,
     "no-magic-numbers": 0,
     "no-mixed-requires": 0,
-    "no-mixed-spaces-and-tabs": 2,
-    "no-multi-spaces": 2,
     "no-multi-str": 2,
-    "no-multiple-empty-lines": 2,
     "no-native-reassign": 2,
     "no-negated-condition": 2,
     "no-negated-in-lhs": 2,
@@ -216,12 +148,10 @@
     "no-sequences": 2,
     "no-shadow": 2,
     "no-shadow-restricted-names": 2,
-    "no-spaced-func": 2,
     "no-sparse-arrays": 2,
     "no-sync": 0,
     "no-ternary": 0,
     "no-throw-literal": 2,
-    "no-trailing-spaces": 2,
     "no-undef": 2,
     "no-undef-init": 0,
     "no-undefined": 0,
@@ -242,14 +172,6 @@
     "no-void": 2,
     "no-warning-comments": 0,
     "no-with": 2,
-    "object-curly-spacing": [
-      2,
-      "always",
-      {
-          "arraysInObjects": false,
-          "objectsInObjects": false
-      }
-    ],
     "one-var": [
       1,
       "never"
@@ -258,50 +180,12 @@
       2,
       "always"
     ],
-    "operator-linebreak": 0,
-    "padded-blocks": [
-      2,
-      "never"
-    ],
-    "quote-props": [
-      2,
-      "as-needed"
-    ],
-    "quotes": [
-      2,
-      "double",
-      "avoid-escape"
-    ],
     "radix": [
       2,
       "always"
     ],
     "require-jsdoc": 0,
-    "semi": [
-      2,
-      "always"
-    ],
-    "semi-spacing": [
-      2,
-      {
-          "after": true
-      }
-    ],
     "sort-vars": 0,
-    "space-before-blocks": [
-      2,
-      "always"
-    ],
-    "space-before-function-paren": [
-      1,
-      "never"
-    ],
-    "space-in-parens": [
-      2,
-      "never"
-    ],
-    "space-infix-ops": 2,
-    "space-unary-ops": 2,
     "spaced-comment": [
       2,
       "always"
@@ -311,11 +195,6 @@
     "valid-jsdoc": 0,
     "valid-typeof": 2,
     "vars-on-top": 0,
-    "wrap-iife": [
-      2,
-      "inside"
-    ],
-    "wrap-regex": 0,
     "yoda": 2,
   }
 }
