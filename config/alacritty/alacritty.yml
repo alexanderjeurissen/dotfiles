@@ -84,7 +84,7 @@ render_timer: false
 
 # Use custom cursor colors. If true, display the cursor in the cursor.foreground
 # and cursor.background colors, otherwise invert the colors of the cursor.
-custom_cursor_colors: true
+custom_cursor_colors: false
 
 # # Colors (Gruvbox)
 # colors:
@@ -120,73 +120,75 @@ custom_cursor_colors: true
 #     cyan:    '0x9ec98e'
 #     white:   '0xefe1bf'
 
-# Colors (cake16)
-colors:
-  # Default colors
-  primary:
-    background: '0xd0c7b8'
-    foreground: '0x774f38'
-
-  # Colors the cursor will use if `custom_cursor_colors` is true
-  cursor:
-    text: '0x774f38'
-    cursor: '0xFFFFFF'
-
-  # Normal colors
-  normal:
-    black:   '0x774f38'
-    red:     '0xb95942'
-    green:   '0x308444'
-    yellow:  '0x996e1f'
-    blue:    '0x50707e'
-    magenta: '0xaa56b2'
-    cyan:    '0x308090'
-    white:   '0xede4d4'
-
-  # Bright colors
-  bright:
-    black:   '0x878787'
-    red:     '0xf10000'
-    green:   '0x82a3b3'
-    yellow:  '0xc79747'
-    blue:    '0x678797'
-    magenta: '0xafafaf'
-    cyan:    '0xe4dccc'
-    white:   '0xf7efdf'
-
-# Colors (onehalf)
+# # Colors (cake16) {
 # colors:
 #   # Default colors
 #   primary:
-#     background: '0x353a44'
-#     foreground: '0xe3e5e9'
+#     background: '0xd0c7b8'
+#     foreground: '0x774f38'
 
 #   # Colors the cursor will use if `custom_cursor_colors` is true
 #   cursor:
-#     text: '0xe3e5e9'
-#     cursor: '0xb2c1d6'
+#     text: '0x774f38'
+#     cursor: '0xFFFFFF'
 
 #   # Normal colors
 #   normal:
-#     black:   '0x353a44'
-#     red:     '0xe88388'
-#     green:   '0xa7cc8c'
-#     yellow:  '0xebca8d'
-#     blue:    '0x72bef2'
-#     magenta: '0xd291e4'
-#     cyan:    '0x65c2cd'
-#     white:   '0xe3e5e9'
+#     black:   '0x774f38'
+#     red:     '0xb95942'
+#     green:   '0x308444'
+#     yellow:  '0x996e1f'
+#     blue:    '0x50707e'
+#     magenta: '0xaa56b2'
+#     cyan:    '0x308090'
+#     white:   '0xede4d4'
 
 #   # Bright colors
 #   bright:
-#     black:   '0x353a44'
-#     red:     '0xe88388'
-#     green:   '0xa7cc8c'
-#     yellow:  '0xebca8d'
-#     blue:    '0x72bef2'
-#     magenta: '0xd291e4'
-#     cyan:    '0x65c2cd'
-#     white:   '0xe3e5e9'
+#     black:   '0x878787'
+#     red:     '0xf10000'
+#     green:   '0x82a3b3'
+#     yellow:  '0xc79747'
+#     blue:    '0x678797'
+#     magenta: '0xafafaf'
+#     cyan:    '0xe4dccc'
+#     white:   '0xf7efdf'
+# }
+
+# Colors (cake16) INVERTED {
+colors:
+  # Default colors
+  primary:
+    background: '0x211808'
+    foreground: '0xD0C8B9'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  cursor:
+    text: '0xD0C8B9'
+    cursor: '0x000000'
+
+  # Normal colors
+  normal:
+    black:   '0xD0C8B9'
+    red:     '0xBD5F47'
+    green:   '0x7CD08F'
+    yellow:  '0xE0B567'
+    blue:    '0x83A2AF'
+    magenta: '0xA04DA8'
+    cyan:    '0x6EBECF'
+    white:   '0x4F3E21'
+
+  # Bright colors
+  bright:
+    black:   '0x787878'
+    red:     '0xFF0F0F'
+    green:   '0x4C6B7B'
+    yellow:  '0xB78938'
+    blue:    '0x678898'
+    magenta: '0x4F4F4F'
+    cyan:    '0x322A1A'
+    white:   '0x211808'
+# }
 
 # Visual Bell
 #
