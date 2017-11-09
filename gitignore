@@ -46,6 +46,5 @@ logfile.log
 
 
 .byebug_history
-
-
 public_
+bin/pretty

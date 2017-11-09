@@ -135,9 +135,10 @@ fi
 
 # Alias for hackerij {{{
   alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
-  alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080"
+  alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 12345 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 12345"
   alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
   alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
+  alias burp="open $HOME/git/hackerij/burp.jar"
 # }}}
 
 # Aliases for TaskWarrior {{{
@@ -410,3 +411,18 @@ export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
+
+
+# Change cursor shape based on mode
+# SOURCE: http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
+# zle-keymap-select () {
+#     if [ "$TERM" = "xterm-256color" ]; then
+#         if [ $KEYMAP = vicmd ]; then
+#             # the command mode for vi
+#             echo -ne "\e[2 q"
+#         else
+#             # the insert mode for vi
+#             echo -ne "\e[4 q"
+#         fi
+#     fi
+# }
