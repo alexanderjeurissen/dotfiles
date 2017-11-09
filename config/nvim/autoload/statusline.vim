@@ -28,7 +28,7 @@ function! statusline#SyntaxFlag()
   if has_key(g:plugs, 'ale')
     let l:res = ale#statusline#Status()
     if l:res ==# 'OK'
-      return '  '
+      return ''
     else
       return '  '
     end
@@ -43,4 +43,14 @@ function! statusline#HardTimeFlag()
   else
     return ''
   endif
+endfunction
+
+function! statusline#BranchFlag()
+  let l:branch = split(fugitive#head(),'\/')
+
+  if len(l:branch) >= 1
+    return l:branch[0].' '
+  endif
+
+  return ""
 endfunction
