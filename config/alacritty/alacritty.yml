@@ -155,40 +155,40 @@ custom_cursor_colors: false
 #     white:   '0xf7efdf'
 # # }
 
-# Colors (cake16) INVERTED {
-colors:
-  # Default colors
-  primary:
-    background: '0x211808'
-    foreground: '0xD0C8B9'
+# # Colors (cake16) INVERTED {
+# colors:
+#   # Default colors
+#   primary:
+#     background: '0x211808'
+#     foreground: '0xD0C8B9'
 
-  # Colors the cursor will use if `custom_cursor_colors` is true
-  cursor:
-    text: '0xD0C8B9'
-    cursor: '0x000000'
+#   # Colors the cursor will use if `custom_cursor_colors` is true
+#   cursor:
+#     text: '0xD0C8B9'
+#     cursor: '0x000000'
 
-  # Normal colors
-  normal:
-    black:   '0xD0C8B9'
-    red:     '0xBD5F47'
-    green:   '0x7CD08F'
-    yellow:  '0xE0B567'
-    blue:    '0x83A2AF'
-    magenta: '0xA04DA8'
-    cyan:    '0x6EBECF'
-    white:   '0x4F3E21'
+#   # Normal colors
+#   normal:
+#     black:   '0xD0C8B9'
+#     red:     '0xBD5F47'
+#     green:   '0x7CD08F'
+#     yellow:  '0xE0B567'
+#     blue:    '0x83A2AF'
+#     magenta: '0xA04DA8'
+#     cyan:    '0x6EBECF'
+#     white:   '0x4F3E21'
 
-  # Bright colors
-  bright:
-    black:   '0x787878'
-    red:     '0xFF0F0F'
-    green:   '0x4C6B7B'
-    yellow:  '0xB78938'
-    blue:    '0x678898'
-    magenta: '0x4F4F4F'
-    cyan:    '0x322A1A'
-    white:   '0x211808'
-# }
+#   # Bright colors
+#   bright:
+#     black:   '0x787878'
+#     red:     '0xFF0F0F'
+#     green:   '0x4C6B7B'
+#     yellow:  '0xB78938'
+#     blue:    '0x678898'
+#     magenta: '0x4F4F4F'
+#     cyan:    '0x322A1A'
+#     white:   '0x211808'
+# # }
 
 # Visual Bell
 #
