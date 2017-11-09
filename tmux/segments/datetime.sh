@@ -1,3 +1,3 @@
 run_segment() {
-  echo " $(date +"%H:%M %a %m/%d")"
+  echo "SFO  $(TZ=US/Pacific date +"%I:%M")"  "AMS  $(TZ=Europe/Amsterdam date +"%I:%M")"
 }
