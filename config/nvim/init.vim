@@ -119,9 +119,10 @@
   " Spelling mapping
   " imap <c-c> <c-g>u<Esc>[s1z=`]a<c-g>u
 
+  " TODO: reevaluate tab pages in vim and mappings
   " tabpage mappings
-  noremap <Leader>t :tabnew<CR>
-  noremap <Leader>tn :tabnext<CR>
+  " noremap <Leader>t :tabnew<CR>
+  " noremap <Leader>tn :tabnext<CR>
 
   " Replace H and L
   nnoremap zh H
