@@ -9,7 +9,8 @@
 
 " PLUGIN_GROUP: ColorSchemes {{{
   " Plug 'morhetz/gruvbox'
-  Plug 'Zabanaa/neuromancer.vim'
+  " Plug 'Zabanaa/neuromancer.vim'
+  Plug 'ajmwagar/vim-deus'
   " Plug 'zefei/cake16'
   Plug 'zefei/vim-colortuner'
 

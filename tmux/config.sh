@@ -67,9 +67,9 @@ flat_segment() {
   local output="#[fg=colour0, bg=colour15]${result}#[bg=colour15]"
 
   if [[ $separator_side == "left" ]]; then
-    output="${padding}${output}"
+    output="${padding}${output}"
   else
-    output="${padding}${output}${padding}"
+    output="${padding}${output}${padding}"
   fi
 
   local exit_code="$?"

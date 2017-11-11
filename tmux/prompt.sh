@@ -10,7 +10,7 @@ print_powerline() {
   # If the required PANE_WIDTH isn't met then the segment will be hidden
   if [[ $1 == "left" ]]; then
     # flat_segment "session_info" 100 "left" " "
-    flat_segment "pomodoro" 100 "left"
+    flat_segment "pomodoro" 100 "left" " "
     # segment "session_info" colour015 colour01 100
     # segment "arc_accepted" colour014 colour000 120
     # segment "arc_needs_revision" colour014 colour000 120
