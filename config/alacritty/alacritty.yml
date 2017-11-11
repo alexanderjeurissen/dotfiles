@@ -120,6 +120,42 @@ custom_cursor_colors: false
 #     cyan:    '0x9ec98e'
 #     white:   '0xefe1bf'
 
+# Colors (Deus) {
+colors:
+  # Default colors
+  primary:
+    background: '0x2C323B'
+    foreground: '0xEBDAB2'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  # cursor:
+  #   text: '0x'
+  #   cursor: '0x'
+
+  # Normal colors
+  normal:
+    black:   '0x2C323B'
+    red:     '0xcc241d'
+    green:   '0x98971a'
+    yellow:  '0xd79921'
+    blue:    '0x458588'
+    magenta: '0xb16286'
+    cyan:    '0x689d6a'
+    white:   '0xd3d3d3'
+
+  # Bright colors
+  bright:
+    black:   '0x2C323B'
+    red:     '0xfb4934'
+    green:   '0x98C379'
+    yellow:  '0xfabd2f'
+    blue:    '0x83a598'
+    magenta: '0xC678DD'
+    cyan:    '0x8ec07c'
+    white:   '0xEBDAB2'
+# }
+
+
 # # Colors (cake16) {
 # colors:
 #   # Default colors

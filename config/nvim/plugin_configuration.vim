@@ -501,9 +501,19 @@ if has_key(g:plugs, 'neuromancer.vim')
       hi! link Float Number
       hi! link Whitespace ErrorMsg
       hi! link SignColumn LineNr
-    " hi! link vertsplit cursorlinenr
-    " hi! link TabLineFill DiffText
-    " hi! link QuickFixMenuLine PMenuSel
+  endfunction
+endif
+" }}}
+
+
+" PLUGIN: ajmwagar/vim-deus {{{
+if has_key(g:plugs, 'vim-deus')
+  function! ActivateColorScheme()
+    set background=dark
+    colorscheme deus
+      " hi! link Float Number
+      " hi! link Whitespace ErrorMsg
+      " hi! link SignColumn LineNr
   endfunction
 endif
 " }}}
