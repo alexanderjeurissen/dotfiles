@@ -131,6 +131,8 @@ fi
   alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
   alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
   alias eslintspecific="yarn run eslint:specific -- --fix"
+  alias yarn_global_add='yarn global add --global-folder=`yarn global bin` '
+  alias yarn_global_remove='yarn global remove --global-folder=`yarn global bin` '
 # }}}
 
 # Alias for hackerij {{{
