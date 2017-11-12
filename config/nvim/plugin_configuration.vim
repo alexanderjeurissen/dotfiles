@@ -491,7 +491,9 @@ if has_key(g:plugs, 'vim-deus')
     set background=dark
     colorscheme deus
     hi! link SignColumn LineNr
-    " hi! clear StatusLine
+    hi! VertSplit guibg=#242a32
+    hi! StatusLine guifg=#242a32 guibg=#e3d2aa
+    hi! StatusLineNC guifg=#242a32 guibg=#e3d2aa
   endfunction
 endif
 " }}}
