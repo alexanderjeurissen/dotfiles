@@ -12,8 +12,8 @@
   set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
   set sessionoptions+=globals                        " Persist global variables in vim session
   set completeopt=menu                               " Use popup menu for insert mode completion
-  set cc=+1,+2                                       " Highlight first 2 columns after 'textwidth'
-  set iskeyword-=_                                   " Treat underscore as a word boundary.
+  set cc=+1                                          " Highlight first column after 'textwidth'
+  " set iskeyword-=_                                   " Treat underscore as a word boundary.
 
   set list
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
@@ -65,16 +65,7 @@
   set laststatus=2
   set guioptions-=e
 
-  " additional symbols:
-  set statusline=
-  let &statusline = ' '
-  let &statusline .= "%{&readonly ? ' ' : &modified ? ' ' : ''}"
-  let &statusline .= " %<%t"
-  let &statusline .= "%=%{statusline#PasteFlag()}"
-  let &statusline .= "%{statusline#SyntaxFlag()}"
-  let &statusline .= "%{statusline#SpellFlag()}"
-  let &statusline .= "%{statusline#HardTimeFlag()}"
-  let &statusline .= "%{statusline#BranchFlag()}"
+  set statusline=%!statusline#Init()
 " }}}
 
 " SETTINGS: terminal {{{
