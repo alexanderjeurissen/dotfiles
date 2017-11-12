@@ -1,3 +1,16 @@
+function! statusline#Init()
+  let statusline_items = '%{statusline#FileInfoFlag()}'
+  let statusline_items .= '%t'
+  let statusline_items .= '%='
+  let statusline_items .= '%{statusline#PasteFlag()}'
+  let statusline_items .= '%{statusline#SyntaxFlag()}'
+  let statusline_items .= '%{statusline#SpellFlag()}'
+  let statusline_items .= '%{statusline#HardTimeFlag()}'
+  let statusline_items .= '%{statusline#BranchFlag()}'
+
+  return statusline_items
+endfunction
+
 function! statusline#WintabsInfo()
   if exists("w:wintabs_buflist")
     let current_buffer_index = index(w:wintabs_buflist, bufnr('%'))+1
@@ -5,6 +18,16 @@ function! statusline#WintabsInfo()
     return "  ".current_buffer_index.":".wintab_buffers_count."│"
   else
     return ''
+  endif
+endfunction
+
+function! statusline#FileInfoFlag()
+  if &readonly
+    return '   '
+  elseif &modified
+    return '   '
+  else
+    return ' '
   endif
 endfunction
 
