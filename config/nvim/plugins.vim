@@ -41,7 +41,7 @@
 
 
 " PLUGIN_GROUP: Navigation {{{
-  "   Plug 'justinmk/vim-sneak' " diagonal movements using S + 2 charaters
+  Plug 'justinmk/vim-sneak' " diagonal movements using S + 2 charaters
   Plug 'junegunn/fzf.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'mhinz/vim-grepper' " add grepper for ag/ack etc.
