@@ -33,9 +33,9 @@ if has_key(g:plugs, 'vim-sneak')
   let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
 
   "fix sneak highlighting
-  autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234
-  autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
-  autocmd ColorScheme * hi SneakLabel cterm=reverse ctermfg=214 ctermbg=234
+  " autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234
+  " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
+  " autocmd ColorScheme * hi SneakLabel cterm=reverse ctermfg=214 ctermbg=234
   " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
 
   " hi! link SneakPluginTarget Search
@@ -43,32 +43,17 @@ if has_key(g:plugs, 'vim-sneak')
   " call s:HL('SneakStreakMask', s:yellow, s:yellow)
   " hi! link SneakStreakStatusLine Search
 
-  " map <Leader> <plug>(sneak-prefix)
-  " nmap <leader><leader> <Plug>(sneak-s)
+  map <Leader> <plug>(sneak-prefix)
+  nmap <leader><leader> <Plug>(sneak-s)
 endif
 " }}}
 
-
-" PLUGIN: tpope/vim-vinegar {{{
-if has_key(g:plugs, 'vim-vinegar')
-  let g:netrw_keepdir=0 " fixes issue when copying or moving files in netrw
-  no <silent> <leader>wv <C-w>v
-  no <silent> <leader>ws <C-w>s
-
-  " Esc exits netrw and goes back to alternate buffer
-  autocmd Filetype netrw no <buffer> <silent> <Esc> <c-^>
-endif
-" }}}
 
 " PLUGIN: justinmk/vim-dirvish {{{
 if has_key(g:plugs, 'vim-dirvish')
 
   no <silent> <leader>wv <C-w>v
   no <silent> <leader>ws <C-w>s
-
-  " Disable Netrw
-  let g:loaded_netrw       = 1
-  let g:loaded_netrwPlugin = 1
 
   " Enable fugitive in dirvish buffers
   autocmd Filetype dirvish call fugitive#detect(@%)
@@ -158,14 +143,10 @@ endif
 
 " PLUGIN: vim-maximizer {{{
 if has_key(g:plugs, 'vim-maximizer')
-  " Settings {{{
-    let g:maximizer_set_default_mapping = 0
-    let g:maximizer_restore_on_winleave = 1
+  let g:maximizer_set_default_mapping = 0
+  let g:maximizer_restore_on_winleave = 1
 
-  " Keybindings {{{
-    nmap <silent> <leader>wz :MaximizerToggle<cr>
-    nmap <leader>bd :Bdelete!<CR>
-  " }}}
+  nmap <silent> <leader>wz :MaximizerToggle<cr>
 endif
 " }}}
 
@@ -484,8 +465,6 @@ if has_key(g:plugs, 'cake16')
   function! ActivateColorScheme()
     colorscheme cake16
     set background=light
-    hi! User1 guifg=#d0c7b8 guibg=#FFFFFF
-    " hi! User2 ctermfg=10 ctermbg=12 guifg=#82a3b3 guibg=#678797
     hi! link vertsplit cursorlinenr
     hi! link TabLineFill DiffText
     hi! link QuickFixMenuLine PMenuSel
@@ -511,9 +490,8 @@ if has_key(g:plugs, 'vim-deus')
   function! ActivateColorScheme()
     set background=dark
     colorscheme deus
-      " hi! link Float Number
-      " hi! link Whitespace ErrorMsg
-      " hi! link SignColumn LineNr
+    hi! link SignColumn LineNr
+    " hi! clear StatusLine
   endfunction
 endif
 " }}}
