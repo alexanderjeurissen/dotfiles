@@ -9,5 +9,5 @@ Feel free to use the scripts in this repository to fine tune your own dotfiles. 
 2. A lightweight alternative wrapper for tmux-powerline segments. only the ones I use (and some I made myself) are included
    but it should be quite easy to create new segments.
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/nvim_light.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/nvim_dark.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/deus_dark.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/deus_light.png)
