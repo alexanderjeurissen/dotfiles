@@ -1,5 +1,6 @@
 function! statusline#Init()
-  let statusline_items = '%{statusline#FileInfoFlag()}'
+  let statusline_items = ' ' " left padding
+  let statusline_items .= '%{statusline#FileInfoFlag()}'
   let statusline_items .= '%t'
   let statusline_items .= '%='
   let statusline_items .= '%{statusline#PasteFlag()}'
@@ -23,28 +24,20 @@ endfunction
 
 function! statusline#FileInfoFlag()
   if &readonly
-    return '   '
+    return '  '
   elseif &modified
-    return '   '
+    return '  '
   else
     return ' '
   endif
 endfunction
 
 function! statusline#PasteFlag()
-  if &paste
-    return '  '
-  else
-    return ''
-  endif
+  return &paste ? '  ' : ''
 endfunction
 
 function! statusline#SpellFlag()
-  if &spell
-    return ' ¶ '
-  else
-    return ''
-  endif
+  return &spell ? ' ¶ ' : ''
 endfunction
 
 function! statusline#SyntaxFlag()
