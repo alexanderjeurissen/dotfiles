@@ -260,6 +260,7 @@
     " This copies current file path + line number to system clipboard
     " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
     nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
+    nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
 
     " Fold settings {{{
       autocmd FileType vim setl foldmethod=marker
