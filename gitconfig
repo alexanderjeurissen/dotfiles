@@ -14,39 +14,18 @@
 [alias]
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative
   lgo = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --date=relative
-  renamebranch = branch -m
   who = blame
-  d = diff
-  ;branch navigation aliases
-  ch = checkout
-  b = branch
-
-  ;rebase aliases
-  ri = rebase -i
-  r = rebase
-  rc = rebase --continue
-  ra = rebase --abort
-  rs = rebase --skip
-
-  ;merge aliases
-  m = merge
-  mc = merge --continue
-  ma = merge --abort
 
   ; push/commit aliases
   aa = add -A
   unadd = reset HEAD
-  c = commit
-  p = push
 
   ; stash aliases
   stash = stash -u
-  sp = stash pop
-  sb = stash branch
 
   ;files changed between two commits
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
-	up = pull --rebase --autostash
+  up = pull --rebase --autostash
 
 [merge]
   tool = vimdiff

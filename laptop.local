@@ -14,22 +14,16 @@ brew_install_or_upgrade 'nodenv'
 
 brew_install_or_upgrade 'ranger'
 brew_install_or_upgrade 'terminal-notifier'
-brew_install_or_upgrade 'zsh-syntax-highlighting'
-
-# emacs mac port
-brew tap d12frosted/emacs-plus
-brew install emacs-plus --with-cocoa --with-gnutls --with-librsvg --with-imagemagick 
 
 # Apps using brew cask
 brew cask install firefox
 
 # Fixes bug where 1password wo'n work with brew cask google-chrome
 # https://twitter.com/jsser/status/532587663279157248
-brew cask install --caskroom=/Applications google-chrome --devel
+# brew cask install --caskroom=/Applications google-chrome --devel
 
 brew cask install dash
 brew cask install alfred
-brew cask install flux
 brew cask install karabiner
 brew cask install slack
 brew cask install teensy

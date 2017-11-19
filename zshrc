@@ -52,6 +52,8 @@ fi
       fi
     done
   }
+
+  port() { lsof -n -i:$@ | grep LISTEN; }
 # }}}
 
 # ZSH highlighting settings {{{
@@ -270,9 +272,6 @@ alias clearTmux="clear && printf '\e[3J'"
 # set nvim as defaut editor
 export EDITOR="nvim"
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
 # FZF {{{
   export FZF_DEFAULT_COMMAND='ag -l -g ""'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -287,11 +286,12 @@ export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+  printf "Install? [y/N]: "
+
+  if read -q; then
+    echo; zplug install
   fi
+fi
 
 # Then, source plugins and add commands to $PATH
 # Only source zplugins when a new terminal is opened not when source ~/.zshrc
@@ -309,7 +309,6 @@ fi
 # git aliases {{{
   source ~/.gitaliases
   alias changedfiles= "git diff --name-only | uniq | xargs nvim"
-  alias removeArtefacts="git stash -u && git stash drop"
   # alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
 # }}}
 
@@ -350,8 +349,6 @@ fi
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 bindkey '^e' autosuggest-accept
 # }}}
-it2prof() { echo -e "\033]50;SetProfile=$1\a" }
-port() { lsof -n -i:$@ | grep LISTEN; }
 
 # Fzf functions {{{
   # fbr - checkout git branch (including remote branches)
