@@ -11,24 +11,23 @@ export LANG=en_US.UTF-8
 # }}}
 
 
-# export PATH="/usr/local/opt/postgresql@9.5/bin:$PATH"
-
-export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.bin:$PATH" # TODO: evaluate env var
 export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# workaround for fontforge compilation error
-export PATH="$PATH:/Applications/FontForge.app/Contents/Resources/opt/local/bin"
-
 export TERM=xterm-256color-italic
-export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # Go settings {{{
   export GOPATH=$HOME/golang
   export GOROOT=/usr/local/opt/go/libexec
   export PATH=$PATH:$GOPATH/bin
   export PATH=$PATH:$GOROOT/bin
+# }}}
+
+# Java settings {{{
+  export JAVA_HOME=`/usr/libexec/java_home`
 # }}}
 
 # FZF settings {{{
