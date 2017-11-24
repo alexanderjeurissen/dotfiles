@@ -503,6 +503,9 @@ if has_key(g:plugs, 'vim-deus')
 
     " NOTE: This also fixes
     hi! AleWarningSign guibg=#242a32 guifg=#ebdab2
+
+    hi! CursorLine guibg=#292f37
+    hi! ColorColumn guibg=#292f37
   endfunction
 endif
 " }}}
