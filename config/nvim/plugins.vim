@@ -24,13 +24,12 @@
 
 " PLUGIN_GROUP: Editing {{{
   call minpac#add('tpope/vim-endwise') " insert end after certain keywords in ruby
-  call minpac#add('tommcdo/vim-exchange')
-  call minpac#add('tpope/vim-repeat')
-  call minpac#add('tpope/vim-surround')
+  call minpac#add('tommcdo/vim-exchange') " Exchange visual selections
+  call minpac#add('tpope/vim-surround') " modify surrounding text
     call minpac#add('tpope/vim-repeat')
   call minpac#add('w0rp/ale') " new async syntax checker for neovim
   call minpac#add('tpope/vim-commentary') " easy commenting using vim motions
-  " call minpac#add('takac/vim-hardtime') " forces efficient movement in vim
+  call minpac#add('machakann/vim-highlightedyank') " make yank movements visible
   call minpac#add('bogado/file-line') " allow opening files with line number e.g. file.txt:30
   call minpac#add('tpope/vim-sleuth') " smart indent width based on buffer and neigbouring files
   call minpac#add('godlygeek/tabular') " re-allignment of text
@@ -75,5 +74,4 @@
 
 " PLUGIN_GROUP: Window Management {{{
   call minpac#add('szw/vim-maximizer')
-  " call minpac#add('zefei/vim-wintabs')
 " }}}
