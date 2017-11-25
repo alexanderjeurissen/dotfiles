@@ -36,6 +36,11 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
    --color info:81,prompt:167,pointer:167,marker:167,spinner:167,header:245
  '
 # }}}
+#
+
+# FIXES: issue with too many open files when refreshing paperclip thumbnails:
+# https://github.com/thoughtbot/paperclip/issues/1326
+export RUN_AT_EXIT_HOOKS=true
 
 # Ensure that a non-login, non-interactive shell has a defined environment.
 if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
