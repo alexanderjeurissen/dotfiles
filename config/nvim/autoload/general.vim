@@ -1,3 +1,4 @@
+" FIXME: this is current bugged due to conflicting tpope plugin
 " rename current file, via Gary Bernhardt
 function! general#RenameFile()
   let old_name = expand('%')
@@ -52,4 +53,10 @@ function! s:get_visual_selection()
   let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
   let lines[0] = lines[0][col1 - 1:]
   return join(lines, "\n")
+endfunction
+
+" Execute macro over visual selection
+function! ExecuteMacroOverVisualRange()
+  echo '@'.getcmdline()
+  execute ":'<,'>normal @".nr2char(getchar())
 endfunction
