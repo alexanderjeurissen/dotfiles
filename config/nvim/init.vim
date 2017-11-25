@@ -1,11 +1,11 @@
 " SETTINGS: General {{{
   set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
   set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
-  set noshowmode                                     " No to showing mode in bottom-left corner
+  set showmode                                       " show mode in bottom-left corner
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
   set autowrite                                      " Write before running commands.
   set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
-  set cmdheight=1                                    " Number of screen lines for the command-line.
+  set cmdheight=2                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
   set textwidth=100                                  " Set maximum number of characters per line
@@ -19,7 +19,7 @@
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
   set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
-  set hid                                            " Allow for more then one unsaved buffer.
+  set hidden                                         " Allow for more then one unsaved buffer.
   set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
   " set lazyredraw                                   " Don't unnecessarily redraw screen.
 
@@ -39,9 +39,17 @@
   set splitright                                     " Open new split panes at rightmost position
   set inccommand=nosplit                             " Show visual indication when using substitute.
   set nofoldenable                                   " collapse all folds.
+  set foldcolumn=0                                   " Don't indicate fold open/closed (redundant info)
+  set foldlevel=10                                   " Autofold nothing by default
+  set foldmethod=syntax                              " Fold on the syntax
+  set foldnestmax=1                                  " Only fold outer functions
 
+  set modeline                                       " automatically settings options based on file comment
   set confirm                                        " Makes operations like qa ask for confirmation.
+  set nomore                                         " Don't show the --more-- prompt but auto scroll
   set t_vb=                                          " Disable visual bell.
+  set belloff=all                                    " no noises!
+
 
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
@@ -92,9 +100,10 @@
   "w!! to save file with sudo
   cmap w!! w !sudo tee % > /dev/null
 
-  " Execute macro under key `a` for all buffers and write afterwards
+  " Macro related mappings
   command! Bufmacro bufdo execute "normal @a" | write
   command! Cmacro cdo execute "normal@a" | write
+  xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
   " Wrapped lines goes down/up to next row, rather than next line in file.
   noremap j gj
@@ -109,11 +118,6 @@
 
   " Spelling mapping
   " imap <c-c> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-  " TODO: reevaluate tab pages in vim and mappings
-  " tabpage mappings
-  " noremap <Leader>t :tabnew<CR>
-  " noremap <Leader>tn :tabnext<CR>
 
   " Replace H and L
   nnoremap zh H
@@ -142,13 +146,11 @@
   no / /\v
   no ? ?\v
 
-  " gO to create a new line below cursor in normal mode
+  " to create a new line below/above cursor in normal mode
   nnoremap go o<ESC>k
-
-  " go to create a new line above cursor
   nnoremap gO O<ESC>j
 
-  " I really hate that things don't auto-center {{{
+  " auto-center on specific movement keys {{{
     nnoremap G Gzz
     nnoremap n nzz
     nnoremap N Nzz
@@ -156,24 +158,9 @@
     nnoremap { {zz
   " }}}
 
-  " open tag in new tab with <C-\>
-  noremap <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-
   " Make Y behave like other capital commands.
   " Hat-tip http://vimbits.com/bits/11
   nnoremap Y y$
-
-  " Toggle highlight search with <leader>thl
-  nnoremap <leader>thl :set hlsearch!<CR>
-
-  " Toggle relative line number
-  nnoremap <leader>trn :set relativenumber!<CR>
-
-  " Toggle cursor column
-  nnoremap <leader>tcc :set cursorcolumn!<CR>
-
-  " Toggle cursor line
-  nnoremap <leader>tcl :set cursorline!<CR>
 
   " close buffer with leader-q
   " and safe & close buffer with leader-wq
@@ -304,3 +291,4 @@ silent! colo deus
     source ~/.nvimrc.local
   endif
 " }}}
+" vim: foldmethod=marker:sw=8:
