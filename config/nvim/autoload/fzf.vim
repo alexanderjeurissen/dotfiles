@@ -1,18 +1,18 @@
 function! fzf#Statusline()
   " Override statusline as you like
   highlight! fzf1 ctermfg=15 ctermbg=12
-  setlocal statusline=%#fzf1#\ \\ FZF
+  setlocal statusline=%#fzf1#\ \<U+F422>\ FZF
 
   if g:fzf_mode == 'Files'
-    setlocal statusline=\ \\ Search\ for\ files
+    setlocal statusline=\ \<U+F422>\ Search\ for\ files
   elseif g:fzf_mode == 'Ag'
-    setlocal statusline=\ \\ Search\ in\ files
+    setlocal statusline=\ \<U+F1E5>\ Search\ in\ files
   elseif g:fzf_mode == 'Mru'
-    setlocal statusline=\ \\ Recent\ files
+    setlocal statusline=\ \<U+F43A>\ Recent\ files
   elseif g:fzf_mode == 'Commands'
-    setlocal statusline=\ \\ Commands
+    setlocal statusline=\ \<U+F120>\ Commands
   elseif g:fzf_mode == 'Commands'
-    setlocal statusline=\ \\ Killring
+    setlocal statusline=\ \<U+F0C4>\ Killring
   endif
 endfunction
 
@@ -27,18 +27,6 @@ function! fzf#NeighbouringFiles()
         \ 'options': '-m -x +s',
         \ 'window':  'enew' })
 endfunction
-
-" function! fzf#WinTabBuffers()
-"   if exists("w:wintabs_buflist")
-"     call fzf#run({
-"       \ 'source': map(copy(w:wintabs_buflist), 'bufname(v:val)'),
-"       \ 'sink':   'e',
-"       \ 'options': '-m -x +s',
-"       \ 'window':  'enew' })
-"   else
-"     echo "ERROR: wintabs not loaded"
-"   endif
-" endfunction
 
 
 " Fuzzy search all files changed in this branch (compared to develop)

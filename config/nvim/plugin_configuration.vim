@@ -1,5 +1,5 @@
 " PLUGIN: SirVer/ultisnips {{{
-if has_key(g:plugs, 'Ultisnips')
+if has_key(g:minpac#pluglist, 'Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -15,7 +15,7 @@ endif
 
 
 " PLUGIN: xolox/vim-session {{{
-if has_key(g:plugs, 'vim-session')
+if has_key(g:minpac#pluglist, 'vim-session')
   let g:session_autoload = 'no'
   let g:session_autosave = 'yes'
   let g:session_autosave_periodic = 30
@@ -28,7 +28,7 @@ endif
 
 
 " PLUGIN: justinmk/vim-sneak {{{
-if has_key(g:plugs, 'vim-sneak')
+if has_key(g:minpac#pluglist, 'vim-sneak')
   let g:sneak#label = 1
   let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
 
@@ -50,7 +50,7 @@ endif
 
 
 " PLUGIN: justinmk/vim-dirvish {{{
-if has_key(g:plugs, 'vim-dirvish')
+if has_key(g:minpac#pluglist, 'vim-dirvish')
 
   no <silent> <leader>wv <C-w>v
   no <silent> <leader>ws <C-w>s
@@ -62,7 +62,7 @@ endif
 
 
 " PLUGIN: vim-ruby/vim-ruby {{{
-if has_key(g:plugs, 'vim-ruby')
+if has_key(g:minpac#pluglist, 'vim-ruby')
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails = 1
 endif
@@ -70,14 +70,14 @@ endif
 
 
 " PLUGIN: int3/vim-extradite {{{
-if has_key(g:plugs, 'vim-extradite')
+if has_key(g:minpac#pluglist, 'vim-extradite')
   let g:gitgutter_eager=0
 endif
 " }}}
 
 
 " PLUGIN: mattn/gist-vim {{{
-if has_key(g:plugs, 'gist-vim')
+if has_key(g:minpac#pluglist, 'gist-vim')
   let g:gist_clip_command = 'pbcopy'
   let g:gist_detect_filetype = 1
   let g:gist_show_privates = 1
@@ -87,7 +87,7 @@ endif
 
 
 " PLUGIN: tpope/vim-rails {{{
-if has_key(g:plugs, 'vim-rails')
+if has_key(g:minpac#pluglist, 'vim-rails')
   nnoremap <leader>mr <c-u>:Rrunner<CR>
   let g:rails_projections = {
     \"app/models/*.rb": {
@@ -142,7 +142,7 @@ endif
 
 
 " PLUGIN: vim-maximizer {{{
-if has_key(g:plugs, 'vim-maximizer')
+if has_key(g:minpac#pluglist, 'vim-maximizer')
   let g:maximizer_set_default_mapping = 0
   let g:maximizer_restore_on_winleave = 1
 
@@ -152,7 +152,7 @@ endif
 
 
 " PLUGIN: mhinz/vim-signify {{{
-if has_key(g:plugs, 'vim-signify')
+if has_key(g:minpac#pluglist, 'vim-signify')
   let g:signify_vcs_list = ['git']
   let g:signify_sign_add               = '+'
   let g:signify_sign_delete            = '_'
@@ -166,7 +166,7 @@ endif
 
 
 " PLUGIN: junegunn/fzf.vim {{{
-if has_key(g:plugs, 'fzf.vim')
+if has_key(g:minpac#pluglist, 'fzf.vim')
   " Color/display options {{{
     " Default fzf layout
     " - down / up / left / right
@@ -241,7 +241,7 @@ endif
 
 
 " PLUGIN: maksimr/vim-jsbeautify {{{
-if has_key(g:plugs, 'vim-jsbeautify')
+if has_key(g:minpac#pluglist, 'vim-jsbeautify')
   "for Javascript
   autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
   autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
@@ -258,7 +258,7 @@ endif
 
 
 " PLUGIN: tpope/vim-fugitive {{{
-if has_key(g:plugs, 'vim-fugitive')
+if has_key(g:minpac#pluglist, 'vim-fugitive')
   nnoremap <silent> <leader>gs  :Gstatus<CR>
   nnoremap <silent> <leader>gd  :Gvdiff<CR>
   nnoremap <silent> <leader>gc  :Gcommit<CR>
@@ -276,7 +276,7 @@ endif
 
 
 " PLUGIN: SirVer/ultisnips {{{
-if has_key(g:plugs, 'ultisnips')
+if has_key(g:minpac#pluglist, 'ultisnips')
   let g:ulti_expand_or_jump_res = 0
   let g:UltiSnipsEnableSnipMate = 1
   let g:UltiSnipsJumpForwardTrigger="<C-n>"
@@ -287,7 +287,7 @@ endif
 
 
 " PLUGIN: takac/vim-hardtime {{{
-if has_key(g:plugs, 'vim-hardtime')
+if has_key(g:minpac#pluglist, 'vim-hardtime')
   let g:hardtime_default_on = 1
   let g:hardtime_showmsg = 0 " Show message
   let g:hardtime_allow_different_key = 1 " This allows jh but not jj
@@ -301,7 +301,7 @@ endif
 
 
 " PLUGIN: mhinz/vim-grepper {{{
-if has_key(g:plugs, 'vim-grepper')
+if has_key(g:minpac#pluglist, 'vim-grepper')
   let g:grepper = {} " initialize g:grepper with empty dictionary
   let g:grepper.tools = ['rg', 'ag', 'git', 'grep']
   let g:grepper.jump = 1
@@ -314,14 +314,14 @@ endif
 
 
 " PLUGIN: terryma/vim-expand-region {{{
-if has_key(g:plugs, 'vim-expand-region')
+if has_key(g:minpac#pluglist, 'vim-expand-region')
   vmap v <Plug>(expand_region_expand)
 endif
 " }}}
 
 
 " PLUGIN: w0rp/ale {{{
-if has_key(g:plugs, 'ale')
+if has_key(g:minpac#pluglist, 'ale')
   " let g:ale_sign_error = '✖'
   " let g:ale_sign_warning = '⚠'
   let g:ale_sign_error = '◆'
@@ -349,7 +349,7 @@ endif
 
 
 " PLUGIN: christoomey/vim-tmux-navigator {{{
-if has_key(g:plugs, 'vim-tmux-navigator')
+if has_key(g:minpac#pluglist, 'vim-tmux-navigator')
   let g:tmux_navigator_no_mappings = 0
   let g:tmux_navigator_save_on_switch = 1
 
@@ -365,7 +365,7 @@ endif
 
 
 " PLUGIN: godlygeek/tabular {{{
-if has_key(g:plugs, 'tabular')
+if has_key(g:minpac#pluglist, 'tabular')
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
   function! s:align()
@@ -383,7 +383,7 @@ endif
 
 
 " PLUGIN: christoomey/vim-tmux-navigator {{{
-if has_key(g:plugs, 'vim-polyglot')
+if has_key(g:minpac#pluglist, 'vim-polyglot')
   let g:used_javascript_libs = 'underscore,backbone,react,flux'
   " let g:javascript_conceal_function             = "ƒ"
   " let g:javascript_conceal_return               = "⬅"
@@ -398,7 +398,7 @@ endif
 " }}}
 
 " PLUGIN: zefei/vim-wintabs {{{
-if has_key(g:plugs, 'vim-wintabs')
+if has_key(g:minpac#pluglist, 'vim-wintabs')
   let g:wintabs_display = 'none'
 
   let g:wintabs_ui_modified = ''
@@ -422,7 +422,7 @@ endif
 " }}}
 
 " PLUGIN: moll/vim-bbye {{{
-if has_key(g:plugs, 'vim-bbye')
+if has_key(g:minpac#pluglist, 'vim-bbye')
   nmap <leader>bn :bnext<CR>
   nmap <leader>bp :beprevious<CR>
   nmap <leader>wc :q<cr>
@@ -447,7 +447,7 @@ endif
 
 
 " PLUGIN: morhetz/gruvbox {{{
-if has_key(g:plugs, 'gruvbox')
+if has_key(g:minpac#pluglist, 'gruvbox')
   let g:gruvbox_italic=1
   let g:gruvbox_italicize_strings=1
   let g:gruvbox_contrast_dark='soft'
@@ -461,7 +461,7 @@ endif
 
 
 " PLUGIN: zefei/cake16 {{{
-if has_key(g:plugs, 'cake16')
+if has_key(g:minpac#pluglist, 'cake16')
   function! ActivateColorScheme()
     colorscheme cake16
     set background=light
@@ -474,7 +474,7 @@ endif
 
 
 " PLUGIN: Zabanaa/neuromancer.vim {{{
-if has_key(g:plugs, 'neuromancer.vim')
+if has_key(g:minpac#pluglist, 'neuromancer.vim')
   function! ActivateColorScheme()
     colorscheme neuromancer
       hi! link Float Number
@@ -486,10 +486,9 @@ endif
 
 
 " PLUGIN: ajmwagar/vim-deus {{{
-if has_key(g:plugs, 'vim-deus')
+if has_key(g:minpac#pluglist, 'vim-deus')
   function! ActivateColorScheme()
     set background=dark
-    colorscheme deus
     hi! link SignColumn LineNr
     hi! VertSplit guibg=#242a32
     hi! StatusLine guifg=#242a32 guibg=#ebdab2
@@ -512,7 +511,7 @@ endif
 
 
 " PLUGIN: roxma/nvim-completion-manager {{{
-if has_key(g:plugs, 'nvim-completion-manager')
+if has_key(g:minpac#pluglist, 'nvim-completion-manager')
   set shortmess+=c
   inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
   inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -521,8 +520,7 @@ endif
 
 
 " PLUGIN: autozimu/LanguageClient-neovim {{{
-if has_key(g:plugs, 'LanguageClient-neovim')
-
+if has_key(g:minpac#pluglist, 'LanguageClient-neovim')
   " Automatically start language servers.
   let g:LanguageClient_autoStart = 0
   let g:LanguageClient_serverCommands = {}

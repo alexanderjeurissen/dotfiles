@@ -280,15 +280,22 @@
 " }}}
 
 
-" PLUGGINS: Initialise vimplug and plugins {{{
-call vimplug#CheckInstall()
-call plug#begin()
-  source $HOME/.config/nvim/plugins.vim
-  source $HOME/.config/nvim/plugin_configuration.vim
-call plug#end()
+" PLUGGINS: Initialise minpac and plugins {{{
+packadd minpac
+
+call minpac#init()
+call minpac#add('k-takata/minpac', {'type': 'opt'}) " allow minpac to manage itself
+
+command! PackageUpdate call minpac#update()
+command! PackageClean call minpac#clean()
+
+source $HOME/.config/nvim/plugins.vim
+source $HOME/.config/nvim/plugin_configuration.vim
+
+autocmd colorscheme deus call ActivateColorScheme()
 
 colo desert " fallback incase colorscheme can't be found
-call ActivateColorScheme()
+silent! colo deus
 " }}}
 
 
