@@ -4,7 +4,7 @@ if [ -n "$TMUX" ]; then
   # export TERM=screen-256color-italic
 else
   # tmux attach-session || exec tmux new-session;
-  tmux attach-session || exec tmux new-session && exit;
+  # tmux attach-session || exec tmux new-session && exit;
 fi
 # }}}
 
@@ -105,6 +105,7 @@ fi
 # aliasses {{{
   alias l="ls -AGC"
   alias ls="ls -G"
+  alias rls="cd && cd - && ls -G"
   alias fixtestdb="bin/rake db:test:prepare"
   alias up="git up && bundle && yarn && migrate"
   alias rup="git up && git rebase develop && bundle && yarn && migrate"
@@ -264,6 +265,7 @@ fi
   alias startFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1"
   alias startGuard="bundle exec guard -d --no-interactions"
   alias startAll="startServices && startBackend && startFrontend"
+  alias neo4j="db/neo4j/development/bin/neo4j"
 # }}}
 
 # Alias for clearing the screen
