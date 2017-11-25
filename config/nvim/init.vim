@@ -37,7 +37,7 @@
   set numberwidth=5                                  " Set width of number column
   set splitbelow                                     " Open new split panes at bottommost position
   set splitright                                     " Open new split panes at rightmost position
-  set inccommand=split                               " Show visual indication when using substitute.
+  set inccommand=nosplit                             " Show visual indication when using substitute.
   set nofoldenable                                   " collapse all folds.
 
   set confirm                                        " Makes operations like qa ask for confirmation.
