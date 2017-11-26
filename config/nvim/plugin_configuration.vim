@@ -323,7 +323,8 @@ endif
 " }}}
 
 
-" PLUGIN: christoomey/vim-tmux-navigator {{{
+
+" PLUGIN: sheerun/vim-polygot {{{
 if has_key(g:minpac#pluglist, 'vim-polyglot')
   let g:used_javascript_libs = 'underscore,backbone,react,flux'
   " let g:javascript_conceal_function             = "ƒ"
