@@ -32,7 +32,7 @@ endif
 " PLUGIN: justinmk/vim-sneak {{{
 if has_key(g:minpac#pluglist, 'vim-sneak')
   let g:sneak#label = 1
-  let g:sneak#target_labels = "aoeuhtns',.pygrl12345890[]"
+  let g:sneak#target_labels = "aoeuhtnsidAOEUHTNSID ',.pgrlfyPGRLFY"
 
   "fix sneak highlighting
   " autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234
