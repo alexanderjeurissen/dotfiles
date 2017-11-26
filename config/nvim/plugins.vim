@@ -51,7 +51,8 @@
   call minpac#add('thinca/vim-visualstar')  " Allows * motion in visual mode
   call minpac#add('justinmk/vim-dirvish') " file browser
   call minpac#add('tpope/vim-eunuch') " UNIX file helpers
-  " call minpac#add('radenling/vim-dispatch-neovim') " add's handy :A :R and :EDoc :ESpec etc.
+  " call minpac#add('hkupty/nvimux', { 'type': 'opt', 'do': ':UpdateRemotePlugins' }) " TODO: evaluate if this can replace tmux on local machine.
+  call minpac#add('tpope/vim-projectionist') " Allows defining projections using .projections.json
 " }}}
 
 

@@ -66,54 +66,54 @@ if has_key(g:minpac#pluglist, 'vim-rails')
   nnoremap <leader>mr <c-u>:Rrunner<CR>
   nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
 
-  let g:rails_projections = {
-    \"app/models/*.rb": {
-    \  "alternate": ["spec/integration/models/%s_spec.rb"],
-    \  "related": ["spec/factories/%s.rb"],
-    \},
-    \"spec/integration/models/*_spec.rb": {
-    \  "alternate": ["app/models/%s.rb"],
-    \},
-    \"spec/factories/*.rb": {
-    \  "alternate": ["app/models/%s.rb"],
-    \},
-    \"app/controllers/*.rb": {
-    \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
-    \},
-    \"spec/integration/controllers/*_spec.rb": {
-    \  "alternate": ["app/controllers/%s.rb"],
-    \},
-    \"app/mailers/*.rb": {
-    \  "alternate": ["spec/integration/mailers/%s_spec.rb"],
-    \},
-    \"spec/integration/mailers/*_spec.rb": {
-    \  "alternate": ["app/mailers/%s.rb"],
-    \},
-    \"app/backend/*.rb": {
-    \  "alternate": ["spec/integration/backend/%s_spec.rb"],
-    \},
-    \"spec/integration/backend/*_spec.rb": {
-    \  "alternate": ["app/backend/%s.rb"],
-    \},
-    \"lib/support/app/controllers/support/*.rb": {
-    \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
-    \},
-    \"spec/integration/controllers/support/*_spec.rb": {
-    \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
-    \},
-    \"lib/api/app/controllers/*.rb": {
-    \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
-    \},
-    \"lib/api/spec/controllers/*_spec.rb": {
-    \  "alternate": ["lib/api/app/controllers/%s.rb"]
-    \},
-    \"db/migrate/*.rb": {
-    \  "alternate": ["spec/integration/migrations/%s_spec.rb"]
-    \},
-    \"spec/integration/migrations/*_spec.rb": {
-    \  "alternate": ["db/migrate/%s.rb"]
-    \},
-  \}
+  " let g:rails_projections = {
+  "   \"app/models/*.rb": {
+  "   \  "alternate": ["spec/integration/models/%s_spec.rb"],
+  "   \  "related": ["spec/factories/%s.rb"],
+  "   \},
+  "   \"spec/integration/models/*_spec.rb": {
+  "   \  "alternate": ["app/models/%s.rb"],
+  "   \},
+  "   \"spec/factories/*.rb": {
+  "   \  "alternate": ["app/models/%s.rb"],
+  "   \},
+  "   \"app/controllers/*.rb": {
+  "   \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
+  "   \},
+  "   \"spec/integration/controllers/*_spec.rb": {
+  "   \  "alternate": ["app/controllers/%s.rb"],
+  "   \},
+  "   \"app/mailers/*.rb": {
+  "   \  "alternate": ["spec/integration/mailers/%s_spec.rb"],
+  "   \},
+  "   \"spec/integration/mailers/*_spec.rb": {
+  "   \  "alternate": ["app/mailers/%s.rb"],
+  "   \},
+  "   \"app/backend/*.rb": {
+  "   \  "alternate": ["spec/integration/backend/%s_spec.rb"],
+  "   \},
+  "   \"spec/integration/backend/*_spec.rb": {
+  "   \  "alternate": ["app/backend/%s.rb"],
+  "   \},
+  "   \"lib/support/app/controllers/support/*.rb": {
+  "   \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
+  "   \},
+  "   \"spec/integration/controllers/support/*_spec.rb": {
+  "   \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
+  "   \},
+  "   \"lib/api/app/controllers/*.rb": {
+  "   \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
+  "   \},
+  "   \"lib/api/spec/controllers/*_spec.rb": {
+  "   \  "alternate": ["lib/api/app/controllers/%s.rb"]
+  "   \},
+  "   \"db/migrate/*.rb": {
+  "   \  "alternate": ["spec/integration/migrations/%s_spec.rb"]
+  "   \},
+  "   \"spec/integration/migrations/*_spec.rb": {
+  "   \  "alternate": ["db/migrate/%s.rb"]
+  "   \},
+  " \}
 endif
 " }}}
 
@@ -305,6 +305,50 @@ endif
 " }}}
 
 
+" PLUGIN: hkupty/nvimux {{{
+if has_key(g:minpac#pluglist, 'nvimux')
+   packadd nvimux
+
+   tnoremap <C-h> <C-\><C-n><C-w>h
+   tnoremap <C-j> <C-\><C-n><C-w>j
+   tnoremap <C-k> <C-\><C-n><C-w>k
+   tnoremap <C-l> <C-\><C-n><C-w>l
+   noremap <C-h> <C-w>h
+   noremap <C-j> <C-w>j
+   noremap <C-k> <C-w>k
+   noremap <C-l> <C-w>l
+   inoremap <C-h> <Esc><C-w>h
+   inoremap <C-j> <Esc><C-w>j
+   inoremap <C-k> <Esc><C-w>k
+   inoremap <C-l> <Esc><C-w>l
+
+   let g:nvimux_open_term_by_default = 1
+
+lua << EOF
+   local nvimux = require('nvimux')
+
+   -- Nvimux configuration
+   nvimux.config.set_all{
+     prefix = '<C-a>',
+     open_term_by_default = true,
+     new_window_buffer = 'single',
+     quickterm_direction = 'botright',
+     quickterm_orientation = 'vertical',
+     -- Use 'g' for global quickterm
+     quickterm_scope = 't',
+     quickterm_size = '80',
+   }
+
+   -- Nvimux custom bindings
+   nvimux.bindings.bind_all{
+     {'s', ':NvimuxHorizontalSplit', {'n', 'v', 'i', 't'}},
+     {'v', ':NvimuxVerticalSplit', {'n', 'v', 'i', 't'}},
+   }
+EOF
+endif
+" }}}
+
+
 " PLUGIN: godlygeek/tabular {{{
 if has_key(g:minpac#pluglist, 'tabular')
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
@@ -321,7 +365,6 @@ if has_key(g:minpac#pluglist, 'tabular')
   endfunction
 endif
 " }}}
-
 
 
 " PLUGIN: sheerun/vim-polygot {{{
