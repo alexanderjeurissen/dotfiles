@@ -1,11 +1,10 @@
 # Start tmux by default and exit terminal if tmux exits. {{{
-
-if [ -n "$TMUX" ]; then
-  # export TERM=screen-256color-italic
-else
-  # tmux attach-session || exec tmux new-session;
-  # tmux attach-session || exec tmux new-session && exit;
-fi
+   if [ -n "$TMUX" ]; then
+     export TERM=screen-256color-italic
+   else
+     tmux attach-session || exec tmux new-session;
+     tmux attach-session || exec tmux new-session && exit;
+   fi
 # }}}
 
 
@@ -435,3 +434,5 @@ export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#
 #         fi
 #     fi
 # }
+
+# vim: foldmethod=marker:sw=3
