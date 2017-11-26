@@ -421,6 +421,7 @@ endif
 if has_key(g:minpac#pluglist, 'vim-deus')
   function! ActivateColorScheme()
     set background=dark
+    colorscheme deus
     hi! link SignColumn LineNr
     hi! VertSplit guibg=#242a32
     hi! StatusLine guifg=#242a32 guibg=#ebdab2
