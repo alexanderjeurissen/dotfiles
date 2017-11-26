@@ -48,7 +48,7 @@
   set confirm                                        " Makes operations like qa ask for confirmation.
   set t_vb=                                          " Disable visual bell.
   set belloff=all                                    " no noises!
-
+  set cursorline cursorcolumn                        " Enable cursorline and cursorcolumn by default
 
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
@@ -68,6 +68,19 @@
 
 " SETTINGS: terminal {{{
   tnoremap <leader><ESC> <C-\><C-n>
+" }}}
+
+
+" SETTINGS: Colorscheme {{{
+  if (has("termguicolors"))
+    set termguicolors
+    set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8b=^[[48;2;%lu;%lu;%lum
+  endif
+
+  function! ActivateColorScheme()
+    colo desert " fallback incase no colorscheme plugin is installed
+  endfunction
 " }}}
 
 
@@ -245,12 +258,11 @@
       autocmd FileType sql setl nofoldenable foldmethod=manual
     " }}}
 
-    " Only have cursorline/cursorcolumn in current window and in normal window
-    autocmd WinLeave * set nocursorline nocursorcolumn
-    autocmd VimEnter,WinEnter * set cursorline cursorcolumn
-
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
+
+    " Set colorscheme if vim is loaded
+    autocmd VimEnter * call ActivateColorScheme()
   augroup END
 " }}}
 
@@ -259,7 +271,6 @@
 packadd minpac
 
 call minpac#init()
-call minpac#clean() " Clean unused plugins on startup
 call minpac#add('k-takata/minpac', {'type': 'opt'}) " allow minpac to manage itself
 
 command! PackageUpdate call minpac#update()
@@ -267,20 +278,6 @@ command! PackageClean call minpac#clean()
 
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
-" }}}
-
-
-" SETTINGS: Colorscheme {{{
-  if (has("termguicolors"))
-    set termguicolors
-    set t_8f=^[[38;2;%lu;%lu;%lum
-    set t_8b=^[[48;2;%lu;%lu;%lum
-  endif
-
-  autocmd colorscheme deus call ActivateColorScheme()
-
-  colo desert " fallback incase colorscheme can't be found
-  silent! colo deus
 " }}}
 
 
