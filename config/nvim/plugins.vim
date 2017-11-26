@@ -11,11 +11,12 @@
   " call minpac#add('zefei/cake16')
   call minpac#add('ajmwagar/vim-deus')
   call minpac#add('zefei/vim-colortuner')
+" }}}
+
 
 " PLUGIN_GROUP: Core {{{
-  call minpac#add('tpope/vim-dispatch') " run tasks in a tmux split to not block vim
-  " call minpac#add('radenling/vim-dispatch-neovim')
-  "   call minpac#add('tpope/vim-dispatch')
+  call minpac#add('radenling/vim-dispatch-neovim')
+    call minpac#add('tpope/vim-dispatch')
   call minpac#add('tpope/vim-obsession') " improve vim session handling
   call minpac#add('tpope/vim-scriptease') " a Vim plugin for making Vim plugins.
   call minpac#add('sheerun/vim-polyglot') " Syntax highlighting, indent, etc. for various file types
@@ -50,6 +51,7 @@
   call minpac#add('thinca/vim-visualstar')  " Allows * motion in visual mode
   call minpac#add('justinmk/vim-dirvish') " file browser
   call minpac#add('tpope/vim-eunuch') " UNIX file helpers
+  " call minpac#add('radenling/vim-dispatch-neovim') " add's handy :A :R and :EDoc :ESpec etc.
 " }}}
 
 
@@ -75,3 +77,5 @@
 " PLUGIN_GROUP: Window Management {{{
   call minpac#add('szw/vim-maximizer')
 " }}}
+
+" vim: foldmethod=marker:sw=3

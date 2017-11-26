@@ -2,14 +2,16 @@
 if has_key(g:minpac#pluglist, 'Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
   let g:UltiSnipsEditSplit='vertical'
-  " let g:UltiSnipsExpandTrigger = ""
   let g:ulti_expand_or_jump_res = 0
-  " let g:UltiSnipsEnableSnipMate = 1
+  let g:UltiSnipsEnableSnipMate = 1
+
   imap <expr><tab> pumvisible() ? "\<C-n>" : "\<TAB>"
   imap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<TAB>"
+
+  let g:UltiSnipsJumpForwardTrigger="<C-n>"
+  let g:UltiSnipsJumpBackwardTrigger="<C-p>"
+  let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
 endif
 " }}}
 
@@ -37,41 +39,14 @@ if has_key(g:minpac#pluglist, 'vim-sneak')
   " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
   " autocmd ColorScheme * hi SneakLabel cterm=reverse ctermfg=214 ctermbg=234
   " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
-
-  " hi! link SneakPluginTarget Search
-  " hi! link SneakStreakTarget Search
-  " call s:HL('SneakStreakMask', s:yellow, s:yellow)
-  " hi! link SneakStreakStatusLine Search
-
-  map <Leader> <plug>(sneak-prefix)
-  nmap <leader><leader> <Plug>(sneak-s)
 endif
 " }}}
 
 
 " PLUGIN: justinmk/vim-dirvish {{{
 if has_key(g:minpac#pluglist, 'vim-dirvish')
-
-  no <silent> <leader>wv <C-w>v
-  no <silent> <leader>ws <C-w>s
-
   " Enable fugitive in dirvish buffers
   autocmd Filetype dirvish call fugitive#detect(@%)
-endif
-" }}}
-
-
-" PLUGIN: vim-ruby/vim-ruby {{{
-if has_key(g:minpac#pluglist, 'vim-ruby')
-  let g:rubycomplete_classes_in_global = 1
-  let g:rubycomplete_rails = 1
-endif
-" }}}
-
-
-" PLUGIN: int3/vim-extradite {{{
-if has_key(g:minpac#pluglist, 'vim-extradite')
-  let g:gitgutter_eager=0
 endif
 " }}}
 
@@ -89,6 +64,8 @@ endif
 " PLUGIN: tpope/vim-rails {{{
 if has_key(g:minpac#pluglist, 'vim-rails')
   nnoremap <leader>mr <c-u>:Rrunner<CR>
+  nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
+
   let g:rails_projections = {
     \"app/models/*.rb": {
     \  "alternate": ["spec/integration/models/%s_spec.rb"],
@@ -239,24 +216,6 @@ endif
 " }}}
 
 
-
-" PLUGIN: maksimr/vim-jsbeautify {{{
-if has_key(g:minpac#pluglist, 'vim-jsbeautify')
-  "for Javascript
-  autocmd FileType javascript,eruby.javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-  autocmd FileType javascript,eruby.javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
-
-  "for html
-  autocmd FileType html,html.javascript,eruby.html,handlebars noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-  autocmd FileType html,html.javascript,eruby.html,handlebars vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
-
-  "for css or scss
-  autocmd FileType css,scss noremap <buffer> <c-f> :call CSSBeautify()<cr>
-  autocmd FileType css,scss vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
-endif
-" }}}
-
-
 " PLUGIN: tpope/vim-fugitive {{{
 if has_key(g:minpac#pluglist, 'vim-fugitive')
   nnoremap <silent> <leader>gs  :Gstatus<CR>
@@ -271,17 +230,6 @@ if has_key(g:minpac#pluglist, 'vim-fugitive')
   command! GreadDevelop Gread! show develop:%
   " Automatically remove fugitive buffers
   autocmd BufReadPost fugitive://* set bufhidden=delete
-endif
-" }}}
-
-
-" PLUGIN: SirVer/ultisnips {{{
-if has_key(g:minpac#pluglist, 'ultisnips')
-  let g:ulti_expand_or_jump_res = 0
-  let g:UltiSnipsEnableSnipMate = 1
-  let g:UltiSnipsJumpForwardTrigger="<C-n>"
-  let g:UltiSnipsJumpBackwardTrigger="<C-p>"
-  let g:UltiSnipsSnippetsDir = "~/.config/nvim/UltiSnips"
 endif
 " }}}
 
@@ -309,13 +257,6 @@ if has_key(g:minpac#pluglist, 'vim-grepper')
 
   command! Ag :Grepper
   nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
-endif
-" }}}
-
-
-" PLUGIN: terryma/vim-expand-region {{{
-if has_key(g:minpac#pluglist, 'vim-expand-region')
-  vmap v <Plug>(expand_region_expand)
 endif
 " }}}
 
@@ -397,6 +338,7 @@ if has_key(g:minpac#pluglist, 'vim-polyglot')
 endif
 " }}}
 
+
 " PLUGIN: zefei/vim-wintabs {{{
 if has_key(g:minpac#pluglist, 'vim-wintabs')
   let g:wintabs_display = 'none'
@@ -421,27 +363,17 @@ if has_key(g:minpac#pluglist, 'vim-wintabs')
 endif
 " }}}
 
+
 " PLUGIN: moll/vim-bbye {{{
 if has_key(g:minpac#pluglist, 'vim-bbye')
-  nmap <leader>bn :bnext<CR>
-  nmap <leader>bp :beprevious<CR>
   nmap <leader>wc :q<cr>
   nmap <leader>bd :Bdelete<CR>
-
-  " Move to the previous buffer
-  nnoremap H :bprevious<CR>
-
-  " Move to the next buffer
-  nnoremap L :bnext<CR>
 
   " Delete all hidden buffers
   nnoremap <leader>bo :DeleteHiddenBuffers<CR>
 
   " Delete all buffers, but keep windows open
   nnoremap <leader>bw :bufdo :Bdelete<CR>
-
-  " fuzzy search for a buffer
-  nnoremap gb :Buffers<CR>
 endif
 " }}}
 
@@ -500,11 +432,11 @@ if has_key(g:minpac#pluglist, 'vim-deus')
     hi! SignifySignDelete guibg=#242a32 guifg=#fb4733
     hi! SignifySignChange guibg=#242a32 guifg=#8ec07b
 
-    " NOTE: This also fixes
     hi! AleWarningSign guibg=#242a32 guifg=#ebdab2
 
     hi! CursorLine guibg=#292f37
     hi! ColorColumn guibg=#292f37
+    hi! link WhiteSpace AleErrorSign
   endfunction
 endif
 " }}}
@@ -553,3 +485,4 @@ if has_key(g:minpac#pluglist, 'LanguageClient-neovim')
   " }}}
 endif
 " }}}
+" vim: foldmethod=marker:sw=3

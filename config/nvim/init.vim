@@ -46,7 +46,6 @@
 
   set modeline                                       " automatically settings options based on file comment
   set confirm                                        " Makes operations like qa ask for confirmation.
-  set nomore                                         " Don't show the --more-- prompt but auto scroll
   set t_vb=                                          " Disable visual bell.
   set belloff=all                                    " no noises!
 
@@ -54,18 +53,8 @@
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
-  " Use <space> as leader
-  let mapleader="\<Space>"
-  let g:mapleader="\<Space>"
-
   let python3_host_prog = "python3"
   let python_host_prog = "python"
-
-  if (has("termguicolors"))
-    set termguicolors
-    set t_8f=^[[38;2;%lu;%lu;%lum
-    set t_8b=^[[48;2;%lu;%lu;%lum
-  endif
 " }}}
 
 
@@ -76,12 +65,17 @@
   set statusline=%!statusline#Init()
 " }}}
 
+
 " SETTINGS: terminal {{{
   tnoremap <leader><ESC> <C-\><C-n>
 " }}}
 
 
 " KEYBINDINGS: General {{{
+  " Use <space> as leader
+  let mapleader="\<Space>"
+  let g:mapleader="\<Space>"
+
   " Fix annoying typo's of WQ, QA and Q
   command! WQ wq
   command! Wq wq
@@ -94,102 +88,101 @@
   command! QA qall
   command! Qa qall
 
-  " Safely exit neovim
-  noremap <C-q> :confirm qall<CR>
-
-  "w!! to save file with sudo
-  cmap w!! w !sudo tee % > /dev/null
-
-  " Macro related mappings
-  command! Bufmacro bufdo execute "normal @a" | write
-  command! Cmacro cdo execute "normal@a" | write
-  xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
-  " Wrapped lines goes down/up to next row, rather than next line in file.
-  noremap j gj
-  noremap k gk
-
-  " Move visual block
-  vnoremap J :m '>+1<CR>gv=gv
-  vnoremap K :m '<-2<CR>gv=gv
-
-  " Find merge conflict markers
-  noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
-
-  " Spelling mapping
-  " imap <c-c> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-  " Replace H and L
-  nnoremap zh H
-  nnoremap zm M
-  nnoremap zl L
-
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>
-
-  " custom comma motion mapping {{{
-    nnoremap di, f,dT,
-    nnoremap ci, f,cT,
-    nnoremap da, f,ld2F,i,<ESC>l "delete argument
-    nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
-  " }}}
-
-  "FIXME: Replace mappings
-  nnoremap <leader>rl 0:s/
-  nnoremap <leader>rp {ma}mb:'a,'bs/
-
-  " upper or lowercase the current word
-  nnoremap g^ gUiW
-  nnoremap gv guiW
-
-  " default to very magic
-  no / /\v
-  no ? ?\v
-
-  " to create a new line below/above cursor in normal mode
-  nnoremap go o<ESC>k
-  nnoremap gO O<ESC>j
-
-  " auto-center on specific movement keys {{{
-    nnoremap G Gzz
-    nnoremap n nzz
-    nnoremap N Nzz
-    nnoremap } }zz
-    nnoremap { {zz
-  " }}}
-
-  " Make Y behave like other capital commands.
-  " Hat-tip http://vimbits.com/bits/11
-  nnoremap Y y$
-
-  " close buffer with leader-q
-  " and safe & close buffer with leader-wq
-  nnoremap <leader>q :Bdelete<CR>
-  nnoremap <leader>wq :w<CR>:bd<CR>
-
-  " Paste and keep pasting same thing, don't take what was removed
-  vnoremap <Leader>p "_dP
-
-  " keep selection after indent
-  vnoremap < <gv
-  vnoremap > >gv
-
-  " Go to previous and next item in quickfix list
-  noremap <leader>cn :cnext<CR>
-  noremap <leader>cp :cprev<CR>
-
-  " window resizing
-  nmap <left> <C-w>5<
-  nmap <up> <C-w>5+
-  nmap <down> <C-w>5-
-  nmap <right> <C-w>5>
 
   " Open highlighted text with default program
   vnoremap o :call general#ExecVisualSelection()<cr>
 " }}}
 
 
-" KEYBINDINGS: File {{{
+" KEYBINDINGS: Editing {{{
+  " Macro related mappings
+  command! Bufmacro bufdo execute "normal @a" | write
+  command! Cmacro cdo execute "normal@a" | write
+  xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+
+  " Move visual block
+  vnoremap J :m '>+1<CR>gv=gv
+  vnoremap K :m '<-2<CR>gv=gv
+
+  " custom comma motion mapping
+  nnoremap di, f,dT,
+  nnoremap ci, f,cT,
+  nnoremap da, f,ld2F,i,<ESC>l "delete argument
+  nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
+
+  "FIXME: Replace mappings
+  nnoremap <leader>rl 0:s/
+  nnoremap <leader>rp {ma}mb:'a,'bs/
+
+  " (upper|lower)case word under cursor
+  nnoremap g^ gUiW
+  nnoremap gv guiW
+
+  " Create newline before/after current row
+  nnoremap go o<ESC>k
+  nnoremap gO O<ESC>j
+
+  " Paste and keep pasting same thing, don't take what was removed
+  vnoremap <Leader>p "_dP
+
+  " Make Y behave like other capital commands.
+  " Hat-tip http://vimbits.com/bits/11
+  nnoremap Y y$
+
+  " keep selection after indent
+  vnoremap < <gv
+  vnoremap > >gv
+" }}}
+
+
+" KEYBINDINGS: Navigation/search {{{
+  " Buffer switching / searching
+  nnoremap H :bprevious<CR>
+  nnoremap L :bnext<CR>
+  nnoremap gb :Buffers<CR>
+
+  " Go to previous and next item in quickfix list
+  noremap <leader>cn :cnext<CR>
+  noremap <leader>cp :cprev<CR>
+
+  " Split creation
+  noremap <silent> <leader>wv <C-w>v
+  noremap <silent> <leader>ws <C-w>s
+
+  " Split resizing
+  nmap <left> <C-w>5<
+  nmap <up> <C-w>5+
+  nmap <down> <C-w>5-
+  nmap <right> <C-w>5>
+
+  " Replace H and L
+  nnoremap zh H
+  nnoremap zm M
+  nnoremap zl L
+
+  " Wrapped lines goes down/up to next row, rather than next line in file.
+  noremap j gj
+  noremap k gk
+
+  " Find merge conflict markers
+  noremap <leader>gm /\v^[<\|=>]{7}( .*\|$)<CR>
+
+  " default to very magic
+  noremap / /\v
+  noremap ? ?\v
+
+  " auto-center on specific movement keys
+  nnoremap G Gzz
+  nnoremap n nzz
+  nnoremap N Nzz
+  nnoremap } }zz
+  nnoremap { {zz
+" }}}
+
+
+" KEYBINDINGS: File manipulation {{{
   " Save
   noremap <leader>fs :w<CR>
 
@@ -203,8 +196,15 @@
   " Get a vimdiff of all approvals
   map <leader>v :!approvals verify -d vimdiff -a<cr>
 
-  " Get a vimdiff of structure.sql compared to develop
-  nnoremap <leader>db :!git diff develop -- db/structure.sql -d vimdiff -a<cr>
+  " Safely exit neovim
+  noremap <C-q> :confirm qall<CR>
+
+  "w!! to save file with sudo
+  cmap w!! w !sudo tee % > /dev/null
+
+  " This copies current file path + line number to system clipboard
+  " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
+  nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
 " }}}
 
 
@@ -230,7 +230,6 @@
 
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile Appraisals set filetype=ruby
-    autocmd BufRead,BufNewFile *.md set filetype=markdown
 
     " Add html highlighting when editing rails views & handlebar templates
     autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
@@ -242,24 +241,13 @@
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")
 
-    nnoremap <leader>fR :.Runner<cr>
-
-    " This copies current file path + line number to system clipboard
-    " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
-    nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
-    nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
-
     " Fold settings {{{
-      autocmd FileType vim setl foldmethod=marker
-      autocmd FileType zsh setl foldmethod=marker
-      autocmd FileType tmux setl foldmethod=marker
-      autocmd FileType sh setl foldmethod=marker
       autocmd FileType sql setl nofoldenable foldmethod=manual
     " }}}
 
     " Only have cursorline/cursorcolumn in current window and in normal window
-    " autocmd WinLeave * set nocursorline nocursorcolumn
-    " autocmd VimEnter,WinEnter * set cursorline cursorcolumn
+    autocmd WinLeave * set nocursorline nocursorcolumn
+    autocmd VimEnter,WinEnter * set cursorline cursorcolumn
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
@@ -267,10 +255,11 @@
 " }}}
 
 
-" PLUGGINS: Initialise minpac and plugins {{{
+" PLUGINS: Initialise minpac and plugins {{{
 packadd minpac
 
 call minpac#init()
+call minpac#clean() " Clean unused plugins on startup
 call minpac#add('k-takata/minpac', {'type': 'opt'}) " allow minpac to manage itself
 
 command! PackageUpdate call minpac#update()
@@ -278,11 +267,20 @@ command! PackageClean call minpac#clean()
 
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
+" }}}
 
-autocmd colorscheme deus call ActivateColorScheme()
 
-colo desert " fallback incase colorscheme can't be found
-silent! colo deus
+" SETTINGS: Colorscheme {{{
+  if (has("termguicolors"))
+    set termguicolors
+    set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8b=^[[48;2;%lu;%lu;%lum
+  endif
+
+  autocmd colorscheme deus call ActivateColorScheme()
+
+  colo desert " fallback incase colorscheme can't be found
+  silent! colo deus
 " }}}
 
 
@@ -291,4 +289,5 @@ silent! colo deus
     source ~/.nvimrc.local
   endif
 " }}}
-" vim: foldmethod=marker:sw=8:
+
+" vim: foldmethod=marker:sw=2
