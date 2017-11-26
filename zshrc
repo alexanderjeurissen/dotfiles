@@ -1,8 +1,8 @@
 # Start tmux by default and exit terminal if tmux exits. {{{
    if [ -n "$TMUX" ]; then
-     export TERM=screen-256color-italic
+     # export TERM=screen-256color-italic
    else
-     tmux attach-session || exec tmux new-session;
+     # tmux attach-session || exec tmux new-session;
      tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
