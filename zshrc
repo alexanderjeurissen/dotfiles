@@ -275,12 +275,12 @@ export EDITOR="nvim"
 
 # FZF {{{
 # --files: List files that would be searched but do not search
-# --no-ignore: Do not respect .gitignore, etc...
+# --ignore: Do respect .gitignore, etc...
 # --hidden: Search hidden files and folders
 # --follow: Follow symlinks
-# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+# --no-messages: don't show error messages in the output
   # export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+  export FZF_DEFAULT_COMMAND='rg --files --ignore-case --hidden --follow --no-messages'
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
