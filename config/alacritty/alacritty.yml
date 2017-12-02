@@ -120,111 +120,75 @@ custom_cursor_colors: true
 #     cyan:    '0x9ec98e'
 #     white:   '0xefe1bf'
 
-# Colors (Deus) {
+# # Colors (Deus) {
+# colors:
+#   # Default colors
+#   primary:
+#     background: '0x2C323B'
+#     foreground: '0xEBDAB2'
+
+#   # Colors the cursor will use if `custom_cursor_colors` is true
+#   # cursor:
+#   #   text: '0x'
+#   #   cursor: '0x'
+
+#   # Normal colors
+#   normal:
+#     black:   '0x2C323B'
+#     red:     '0xcc241d'
+#     green:   '0x98971a'
+#     yellow:  '0xd79921'
+#     blue:    '0x458588'
+#     magenta: '0xb16286'
+#     cyan:    '0x689d6a'
+#     white:   '0xd3d3d3'
+
+#   # Bright colors
+#   bright:
+#     black:   '0x2C323B'
+#     red:     '0xfb4934'
+#     green:   '0x98C379'
+#     yellow:  '0xfabd2f'
+#     blue:    '0x83a598'
+#     magenta: '0xC678DD'
+#     cyan:    '0x8ec07c'
+#     white:   '0xEBDAB2'
+# # }
+
+# Colors (Nord) {
 colors:
   # Default colors
   primary:
-    background: '0x2C323B'
-    foreground: '0xEBDAB2'
+    background: '0x2E3440'
+    foreground: '0xD8DEE9'
 
   # Colors the cursor will use if `custom_cursor_colors` is true
   # cursor:
   #   text: '0x'
-  #   cursor: '0x'
+    cursor: '0xD8DEE9'
 
   # Normal colors
   normal:
-    black:   '0x2C323B'
-    red:     '0xcc241d'
-    green:   '0x98971a'
-    yellow:  '0xd79921'
-    blue:    '0x458588'
-    magenta: '0xb16286'
-    cyan:    '0x689d6a'
-    white:   '0xd3d3d3'
+    black:   '0x3B4252'
+    red:     '0xBF616A'
+    green:   '0xA3BE8C'
+    yellow:  '0xEBCB8B'
+    blue:    '0x81A1C1'
+    magenta: '0xB48EAD'
+    cyan:    '0x88C0D0'
+    white:   '0xE5E9F0'
 
   # Bright colors
   bright:
-    black:   '0x2C323B'
-    red:     '0xfb4934'
-    green:   '0x98C379'
-    yellow:  '0xfabd2f'
-    blue:    '0x83a598'
-    magenta: '0xC678DD'
-    cyan:    '0x8ec07c'
-    white:   '0xEBDAB2'
+    black:   '0x4C566A'
+    red:     '0xBF616A'
+    green:   '0xA3BE8C'
+    yellow:  '0xEBCB8B'
+    blue:    '0x81A1C1'
+    magenta: '0xB48EAD'
+    cyan:    '0x8FBCBB'
+    white:   '0xECEFF4'
 # }
-
-
-# # Colors (cake16) {
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0xd0c7b8'
-#     foreground: '0x774f38'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0x774f38'
-#     cursor: '0xFFFFFF'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x774f38'
-#     red:     '0xb95942'
-#     green:   '0x308444'
-#     yellow:  '0x996e1f'
-#     blue:    '0x50707e'
-#     magenta: '0xaa56b2'
-#     cyan:    '0x308090'
-#     white:   '0xede4d4'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x878787'
-#     red:     '0xf10000'
-#     green:   '0x82a3b3'
-#     yellow:  '0xc79747'
-#     blue:    '0x678797'
-#     magenta: '0xafafaf'
-#     cyan:    '0xe4dccc'
-#     white:   '0xf7efdf'
-# # }
-
-# # Colors (cake16) INVERTED {
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x211808'
-#     foreground: '0xD0C8B9'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0xD0C8B9'
-#     cursor: '0x000000'
-
-#   # Normal colors
-#   normal:
-#     black:   '0xD0C8B9'
-#     red:     '0xBD5F47'
-#     green:   '0x7CD08F'
-#     yellow:  '0xE0B567'
-#     blue:    '0x83A2AF'
-#     magenta: '0xA04DA8'
-#     cyan:    '0x6EBECF'
-#     white:   '0x4F3E21'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x787878'
-#     red:     '0xFF0F0F'
-#     green:   '0x4C6B7B'
-#     yellow:  '0xB78938'
-#     blue:    '0x678898'
-#     magenta: '0x4F4F4F'
-#     cyan:    '0x322A1A'
-#     white:   '0x211808'
-# # }
 
 # Visual Bell
 #
@@ -287,6 +251,7 @@ visual_bell:
 #
   # - { key: V,        mods: Command, action: Paste                        }
 key_bindings:
+  - { key: Period,   mods: Command, action: Paste                        }
   - { key: V,        mods: Command, action: Paste                        }
   - { key: C,        mods: Command, action: Copy                         }
   - { key: Q,        mods: Command, action: Quit                         }

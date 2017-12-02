@@ -53,6 +53,10 @@ fi
   }
 
   port() { lsof -n -i:$@ | grep LISTEN; }
+
+  wifi_signal_strength() {
+    while x=1; do /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep CtlRSSI; sleep 0.5; done
+  }
 # }}}
 
 # ZSH highlighting settings {{{
@@ -108,6 +112,7 @@ fi
   alias fixtestdb="bin/rake db:test:prepare"
   alias up="git up && bundle && yarn && migrate"
   alias rup="git up && git rebase develop && bundle && yarn && migrate"
+  alias mup="git up && git merge develop && bundle && yarn && migrate"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
@@ -435,4 +440,4 @@ export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#
 #     fi
 # }
 
-# vim: foldmethod=marker:sw=3
+# vim: foldmethod=marker:sw=2
