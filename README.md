@@ -5,9 +5,6 @@ Feel free to use the scripts in this repository to fine tune your own dotfiles. 
 1. Neovim configuration with custom statusline, and several nifty bindings and settings.
 2. Several shell aliases that I gathered over the years.
 3. Custom zsh prompt.
-3. Tmux pomodoro segment that can be invoked with Ctrl+t+p
-2. A lightweight alternative wrapper for tmux-powerline segments. only the ones I use (and some I made myself) are included
-   but it should be quite easy to create new segments.
+3. Tmux statusline
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/deus_dark.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/deus_light.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/nord.png)
