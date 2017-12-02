@@ -16,7 +16,7 @@
   " set iskeyword-=_                                   " Treat underscore as a word boundary.
 
   set list
-  set listchars=tab:▸\ ,trail:-,extends:>,precedes:< " Strings in 'list' mode.
+  set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
   set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
   set hidden                                         " Allow for more then one unsaved buffer.
