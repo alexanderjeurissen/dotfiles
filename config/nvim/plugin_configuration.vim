@@ -63,8 +63,9 @@ endif
 
 " PLUGIN: tpope/vim-rails {{{
 if has_key(g:minpac#pluglist, 'vim-rails')
-  nnoremap <leader>mr <c-u>:Rrunner<CR>
-  nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
+  nnoremap <leader>rC :.Runner<CR>
+  nnoremap <leader>rA :Runner<CR>
+  " nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
 
   " let g:rails_projections = {
   "   \"app/models/*.rb": {
@@ -431,6 +432,7 @@ if has_key(g:minpac#pluglist, 'gruvbox')
 
   function! ActivateColorScheme()
     colorscheme gruvbox
+    set background=dark
   endfunction
 endif
 " }}}
@@ -482,9 +484,18 @@ if has_key(g:minpac#pluglist, 'vim-deus')
     hi! CursorLine guibg=#292f37
     hi! ColorColumn guibg=#292f37
     hi! link WhiteSpace AleErrorSign
+    hi! link QuickFixLine DiffText
   endfunction
 endif
 " }}}
+
+" PLUGIN: arcticicestudio/nord-vim {{{
+if has_key(g:minpac#pluglist, 'nord-vim')
+  function! ActivateColorScheme()
+   colorscheme nord
+  endfunction
+endif
+"}}}
 
 
 " PLUGIN: roxma/nvim-completion-manager {{{

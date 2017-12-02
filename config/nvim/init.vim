@@ -273,8 +273,8 @@ packadd minpac
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'}) " allow minpac to manage itself
 
-command! PackageUpdate call minpac#update()
-command! PackageClean call minpac#clean()
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
 
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/plugin_configuration.vim
