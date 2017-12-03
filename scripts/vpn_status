@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 if echo `ifconfig` | egrep 'inet 10' > /dev/null; then
-  echo "#[bg=green, fg=black]  VPN #[bg=default, fg=default]"
+  echo "#[bg=green, fg=black, bold]  VPN #[bg=default, fg=default, nobold]"
 else 
-  echo "#[bg=red, fg=black]  NO VPN #[bg=default, fg=default]"
+  echo "#[bg=red, fg=black, bold]  NO VPN #[bg=default, fg=default, nobold]"
 fi
