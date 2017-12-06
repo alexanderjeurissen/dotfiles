@@ -263,6 +263,8 @@
 
     " Set colorscheme if vim is loaded
     autocmd VimEnter * call ActivateColorScheme()
+
+    autocmd TermOpen * call terminal#Settings()
   augroup END
 " }}}
 
