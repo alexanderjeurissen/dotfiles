@@ -21,6 +21,9 @@
 
   set hidden                                         " Allow for more then one unsaved buffer.
   set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+  set noshowcmd                                      " showcmd is slow r/neovim/comments/7epa94
+  set noruler                                        " ^ same as the rule above
+
   " set lazyredraw                                   " Don't unnecessarily redraw screen.
 
   set undofile                                       " Save undo's after file closes.

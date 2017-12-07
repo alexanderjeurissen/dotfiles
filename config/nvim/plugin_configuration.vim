@@ -497,6 +497,13 @@ if has_key(g:minpac#pluglist, 'nord-vim')
 endif
 "}}}
 
+" PLUGIN: KeitaNakamura/neodark.vim {{{
+if has_key(g:minpac#pluglist, 'neodark.vim')
+  function! ActivateColorScheme()
+   colorscheme neodark
+  endfunction
+endif
+"}}}
 
 " PLUGIN: roxma/nvim-completion-manager {{{
 if has_key(g:minpac#pluglist, 'nvim-completion-manager')

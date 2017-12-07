@@ -10,7 +10,8 @@
   " call minpac#add('Zabanaa/neuromancer.vim')
   " call minpac#add('zefei/cake16')
   " call minpac#add('ajmwagar/vim-deus')
-  call minpac#add('arcticicestudio/nord-vim')
+  call minpac#add('KeitaNakamura/neodark.vim')
+  " call minpac#add('arcticicestudio/nord-vim')
   call minpac#add('zefei/vim-colortuner')
 " }}}
 

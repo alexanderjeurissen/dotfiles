@@ -120,75 +120,76 @@ custom_cursor_colors: true
 #     cyan:    '0x9ec98e'
 #     white:   '0xefe1bf'
 
-# # Colors (Deus) {
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x2C323B'
-#     foreground: '0xEBDAB2'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   # cursor:
-#   #   text: '0x'
-#   #   cursor: '0x'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x2C323B'
-#     red:     '0xcc241d'
-#     green:   '0x98971a'
-#     yellow:  '0xd79921'
-#     blue:    '0x458588'
-#     magenta: '0xb16286'
-#     cyan:    '0x689d6a'
-#     white:   '0xd3d3d3'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x2C323B'
-#     red:     '0xfb4934'
-#     green:   '0x98C379'
-#     yellow:  '0xfabd2f'
-#     blue:    '0x83a598'
-#     magenta: '0xC678DD'
-#     cyan:    '0x8ec07c'
-#     white:   '0xEBDAB2'
-# # }
-
-# Colors (Nord) {
+# Colors (Neodark) {
 colors:
   # Default colors
   primary:
-    background: '0x2E3440'
-    foreground: '0xD8DEE9'
+    background: '0x1F2F38'
+    foreground: '0xAABBC4'
 
   # Colors the cursor will use if `custom_cursor_colors` is true
   # cursor:
   #   text: '0x'
-    cursor: '0xD8DEE9'
+    cursor: '0x5C7988'
 
   # Normal colors
   normal:
-    black:   '0x3B4252'
-    red:     '0xBF616A'
-    green:   '0xA3BE8C'
-    yellow:  '0xEBCB8B'
-    blue:    '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan:    '0x88C0D0'
-    white:   '0xE5E9F0'
+    black:   '0x1F2F38'
+    red:     '0xDC657D'
+    green:   '0x84B97C'
+    yellow:  '0xD4B261'
+    blue:    '0x639EE4'
+    magenta: '0xB888E2'
+    cyan:    '0xE18254'
+    white:   '0x658595'
 
   # Bright colors
   bright:
-    black:   '0x4C566A'
-    red:     '0xBF616A'
-    green:   '0xA3BE8C'
-    yellow:  '0xEBCB8B'
-    blue:    '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan:    '0x8FBCBB'
-    white:   '0xECEFF4'
+    black:   '0x263A45'
+    red:     '0xE69CA0'
+    green:   '0x4BB1A7'
+    yellow:  '0xC7C18B'
+    blue:    '0x72C7D1'
+    magenta: '0x475C69'
+    cyan:    '0xAE8785'
+    white:   '0xAABBC4'
 # }
+
+
+# # Colors (Nord) {
+# colors:
+#   # Default colors
+#   primary:
+#     background: '0x2E3440'
+#     foreground: '0xD8DEE9'
+
+#   # Colors the cursor will use if `custom_cursor_colors` is true
+#   # cursor:
+#   #   text: '0x'
+#     cursor: '0xD8DEE9'
+
+#   # Normal colors
+#   normal:
+#     black:   '0x3B4252'
+#     red:     '0xBF616A'
+#     green:   '0xA3BE8C'
+#     yellow:  '0xEBCB8B'
+#     blue:    '0x81A1C1'
+#     magenta: '0xB48EAD'
+#     cyan:    '0x88C0D0'
+#     white:   '0xE5E9F0'
+
+#   # Bright colors
+#   bright:
+#     black:   '0x4C566A'
+#     red:     '0xBF616A'
+#     green:   '0xA3BE8C'
+#     yellow:  '0xEBCB8B'
+#     blue:    '0x81A1C1'
+#     magenta: '0xB48EAD'
+#     cyan:    '0x8FBCBB'
+#     white:   '0xECEFF4'
+# # }
 
 # Visual Bell
 #
