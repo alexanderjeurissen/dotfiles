@@ -83,6 +83,14 @@
   endfunction
 " }}}
 
+" SETTINGS: Navigation {{{
+  if executable("rg")
+    set grepprg=rg\ -H\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+    command! -nargs=+ -complete=file -bar Rg grep! <args>|cw
+  endif
+" }}}
 
 " KEYBINDINGS: General {{{
   " Use <space> as leader
@@ -126,7 +134,6 @@
   nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
 
   "FIXME: Replace mappings
-  nnoremap <leader>rl 0:s/
   nnoremap <leader>rp {ma}mb:'a,'bs/
 
   " (upper|lower)case word under cursor
@@ -159,6 +166,9 @@
   " Go to previous and next item in quickfix list
   noremap <leader>cn :cnext<CR>
   noremap <leader>cp :cprev<CR>
+
+  noremap <leader>ln :lnext<CR>
+  noremap <leader>lp :lprev<CR>
 
   " Split creation
   noremap <silent> <leader>wv <C-w>v
@@ -241,6 +251,9 @@
     " http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
     autocmd BufEnter * :syntax sync maxlines=200
 
+    " Automatically remove fugitive buffers
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile Appraisals set filetype=ruby
 
@@ -265,6 +278,8 @@
     autocmd VimEnter * call ActivateColorScheme()
 
     autocmd TermOpen * call terminal#Settings()
+
+    autocmd! User FzfStatusLine call fzf#Statusline()
   augroup END
 " }}}
 

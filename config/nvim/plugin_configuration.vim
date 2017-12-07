@@ -33,12 +33,6 @@ endif
 if has_key(g:minpac#pluglist, 'vim-sneak')
   let g:sneak#label = 1
   let g:sneak#target_labels = "aoeuhtnsidAOEUHTNSID ',.pgrlfyPGRLFY"
-
-  "fix sneak highlighting
-  " autocmd ColorScheme * hi Sneak cterm=reverse ctermfg=214 ctermbg=234
-  " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
-  " autocmd ColorScheme * hi SneakLabel cterm=reverse ctermfg=214 ctermbg=234
-  " autocmd ColorScheme * hi SneakScope cterm=reverse ctermfg=214 ctermbg=234
 endif
 " }}}
 
@@ -51,70 +45,10 @@ endif
 " }}}
 
 
-" PLUGIN: mattn/gist-vim {{{
-if has_key(g:minpac#pluglist, 'gist-vim')
-  let g:gist_clip_command = 'pbcopy'
-  let g:gist_detect_filetype = 1
-  let g:gist_show_privates = 1
-  let g:gist_update_on_write = 1
-endif
-" }}}
-
-
 " PLUGIN: tpope/vim-rails {{{
 if has_key(g:minpac#pluglist, 'vim-rails')
   nnoremap <leader>rC :.Runner<CR>
   nnoremap <leader>rA :Runner<CR>
-  " nnoremap <leader>rC :call tmux#RunSpecAtLine()<CR>
-
-  " let g:rails_projections = {
-  "   \"app/models/*.rb": {
-  "   \  "alternate": ["spec/integration/models/%s_spec.rb"],
-  "   \  "related": ["spec/factories/%s.rb"],
-  "   \},
-  "   \"spec/integration/models/*_spec.rb": {
-  "   \  "alternate": ["app/models/%s.rb"],
-  "   \},
-  "   \"spec/factories/*.rb": {
-  "   \  "alternate": ["app/models/%s.rb"],
-  "   \},
-  "   \"app/controllers/*.rb": {
-  "   \  "alternate": ["spec/integration/controllers/%s_spec.rb"],
-  "   \},
-  "   \"spec/integration/controllers/*_spec.rb": {
-  "   \  "alternate": ["app/controllers/%s.rb"],
-  "   \},
-  "   \"app/mailers/*.rb": {
-  "   \  "alternate": ["spec/integration/mailers/%s_spec.rb"],
-  "   \},
-  "   \"spec/integration/mailers/*_spec.rb": {
-  "   \  "alternate": ["app/mailers/%s.rb"],
-  "   \},
-  "   \"app/backend/*.rb": {
-  "   \  "alternate": ["spec/integration/backend/%s_spec.rb"],
-  "   \},
-  "   \"spec/integration/backend/*_spec.rb": {
-  "   \  "alternate": ["app/backend/%s.rb"],
-  "   \},
-  "   \"lib/support/app/controllers/support/*.rb": {
-  "   \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
-  "   \},
-  "   \"spec/integration/controllers/support/*_spec.rb": {
-  "   \  "alternate": ["lib/support/app/controllers/support/%s.rb"]
-  "   \},
-  "   \"lib/api/app/controllers/*.rb": {
-  "   \  "alternate": ["spec/integration/controllers/support/%s_spec.rb"]
-  "   \},
-  "   \"lib/api/spec/controllers/*_spec.rb": {
-  "   \  "alternate": ["lib/api/app/controllers/%s.rb"]
-  "   \},
-  "   \"db/migrate/*.rb": {
-  "   \  "alternate": ["spec/integration/migrations/%s_spec.rb"]
-  "   \},
-  "   \"spec/integration/migrations/*_spec.rb": {
-  "   \  "alternate": ["db/migrate/%s.rb"]
-  "   \},
-  " \}
 endif
 " }}}
 
@@ -146,10 +80,6 @@ endif
 " PLUGIN: junegunn/fzf.vim {{{
 if has_key(g:minpac#pluglist, 'fzf.vim')
   " Color/display options {{{
-    " Default fzf layout
-    " - down / up / left / right
-    " - window (nvim only)
-    " let g:fzf_layout = { 'window': 'rightbelow 100new' }
     let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_mode = ''
 
@@ -170,47 +100,27 @@ if has_key(g:minpac#pluglist, 'fzf.vim')
 
       imap <c-x><c-f> <plug>(fzf-complete-path)
       imap <c-x><c-/> <plug>(fzf-complete-file-ag)
-
-      autocmd! User FzfStatusLine call fzf#Statusline()
   " }}}
-
-  " Ag search {{{
-    command! -bang -nargs=* Find call fzf#vim#ag(<q-args>, '--literal --ignore-case ', {'window': 'enew'})
-    command! -bang -nargs=* Locate call fzf#vim#ag(<q-args>, '--literal --ignore-case -l ', {'window': 'enew'})
-  " }}}
-
-    command! -nargs=* WintabsChose call fzf#WintabsBuffers()
 
   " Keybindings {{{
-    " nnoremap <silent> <leader>ff :<C-u>call Fzf_dev()<CR>
     nnoremap <silent> <leader>pf :<C-u>Files<CR>
     nnoremap <silent> <leader>fc :<C-u>call fzf#NeighbouringFiles()<CR>
     nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
     nnoremap <silent> <leader>; :<C-u>BLines<CR>
     nnoremap <silent> <leader>. :<C-u>Lines<CR>
-    nnoremap <silent> <leader>o :<C-u>BTags<CR>
-    nnoremap <silent> <leader>O :<C-u>Tags<CR>
     nnoremap <silent> <leader>: :<C-u>Commands<CR>
     nnoremap <silent> <leader>? :<C-u>History<CR>
-    nnoremap <silent> <leader>p/ :<C-u>Ag<CR>
-    " nnoremap <silent> <leader>/ :<C-u>Ag<CR>
     nnoremap <silent> <leader>gl :<C-u>Commits<CR>
-    nnoremap <silent> <leader>ga :<C-u>BCommits<CR>
+    nnoremap <silent> <leader>gb :<C-u>BCommits<CR>
     nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
     nnoremap <silent> <leader>gF :<C-u>call fzf#FilesChangedInBranch()<CR>
 
-    nnoremap <silent> <leader>rm :<C-u>FZF app/models<CR>
-    nnoremap <silent> <leader>rc :<C-u>FZF app/controllers<CR>
-    nnoremap <silent> <leader>rv :<C-u>FZF app/views<CR>
-    nnoremap <silent> <leader>rl :<C-u>FZF ./lib<CR>
-
+    nnoremap <silent> <leader>rh :<C-u>FZF app<CR>
+    nnoremap <silent> <leader>rl :<C-u>FZF lib<CR>
     nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
-    nnoremap <silent> <leader>rsm :<C-u>FZF spec/integration/models<CR>
-    nnoremap <silent> <leader>rsc :<C-u>FZF spec/integration/controllers<CR>
 
     nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
     nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
-
     nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
   " }}}
 endif
@@ -228,23 +138,8 @@ if has_key(g:minpac#pluglist, 'vim-fugitive')
   nnoremap <silent> <leader>gw  :Gwrite<CR>
   nnoremap <silent> <leader>gwq :Gwrite<CR>:qa<CR>
   nnoremap <silent> <leader>ge  :Gedit<CR>
+
   command! GreadDevelop Gread! show develop:%
-  " Automatically remove fugitive buffers
-  autocmd BufReadPost fugitive://* set bufhidden=delete
-endif
-" }}}
-
-
-" PLUGIN: takac/vim-hardtime {{{
-if has_key(g:minpac#pluglist, 'vim-hardtime')
-  let g:hardtime_default_on = 1
-  let g:hardtime_showmsg = 0 " Show message
-  let g:hardtime_allow_different_key = 1 " This allows jh but not jj
-  let g:hardtime_ignore_quickfix = 1 " Ignore hardtime when in quickfix buffer
-  let g:hardtime_timeout = 100
-
-  let g:list_of_normal_keys = ["h", "j", "k", "l", "+"]
-  let g:list_of_visual_keys = ["h", "j", "k", "l", "+"]
 endif
 " }}}
 
@@ -256,7 +151,6 @@ if has_key(g:minpac#pluglist, 'vim-grepper')
   let g:grepper.jump = 1
   let g:grepper.stop = 100
 
-  command! Ag :Grepper
   nnoremap <silent> <leader>/ :<C-u>Grepper<CR>
 endif
 " }}}
@@ -264,8 +158,6 @@ endif
 
 " PLUGIN: w0rp/ale {{{
 if has_key(g:minpac#pluglist, 'ale')
-  " let g:ale_sign_error = '✖'
-  " let g:ale_sign_warning = '⚠'
   let g:ale_sign_error = '◆'
   let g:ale_sign_warning = '◇'
   let g:ale_linters = {
@@ -371,40 +263,7 @@ endif
 " PLUGIN: sheerun/vim-polygot {{{
 if has_key(g:minpac#pluglist, 'vim-polyglot')
   let g:used_javascript_libs = 'underscore,backbone,react,flux'
-  " let g:javascript_conceal_function             = "ƒ"
-  " let g:javascript_conceal_return               = "⬅"
-  " let g:javascript_conceal_arrow_function       = "⇒"
-  " let g:javascript_conceal_noarg_arrow_function = "➡"
-  " syntax match jsOperator /<=/ conceal cchar=≤
-  " syntax match jsOperator />=/ conceal cchar=≥
-  " syntax match jsOperator /!=/ conceal cchar=≢
-  " syntax keyword Statement lambda conceal cchar=λ
   set conceallevel=2
-endif
-" }}}
-
-
-" PLUGIN: zefei/vim-wintabs {{{
-if has_key(g:minpac#pluglist, 'vim-wintabs')
-  let g:wintabs_display = 'none'
-
-  let g:wintabs_ui_modified = ''
-  let g:wintabs_ui_readonly = ''
-
-  " style active wintab for gruvbox
-  " autocmd ColorScheme gruvbox hi User1 guifg=#353535 guibg=#7aab7d
-  let g:wintabs_ui_active_higroup = 'DiffDelete'
-
-  nmap <leader>bn <plug>(wintabs_next)
-  nmap <leader>bp <plug>(wintabs_previous)
-  nmap <leader>wn <plug>(wintabs_next)
-  nmap <leader>wp <plug>(wintabs_previous)
-  nmap <leader>wc :q<cr>
-  nmap <leader>wd <plug>(wintabs_close)
-  nmap <leader>wt <plug>(wintabs_maximize)
-  nmap <leader>wa <plug>(wintabs_all)
-  nmap <leader>wo <plug>(wintabs_only)
-  nmap <leader>tc <plug>(wintabs_close_vimtab)
 endif
 " }}}
 
@@ -419,46 +278,6 @@ if has_key(g:minpac#pluglist, 'vim-bbye')
 
   " Delete all buffers, but keep windows open
   nnoremap <leader>bw :bufdo :Bdelete<CR>
-endif
-" }}}
-
-
-" PLUGIN: morhetz/gruvbox {{{
-if has_key(g:minpac#pluglist, 'gruvbox')
-  let g:gruvbox_italic=1
-  let g:gruvbox_italicize_strings=1
-  let g:gruvbox_contrast_dark='soft'
-  let g:gruvbox_contrast_light='soft'
-
-  function! ActivateColorScheme()
-    colorscheme gruvbox
-    set background=dark
-  endfunction
-endif
-" }}}
-
-
-" PLUGIN: zefei/cake16 {{{
-if has_key(g:minpac#pluglist, 'cake16')
-  function! ActivateColorScheme()
-    colorscheme cake16
-    set background=light
-    hi! link vertsplit cursorlinenr
-    hi! link TabLineFill DiffText
-    hi! link QuickFixMenuLine PMenuSel
-  endfunction
-endif
-" }}}
-
-
-" PLUGIN: Zabanaa/neuromancer.vim {{{
-if has_key(g:minpac#pluglist, 'neuromancer.vim')
-  function! ActivateColorScheme()
-    colorscheme neuromancer
-      hi! link Float Number
-      hi! link Whitespace ErrorMsg
-      hi! link SignColumn LineNr
-  endfunction
 endif
 " }}}
 
