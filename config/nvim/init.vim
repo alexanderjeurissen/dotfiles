@@ -49,6 +49,8 @@
   set t_vb=                                          " Disable visual bell.
   set belloff=all                                    " no noises!
   set cursorline cursorcolumn                        " Enable cursorline and cursorcolumn by default
+  set scrolloff=2                                    " Keep at least 2 lines above/below
+  set sidescrolloff=5                                " Keep at least 5 lines left/right
 
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
@@ -249,7 +251,7 @@
                 \   endif
 
     " http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
-    autocmd BufEnter * :syntax sync maxlines=200
+    autocmd Syntax * if 5000 < line('$') | syntax sync maxlines=200 | endif
 
     " Automatically remove fugitive buffers
     autocmd BufReadPost fugitive://* set bufhidden=delete
@@ -267,6 +269,13 @@
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")
 
+  " Update filetype on save if empty
+    autocmd BufWritePost * nested
+      \ if &l:filetype ==# '' || exists('b:ftdetect')
+      \ |   unlet! b:ftdetect
+      \ |   filetype detect
+      \ | endif
+
     " Fold settings {{{
       autocmd FileType sql setl nofoldenable foldmethod=manual
     " }}}
@@ -276,8 +285,6 @@
 
     " Set colorscheme if vim is loaded
     autocmd VimEnter * call ActivateColorScheme()
-
-    autocmd TermOpen * call terminal#Settings()
 
     autocmd! User FzfStatusLine call fzf#Statusline()
   augroup END
