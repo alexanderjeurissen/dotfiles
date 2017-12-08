@@ -100,16 +100,14 @@
   let g:mapleader="\<Space>"
 
   " Fix annoying typo's of WQ, QA and Q
-  command! WQ wq
-  command! Wq wq
-
-  command! W w
-  command! WW w
-
-  command! Q q
-
-  command! QA qall
-  command! Qa qall
+  cnoreabbrev qw wq
+  cnoreabbrev Wq wq
+  cnoreabbrev WQ wq
+  cnoreabbrev QA qa
+  cnoreabbrev Qa qa
+  cnoreabbrev W w
+  cnoreabbrev WW w
+  cnoreabbrev Q q
 
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>
@@ -230,6 +228,9 @@
   " This copies current file path + line number to system clipboard
   " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
   nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
+
+  " cd to the directory of the current buffer
+  map <Leader>cd :lcd %:p:h<CR>:pwd<CR>
 " }}}
 
 
