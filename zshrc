@@ -432,7 +432,7 @@ bindkey '^e' autosuggest-accept
       fzf --ansi --no-sort --query="$q" --print-query \
           --expect=ctrl-d,ctrl-b);
     do
-      mapfile -t out <<< "$out"
+      $mapfile -t out <<< "$out"
       q="${out[0]}"
       k="${out[1]}"
       sha="${out[-1]}"
