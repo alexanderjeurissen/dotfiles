@@ -1,13 +1,11 @@
 " PLUGIN: SirVer/ultisnips {{{
 if has_key(g:minpac#pluglist, 'Ultisnips')
   let g:UltiSnipsUsePythonVersion = 3
-  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsExpandTrigger = "<tab>"
   let g:UltiSnipsEditSplit='vertical'
-  let g:ulti_expand_or_jump_res = 0
+  " let g:ulti_expand_or_jump_res = 0
   let g:UltiSnipsEnableSnipMate = 1
-
-  imap <expr><tab> pumvisible() ? "\<C-n>" : "\<TAB>"
-  imap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<TAB>"
+  let g:UltiSnipsRemoveSelectModeMappings = 0
 
   let g:UltiSnipsJumpForwardTrigger="<C-n>"
   let g:UltiSnipsJumpBackwardTrigger="<C-p>"
@@ -96,7 +94,7 @@ if has_key(g:minpac#pluglist, 'fzf')
   let g:fzf_default_options = [
         \'--ansi',
         \'--multi',
-        \'--no-sort',
+        \'--sort',
         \'--bind=ctrl-a:select-all,ctrl-d:deselect-all'
         \ ]
 
@@ -129,9 +127,6 @@ if has_key(g:minpac#pluglist, 'fzf')
   nnoremap <silent> <leader>fc :<C-u>NeighbouringFiles<CR>
   nnoremap <silent> <leader>pf :<C-u>Files<CR>
   nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-  nnoremap <silent> <leader>? :<C-u>History<CR>
-  nnoremap <silent> <leader>gl :<C-u>Commits<CR>
-  nnoremap <silent> <leader>gb :<C-u>BCommits<CR>
   nnoremap <silent> <leader>gf :<C-u>GitFiles<CR>
   nnoremap <silent> <leader>gF :<C-u>GitBranchFiles<CR>
 

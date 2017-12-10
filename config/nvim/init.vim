@@ -11,7 +11,6 @@
   set textwidth=100                                  " Set maximum number of characters per line
   set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
   set sessionoptions+=globals                        " Persist global variables in vim session
-  set completeopt=menu                               " Use popup menu for insert mode completion
   set cc=+1                                          " Highlight first column after 'textwidth'
   " set iskeyword-=_                                   " Treat underscore as a word boundary.
 
