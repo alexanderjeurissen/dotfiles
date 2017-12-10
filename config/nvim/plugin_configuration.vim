@@ -78,14 +78,34 @@ endif
 
 
 " PLUGIN: junegunn/fzf.vim {{{
-if has_key(g:minpac#pluglist, 'fzf.vim')
-  " Color/display options {{{
-    let g:fzf_layout = { 'window': 'enew' }
-    let g:fzf_mode = ''
+if has_key(g:minpac#pluglist, 'fzf')
+  " An action can be a reference to a function that processes selected lines
+  function! s:build_quickfix_list(lines)
+   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+   copen
+   " cc " Open first match
+  endfunction
 
-    " Customize fzf colors to match your color scheme
-    let g:fzf_colors =
-    \ { 'fg':      ['fg', 'Normal'],
+  let g:fzf_action = {
+        \ 'ctrl-o': function('s:build_quickfix_list'),
+        \ 'ctrl-r': function('s:build_quickfix_list'),
+        \ 'ctrl-t': 'tab split',
+        \ 'ctrl-s': 'split',
+        \ 'ctrl-v': 'vsplit' }
+
+  let g:fzf_default_options = [
+        \'--ansi',
+        \'--multi',
+        \'--no-sort',
+        \'--bind=ctrl-a:select-all,ctrl-d:deselect-all'
+        \ ]
+
+    " Replace current buffer with search window
+    let g:fzf_layout = { 'window': 'enew' }
+
+  " Customize fzf colors to match your color scheme
+    let g:fzf_colors = {
+      \ 'fg':      ['fg', 'Normal'],
       \ 'bg':      ['bg', 'Normal'],
       \ 'hl':      ['fg', 'Comment'],
       \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -97,32 +117,35 @@ if has_key(g:minpac#pluglist, 'fzf.vim')
       \ 'marker':  ['fg', 'Keyword'],
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
-
-      imap <c-x><c-f> <plug>(fzf-complete-path)
-      imap <c-x><c-/> <plug>(fzf-complete-file-ag)
   " }}}
 
-  " Keybindings {{{
-    nnoremap <silent> <leader>pf :<C-u>Files<CR>
-    nnoremap <silent> <leader>fc :<C-u>call fzf#NeighbouringFiles()<CR>
-    nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-    nnoremap <silent> <leader>; :<C-u>BLines<CR>
-    nnoremap <silent> <leader>. :<C-u>Lines<CR>
-    nnoremap <silent> <leader>: :<C-u>Commands<CR>
-    nnoremap <silent> <leader>? :<C-u>History<CR>
-    nnoremap <silent> <leader>gl :<C-u>Commits<CR>
-    nnoremap <silent> <leader>gb :<C-u>BCommits<CR>
-    nnoremap <silent> <leader>gf :<C-u>GitFiles?<CR>
-    nnoremap <silent> <leader>gF :<C-u>call fzf#FilesChangedInBranch()<CR>
+" Keybindings & commands {{{
+  command! Files call fzf#Files()
+  command! NeighbouringFiles call fzf#NeighbouringFiles()
+  command! GitFiles call fzf#GitFiles()
+  command! GitBranchFiles call fzf#GitBranchFiles()
+  command! Buffers call fzf#Buffers()
 
-    nnoremap <silent> <leader>rh :<C-u>FZF app<CR>
-    nnoremap <silent> <leader>rl :<C-u>FZF lib<CR>
-    nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
+  nnoremap <silent> <leader>fc :<C-u>NeighbouringFiles<CR>
+  nnoremap <silent> <leader>pf :<C-u>Files<CR>
+  nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
+  nnoremap <silent> <leader>? :<C-u>History<CR>
+  nnoremap <silent> <leader>gl :<C-u>Commits<CR>
+  nnoremap <silent> <leader>gb :<C-u>BCommits<CR>
+  nnoremap <silent> <leader>gf :<C-u>GitFiles<CR>
+  nnoremap <silent> <leader>gF :<C-u>GitBranchFiles<CR>
 
-    nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
-    nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
-    nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
-  " }}}
+  nnoremap <silent> <leader>rh :<C-u>FZF app<CR>
+  nnoremap <silent> <leader>rl :<C-u>FZF lib<CR>
+  nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
+
+  nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
+  nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
+  nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
+
+  imap <c-x><c-f> <plug>(fzf-complete-path)
+  imap <c-x><c-/> <plug>(fzf-complete-file-ag)
+" }}}
 endif
 " }}}
 
@@ -360,4 +383,4 @@ if has_key(g:minpac#pluglist, 'LanguageClient-neovim')
   " }}}
 endif
 " }}}
-" vim: foldmethod=marker:sw=3
+" vim: foldmethod=marker:sw=2
