@@ -1,54 +1,69 @@
 function! fzf#Statusline()
-  setlocal statusline=%#fzf1#\ \ FZF
+  echom "kerk"
+  setlocal statusline=%#fzf1#\ FZF\ -\ %{g:fzf_current_mode}
 endfunction
 
+function! fzf#Files()
+  let g:fzf_current_mode = 'Filess'
+  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options }))
+endfunction
+
+
+function! fzf#Buffers()
+  let g:fzf_current_mode = 'Buffers'
+  function! s:buflist()
+    redir => ls
+    silent ls
+    redir END
+    return split(ls, '\n')
+  endfunction
+
+  function! s:bufopen(e)
+    execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+  endfunction
+
+  call fzf#run(fzf#wrap({
+        \ 'source':  reverse(<sid>buflist()),
+        \ 'sink':    function('<sid>bufopen'),
+        \ 'options': g:fzf_default_options,
+        \ }))
+endfunction
+
+
+"NOTE: Files that are in the same directory as the current buffer
 function! fzf#NeighbouringFiles()
-  let current_file =expand("%")
+  let g:fzf_current_mode = 'NeighbouringFiles'
+  let current_file = expand("%")
   let cwd = fnamemodify(current_file, ':p:h')
-  let command = 'ag -g "" -f ' . cwd . ' --depth 0'
+  let command = $FZF_DEFAULT_COMMAND . ' --maxdepth 1'
 
-  call fzf#run({
+  call fzf#run(fzf#wrap({
         \ 'source': command,
-        \ 'sink':   'e',
-        \ 'options': '-m -x +s',
-        \ 'window':  'enew' })
-
+        \ 'dir': cwd,
+        \ 'options': g:fzf_default_options
+        \ }))
 endfunction
 
-"NOTE: Fuzzy search all files changed in current branch (compared to develop)
-function! fzf#FilesChangedInBranch()
+
+"NOTE: Files that are tracked by Git in $PWD that are dirty
+function! fzf#GitFiles()
+  let g:fzf_current_mode = 'GitFiles'
+  let command = 'git diff --name-only'
+
+  call fzf#run(fzf#wrap({
+        \ 'source': command,
+        \ 'options': g:fzf_default_options
+        \ }))
+endfunction
+
+
+"NOTE: Files in $PWD that have changed in current branch compared to develop
+function! fzf#GitBranchFiles()
+  let g:fzf_current_mode = 'GitBranchFiles'
   let command = 'git diff --name-only develop'
 
-  call fzf#run({
+  call fzf#run(fzf#wrap({
         \ 'source': command,
-        \ 'sink*':  function('<sid>qf_handler'),
-        \ 'options': '-m -x +s --bind=ctrl-a:select-all,ctrl-d:deselect-all',
-        \ 'window':  'enew' })
-endfunction
-
-
-function! s:fzf_to_qf(line)
-  let parts = split(a:line, ':')
-  return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
-        \ 'text': join(parts[3:], ':')}
-endfunction
-
-function! s:qf_handler(lines)
-  if len(a:lines) < 2 | return | endif
-
-  let cmd = get({'ctrl-x': 'split',
-               \ 'ctrl-v': 'vertical split',
-               \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-  let list = map(a:lines[1:], 's:fzf_to_qf(v:val)')
-
-  let first = list[0]
-  execute cmd escape(first.filename, ' %#\')
-  execute first.lnum
-  execute 'normal!' first.col.'|zz'
-
-  if len(list) > 1
-    call setqflist(list)
-    copen
-    wincmd p
-  endif
+        \ 'options': g:fzf_default_options
+        \ }))
 endfunction

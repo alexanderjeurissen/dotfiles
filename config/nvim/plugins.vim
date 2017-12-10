@@ -24,7 +24,7 @@
 
 
 " PLUGIN_GROUP: Editing {{{
-  call minpac#add('tpope/vim-endwise') " insert end after certain keywords in ruby
+call minpac#add('tpope/vim-endwise') " insert end after certain keywords in ruby
   call minpac#add('tommcdo/vim-exchange') " Exchange visual selections
   call minpac#add('tpope/vim-surround') " modify surrounding text
     call minpac#add('tpope/vim-repeat')
@@ -39,8 +39,8 @@
 
 " PLUGIN_GROUP: Navigation {{{
   call minpac#add('justinmk/vim-sneak') " diagonal movements using S + 2 charaters
-  call minpac#add('junegunn/fzf.vim')
-    call minpac#add('junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' })
+  call minpac#add('ryanoasis/vim-devicons')
+  call minpac#add('junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' })
   call minpac#add('mhinz/vim-grepper') " add grepper for ag/ack etc.
   call minpac#add('moll/vim-bbye') " buffer deleting
   call minpac#add('arithran/vim-delete-hidden-buffers') " delete all hidden buffers
@@ -79,4 +79,4 @@
   call minpac#add('szw/vim-maximizer')
 " }}}
 
-" vim: foldmethod=marker:sw=3
+" vim: foldmethod=marker:sw=2
