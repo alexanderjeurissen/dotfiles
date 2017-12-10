@@ -107,7 +107,6 @@
   cnoreabbrev Qa qa
   cnoreabbrev W w
   cnoreabbrev WW w
-  cnoreabbrev Q q
 
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>
@@ -220,7 +219,7 @@
   map <leader>v :!approvals verify -d vimdiff -a<cr>
 
   " Safely exit neovim
-  noremap <C-q> :confirm qall<CR>
+  nmap Q :confirm qall<CR>
 
   "w!! to save file with sudo
   cmap w!! w !sudo tee % > /dev/null
@@ -287,7 +286,7 @@
     " Set colorscheme if vim is loaded
     autocmd VimEnter * call ActivateColorScheme()
 
-    autocmd! User FzfStatusLine call fzf#Statusline()
+    autocmd User FzfStatusLine call fzf#Statusline()
   augroup END
 " }}}
 
