@@ -157,37 +157,33 @@ custom_cursor_colors: true
 
 # Colors (Nord) {
 colors:
-  # Default colors
   primary:
     background: '0x2E3440'
     foreground: '0xD8DEE9'
 
-  # Colors the cursor will use if `custom_cursor_colors` is true
-  # cursor:
-  #   text: '0x'
+  cursor:
+    text: '0x000000'
     cursor: '0xD8DEE9'
 
-  # Normal colors
   normal:
-    black:   '0x3B4252'
-    red:     '0xBF616A'
-    green:   '0xA3BE8C'
-    yellow:  '0xEBCB8B'
-    blue:    '0x81A1C1'
+    black: '0x3B4252'
+    red: '0xBF616A'
+    green: '0xA3BE8C'
+    yellow: '0xEBCB8B'
+    blue: '0x81A1C1'
     magenta: '0xB48EAD'
-    cyan:    '0x88C0D0'
-    white:   '0xE5E9F0'
+    cyan: '0x88C0D0'
+    white: '0xE5E9F0'
 
-  # Bright colors
   bright:
-    black:   '0x4C566A'
-    red:     '0xBF616A'
-    green:   '0xA3BE8C'
-    yellow:  '0xEBCB8B'
-    blue:    '0x81A1C1'
+    black: '0x4C566A'
+    red: '0xBF616A'
+    green: '0xA3BE8C'
+    yellow: '0xEBCB8B'
+    blue: '0x81A1C1'
     magenta: '0xB48EAD'
-    cyan:    '0x8FBCBB'
-    white:   '0xECEFF4'
+    cyan: '0x8FBCBB'
+    white: '0xECEFF4'
 # }
 
 # Visual Bell
@@ -215,6 +211,12 @@ colors:
 visual_bell:
   animation: EaseOutExpo
   duration: 0
+
+# Background opacity
+# background_opacity: 1.0
+
+# Live config reload (changes require restart)
+live_config_reload: true
 
 # Key bindings
 #
@@ -330,13 +332,3 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
 hide_cursor_when_typing: false
-
-# Shell
-#
-# You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
-# Entries in shell.args are passed unmodified as arguments to the shell.
-#
-# shell:
- # program: ~/.dotfiles/scripts/starttmux
- # args:
- #   - new-session -A -s dev
