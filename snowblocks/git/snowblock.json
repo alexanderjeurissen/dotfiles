@@ -1,0 +1,18 @@
+[
+  {
+    "clean": ["~"]
+  },
+  {
+    "link": {
+      "~/.gitconfig": {
+        "relink": true
+      },
+      "~/.gitaliases": {
+        "relink": true
+      },
+      "~/.gitignore": {
+        "relink": true
+      }
+    }
+  }
+]
