@@ -1,0 +1,31 @@
+[
+  {
+    "clean": [
+      "~/.config/nvim",
+      "~/.config/nvim/autoload",
+      "~/.config/nvim/after",
+      "~/.config/nvim/pack"
+    ]
+  },
+  {
+    "link": {
+      "~/.config/nvim/init.vim": { "create": true },
+      "~/.config/nvim/autoload": { "create": true },
+      "~/.config/nvim/after":    { "create": true }
+    },
+    "shell": {
+      [
+        "mkdir -p ~/.config/nvim/pack/minpac/opt/minpac",
+        "Create folder structure for minpac vim plugin manager"
+      ]
+      [
+        "git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
+        "Install minpac / Vim plugin manager"
+      ],
+      [
+        "nvim -c 'PackClean' -c 'PackUpdate' -c 'quit'",
+        "Update/install Neovim plugins"
+      ]
+    }
+  }
+]
