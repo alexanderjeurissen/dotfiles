@@ -1,0 +1,18 @@
+[
+  {
+    "clean": [
+      "~",
+      "~/.zplug",
+      "/usr/local/share/zsh/site-functions/"
+    ]
+  },
+  {
+    "link": {
+      "~/.zshrc": null,
+      "~/.zprofile": null,
+      "~/.zshenv": null,
+      "~/.zplug": null,
+      "/usr/local/share/zsh/site-functions/prompt_snappy_setup": { "create": true }
+    }
+  }
+]
