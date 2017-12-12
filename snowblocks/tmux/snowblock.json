@@ -1,0 +1,23 @@
+[
+  {
+    "clean": [
+      "~",
+      "~/.tmux"
+    ]
+  },
+  {
+    "link": {
+      "~/.tmux.conf": null
+    },
+    "shell": {
+      [
+        "mkdir -p ~/.tmux/plugins",
+        "Create .tmux and .tmux/plugins directory"
+      ]
+      [
+        "git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm",
+        "Install TPM / Tmux plugin manager"
+      ]
+    }
+  }
+]
