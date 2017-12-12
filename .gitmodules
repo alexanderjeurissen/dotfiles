@@ -27,3 +27,6 @@
   url = git@github.com:tmux-plugins/tpm.git
 
 
+[submodule ".snowsaw"]
+	path = .snowsaw
+	url = https://github.com/arcticicestudio/snowsaw

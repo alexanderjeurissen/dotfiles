@@ -3,7 +3,7 @@
      # export TERM=screen-256color-italic
    else
      # tmux attach-session || exec tmux new-session;
-     tmux attach-session || exec tmux new-session && exit;
+     # tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -68,6 +68,11 @@ fi
   ZSH_HIGHLIGHT_PATTERNS+=('No Revision' 'fg=blue,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('Abandoned' 'fg=default,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+# }}}
+
+# Dir colors {{{
+  test -e ~/.dir_colors && \
+     eval `gdircolors -b ~/.dir_colors`
 # }}}
 
 # Vi mode {{{
