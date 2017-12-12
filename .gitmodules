@@ -1,32 +1,6 @@
-[submodule "iterm/base16-iterm2"]
-	path = iterm/base16-iterm2
-  url = git@github.com:chriskempson/base16-iterm2.git
-
-[submodule "iterm/Base2Tone"]
-	path = iterm/Base2Tone
-  url = git@github.com:atelierbram/Base2Tone-iterm2.git
-
-[submodule "tmux/plugins/tmux-copycat"]
-	path = tmux/plugins/tmux-copycat
-  url = git@github.com:tmux-plugins/tmux-copycat.git
-
-[submodule "tmux/plugins/tmux-online-status"]
-	path = tmux/plugins/tmux-online-status
-  url = git@github.com:tmux-plugins/tmux-online-status.git
-
-[submodule "tmux/plugins/tmux-resurrect"]
-	path = tmux/plugins/tmux-resurrect
-  url = git@github.com:tmux-plugins/tmux-resurrect.git
-
-[submodule "tmux/plugins/tmux-yank"]
-	path = tmux/plugins/tmux-yank
-  url = git@github.com:tmux-plugins/tmux-yank.git
-
-[submodule "tmux/plugins/tpm"]
-	path = tmux/plugins/tpm
-  url = git@github.com:tmux-plugins/tpm.git
-
-
 [submodule ".snowsaw"]
 	path = .snowsaw
 	url = https://github.com/arcticicestudio/snowsaw
+[submodule "snowblocks/zsh/zplug"]
+	path = snowblocks/zsh/zplug
+	url = https://github.com/zplug/zplug
