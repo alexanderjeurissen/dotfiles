@@ -4,28 +4,44 @@
       "~/.config/nvim",
       "~/.config/nvim/autoload",
       "~/.config/nvim/after",
-      "~/.config/nvim/pack"
+      "~/.config/nvim/pack",
+      "~/.config/nvim/UltiSnips"
     ]
   },
   {
     "link": {
       "~/.config/nvim/init.vim": { "create": true },
+      "~/.config/nvim/plugins.vim": { "create": true },
+      "~/.config/nvim/plugin_configuration.vim": { "create": true },
       "~/.config/nvim/autoload": { "create": true },
-      "~/.config/nvim/after":    { "create": true }
+      "~/.config/nvim/after": { "create": true },
+      "~/.config/nvim/UltiSnips": { "create": true }
     },
-    "shell": {
+    "shell": [
+      [
+        "mkdir -p ~/.config/nvim/undo",
+        "Create folder for undo files"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/UndoHistory",
+        "Create folder for UndoHistory"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/sessions",
+        "Create folder for vim sessions"
+      ],
       [
         "mkdir -p ~/.config/nvim/pack/minpac/opt/minpac",
         "Create folder structure for minpac vim plugin manager"
-      ]
+      ],
       [
         "git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
         "Install minpac / Vim plugin manager"
       ],
       [
-        "nvim -c 'PackClean' -c 'PackUpdate' -c 'quit'",
+        "nvim -c \"PackClean\" -c \"PackUpdate\" -c \"quit\"",
         "Update/install Neovim plugins"
       ]
-    }
+    ]
   }
 ]
