@@ -1,0 +1,11 @@
+[
+  {
+    "clean": [ "~/Library/Fonts" ]
+  },
+  {
+    "link": {
+      "~/Library/Fonts/FiraCode-bold.otf": { "relink": true },
+      "~/Library/Fonts/FiraCode-Retina.otf": { "relink": true }
+    }
+  }
+]
