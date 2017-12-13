@@ -1,0 +1,14 @@
+[
+  {
+    "clean": [ "~/.scripts" ]
+  },
+  {
+    "link": {
+      "~/.scripts": {
+        "create": true,
+        "relink": true,
+        "path": "."
+      }
+    }
+  }
+]
