@@ -35,8 +35,8 @@
         "Create folder structure for minpac vim plugin manager"
       ],
       [
-        "git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
-        "Install minpac / Vim plugin manager"
+        "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
+        "Install/Update minpac(Vim plugin manager)"
       ],
       [
         "nvim -c \"PackClean\" -c \"PackUpdate\" -c \"quit\"",
