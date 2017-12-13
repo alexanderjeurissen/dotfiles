@@ -10,12 +10,12 @@
   },
   {
     "link": {
-      "~/.config/nvim/init.vim": { "create": true },
-      "~/.config/nvim/plugins.vim": { "create": true },
-      "~/.config/nvim/plugin_configuration.vim": { "create": true },
-      "~/.config/nvim/autoload": { "create": true },
-      "~/.config/nvim/after": { "create": true },
-      "~/.config/nvim/UltiSnips": { "create": true }
+      "~/.config/nvim/init.vim": { "create": true, "relink": true },
+      "~/.config/nvim/plugins.vim": { "create": true, "relink": true },
+      "~/.config/nvim/plugin_configuration.vim": { "create": true, "relink": true },
+      "~/.config/nvim/autoload": { "create": true, "relink": true },
+      "~/.config/nvim/after": { "create": true, "relink": true },
+      "~/.config/nvim/UltiSnips": { "create": true, "relink": true }
     },
     "shell": [
       [
@@ -35,7 +35,7 @@
         "Create folder structure for minpac vim plugin manager"
       ],
       [
-        "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
+        "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
         "Install/Update minpac(Vim plugin manager)"
       ],
       [
