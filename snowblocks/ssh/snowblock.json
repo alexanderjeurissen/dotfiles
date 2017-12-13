@@ -1,0 +1,13 @@
+[
+  {
+    "clean": [
+      "~",
+      "~/.ssh"
+    ]
+  },
+  {
+    "link": {
+      "~/.ssh/config": { "create": true, "relink": true }
+    }
+  }
+]
