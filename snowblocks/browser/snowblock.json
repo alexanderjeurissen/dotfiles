@@ -1,0 +1,13 @@
+[
+  {
+    "clean": [ "~" ]
+  },
+  {
+    "link": {
+      "~/cvimrc": { "relink": true },
+      "~/cvim.css": { "relink": true },
+      "~/safari_stylesheet.css": { "relink": true },
+      "~/.vimperatorrc": { "relink": true }
+    }
+  }
+]
