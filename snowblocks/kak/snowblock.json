@@ -1,0 +1,14 @@
+[
+  {
+    "clean": [
+      "~/.config/kak",
+      "~/.config/kak/rc"
+    ]
+  },
+  {
+    "link": {
+      "~/.config/kak/kakrc": { "create": true, "relink": true },
+      "~/.config/kak/rc/syntastic.kak": { "create": true, "relink": true }
+    }
+  }
+]
