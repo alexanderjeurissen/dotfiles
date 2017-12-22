@@ -3,6 +3,18 @@
     "clean": [ "~" ]
   },
   {
+    "dependencies": [
+      {
+        "name": "firefox",
+        "cmd": "brew cask install firefox"
+      },
+      {
+        "name": "chrome",
+        "cmd": "brew cask install google-chrome"
+      }
+    ]
+  },
+  {
     "link": {
       "~/cvimrc": { "relink": true },
       "~/cvim.css": { "relink": true },

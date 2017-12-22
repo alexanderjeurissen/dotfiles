@@ -5,6 +5,9 @@ SNOWSAW_DIR=".snowsaw"
 SNOWSAW_BIN="bin/snowsaw"
 
 SNOWBLOCKS_BASE_DIR_NAME="snowblocks"
-SNOWBLOCKSDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$SNOWBLOCKS_BASE_DIR_NAME"
+SNOWBLOCKS_PLUGINS_DIR_NAME="snowsaw_plugins"
 
-python3 "${SNOWSAW_DIR}/${SNOWSAW_BIN}" -s "${SNOWBLOCKSDIR}" "${@}"
+SNOWBLOCKSDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$SNOWBLOCKS_BASE_DIR_NAME"
+SNOWBLOCKS_PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$SNOWBLOCKS_PLUGINS_DIR_NAME"
+
+python3 "${SNOWSAW_DIR}/${SNOWSAW_BIN}" -s "${SNOWBLOCKSDIR}" --plugin-dir "${SNOWBLOCKS_PLUGIN_DIR}" "${@}"
