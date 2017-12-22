@@ -7,6 +7,15 @@
     ]
   },
   {
+    "dependencies": [
+      { "name": "zsh", "cmd": "brew install zsh" },
+      { "name": "ranger", "cmd": "brew install ranger" },
+      { "name": "fzf", "cmd": "brew install fzf" },
+      { "name": "terminal-notifier", "cmd": "brew install terminal-notifier" },
+      { "name": "pure-prompt", "cmd": "yarn global add pure-prompt" }
+    ]
+  },
+  {
     "link": {
       "~/.zshrc": { "relink": true },
       "~/.zprofile": { "relink": true },

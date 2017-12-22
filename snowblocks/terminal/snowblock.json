@@ -6,6 +6,11 @@
     ]
   },
   {
+    "dependencies": [
+      { "name": "alacritty", "cmd": "brew install alacritty" }
+    ]
+  },
+  {
     "link": {
       "~/.config/alacritty/alacritty.yml": { "create": true, "relink": true },
       "~/.inputrc": { "relink": true }

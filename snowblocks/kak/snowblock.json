@@ -6,6 +6,11 @@
     ]
   },
   {
+    "dependencies": [
+      { "name": "kak", "cmd": "brew install kak" }
+    ]
+  },
+  {
     "link": {
       "~/.config/kak/kakrc": { "create": true, "relink": true },
       "~/.config/kak/rc/syntastic.kak": { "create": true, "relink": true }
