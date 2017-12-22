@@ -9,6 +9,15 @@
     ]
   },
   {
+    "dependencies": [
+      { "name": "neovim", "cmd": "brew install neovim" },
+      { "name": "neovim", "cmd": "pip2 install neovim" },
+      { "name": "neovim", "cmd": "pip3 install neovim" },
+      { "name": "neovim", "cmd": "gem install neovim" },
+      { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" }
+    ]
+  },
+  {
     "link": {
       "~/.config/nvim/init.vim": { "create": true, "relink": true },
       "~/.config/nvim/plugins.vim": { "create": true, "relink": true },
@@ -37,10 +46,6 @@
       [
         "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
         "Install/Update minpac(Vim plugin manager)"
-      ],
-      [
-        "nvim -c \"PackClean\" -c \"PackUpdate\" -c \"quit\"",
-        "Update/install Neovim plugins"
       ]
     ]
   }
