@@ -1,0 +1,46 @@
+[
+  {
+    "dependencies": [
+      {
+        "name": "go",
+        "cmd": "brew install go"
+      },
+      {
+        "name": "coreutils",
+        "cmd": "brew install coreutils"
+      },
+      {
+        "name": "python",
+        "cmd": "brew install python"
+      },
+      {
+        "name": "python3",
+        "cmd": "brew install python3"
+      },
+      {
+        "name": "node-build",
+        "cmd": "brew install node-build"
+      },
+      {
+        "name": "nodenv",
+        "cmd": "brew install nodenv"
+      },
+      {
+        "name": "ruby-build",
+        "cmd": "brew install ruby-build"
+      },
+      {
+        "name": "rbenv",
+        "cmd": "brew install rbenv"
+      },
+      {
+        "name": "slack",
+        "cmd": "brew cask install slack"
+      },
+      {
+        "name": "teensy",
+        "cmd": "brew cask install teensy"
+      }
+    ]
+  }
+]

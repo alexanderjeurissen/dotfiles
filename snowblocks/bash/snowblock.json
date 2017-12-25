@@ -1,0 +1,12 @@
+[
+  {
+    "clean": [ "~" ]
+  },
+  {
+    "link": {
+      "~/.bash_profile": { "relink": true },
+      "~/.bashrc": { "relink": true },
+      "~/.profile": { "relink": true }
+    }
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "clean": [
+      "~",
+      "~/.config"
+    ]
+  },
+  {
+    "dependencies": [
+      { "name": "alacritty", "cmd": "brew install alacritty" }
+    ]
+  },
+  {
+    "link": {
+      "~/.config/alacritty/alacritty.yml": { "create": true, "relink": true },
+      "~/.inputrc": { "relink": true }
+    },
+    "shell": [
+      [ "tic ./xterm-256color-italic.tic", "add xterm-256color-italic to tic file" ]
+    ]
+  }
+]
