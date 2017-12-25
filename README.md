@@ -7,4 +7,4 @@ Feel free to use the scripts in this repository to fine tune your own dotfiles. 
 3. Custom zsh prompt.
 3. Tmux statusline
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/screenshots/nord.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/master/assets/screenshots/nord.png)

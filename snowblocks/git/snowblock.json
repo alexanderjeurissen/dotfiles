@@ -1,0 +1,23 @@
+[
+  {
+    "clean": ["~"]
+  },
+  {
+    "dependencies": [
+      { "name": "git", "cmd": "brew install git" }
+    ]
+  },
+  {
+    "link": {
+      "~/.gitconfig": {
+        "relink": true
+      },
+      "~/.gitaliases": {
+        "relink": true
+      },
+      "~/.gitignore": {
+        "relink": true
+      }
+    }
+  }
+]

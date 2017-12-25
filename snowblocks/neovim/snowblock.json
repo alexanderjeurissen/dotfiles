@@ -1,0 +1,52 @@
+[
+  {
+    "clean": [
+      "~/.config/nvim",
+      "~/.config/nvim/autoload",
+      "~/.config/nvim/after",
+      "~/.config/nvim/pack",
+      "~/.config/nvim/UltiSnips"
+    ]
+  },
+  {
+    "dependencies": [
+      { "name": "neovim", "cmd": "brew install neovim" },
+      { "name": "neovim", "cmd": "pip2 install neovim" },
+      { "name": "neovim", "cmd": "pip3 install neovim" },
+      { "name": "neovim", "cmd": "gem install neovim" },
+      { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" }
+    ]
+  },
+  {
+    "link": {
+      "~/.config/nvim/init.vim": { "create": true, "relink": true },
+      "~/.config/nvim/plugins.vim": { "create": true, "relink": true },
+      "~/.config/nvim/plugin_configuration.vim": { "create": true, "relink": true },
+      "~/.config/nvim/autoload": { "create": true, "relink": true },
+      "~/.config/nvim/after": { "create": true, "relink": true },
+      "~/.config/nvim/UltiSnips": { "create": true, "relink": true }
+    },
+    "shell": [
+      [
+        "mkdir -p ~/.config/nvim/undo",
+        "Create folder for undo files"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/UndoHistory",
+        "Create folder for UndoHistory"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/sessions",
+        "Create folder for vim sessions"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/pack/minpac/opt/minpac",
+        "Create folder structure for minpac vim plugin manager"
+      ],
+      [
+        "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
+        "Install/Update minpac(Vim plugin manager)"
+      ]
+    ]
+  }
+]
