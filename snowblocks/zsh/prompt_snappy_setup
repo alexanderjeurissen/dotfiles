@@ -1,5 +1,4 @@
 #/usr/bin/env zsh
-#vim: set foldlevel=0 foldmethod=marker 
 
 # Git hooks {{{
   ### Set highlighting based on dirty state
@@ -9,13 +8,15 @@
     local action_symbol
 
     if [[ -n $action ]]; then
-      if [[ "$action" == "rebase" ]]; then
+      if [[ "$action" == "rebase" ]] || [[ "$action" == "rebase-i" ]]; then
         action_symbol="%F{magenta}"
       elif [[ "$action" == "merge" ]]; then
-        action_symbol="%F{yellow}"
+        action_symbol="%F{red}"
+      else
+        action_symbol="${action}"
       fi
     else
-      action_symbol="%F{blue}"
+      action_symbol="%F{yellow}"
     fi 
 
 
@@ -24,20 +25,10 @@
     else
       hook_com[misc]="%U${action_symbol}"
     fi
-
-    # merge conflict: 
-    # Rebase: 
-    # Merge: 
   }
-
 # }}}
 
 _generate_prompt() {
-  # check that no command is currently running, 
-  # the preprompt will otherwise be rendered in the wrong place
-  #•
-  #›
-
   local prompt_content="${prompt_newline}"
   local prompt_sym
   local ok_color
@@ -61,11 +52,13 @@ _generate_prompt() {
   # add exit code based color to prompt symbol
   prompt_content+="%B%(?.%F{${ok_color}} ${prompt_sym} %f.%F{red} ${prompt_sym} %f)%b"
 
+  # Add vim mode indicator
+  prompt_content+="› "
+
   PROMPT="${(j..)prompt_content}"
 }
 
 _generate_rprompt() {
-  # store working_tree without the "x" prefix
   local rprompt_content
   local working_tree="${vcs_info_msg_1_}"
 
@@ -77,7 +70,35 @@ _generate_rprompt() {
     rprompt_content+="${vcs_info_msg_0_}"
   fi
 
-  RPROMPT="%F{8}${rprompt_content}%f"
+  RPROMPT="%F{blue}${rprompt_content}%f"
+}
+
+_snappy_keymap_select() {
+  [[ "$KEYMAP" == 'main' ]] && PROMPT="${PROMPT/·/›}"
+  [[ "$KEYMAP" == 'viins' ]] && PROMPT="${PROMPT/·/›}"
+  [[ "$KEYMAP" == 'vicmd' ]] && PROMPT="${PROMPT/›/·}"
+
+  zle reset-prompt
+  zle -R
+}
+
+_snappy_buffer_empty() {
+  if [ -z "$BUFFER" ]; then
+     echo -ne "\n \033[1m --- GIT:\033[0m \n"
+     git -c color.status=always status --ignore-submodules=all --short | less -XFR
+     echo -ne "\n \033[1m--- FILES:\033[0m \n"
+     CLICOLOR_FORCE=1 ls -C -G | less -XFR
+     echo -n "\n"
+
+    zle redisplay
+  else
+    zle accept-line
+  fi
+}
+
+_snappy_line_init() {
+  LAST_EXIT_CODE="$?"
+  zle reset-prompt
 }
 
 prompt_snappy_setup() {
@@ -108,7 +129,14 @@ prompt_snappy_setup() {
   add-zsh-hook precmd vcs_info
   add-zsh-hook precmd _generate_prompt # generate prompt
   add-zsh-hook precmd _generate_rprompt # generate prompt
+
+  zle -N zle-line-init _snappy_line_init
+  zle -N zle-keymap-select _snappy_keymap_select
+  zle -N buffer-empty _snappy_buffer_empty
+
+  bindkey -M main  "^M" buffer-empty
+  bindkey -M vicmd "^M" buffer-empty
 }
 
 prompt_snappy_setup "$@"
-## vim:ft=zsh
+# vim:ft=zsh set foldlevel=0 foldmethod=marker 

@@ -3,7 +3,7 @@
      # export TERM=screen-256color-italic
    else
      # tmux attach-session || exec tmux new-session;
-     # tmux attach-session || exec tmux new-session && exit;
+     tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -207,13 +207,6 @@ fi
   alias vi='nvim'
   alias v='nvim'
   alias vim='nvim'
-
-  # alias -s php=$EDITOR
-  # alias -s rb=$EDITOR
-  # alias -s txt=$EDITOR
-  # alias -s md=$EDITOR
-  # alias -s vim=$EDITOR
-  # alias -s java=$EDITOR
 # }}}
 
 # Aliases for Arcanist {{{
@@ -458,21 +451,4 @@ bindkey '^e' autosuggest-accept
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
-export PS1=$PS1'$([ -n "$TMUX" ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
-
-
-# Change cursor shape based on mode
-# SOURCE: http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
-# zle-keymap-select () {
-#     if [ "$TERM" = "xterm-256color" ]; then
-#         if [ $KEYMAP = vicmd ]; then
-#             # the command mode for vi
-#             echo -ne "\e[2 q"
-#         else
-#             # the insert mode for vi
-#             echo -ne "\e[4 q"
-#         fi
-#     fi
-# }
-
 # vim: foldmethod=marker:sw=2

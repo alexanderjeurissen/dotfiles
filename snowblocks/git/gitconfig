@@ -1,6 +1,6 @@
 [user]
   name = Alexander Jeurissen
-  email = alexanderjeurissen@gmail.com
+  email = 1220084+alexanderjeurissen@users.noreply.github.com
 [diff]
   tool = vim-diff-tool
 [difftool "vim-diff-tool"]
