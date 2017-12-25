@@ -38,8 +38,8 @@
         "cmd": "brew cask install slack"
       },
       {
-        "name": "teensy",
-        "cmd": "brew cask install teensy"
+        "name": "viscosity",
+        "cmd": "brew cask install viscosity"
       }
     ]
   }
