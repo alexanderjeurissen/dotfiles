@@ -8,7 +8,7 @@
 " PLUGIN_GROUP: ColorSchemes {{{
   " call minpac#add('morhetz/gruvbox')
   " call minpac#add('zefei/cake16')
-  " call minpac#add('ajmwagar/vim-deus')
+  call minpac#add('ajmwagar/vim-deus')
   call minpac#add('arcticicestudio/nord-vim')
   " call minpac#add('MaxSt/FlatColor')
 " }}}

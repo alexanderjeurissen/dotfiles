@@ -12,7 +12,7 @@ export LANG=en_US.UTF-8
 
 
 export PATH="$HOME/.bin:$PATH" # TODO: evaluate env var
-export PATH="/Users/alexanderjeurissen/.dotfiles/scripts:$PATH" # include my own scripts
+export PATH="/Users/alexanderjeurissen/.scripts:$PATH" # include my own scripts
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 

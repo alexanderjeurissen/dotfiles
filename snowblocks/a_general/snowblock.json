@@ -2,8 +2,16 @@
   {
     "dependencies": [
       {
+        "name": "xcode developer utilities",
+        "cmd": "xcode-select --install"
+      },
+      {
         "name": "go",
         "cmd": "brew install go"
+      },
+      {
+        "name": "terminal-notifier",
+        "cmd": "gem install terminal-notifier"
       },
       {
         "name": "coreutils",

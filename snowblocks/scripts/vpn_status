@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-if echo `ifconfig` | egrep 'inet 10' > /dev/null; then
+if echo `ifconfig` | egrep utun -A 1 | egrep 'inet 10' > /dev/null; then
   echo "#[bg=green, fg=black, bold]  VPN #[bg=default, fg=default, nobold]"
 else 
   echo "#[bg=red, fg=black, bold]  NO VPN #[bg=default, fg=default, nobold]"
