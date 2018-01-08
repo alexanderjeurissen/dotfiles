@@ -7,7 +7,8 @@
   },
   {
     "dependencies": [
-      { "name": "kak", "cmd": "brew install kak" }
+      { "name": "xcode developer utilities", "cmd": "xcode-select --install" },
+      { "name": "kakoune", "cmd": "brew install --HEAD kakoune" }
     ]
   },
   {

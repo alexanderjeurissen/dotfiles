@@ -8,23 +8,20 @@
     local action_symbol
 
     if [[ -n $action ]]; then
-      if [[ "$action" == "rebase" ]] || [[ "$action" == "rebase-i" ]]; then
-        action_symbol="%F{magenta}"
+      if [[ "$action" == "rebase" ]] || ; then
+        hook_com[misc]="%F{13}"
+      elif [[ "$action" == "rebase-i" ]]; then
+        hook_com[misc]="%F{13}"
       elif [[ "$action" == "merge" ]]; then
-        action_symbol="%F{red}"
-      else
-        action_symbol="${action}"
+        hook_com[misc]="%F{9}"
       fi
     else
-      action_symbol="%F{yellow}"
+      if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
+        hook_com[misc]="%F{10}"
+      else
+        hook_com[misc]="%F{11}"
+      fi
     fi 
-
-
-    if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
-      hook_com[misc]="${action_symbol}"
-    else
-      hook_com[misc]="%U${action_symbol}"
-    fi
   }
 # }}}
 
@@ -84,11 +81,14 @@ _snappy_keymap_select() {
 
 _snappy_buffer_empty() {
   if [ -z "$BUFFER" ]; then
-     echo -ne "\n \033[1m --- GIT:\033[0m \n"
-     git -c color.status=always status --ignore-submodules=all --short | less -XFR
-     echo -ne "\n \033[1m--- FILES:\033[0m \n"
-     CLICOLOR_FORCE=1 ls -C -G | less -XFR
-     echo -n "\n"
+    if [ -n "${vcs_info_msg_1_}" ]; then
+       echo -ne "\033[1m git status\033[0m \n"
+       git -c color.status=always status --ignore-submodules=all | less -XFR
+    fi
+
+    # echo -ne "\n \033[1m--- FILES:\033[0m \n"
+    # CLICOLOR_FORCE=1 ls -C -G | less -XFR
+    # echo -n "\n"
 
     zle redisplay
   else
@@ -96,10 +96,10 @@ _snappy_buffer_empty() {
   fi
 }
 
-_snappy_line_init() {
-  LAST_EXIT_CODE="$?"
-  zle reset-prompt
-}
+# _snappy_line_init() {
+#   LAST_EXIT_CODE="$?"
+#   zle reset-prompt
+# }
 
 prompt_snappy_setup() {
   # prevent percentage showing up
@@ -130,12 +130,13 @@ prompt_snappy_setup() {
   add-zsh-hook precmd _generate_prompt # generate prompt
   add-zsh-hook precmd _generate_rprompt # generate prompt
 
-  zle -N zle-line-init _snappy_line_init
+  # zle -N zle-line-init _snappy_line_init
   zle -N zle-keymap-select _snappy_keymap_select
   zle -N buffer-empty _snappy_buffer_empty
 
   bindkey -M main  "^M" buffer-empty
   bindkey -M vicmd "^M" buffer-empty
+  bindkey -M viins  "^M" buffer-empty
 }
 
 prompt_snappy_setup "$@"

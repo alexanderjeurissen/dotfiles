@@ -46,7 +46,6 @@
   set modeline                                       " automatically settings options based on file comment
   set confirm                                        " Makes operations like qa ask for confirmation.
   set t_vb=                                          " Disable visual bell.
-  set belloff=all                                    " no noises!
   set cursorline cursorcolumn                        " Enable cursorline and cursorcolumn by default
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right

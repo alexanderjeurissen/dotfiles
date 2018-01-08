@@ -2,8 +2,8 @@
    if [ -n "$TMUX" ]; then
      # export TERM=screen-256color-italic
    else
-     # tmux attach-session || exec tmux new-session;
-     tmux attach-session || exec tmux new-session && exit;
+     tmux attach-session || exec tmux new-session;
+     # tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -111,8 +111,8 @@ fi
 # }}}
 
 # aliasses {{{
-  alias l="ls -AGC"
-  alias ls="ls -G"
+  alias l="LC_COLLATE=C \gls -lAh --color=auto --time-style="+%Y-%m-%d +%H:%M:%S" --group-directories-first"
+  alias ls="\gls --color=auto --group-directories-first"
   alias rls="cd && cd - && ls -G"
   alias fixtestdb="bin/rake db:test:prepare"
   alias up="git up && bundle && yarn && migrate"
@@ -257,7 +257,7 @@ fi
 # Aliases for directories {{{
   alias h1="cd ~/git/hackerone/"
   alias payments="cd ~/git/hackerone-payments/"
-  alias dotfiles="cd ~/.dotfiles/"
+  alias dotfiles="cd ~/git/dotfiles/"
 # }}}
 
 # Aliases for foreman and psql {{{
@@ -271,7 +271,7 @@ fi
 # }}}
 
 # Alias for clearing the screen
-alias clearTmux="clear && printf '\e[3J'"
+alias cl="clear && printf '\e[3J'"
 
 # set nvim as defaut editor
 export EDITOR="nvim"
