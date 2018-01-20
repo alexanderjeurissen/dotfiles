@@ -41,16 +41,12 @@ function! statusline#SpellFlag()
 endfunction
 
 function! statusline#SyntaxFlag()
- if has_key(g:minpac#pluglist, 'ale')
-   let l:res = ale#statusline#Status()
-   if l:res ==# 'OK'
-     return ''
-   else
-     return '  '
-   end
- else
+  let l:res = ale#statusline#Status()
+  if l:res ==# 'OK'
    return ''
- endif
+  else
+   return '  '
+  end
 endfunction
 
 function! statusline#HardTimeFlag()
