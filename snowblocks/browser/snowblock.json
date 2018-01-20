@@ -9,7 +9,7 @@
         "cmd": "brew cask install firefox"
       },
       {
-        "name": "chrome",
+        "name": "google-chrome",
         "cmd": "brew cask install google-chrome"
       }
     ]

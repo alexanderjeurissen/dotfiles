@@ -2,8 +2,8 @@
    if [ -n "$TMUX" ]; then
      # export TERM=screen-256color-italic
    else
-     tmux attach-session || exec tmux new-session;
-     # tmux attach-session || exec tmux new-session && exit;
+     # tmux attach-session || exec tmux new-session;
+     tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -123,7 +123,7 @@ fi
   alias console="bin/rails console"
   alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
   alias migrate_redo="bin/rake db:migrate:redo VERSION="
-  alias r="bin/rails"
+  alias chrome="CAPYBARA_DRIVER=\"selenium\""
   alias routes="rails_routes | fzf | pbcopy"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
@@ -146,6 +146,11 @@ fi
   alias eslintspecific="yarn run eslint:specific -- --fix"
   alias yarn_global_add='yarn global add --global-folder=`yarn global bin` '
   alias yarn_global_remove='yarn global remove --global-folder=`yarn global bin` '
+  alias urldecode='python -c "import sys, urllib as ul; \
+    print ul.unquote_plus(sys.argv[1])"'
+
+  alias urlencode='python -c "import sys, urllib as ul; \
+    print ul.quote_plus(sys.argv[1])"'
 # }}}
 
 # Alias for hackerij {{{
@@ -281,9 +286,8 @@ export EDITOR="nvim"
 # --ignore: Do respect .gitignore, etc...
 # --hidden: Search hidden files and folders
 # --follow: Follow symlinks
-# --no-messages: don't show error messages in the output
   # export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  export FZF_DEFAULT_COMMAND='rg --files --ignore-case --hidden --follow --no-messages'
+  export FZF_DEFAULT_COMMAND='rg --files --ignore-case --hidden --follow'
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

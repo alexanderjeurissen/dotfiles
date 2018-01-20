@@ -1,5 +1,5 @@
 " PLUGIN_GROUP: AutoCompletion / language servers {{{
-  call minpac#add('SirVer/ultisnips')
+  " call minpac#add('SirVer/ultisnips')
   call minpac#add('roxma/nvim-completion-manager')
   call minpac#add('autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' })
 " }}}

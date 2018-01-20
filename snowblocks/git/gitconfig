@@ -25,7 +25,8 @@
 
   ;files changed between two commits
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
-  up = pull --rebase --autostash
+	up = pull --rebase --autostash
+	; up = pull --rebase --autostash
 
 [merge]
   tool = vimdiff
@@ -44,3 +45,9 @@
   pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
+[git-up "rebase"]
+	auto = false
+[git-up "bundler"]
+	check = true
+	rbenv = true
+	autoinstall = true
