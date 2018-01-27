@@ -1,1 +1,2 @@
-set keywordprg=mdn
+" set keywordprg=mdn
+
