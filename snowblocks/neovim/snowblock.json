@@ -5,14 +5,15 @@
       "~/.config/nvim/autoload",
       "~/.config/nvim/after",
       "~/.config/nvim/pack",
+      "~/.config/nvim/.pack",
       "~/.config/nvim/UltiSnips"
     ]
   },
   {
     "dependencies": [
       { "name": "neovim", "cmd": "brew install neovim" },
-      { "name": "neovim", "cmd": "pip2 install neovim" },
-      { "name": "neovim", "cmd": "pip3 install neovim" },
+      { "name": "neovim", "cmd": "pip2 install --upgrade neovim" },
+      { "name": "neovim", "cmd": "pip3 install --upgrade neovim" },
       { "name": "neovim", "cmd": "gem install neovim" },
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" }
     ]
@@ -24,7 +25,13 @@
       "~/.config/nvim/plugin_configuration.vim": { "create": true, "relink": true },
       "~/.config/nvim/autoload": { "create": true, "relink": true },
       "~/.config/nvim/after": { "create": true, "relink": true },
-      "~/.config/nvim/UltiSnips": { "create": true, "relink": true }
+      "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
+      "~/.config/nvim/.pack": {
+        "create": true,
+        "relink": true,
+        "path": "vim_pack"
+
+      }
     },
     "shell": [
       [
@@ -38,14 +45,6 @@
       [
         "mkdir -p ~/.config/nvim/sessions",
         "Create folder for vim sessions"
-      ],
-      [
-        "mkdir -p ~/.config/nvim/pack/minpac/opt/minpac",
-        "Create folder structure for minpac vim plugin manager"
-      ],
-      [
-        "git -C ~/.config/nvim/pack/minpac/opt/minpac pull || git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac",
-        "Install/Update minpac(Vim plugin manager)"
       ]
     ]
   }

@@ -124,6 +124,7 @@ fi
   alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
   alias migrate_redo="bin/rake db:migrate:redo VERSION="
   alias chrome="CAPYBARA_DRIVER=\"selenium\""
+  alias rerun="bundle exec cucumber -p rerun"
   alias routes="rails_routes | fzf | pbcopy"
   alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'

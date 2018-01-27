@@ -5,4 +5,5 @@ config/nvim/UndoHistory/
 config/nvim/.netrwhist
 config/nvim/plugged/
 config/nvim/spell/
+__pycache__
 *~

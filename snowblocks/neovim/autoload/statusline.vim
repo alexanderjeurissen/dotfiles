@@ -4,7 +4,7 @@ function! statusline#Init()
   let statusline_items .= '%t'
   let statusline_items .= '%='
   let statusline_items .= '%{statusline#PasteFlag()}'
-  let statusline_items .= '%{statusline#SyntaxFlag()}'
+  "let statusline_items .= '%{statusline#SyntaxFlag()}'
   let statusline_items .= '%{statusline#SpellFlag()}'
   let statusline_items .= '%{statusline#HardTimeFlag()}'
   let statusline_items .= '%{statusline#BranchFlag()}'
@@ -41,16 +41,12 @@ function! statusline#SpellFlag()
 endfunction
 
 function! statusline#SyntaxFlag()
- if has_key(g:minpac#pluglist, 'ale')
-   let l:res = ale#statusline#Status()
-   if l:res ==# 'OK'
-     return ''
-   else
-     return '  '
-   end
- else
+  let l:res = ale#statusline#Status()
+  if l:res ==# 'OK'
    return ''
- endif
+  else
+   return '  '
+  end
 endfunction
 
 function! statusline#HardTimeFlag()

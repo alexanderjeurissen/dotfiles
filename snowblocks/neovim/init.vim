@@ -1,4 +1,5 @@
 " SETTINGS: General {{{
+  set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
   set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
   set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
   set showmode                                       " show mode in bottom-left corner
@@ -286,20 +287,6 @@
 
     autocmd User FzfStatusLine call fzf#Statusline()
   augroup END
-" }}}
-
-
-" PLUGINS: Initialise minpac and plugins {{{
-packadd minpac
-
-call minpac#init()
-call minpac#add('k-takata/minpac', {'type': 'opt'}) " allow minpac to manage itself
-
-command! PackUpdate call minpac#update()
-command! PackClean call minpac#clean()
-
-source $HOME/.config/nvim/plugins.vim
-source $HOME/.config/nvim/plugin_configuration.vim
 " }}}
 
 " EXTRA: Include local vim config {{{
