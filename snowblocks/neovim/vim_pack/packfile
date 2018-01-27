@@ -231,10 +231,10 @@
   name: "tpope/vim-unimpaired"
   opt: false
 - 
-  category: editing
+  category: disabled
   local: false
   name: w0rp/ale
-  opt: false
+  opt: true
 - 
   category: colorschemes
   local: false
