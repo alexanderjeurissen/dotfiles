@@ -15,14 +15,17 @@
       { "name": "neovim", "cmd": "pip2 install --upgrade neovim" },
       { "name": "neovim", "cmd": "pip3 install --upgrade neovim" },
       { "name": "neovim", "cmd": "gem install neovim" },
-      { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" }
+      { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
+      {
+        "name": "yarn global add javascript-typescript-langserver",
+        "cmd": "gem install language_server"
+      },
+      { "name": "language_server", "cmd": "gem install language_server" }
     ]
   },
   {
     "link": {
       "~/.config/nvim/init.vim": { "create": true, "relink": true },
-      "~/.config/nvim/plugins.vim": { "create": true, "relink": true },
-      "~/.config/nvim/plugin_configuration.vim": { "create": true, "relink": true },
       "~/.config/nvim/autoload": { "create": true, "relink": true },
       "~/.config/nvim/after": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
