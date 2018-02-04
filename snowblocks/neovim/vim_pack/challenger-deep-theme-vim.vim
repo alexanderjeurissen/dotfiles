@@ -1,5 +1,4 @@
 function! ActivateColorScheme()
  set background=dark
- colorscheme deus
- hi! link QuickFixLine DiffText
+ colorscheme challenger_deep
 endfunction
