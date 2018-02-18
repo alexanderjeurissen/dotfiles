@@ -28,6 +28,8 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # Java settings {{{
   export JAVA_HOME=`/usr/libexec/java_home`
+  export MAVENPATH=$HOME/.maven
+  export PATH=$PATH:$MAVENPATH/bin
 # }}}
 
 # FZF settings {{{
