@@ -59,6 +59,11 @@
   name: "christoomey/vim-tmux-navigator"
   opt: false
 - 
+  category: clojure
+  local: false
+  name: "clojure-vim/acid.nvim"
+  opt: true
+- 
   category: editing
   local: false
   name: godlygeek/tabular
@@ -175,6 +180,11 @@
   category: navigation
   local: false
   name: "tpope/vim-eunuch"
+  opt: false
+- 
+  category: clojure
+  local: false
+  name: "tpope/vim-fireplace"
   opt: false
 - 
   category: version_control
