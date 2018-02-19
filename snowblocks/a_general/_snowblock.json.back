@@ -42,6 +42,30 @@
         "cmd": "brew install rbenv"
       },
       {
+        "name": "clojure",
+        "cmd": "brew install clojure"
+      },
+      {
+        "name": "leiningen",
+        "cmd": "leiningen"
+      },
+      {
+        "name": "emacs-plus",
+        "cmd": "brew install emacs-plus"
+      },
+      {
+        "name": "highlight",
+        "cmd": "brew install highlight"
+      },
+      {
+        "name": "ranger",
+        "cmd": "brew install ranger"
+      },
+      {
+        "name": "unrar",
+        "cmd": "brew install unrar"
+      },
+      {
         "name": "slack",
         "cmd": "brew cask install slack"
       },
