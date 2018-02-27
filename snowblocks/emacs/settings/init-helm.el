@@ -26,12 +26,12 @@
   (setq helm-swoop-split-with-multiple-windows t)
 
   ;; evil mappings
-  (evil-leader/set-key
-    "f"  'helm-find-files
-    "b"  'switch-to-buffer
-    "/"  'helm-ag
-    "pf" 'helm-projectile-find-files
-    "/"  'helm-projectile-ag
-    "x"  'helm-M-x))
-
+  ; (evil-leader/set-key
+  ;   "f"  'helm-find-files
+  ;   "b"  'switch-to-buffer
+  ;   "/"  'helm-ag
+  ;   "pf" 'helm-projectile-find-files
+  ;   "/"  'helm-projectile-ag
+  ;   "x"  'helm-M-x))
+)
 (provide 'init-helm)

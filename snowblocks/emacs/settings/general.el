@@ -1,24 +1,14 @@
-(use-package ace-jump-mode
-  :ensure t
-  :init
-  (autoload 'ace-jump-mode "ace-jump-mode" nil t)
-  (evil-leader/set-key "<SPC>" 'ace-jump-mode))
+; (use-package ace-jump-mode
+;   :ensure t
+;   :init
+;   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
+;   (evil-leader/set-key "<SPC>" 'ace-jump-mode))
 
-(use-package ace-window
-  :ensure t
-  :config
-  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?i ?d)))
+; (use-package ace-window
+;   :ensure t
+;   :config
+;   (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?i ?d)))
 
-;; (use-package switch-window
-;;   :ensure t
-;;   :config
-;;   (defcustom switch-window-qwerty-shortcuts
-;;     '("a" "o" "e" "u" "i" "d" "h" "t" "n" "s" "1" "2" "3" "4" "5" "6")
-;;     "hack take make it work with my custom keyboard that is hard coded dvorak"
-;;     :type 'list
-;;     :group 'switch-window)
-;;   (setq switch-window-shortcut-style 'qwerty))
-  
 (use-package golden-ratio
   :ensure t
   :config
@@ -64,7 +54,7 @@
  (setq company-selection-wrap-around t)
  (define-key company-active-map [tab] 'company-complete)
  (define-key company-active-map (kbd "C-n") 'company-select-next)
- (define-key company-active-map (kbd "C-p") 'company-select-previous))   
+ (define-key company-active-map (kbd "C-p") 'company-select-previous))
 
 (use-package yasnippet
   :ensure t)

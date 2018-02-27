@@ -22,8 +22,8 @@
   (package-install 'use-package))
 
 ;; specify font for all unicode characters
-(when (member "SauceCodePro Nerd Font" (font-family-list))
-  (set-fontset-font t 'unicode "SauceCodePro Nerd Font-24" nil 'prepend))
+(when (member "FuraCode Nerd Font" (font-family-list))
+  (set-fontset-font t 'unicode "FuraCode Nerd Font-24" nil 'prepend))
 
 ;;;;;;;;;;;; General options ;;;;;;;;;;;;;;;;;;;
 
@@ -85,55 +85,40 @@
 (use-package solarized-theme
   :ensure t
   :config
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+  (setq solarized-high-contrast-mode-line t)
   (load-theme 'solarized-light t t)
-  (load-theme 'solarized-dark t t))
-
-(use-package purple-haze-theme
-  :ensure t
-  :config
-  (load-theme 'purple-haze t t))
-
-(use-package atom-one-dark-theme
-  :ensure t
-  :config
-  (load-theme 'atom-one-dark t t))
-
-(use-package spacemacs-theme
-  :ensure t
-  :config
-  (load-theme 'spacemacs-dark t t)
-  (load-theme 'spacemacs-light t))
+  (load-theme 'solarized-dark t))
 
 ;; custom configuration
 (require 'start-server)
 (require 'general)
 (require 'writing)
 (require 'init-org)
-(require 'init-powerline)
+;;(require 'init-powerline)
 (require 'init-magit)
 (require 'ruby)
 (require 'web)
-(require 'init-evil)
+;; (require 'init-evil)
 (require 'init-ag)
 (require 'init-ivy)
 ;; (require 'init-ido)
-;; (require 'init-helm)
-(require 'init-shell)
-
-;;;;;;;;;;;; Customization variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "nil" :slant normal :weight normal :height 181 :width normal)))))
+;;(require 'init-helm)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
+ '(package-selected-packages
    (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(ivy-mode t))
+    (exec-path-from-shell ivy-hydra counsel-osx-app counsel-projectile counsel ivy yasnippet yard-mode writeroom-mode wgrep-ag web-mode wc-mode use-package solarized-theme smex smart-mode-line rspec-mode rainbow-mode purple-haze-theme projectile-rails org-bullets nyan-mode golden-ratio flycheck evil-org evil-magit diff-hl company atom-one-dark-theme ag))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
