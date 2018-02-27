@@ -2,8 +2,8 @@
    if [ -n "$TMUX" ]; then
      # export TERM=screen-256color-italic
    else
-     # tmux attach-session || exec tmux new-session;
-     tmux attach-session || exec tmux new-session && exit;
+     tmux attach-session || exec tmux new-session;
+     #tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -451,9 +451,6 @@ bindkey '^e' autosuggest-accept
       fi
     done
   }
-
 # }}}
-export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
-
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 # vim: foldmethod=marker:sw=2
