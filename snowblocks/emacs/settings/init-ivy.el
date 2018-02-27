@@ -35,16 +35,16 @@
   (use-package ivy-hydra
     :ensure t)
 
-  (global-key-binding (kbd "/") 'swiper)   ;; I prefer the way swiper searches compared to evil
-  (global-key-binding (kbd "C-s") 'swiper) ;; I prefer the way swiper searches compared to I-search
+  (global-set-key (kbd "C-s") 'swiper) ;; Use swiper instead of I-search
+  (global-set-key (kbd "M-x") 'counsel-M-x) ;; Use Ivy for M-x
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file) ;; Use Ivy for finding files
+  ; (evil-leader/set-key
+  ;   "b"  'ivy-switch-buffer      ;; Switch to another buffer
+  ;   "f"  'counsel-find-file      ;; find file
+  ;   "/"  'counsel-ag             ;; use ag in none git repositories
 
-  (evil-leader/set-key
-    "b"  'ivy-switch-buffer      ;; Switch to another buffer
-    "f"  'counsel-find-file      ;; find file
-    "/"  'counsel-ag             ;; use ag in none git repositories
-
-    "pf" 'projectile-find-file   ;; find file in git project
-    "p/" 'counsel-git-grep       ;; use git grep to locate file
-    "x"  'counsel-M-x))
-
+  ;   "pf" 'projectile-find-file   ;; find file in git project
+  ;   "p/" 'counsel-git-grep       ;; use git grep to locate file
+  ;   "x"  'counsel-M-x))
+  )
 (provide 'init-ivy)
