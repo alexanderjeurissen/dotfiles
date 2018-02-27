@@ -28,7 +28,7 @@
   category: colorschemes
   local: false
   name: "ajmwagar/vim-deus"
-  opt: false
+  opt: true
 - 
   category: frontend
   for: 
@@ -82,6 +82,11 @@
   category: navigation
   local: false
   name: "justinmk/vim-sneak"
+  opt: false
+- 
+  category: colorschemes
+  local: false
+  name: "lifepillar/vim-solarized8"
   opt: false
 - 
   category: editing
