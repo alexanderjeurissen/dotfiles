@@ -15,7 +15,7 @@
   set cc=+1                                          " Highlight first column after 'textwidth'
   " set iskeyword-=_                                   " Treat underscore as a word boundary.
 
-  set list
+  set nolist
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
   set fillchars=vert:\                               " Strings in statuslines and vert separators.
 
