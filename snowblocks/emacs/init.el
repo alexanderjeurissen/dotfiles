@@ -23,8 +23,7 @@
 
 ;; specify font for all unicode characters
 (when (member "FuraCode Nerd Font" (font-family-list))
-  (set-fontset-font t 'unicode "FuraCode Nerd Font-24" nil 'prepend)
-  (set-fontset-font t 'default "FuraCode Nerd Font-14" nil 'prepend))
+  (set-fontset-font t 'unicode "FuraCode Nerd Font-24" nil 'prepend))
 
 ;;;;;;;;;;;; General options ;;;;;;;;;;;;;;;;;;;
 
@@ -116,7 +115,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ivy-rich exec-path-from-shell ivy-hydra counsel-osx-app counsel-projectile counsel ivy yasnippet yard-mode writeroom-mode wgrep-ag web-mode wc-mode use-package solarized-theme smex smart-mode-line rspec-mode rainbow-mode purple-haze-theme projectile-rails org-bullets nyan-mode golden-ratio flycheck evil-org evil-magit diff-hl company atom-one-dark-theme ag))))
+    (swiper ivy-rich exec-path-from-shell ivy-hydra counsel-osx-app counsel-projectile counsel ivy yasnippet yard-mode writeroom-mode wgrep-ag web-mode wc-mode use-package solarized-theme smex smart-mode-line rspec-mode rainbow-mode purple-haze-theme projectile-rails org-bullets nyan-mode golden-ratio flycheck evil-org evil-magit diff-hl company atom-one-dark-theme ag))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
