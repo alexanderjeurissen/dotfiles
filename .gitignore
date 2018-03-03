@@ -6,4 +6,5 @@ config/nvim/.netrwhist
 config/nvim/plugged/
 config/nvim/spell/
 __pycache__/
+*.orig
 *~
