@@ -94,6 +94,11 @@
   name: "machakann/vim-highlightedyank"
   opt: false
 - 
+  category: editing
+  local: false
+  name: "maxbrunsfeld/vim-emacs-bindings"
+  opt: false
+- 
   category: navigation
   local: false
   name: "mhinz/vim-grepper"
