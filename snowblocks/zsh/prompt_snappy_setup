@@ -84,6 +84,7 @@ _snappy_buffer_empty() {
     if [ -n "${vcs_info_msg_1_}" ]; then
        echo -ne "\033[1m git status\033[0m \n"
        git -c color.status=always status --ignore-submodules=all | less -XFR
+       git -c color.status=always lg -3 | less -XFR
     fi
 
     # echo -ne "\n \033[1m--- FILES:\033[0m \n"
