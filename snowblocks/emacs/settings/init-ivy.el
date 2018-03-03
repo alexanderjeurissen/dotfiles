@@ -57,9 +57,7 @@
     :diminish counsel-mode
     :bind (("M-x"     . counsel-M-x)
            ("C-h f"   . counsel-describe-function)
-           ("C-h v"   . counsel-describe-variable)
-           ("C-h el" . counsel-find-library)
-           ("C-h eu" . counsel-unicode-char))
+           ("C-h v"   . counsel-describe-variable))
     :config
     (use-package counsel-projectile ;; Use counsel with projectile
       :ensure t)
