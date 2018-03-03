@@ -86,105 +86,34 @@ render_timer: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: true
 
-# # Colors (Gruvbox)
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x353535'
-#     foreground: '0xefe1bf'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0xffffff'
-#     cursor: '0xc7c7c7'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x353535'
-#     red:     '0xd83925'
-#     green:   '0xa8a521'
-#     yellow:  '0xe0a82a'
-#     blue:    '0x54969a'
-#     magenta: '0xc07998'
-#     cyan:    '0x7aab7d'
-#     white:   '0xc9bba4'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x8f8277'
-#     red:     '0xfe6143'
-#     green:   '0xc4c431'
-#     yellow:  '0xfcc73c'
-#     blue:    '0x94b3a8'
-#     magenta: '0xdd9aab'
-#     cyan:    '0x9ec98e'
-#     white:   '0xefe1bf'
-
-# # Colors (Deus) {
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x2C323B'
-#     foreground: '0xEBDAB2'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   # cursor:
-#   #   text: '0x'
-#   #   cursor: '0x'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x2C323B'
-#     red:     '0xcc241d'
-#     green:   '0x98971a'
-#     yellow:  '0xd79921'
-#     blue:    '0x458588'
-#     magenta: '0xb16286'
-#     cyan:    '0x689d6a'
-#     white:   '0xd3d3d3'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x2C323B'
-#     red:     '0xfb4934'
-#     green:   '0x98C379'
-#     yellow:  '0xfabd2f'
-#     blue:    '0x83a598'
-#     magenta: '0xC678DD'
-#     cyan:    '0x8ec07c'
-#     white:   '0xEBDAB2'
-# # }
-
-# Colors (Nord) {
+# Colors (Solarized Dark)
 colors:
+  # Default colors
   primary:
-    background: '0x2E3440'
-    foreground: '0xD8DEE9'
+    background: '0x002b36'
+    foreground: '0x839496'
 
-  cursor:
-    text: '0x000000'
-    cursor: '0xD8DEE9'
-
+  # Normal colors
   normal:
-    black: '0x3B4252'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x88C0D0'
-    white: '0xE5E9F0'
+    black:   '0x073642'
+    red:     '0xdc322f'
+    green:   '0x859900'
+    yellow:  '0xb58900'
+    blue:    '0x268bd2'
+    magenta: '0xd33682'
+    cyan:    '0x2aa198'
+    white:   '0xeee8d5'
 
+  # Bright colors
   bright:
-    black: '0x4C566A'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x8FBCBB'
-    white: '0xECEFF4'
-# }
+    black:   '0x002b36'
+    red:     '0xcb4b16'
+    green:   '0x586e75'
+    yellow:  '0x657b83'
+    blue:    '0x839496'
+    magenta: '0x6c71c4'
+    cyan:    '0x93a1a1'
+    white:   '0xfdf6e3'
 
 # Visual Bell
 #
