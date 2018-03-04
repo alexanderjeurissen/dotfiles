@@ -1,0 +1,2 @@
+setlocal nofoldenable
+setlocal foldmethod=manual

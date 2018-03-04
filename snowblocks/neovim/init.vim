@@ -39,9 +39,9 @@
   set splitright                                     " Open new split panes at rightmost position
   set inccommand=nosplit                             " Show visual indication when using substitute.
   set nofoldenable                                   " collapse all folds.
+  set foldmethod=syntax                              " Fold on the syntax
   set foldcolumn=0                                   " Don't indicate fold open/closed (redundant info)
   set foldlevel=10                                   " Autofold nothing by default
-  set foldmethod=syntax                              " Fold on the syntax
   set foldnestmax=1                                  " Only fold outer functions
 
   set modeline                                       " automatically settings options based on file comment
@@ -58,7 +58,6 @@
   let python_host_prog = "python"
 " }}}
 
-
 " SETTINGS: statusline {{{
   set laststatus=2
   set guioptions-=e
@@ -66,11 +65,9 @@
   set statusline=%!statusline#Init()
 " }}}
 
-
 " SETTINGS: terminal {{{
   tnoremap <leader><ESC> <C-\><C-n>
 " }}}
-
 
 " SETTINGS: Colorscheme {{{
   if (has("termguicolors"))
@@ -90,6 +87,16 @@
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 
     command! -nargs=+ -complete=file -bar Rg grep! <args>|cw
+  endif
+" }}}
+
+" SETTINGS: DiffMode {{{
+  if &diff
+    set nolist
+    set nocursorcolumn
+    set nocursorline
+    set conceallevel=0
+    set colorcolumn=0
   endif
 " }}}
 
@@ -113,7 +120,6 @@
   " Open highlighted text with default program
   vnoremap o :call general#ExecVisualSelection()<cr>
 " }}}
-
 
 " KEYBINDINGS: Editing {{{
   " Macro related mappings
@@ -154,11 +160,7 @@
   vnoremap > >gv
 " }}}
 
-
 " KEYBINDINGS: Navigation/search {{{
-  " Buffer switching / searching
-  nnoremap H :bprevious<CR>
-  nnoremap L :bnext<CR>
   nnoremap gb :Buffers<CR>
 
   " Go to previous and next item in quickfix list
@@ -177,6 +179,13 @@
   nmap <up> <C-w>5+
   nmap <down> <C-w>5-
   nmap <right> <C-w>5>
+
+  " NOTE: disable arrows and BS in insert mode
+  imap <left> <nop>
+  imap <up> <nop>
+  imap <down> <nop>
+  imap <right> <nop>
+  imap <bs> <nop>
 
   " Replace H and L
   nnoremap zh H
@@ -201,7 +210,6 @@
   nnoremap } }zz
   nnoremap { {zz
 " }}}
-
 
 " KEYBINDINGS: File manipulation {{{
   " Save
@@ -230,7 +238,6 @@
   " cd to the directory of the current buffer
   map <Leader>cd :lcd %:p:h<CR>:pwd<CR>
 " }}}
-
 
 " AUTOCMD: General {{{
   augroup ALEXANDER_GENERAL
@@ -262,9 +269,6 @@
     autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
     autocmd BufRead,BufNewFile *.hbs set filetype=handlebars.html
 
-    " Add javascript highlighting when embeded in HTML file
-    autocmd BufRead,BufNewFile *.html set filetype=html.javascript
-
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")
 
@@ -274,10 +278,6 @@
       \ |   unlet! b:ftdetect
       \ |   filetype detect
       \ | endif
-
-    " Fold settings {{{
-      autocmd FileType sql setl nofoldenable foldmethod=manual
-    " }}}
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
@@ -295,4 +295,4 @@
   endif
 " }}}
 
-" vim: foldmethod=marker:sw=2
+" vim: foldmethod=marker:sw=2:foldlevel=10
