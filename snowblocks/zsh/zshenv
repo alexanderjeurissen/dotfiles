@@ -10,7 +10,6 @@ export LANG=en_US.UTF-8
   export PATH="/usr/local/sbin:$PATH"
 # }}}
 
-
 export PATH="$HOME/.bin:$PATH" # TODO: evaluate env var
 export PATH="/Users/alexanderjeurissen/.scripts:$PATH" # include my own scripts
 export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
