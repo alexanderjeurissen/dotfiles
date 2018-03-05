@@ -13,7 +13,7 @@ fi
 # ! [ -f 'bin/cucumber' ] && 
 cucumber_command='bundle exec cucumber' 
 # ! [ -f 'bin/rspec' ] && 
-rspec_command='bundle exec rspec --color --fail-fast' 
+rspec_command='bundle exec rspec --color' 
 
 if [[ $file_path == *.feature ]]; then
   $cucumber_command $spec
