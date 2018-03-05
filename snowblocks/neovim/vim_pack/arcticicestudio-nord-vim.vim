@@ -1,3 +1,3 @@
 function! ActivateColorScheme()
-   colorscheme nord
+  colorscheme nord
 endfunction

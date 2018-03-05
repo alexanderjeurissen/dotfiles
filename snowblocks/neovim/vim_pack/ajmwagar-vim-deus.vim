@@ -1,20 +1,20 @@
 function! ActivateColorScheme()
- set background=dark
- colorscheme deus
- hi! VertSplit guibg=#242a32
- hi! StatusLine guifg=#242a32 guibg=#ebdab2
- hi! StatusLineNC guifg=#242a32 guibg=#ebdab2
- hi! CursorLineNr guibg=#242a32 guifg=#ebdab2
+  set background=dark
+  colorscheme deus
+  highlight! VertSplit guibg=#242a32
+  highlight! StatusLine guifg=#242a32 guibg=#ebdab2
+  highlight! StatusLineNC guifg=#242a32 guibg=#ebdab2
+  highlight! CursorLineNr guibg=#242a32 guifg=#ebdab2
 
- hi! SignColumn guibg=#242a32
- hi! SignifySignAdd guibg=#242a32 guifg=#99c379
- hi! SignifySignDelete guibg=#242a32 guifg=#fb4733
- hi! SignifySignChange guibg=#242a32 guifg=#8ec07b
+  highlight! SignColumn guibg=#242a32
+  highlight! SignifySignAdd guibg=#242a32 guifg=#99c379
+  highlight! SignifySignDelete guibg=#242a32 guifg=#fb4733
+  highlight! SignifySignChange guibg=#242a32 guifg=#8ec07b
 
- hi! AleWarningSign guibg=#242a32 guifg=#ebdab2
+  highlight! AleWarningSign guibg=#242a32 guifg=#ebdab2
 
- hi! CursorLine guibg=#292f37
- hi! ColorColumn guibg=#292f37
- " hi! link WhiteSpace AleErrorSign
- hi! link QuickFixLine DiffText
+  highlight! CursorLine guibg=#292f37
+  highlight! ColorColumn guibg=#292f37
+  " highlight! link WhiteSpace AleErrorSign
+  highlight! link QuickFixLine DiffText
 endfunction
