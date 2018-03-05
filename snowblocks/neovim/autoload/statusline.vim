@@ -12,16 +12,6 @@ function! statusline#Init()
   return statusline_items
 endfunction
 
-function! statusline#WintabsInfo()
-  if exists("w:wintabs_buflist")
-    let current_buffer_index = index(w:wintabs_buflist, bufnr('%'))+1
-    let wintab_buffers_count = len(w:wintabs_buflist)
-    return "  ".current_buffer_index.":".wintab_buffers_count."│"
-  else
-    return ''
-  endif
-endfunction
-
 function! statusline#FileInfoFlag()
   if &readonly
     return '  '

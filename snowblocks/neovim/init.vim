@@ -79,7 +79,7 @@
   endif
 
   function! ActivateColorScheme()
-    colo desert " fallback incase no colorscheme plugin is installed
+    colorscheme desert " fallback incase no colorscheme plugin is installed
   endfunction
 " }}}
 
@@ -252,7 +252,7 @@
     " inside an event handler (happens when dropping a file on gvim).
     autocmd BufReadPost *
           \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-          \   exe "normal g`\"" |
+          \   execute "normal g`\"" |
           \ endif
 
     " Disable linting and syntax highlighting for large files
@@ -271,6 +271,7 @@
     autocmd BufRead,BufNewFile Appraisals set filetype=ruby
 
     " Add html highlighting when editing rails views & handlebar templates
+    autocmd BufRead,BufNewFile *.html set filetype=html.javascript
     autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
     autocmd BufRead,BufNewFile *.hbs set filetype=handlebars.html
 

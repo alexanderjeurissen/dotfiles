@@ -1,6 +1,6 @@
 function! terminal#Settings()
-  setl nonumber
-  setl norelativenumber
-  setl nocursorline
-  setl nocursorcolumn
+  setlocal nonumber
+  setlocal norelativenumber
+  setlocal nocursorline
+  setlocal nocursorcolumn
 endfunction

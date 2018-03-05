@@ -4,7 +4,7 @@ function! general#RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'))
   if new_name != '' && new_name != old_name
-    exec ':Rename ' . new_name
+    execute':Rename ' . new_name
     redraw!
   endif
 endfunction
@@ -34,7 +34,7 @@ function! general#WriteSession()
   let extension = ".session"
   " let fname = cwd . "_" . dateStamp . extension
   let fname = cwd . extension
-  silent exe ":Obsession " . fname
+  silent execute ":Obsession " . fname
   echo "Wrote " . fname
 endfun
 
