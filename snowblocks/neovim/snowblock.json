@@ -17,8 +17,8 @@
       { "name": "neovim", "cmd": "gem install neovim" },
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
       {
-        "name": "yarn global add javascript-typescript-langserver",
-        "cmd": "gem install language_server"
+        "name": "javascript-typescript-langserver",
+        "cmd": "yarn global add javascript-typescript-langserver"
       },
       { "name": "language_server", "cmd": "gem install language_server" }
     ]
