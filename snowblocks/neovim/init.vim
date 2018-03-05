@@ -1,5 +1,7 @@
 " SETTINGS: General {{{
   set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
+  set path+=**                                       " Make :find more usable by default
+  set wildmenu                                       " Show all matches when tab completing
   set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
   set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
   set showmode                                       " show mode in bottom-left corner
@@ -87,6 +89,9 @@
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 
     command! -nargs=+ -complete=file -bar Rg grep! <args>|cw
+
+    " bind K to grep word under cursor
+    nnoremap K :grep! "\b<C-R><C-W>\b"<CR><CR>:cw<CR>
   endif
 " }}}
 
