@@ -452,5 +452,10 @@ bindkey '^e' autosuggest-accept
   }
 # }}}
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
+
+# NOTE: this hopefully fools workstation init
+# script that this line is already in my zshrc
+# I prefer defining these path variables in my zshenv
+# export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+
 # vim: foldmethod=marker:sw=2
-export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
