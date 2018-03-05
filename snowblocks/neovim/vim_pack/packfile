@@ -94,6 +94,11 @@
   name: morhetz/gruvbox
   opt: true
 - 
+  category: navigation
+  local: false
+  name: octref/RootIgnore
+  opt: false
+- 
   category: default
   local: false
   name: "radenling/vim-dispatch-neovim"
