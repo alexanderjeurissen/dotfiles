@@ -40,31 +40,3 @@ CSV.open(ARGV[0], "wb") do |csv|
     p "======================================="
   end
 end
-
-
-# parseTransactions() {
-#   while IFS='' read -r line || [[ -n "$line" ]]; do
-#     local transaction_date=$(echo "$line" |
-#       egrep -Eo '[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{4}' |
-#       sed 's/\-/\//g')
-    
-#     local inflow=$(echo "$line" | 
-#       egrep -Eo '(?:€\t-)([[:digit:]]{1,4},[[:digit:]]{2})' |
-#       egrep -Eo '[[:digit:]]{1,4},[[:digit:]]{2})' |
-#       sed 's/\,/\./')
-
-#     local outflow=$(echo "$line" |
-#       egrep -Eo '(?:€\t)[[:digit:]]{1,4},[[:digit:]]{2}' |
-#       egrep -Eo '[[:digit:]]{1,4},[[:digit:]]{2}' |
-#       sed 's/\,/\./')
-#     # for word in $line
-#     # do
-#     #     echo "${word}"
-#     # done
-#     # echo "Text read from file: $line"
-#     echo "transaction_date: ${transaction_date}"
-#     echo "inflow: ${inflow} | outflow: ${outflow}"
-#   done < "$1"
-# }
-
-# parseTransactions "$1"
