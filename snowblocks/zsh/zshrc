@@ -2,8 +2,8 @@
    if [ -n "$TMUX" ]; then
      # export TERM=screen-256color-italic
    else
-     tmux attach-session || exec tmux new-session;
-     #tmux attach-session || exec tmux new-session && exit;
+     # tmux attach-session || exec tmux new-session;
+     tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
@@ -115,7 +115,8 @@ fi
   alias ls="\gls --color=auto --group-directories-first"
   alias rls="cd && cd - && ls -G"
   alias fixtestdb="bin/rake db:test:prepare"
-  alias up="git pull origin develop:develop --rebase --ff-only"
+  alias upd="git pull origin develop:develop --rebase --ff-only"
+  alias upm="git pull origin master:master --rebase --ff-only"
   alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
@@ -452,3 +453,4 @@ bindkey '^e' autosuggest-accept
 # }}}
 $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 # vim: foldmethod=marker:sw=2
+export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
