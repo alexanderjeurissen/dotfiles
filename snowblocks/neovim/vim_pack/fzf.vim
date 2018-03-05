@@ -58,9 +58,6 @@ nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
 nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
 nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
 nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
-
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-/> <plug>(fzf-complete-file-ag)
 " }}}
 
 " Functions {{{
