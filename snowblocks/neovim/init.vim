@@ -1,7 +1,8 @@
 " SETTINGS: General {{{
   set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
-  set path+=**                                       " Make :find more usable by default
+  set path=$PWD/**                                   " Make :find more usable by default
   set wildmenu                                       " Show all matches when tab completing
+  set wildmode=longest:list,full                     " Show longest match first
   set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
   set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
   set showmode                                       " show mode in bottom-left corner
@@ -192,11 +193,6 @@
   imap <right> <nop>
   imap <bs> <nop>
 
-  " Replace H and L
-  nnoremap zh H
-  nnoremap zm M
-  nnoremap zl L
-
   " Wrapped lines goes down/up to next row, rather than next line in file.
   noremap j gj
   noremap k gk
@@ -268,12 +264,12 @@
     autocmd BufReadPost fugitive://* set bufhidden=delete
 
     " Set syntax highlighting for specific file types
-    autocmd BufRead,BufNewFile Appraisals set filetype=ruby
+    autocmd BufRead,BufNewFile Appraisals setlocal filetype=ruby
 
     " Add html highlighting when editing rails views & handlebar templates
-    autocmd BufRead,BufNewFile *.html set filetype=html.javascript
-    autocmd BufRead,BufNewFile *.erb set filetype=eruby.html
-    autocmd BufRead,BufNewFile *.hbs set filetype=handlebars.html
+    autocmd BufRead,BufNewFile *.html setlocal filetype=html.javascript
+    autocmd BufRead,BufNewFile *.erb setlocal filetype=eruby.html
+    autocmd BufRead,BufNewFile *.hbs setlocal filetype=handlebars.html
 
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")
