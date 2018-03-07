@@ -1,6 +1,6 @@
 " SETTINGS: General {{{
   set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
-  set path=$PWD/**                                   " Make :find more usable by default
+  set path=$PWD,$PWD/app/**                                   " Make :find more usable by default
   set wildmenu                                       " Show all matches when tab completing
   set wildmode=longest:list,full                     " Show longest match first
   set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
@@ -258,7 +258,7 @@
                 \   endif
 
     " http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
-    autocmd Syntax * if 5000 < line('$') | syntax sync maxlines=200 | endif
+    autocmd Syntax * if 2000 < line('$') | syntax sync maxlines=200 | endif
 
     " Automatically remove fugitive buffers
     autocmd BufReadPost fugitive://* set bufhidden=delete

@@ -10,6 +10,11 @@
   name: /usr/local/opt/fzf
   opt: false
 - 
+  category: default
+  local: false
+  name: Konfekt/FastFold
+  opt: false
+- 
   category: autocomplete
   local: false
   name: SirVer/ultisnips
@@ -42,11 +47,6 @@
   category: navigation
   local: false
   name: "christoomey/vim-tmux-navigator"
-  opt: false
-- 
-  category: editing
-  local: false
-  name: godlygeek/tabular
   opt: false
 - 
   category: navigation
@@ -88,11 +88,6 @@
   local: false
   name: "moll/vim-bbye"
   opt: false
-- 
-  category: colorschemes
-  local: false
-  name: morhetz/gruvbox
-  opt: true
 - 
   category: navigation
   local: false
