@@ -34,6 +34,11 @@
   name: "ap/vim-css-color"
   opt: true
 - 
+  category: colorschemes
+  local: false
+  name: "arcticicestudio/nord-vim"
+  opt: false
+- 
   category: navigation
   local: false
   name: "arithran/vim-delete-hidden-buffers"
@@ -62,11 +67,6 @@
   category: navigation
   local: false
   name: "justinmk/vim-sneak"
-  opt: false
-- 
-  category: colorschemes
-  local: false
-  name: "lifepillar/vim-solarized8"
   opt: false
 - 
   category: editing
