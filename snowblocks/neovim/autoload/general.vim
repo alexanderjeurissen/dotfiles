@@ -33,6 +33,15 @@ function! general#EnsureDirExists ()
   endif
 endfunction
 
+
+" NOTE: copied from Damian Conway's vimrc
+" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
+function! general#UndoubleCompletions()
+  let col = getpos('.')[2]
+  let line = getline('.')
+  call setline('.', substitute(line, '\(\k\+\)\%'.col.'c\zs\1', '', ''))
+endfunction
+
 function! general#Preserve(command)
   " Preparation: save last search, and cursor position.
   let _s=@/

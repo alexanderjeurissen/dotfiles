@@ -284,6 +284,9 @@
     " NOTE: Ensure directory structure exists when opening a new file
     autocmd  BufNewFile  *  :call general#EnsureDirExists()
 
+    " NOTE: Makes sure we don't end up with double completions
+    autocmd CompleteDone * :call general#UndoubleCompletions()
+
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
 
