@@ -274,12 +274,15 @@
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")
 
-  " Update filetype on save if empty
+    " Update filetype on save if empty
     autocmd BufWritePost * nested
       \ if &l:filetype ==# '' || exists('b:ftdetect')
       \ |   unlet! b:ftdetect
       \ |   filetype detect
       \ | endif
+
+    " NOTE: Ensure directory structure exists when opening a new file
+    autocmd  BufNewFile  *  :call general#EnsureDirExists()
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
