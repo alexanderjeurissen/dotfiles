@@ -4,6 +4,7 @@
       "~/.config/nvim",
       "~/.config/nvim/autoload",
       "~/.config/nvim/after",
+      "~/.config/nvim/colors",
       "~/.config/nvim/pack",
       "~/.config/nvim/.pack",
       "~/.config/nvim/UltiSnips",
@@ -17,6 +18,7 @@
       { "name": "neovim", "cmd": "pip3 install --upgrade neovim" },
       { "name": "neovim", "cmd": "gem install neovim" },
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
+      { "name": "vim-vint", "cmd": "pip3 install vim-vint" },
       {
         "name": "javascript-typescript-langserver",
         "cmd": "yarn global add javascript-typescript-langserver"
@@ -29,14 +31,10 @@
       "~/.config/nvim/init.vim": { "create": true, "relink": true },
       "~/.config/nvim/autoload": { "create": true, "relink": true },
       "~/.config/nvim/after": { "create": true, "relink": true },
+      "~/.config/nvim/colors": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
       "~/.config/nvim/make_programs": { "create": true, "relink": true },
-      "~/.config/nvim/.pack": {
-        "create": true,
-        "relink": true,
-        "path": "vim_pack"
-
-      }
+      "~/.config/nvim/.pack": { "create": true, "relink": true, "path": "vim_pack" }
     },
     "shell": [
       [
