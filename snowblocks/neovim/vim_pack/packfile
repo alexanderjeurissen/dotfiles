@@ -216,7 +216,7 @@
   name: "tpope/vim-unimpaired"
   opt: false
 - 
-  category: editing
+  category: default
   local: false
   name: w0rp/ale
   opt: false

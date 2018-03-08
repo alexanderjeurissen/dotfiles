@@ -31,7 +31,7 @@ let g:colors_name="snappy"
     let g:snappy_bold=1
   endif
   if !exists('g:snappy_italic')
-    if has('gui_running') || $TERM_ITALICS == 'true'
+    if has('nvim') || has('gui_running') || $TERM_ITALICS == 'true'
       let g:snappy_italic=1
     else
       let g:snappy_italic=0
@@ -103,7 +103,7 @@ let g:colors_name="snappy"
   call s:HL('Normal', s:black, s:white)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:gray3)
+  call s:HL('CursorLine', s:none , s:gray2)
   hi! link CursorColumn CursorLine
 
   " Match paired bracket under the cursor
@@ -122,8 +122,8 @@ let g:colors_name="snappy"
   call s:HL('Visual', s:none,  s:white, s:invert_selection)
   hi! link VisualNOS Visual
 
-  call s:HL('Search', s:blue, s:white, s:inverse)
-  call s:HL('IncSearch', s:blue, s:blue, s:inverse)
+  call s:HL('Search', s:black, s:white, s:inverse)
+  call s:HL('IncSearch', s:black, s:white, s:inverse)
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
@@ -181,6 +181,7 @@ let g:colors_name="snappy"
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:purple, s:none)
+  call s:HL('ColorColumn', s:none, s:gray3)
 
   " Line used for closed folds
   call s:HL('Folded', s:white, s:purple, s:italic)
@@ -238,7 +239,7 @@ let g:colors_name="snappy"
   hi! link PreCondit ItalicGray1
 
   " Generic constant
-  hi! link Constant ItalicGreen
+  hi! link Constant Bold
   " Character constant: 'c', '/n'
   hi! link Character ItalicRed
   " String constant: "this is a string"
@@ -247,7 +248,7 @@ let g:colors_name="snappy"
   " Boolean constant: TRUE, FALSE
   hi! link Boolean BoldBlue
   " Number constant: 234, 0xff
-  hi! link Number ItalicPurple
+  hi! link Number Italic
   " Floating point constant: 2.3e10
   hi! link Float ItalicPurple
 
