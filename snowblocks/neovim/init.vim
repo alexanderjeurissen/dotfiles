@@ -77,6 +77,10 @@
     set termguicolors
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
+    set t_Cs =^[[6m"
+    set t_Ce =^[[24m"
+    let &t_Cs = "\e[6m"
+    let &t_Ce = "\e[24m"
   endif
 
   function! ActivateColorScheme()
