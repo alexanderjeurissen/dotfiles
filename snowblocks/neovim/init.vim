@@ -80,7 +80,7 @@
   endif
 
   function! ActivateColorScheme()
-    colorscheme desert " fallback incase no colorscheme plugin is installed
+    colorscheme snappy " fallback incase no colorscheme plugin is installed
   endfunction
 " }}}
 
