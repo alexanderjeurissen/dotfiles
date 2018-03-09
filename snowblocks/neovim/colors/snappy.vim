@@ -1,28 +1,28 @@
 highlight clear
-if exists("syntax_on")
+if exists('syntax_on')
   syntax reset
 endif
 
 set background=light
-let g:colors_name="snappy"
+let g:colors_name = 'snappy'
 
 " Functions: {{{
   function! s:HL(group, ...)
-    let histring = 'hi ' . a:group . ' '
+    let l:histring = 'hi ' . a:group . ' '
 
     if strlen(a:1)
-      let histring .= 'guifg=' . a:1 . ' '
+      let l:histring .= 'guifg=' . a:1 . ' '
     endif
 
     if strlen(a:2)
-      let histring .= 'guibg=' . a:2 . ' '
+      let l:histring .= 'guibg=' . a:2 . ' '
     endif
 
     if a:0 >= 3 && strlen(a:3)
-      let histring .= 'gui=' . a:3 . ' '
+      let l:histring .= 'gui=' . a:3 . ' '
     endif
 
-    execute histring
+    execute l:histring
   endfunction
 " }}}
 
@@ -31,7 +31,7 @@ let g:colors_name="snappy"
     let g:snappy_bold=1
   endif
   if !exists('g:snappy_italic')
-    if has('nvim') || has('gui_running') || $TERM_ITALICS == 'true'
+    if has('nvim') || has('gui_running') || $TERM_ITALICS ==# 'true'
       let g:snappy_italic=1
     else
       let g:snappy_italic=0
@@ -153,10 +153,10 @@ let g:colors_name="snappy"
   " The column separating vertically split windows
   call s:HL('VertSplit', s:black, s:none)
 
-  " FIXME:
-  " " Current match in wildmenu completion
-  " call s:HL('WildMenu', s:blue, s:bg2, s:bold)
+  " Current match in wildmenu completion
+  call s:HL('WildMenu', s:purple, s:white, s:bold . s:inverse)
 
+  " FIXME
   " " Directory names, special names in listing
   " hi! link Directory GruvboxGreenBold
 
@@ -208,58 +208,76 @@ let g:colors_name="snappy"
   call s:HL('Error', s:red, s:white, s:bold . s:inverse)
 
   " Generic statement
-  hi! link Statement Bold
+  call s:HL('Statement', s:black, s:white, s:bold)
+
   " if, then, else, endif, swicth, etc.
-  hi! link Conditional Bold
+  call s:HL('Conditional', s:black, s:white, s:bold)
+
   " for, do, while, etc.
-  hi! link Repeat Bold
+  call s:HL('Repeat', s:black, s:white, s:bold)
+
   " case, default, etc.
-  hi! link Label Bold
+  call s:HL('Label', s:black, s:white, s:bold)
+
   " try, catch, throw
-  hi! link Exception BoldRed
+  call s:HL('Exception', s:blue, s:white, s:bold)
+
   " sizeof, "+", "*", etc.
-  hi! link Operator Normal
+  call s:HL('Operator', s:black, s:white)
+
   " Any other keyword
-  hi! link Keyword Bold
+  call s:HL('Keyword', s:black, s:white, s:bold)
 
   " Variable name
-  hi! link Identifier Underlined
+  call s:HL('Identifier', s:black, s:white, s:underline)
+
   " Function name
-  hi! link Function Underlined
+  call s:HL('Function', s:black, s:white, s:italic)
 
   " Generic preprocessor
-  hi! link PreProc Bold
+  call s:HL('PreProc', s:black, s:white, s:bold)
+
   " Preprocessor #include
-  hi! link Include Italic
+  call s:HL('Include', s:black, s:white, s:italic)
+
   " Preprocessor #define
-  hi! link Define Bold
+  call s:HL('Define', s:black, s:white, s:bold)
+
   " Same as Define
-  hi! link Macro Italic
+  call s:HL('Macro', s:black, s:white, s:bold)
+
   " Preprocessor #if, #else, #endif, etc.
-  hi! link PreCondit ItalicGray1
+  call s:HL('PreCondit', s:gray1, s:white, s:italic)
 
   " Generic constant
-  hi! link Constant Bold
+  call s:HL('Constant', s:black, s:white, s:bold)
+
   " Character constant: 'c', '/n'
-  hi! link Character ItalicRed
+  call s:HL('Character', s:red, s:white, s:italic)
+
   " String constant: "this is a string"
-  call s:HL('String', s:green, s:none, s:italic)
+  call s:HL('String', s:green, s:white, s:italic)
 
   " Boolean constant: TRUE, FALSE
-  hi! link Boolean BoldBlue
+  call s:HL('Boolean', s:purple, s:white, s:bold)
+
   " Number constant: 234, 0xff
-  hi! link Number Italic
+  call s:HL('Number', s:purple, s:white, s:italic)
+
   " Floating point constant: 2.3e10
-  hi! link Float ItalicPurple
+  call s:HL('Float', s:purple, s:white, s:italic)
 
   " Generic type
-  hi! link Type Bold
+  call s:HL('Type', s:black, s:white, s:bold)
+
   " static, register, volatile, etc
-  hi! link StorageClass Bold
+  call s:HL('StorageClass', s:black, s:white, s:bold)
+
   " struct, union, enum, etc.
-  hi! link Structure Bold
+  call s:HL('Structure', s:black, s:white, s:bold)
+
   " typedef
-  hi! link Typedef Italic
+  call s:HL('Typedef', s:black, s:white, s:italic)
 " }}}
 
 " Completion Menu: {{{
@@ -295,25 +313,27 @@ let g:colors_name="snappy"
 " }}}
 
 " Diff: {{{
-  hi! link diffAdded Green
-  hi! link diffRemoved Red
-  hi! link diffChanged Blue
+  call s:HL('diffAdded', s:green, s:white)
+  call s:HL('diffRemoved', s:red, s:white)
+  call s:HL('diffChanged', s:blue, s:white)
 
-  hi! link diffFile Purple
-  hi! link diffNewFile ItalicPurple
+  call s:HL('diffFile', s:black, s:white)
+  call s:HL('diffNewFile', s:black, s:white, s:bold)
 
-  hi! link diffLine ItalicBlue
+  call s:HL('diffLine', s:purple, s:white)
 " }}}
 
 " Sneak: {{{
-  autocmd ColorScheme snappy hi! link Sneak Search
-  autocmd ColorScheme snappy hi! link SneakLabel Search
+  augroup snappy
+    autocmd ColorScheme snappy hi! link Sneak Search
+    autocmd ColorScheme snappy hi! link SneakLabel Search
+  augroup END
 " }}}
 
 " Signify: {{{
-  hi! link SignifySignAdd SnappyGreenSign
-  hi! link SignifySignChange SnappyBlueSign
-  hi! link SignifySignDelete SnappyRedSign
+  call s:HL('SignifySignAdd', s:gray1, s:white)
+  call s:HL('SignifySignChange', s:gray1, s:white)
+  call s:HL('SignifySignDelete', s:gray1, s:white)
 " }}}
 
 " Asynchronous Lint Engine: {{{
@@ -324,8 +344,8 @@ let g:colors_name="snappy"
 " }}}
 
 " Dirvish: {{{
-  hi! link DirvishPathTail ItalicBlue
-  hi! link DirvishArg ItalicPurple
+  call s:HL('DirvishPathTail', s:black, s:white, s:bold)
+  call s:HL('DirvishArg', s:blue, s:white, s:italic)
 " }}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker:
