@@ -57,8 +57,8 @@
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
-  let python3_host_prog = "python3"
-  let python_host_prog = "python"
+  let g:python3_host_prog = 'python3'
+  let g:python_host_prog = 'python'
 " }}}
 
 " SETTINGS: statusline {{{
@@ -73,7 +73,7 @@
 " }}}
 
 " SETTINGS: Colorscheme {{{
-  if (has("termguicolors"))
+  if (has('termguicolors'))
     set termguicolors
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
@@ -302,7 +302,7 @@
 " }}}
 
 " EXTRA: Include local vim config {{{
-  if filereadable(expand("~/.nvimrc.local"))
+  if filereadable(expand('~/.nvimrc.local'))
     source ~/.nvimrc.local
   endif
 " }}}
