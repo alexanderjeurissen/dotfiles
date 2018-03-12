@@ -20,14 +20,14 @@ endfunction
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
 function! general#EnsureDirExists ()
-  let required_dir = expand("%:h")
-  if !isdirectory(required_dir)
-    call AskQuit("Parent directory '" . required_dir . "' doesn't exist.",
+  let l:required_dir = expand('%:h')
+  if !isdirectory(l:required_dir)
+    call AskQuit("Parent directory '" . l:required_dir . "' doesn't exist.",
       \       "&Create it\nor &Quit?", 2)
     try
-      call mkdir( required_dir, 'p' )
+      call mkdir(l:required_dir, 'p')
     catch
-      call AskQuit("Can't create '" . required_dir . "'",
+      call AskQuit("Can't create '" . l:required_dir . "'",
         \            "&Quit\nor &Continue anyway?", 1)
     endtry
   endif
@@ -37,10 +37,22 @@ endfunction
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
 function! general#UndoubleCompletions()
-  let col = getpos('.')[2]
-  let line = getline('.')
-  call setline('.', substitute(line, '\(\k\+\)\%'.col.'c\zs\1', '', ''))
+  let l:col = getpos('.')[2]
+  let l:line = getline('.')
+  call setline('.', substitute(l:line, '\(\k\+\)\%'.l:col.'c\zs\1', '', ''))
 endfunction
+
+" NOTE: copied from Damian Conway's vimrc
+" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
+function! general#HLNext(blinktime)
+  let l:target_pat = '\c\%#'.@/
+  let l:ring = matchadd('CurrentSearchMatch', l:target_pat, 101)
+  redraw
+  exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+  call matchdelete(l:ring)
+  redraw
+endfunction
+
 
 function! general#Preserve(command)
   " Preparation: save last search, and cursor position.
