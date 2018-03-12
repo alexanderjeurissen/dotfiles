@@ -57,8 +57,9 @@
   " Open help in a new split instead of vimbuffer
   cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
-  let g:python3_host_prog = 'python3'
-  let g:python_host_prog = 'python'
+  let python3_host_prog = "python3"
+  let python_host_prog = "python"
+  let g:snappy_dev = 1
 " }}}
 
 " SETTINGS: statusline {{{
@@ -208,10 +209,10 @@
   noremap / /\v
   noremap ? ?\v
 
-  " auto-center on specific movement keys
+  " auto-center on specific movement keys, and blink current search match
   nnoremap G Gzz
-  nnoremap n nzz
-  nnoremap N Nzz
+  nnoremap n nzz:call general#HLNext(0.3)<cr>
+  nnoremap N Nzz:call general#HLNext(0.3)<cr>
   nnoremap } }zz
   nnoremap { {zz
 " }}}
