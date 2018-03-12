@@ -1,3 +1,4 @@
+scriptencoding utf-8
 highlight clear
 if exists('syntax_on')
   syntax reset
@@ -6,23 +7,50 @@ endif
 set background=light
 let g:colors_name = 'snappy'
 
+augroup SnappyReload
+autocmd!
+    autocmd BufWritePost snappy.vim colo snappy
+    autocmd BufWritePost snappy.vim let g:snappy_dev=1
+augroup END
+
 " Functions: {{{
-  function! s:HL(group, ...)
+  function! s:HL(group, fg_name, ...)
+    let l:pieces = [a:group]
     let l:histring = 'hi ' . a:group . ' '
 
-    if strlen(a:1)
-      let l:histring .= 'guifg=' . a:1 . ' '
+    if a:fg_name !=# ''
+      let l:pieces = s:AddGroundValues(l:pieces, 'guifg', a:fg_name)
     endif
 
-    if strlen(a:2)
-      let l:histring .= 'guibg=' . a:2 . ' '
+    if a:0 > 0 && a:1 !=# ''
+      let l:pieces = s:AddGroundValues(l:pieces, 'guibg', a:1)
     endif
 
-    if a:0 >= 3 && strlen(a:3)
-      let l:histring .= 'gui=' . a:3 . ' '
+    if a:0 > 1 && a:2 !=# ''
+      let l:pieces = s:AddGroundValues(l:pieces, 'gui', a:2)
     endif
 
-    execute l:histring
+    call s:Clear(a:group)
+    call s:Highlight(l:pieces)
+  endfunction
+
+  function! s:AddGroundValues(accumulator, ground, value)
+    let l:new_list = a:accumulator
+    " for [l:where, l:value] in items(a:color)
+    call add(l:new_list, a:ground . '=' . a:value)
+    " endfor
+
+    return l:new_list
+  endfunction
+
+  " NOTE: clear given higlightgroup
+  function! s:Clear(group)
+    exec 'highlight clear ' . a:group
+  endfunction
+
+  " NOTE: execute the 'highlight' command with a List of arguments.
+  function! s:Highlight(args)
+    exec 'highlight ' . join(a:args, ' ')
   endfunction
 " }}}
 
@@ -45,6 +73,9 @@ let g:colors_name = 'snappy'
   endif
   if !exists('g:snappy_inverse')
     let g:snappy_inverse=1
+  endif
+  if !exists('g:snappy_dev')
+    let g:snappy_dev=0
   endif
 
   let s:bold = 'bold,'
@@ -86,24 +117,30 @@ let g:colors_name = 'snappy'
   let s:black = '#000000'
   " let s:white = '#FFFFFF'
   let s:white = '#ECF0F1'
-  let s:gray1 = '#707470'
-  let s:gray2 = '#D0D4D0'
-  let s:gray3 = '#E9EEE9'
+  let s:gray1 = '#585858'
+  let s:gray2 = '#757575'
+  let s:gray3 = '#9E9E9E'
+  let s:gray4 = '#C4C4C4'
+  let s:gray5 = '#DDDBDB'
+  let s:gray6 = '#F2F2F2'
+  let s:gray7 = '#F5F5F5'
+  let s:gray8 = '#F9F9F9'
 
-  let s:blue = 'Blue'
   let s:red = 'Red'
   let s:green = 'Green'
+  let s:blue = 'Blue'
   let s:purple = 'Purple'
 
-  let s:troll = '#00B9E5'
 " }}}
 
 " Normal UI {{{
   " Normal text
-  call s:HL('Normal', s:black, s:white)
+  call s:HL('Normal', s:black, s:gray7)
+  " call s:HL('Normal', s:black, s:light_red_bg)
 
   " Cursor line / column
   call s:HL('CursorLine', s:none , s:gray2)
+
   hi! link CursorColumn CursorLine
 
   " Match paired bracket under the cursor
@@ -115,69 +152,54 @@ let g:colors_name = 'snappy'
   " Line number of CursorLine
   call s:HL('CursorLineNr', s:white, s:black)
 
-  " Non text and special keys
-  hi! link NonText GruvboxBg2
-  hi! link SpecialKey GruvboxBg2
+  " Non text is stuff like Tildes on the bottom of the page.
+  call s:HL('NonText', s:gray1, s:none)
 
-  call s:HL('Visual', s:none,  s:white, s:invert_selection)
+  " Special keys, e.g. some of the chars in 'listchars'. See ':h listchars'.
+  call s:HL('SpecialKey', s:none, s:gray1)
+
+  call s:HL('Visual', s:none, s:none, s:invert_selection)
   hi! link VisualNOS Visual
 
-  call s:HL('Search', s:black, s:white, s:inverse)
-  call s:HL('IncSearch', s:black, s:white, s:inverse)
+  call s:HL('Search', s:purple, s:none, s:inverse)
+  call s:HL('IncSearch', s:purple, s:none, s:inverse)
+  call s:HL('CurrentSearchMatch', s:black, s:none, s:inverse . s:bold)
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
-  call s:HL('Red', s:red, s:none)
-  call s:HL('Green', s:green, s:none)
-  call s:HL('Blue', s:blue, s:none)
-  call s:HL('Purple', s:purple, s:none)
-
-  call s:HL('Italic', s:black, s:none, s:italic)
-  call s:HL('ItalicGray1', s:gray1, s:none, s:italic)
-  call s:HL('ItalicGray2', s:gray2, s:none, s:italic)
-  call s:HL('ItalicGray3', s:gray3, s:none, s:italic)
-  call s:HL('ItalicRed', s:red, s:none, s:italic)
-  call s:HL('ItalicGreen', s:green, s:none, s:italic)
-  call s:HL('ItalicBlue', s:blue, s:none, s:italic)
-  call s:HL('ItalicPurple', s:purple, s:none, s:italic)
-
-  call s:HL('Bold', s:black, s:none, s:bold)
-  call s:HL('BoldRed', s:red, s:none, s:bold)
-  call s:HL('BoldGreen', s:green, s:none, s:bold)
-  call s:HL('BoldBlue', s:blue, s:none, s:bold)
-  call s:HL('BoldPurple', s:purple, s:none, s:bold)
-
-  call s:HL('StatusLine', s:black, s:white, s:inverse)
-  call s:HL('StatusLineNC', s:black, s:white, s:inverse)
+  call s:HL('StatusLine', s:gray3, s:gray1, s:inverse)
+  " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
+  " SOURCE: https://tinyurl.com/yavjy26z
+  " call s:HL('StatusLineNC', s:black, s:white, s:inverse)
 
   " The column separating vertically split windows
-  call s:HL('VertSplit', s:black, s:none)
+  call s:HL('VertSplit', s:none, s:black)
 
   " Current match in wildmenu completion
   call s:HL('WildMenu', s:purple, s:white, s:bold . s:inverse)
 
   " FIXME
   " " Directory names, special names in listing
-  " hi! link Directory GruvboxGreenBold
+  call s:HL('Directory', s:black, s:none, s:bold)
 
   " " Titles for output from :set all, :autocmd, etc.
   " hi! link Title GruvboxGreenBold
 
   " " Error messages on the command line
-  call s:HL('ErrorMsg', s:red, s:white, s:bold)
+  call s:HL('ErrorMsg', s:red, s:none, s:bold)
   " " More prompt: -- More --
-  call s:HL('MoreMsg', s:blue, s:white, s:bold)
+  call s:HL('MoreMsg', s:blue, s:none, s:bold)
   " " Current mode message: -- INSERT --
-  call s:HL('ModeMsg', s:blue, s:white, s:bold)
+  call s:HL('ModeMsg', s:blue, s:none, s:bold)
   " " 'Press enter' prompt and yes/no questions
-  call s:HL('Question', s:green, s:white, s:bold)
+  call s:HL('Question', s:green, s:none, s:bold)
   " " Warning messages
-  call s:HL('WarningMsg', s:red, s:white, s:bold)
+  call s:HL('WarningMsg', s:red, s:none, s:bold)
 " }}}
 
 " Gutter: {{{
   " Line number for :number and :# commands
-  call s:HL('LineNr', s:black, s:white)
+  call s:HL('LineNr', s:gray2, s:gray5)
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:purple, s:none)
@@ -202,82 +224,84 @@ let g:colors_name = 'snappy'
 " }}}
 
 " Syntax Highlighting: {{{
-  call s:HL('Special', s:black, s:white, s:italic)
+  call s:HL('Special', s:black, s:none, s:italic)
   call s:HL('Comment', s:gray1, s:none, s:italic)
-  call s:HL('Todo', s:purple, s:white, s:bold . s:italic)
-  call s:HL('Error', s:red, s:white, s:bold . s:inverse)
+  " TODO and similar tags.
+  call s:HL('Todo', s:purple, s:none, s:bold . s:italic)
+  call s:HL('Error', s:red, s:none, s:bold . s:inverse)
 
   " Generic statement
-  call s:HL('Statement', s:black, s:white, s:bold)
+  call s:HL('Statement', s:black, s:none, s:bold)
 
   " if, then, else, endif, swicth, etc.
-  call s:HL('Conditional', s:black, s:white, s:bold)
+  call s:HL('Conditional', s:black, s:none, s:bold)
 
   " for, do, while, etc.
-  call s:HL('Repeat', s:black, s:white, s:bold)
+  call s:HL('Repeat', s:black, s:none, s:bold)
 
   " case, default, etc.
-  call s:HL('Label', s:black, s:white, s:bold)
+  call s:HL('Label', s:black, s:none, s:bold)
 
   " try, catch, throw
-  call s:HL('Exception', s:blue, s:white, s:bold)
+  call s:HL('Exception', s:red, s:none, s:bold)
 
   " sizeof, "+", "*", etc.
-  call s:HL('Operator', s:black, s:white)
+  call s:HL('Operator', s:black, s:none)
 
   " Any other keyword
-  call s:HL('Keyword', s:black, s:white, s:bold)
+  call s:HL('Keyword', s:black, s:none, s:bold)
 
   " Variable name
-  call s:HL('Identifier', s:black, s:white, s:underline)
+  call s:HL('Identifier', s:black, s:none, s:italic)
 
   " Function name
-  call s:HL('Function', s:black, s:white, s:italic)
+  call s:HL('Function', s:black, s:none, s:italic)
 
   " Generic preprocessor
-  call s:HL('PreProc', s:black, s:white, s:bold)
+  " Stuff like 'require' in Ruby.
+  call s:HL('PreProc', s:black, s:none, s:bold)
 
   " Preprocessor #include
-  call s:HL('Include', s:black, s:white, s:italic)
+  call s:HL('Include', s:black, s:none, s:italic)
 
   " Preprocessor #define
-  call s:HL('Define', s:black, s:white, s:bold)
+  call s:HL('Define', s:black, s:none, s:bold)
 
   " Same as Define
-  call s:HL('Macro', s:black, s:white, s:bold)
+  call s:HL('Macro', s:black, s:none, s:bold)
 
   " Preprocessor #if, #else, #endif, etc.
-  call s:HL('PreCondit', s:gray1, s:white, s:italic)
+  call s:HL('PreCondit', s:gray1, s:none, s:italic)
 
   " Generic constant
-  call s:HL('Constant', s:black, s:white, s:bold)
+  call s:HL('Constant', s:black, s:none, s:bold)
 
   " Character constant: 'c', '/n'
-  call s:HL('Character', s:red, s:white, s:italic)
+  call s:HL('Character', s:red, s:none, s:italic)
 
   " String constant: "this is a string"
-  call s:HL('String', s:green, s:white, s:italic)
+  call s:HL('String', s:green, s:none, s:italic)
 
   " Boolean constant: TRUE, FALSE
-  call s:HL('Boolean', s:purple, s:white, s:bold)
+  call s:HL('Boolean', s:purple, s:none, s:bold)
 
   " Number constant: 234, 0xff
-  call s:HL('Number', s:purple, s:white, s:italic)
+  call s:HL('Number', s:purple, s:none, s:italic)
 
   " Floating point constant: 2.3e10
-  call s:HL('Float', s:purple, s:white, s:italic)
+  call s:HL('Float', s:purple, s:none, s:italic)
 
   " Generic type
-  call s:HL('Type', s:black, s:white, s:bold)
+  call s:HL('Type', s:black, s:none, s:bold)
 
   " static, register, volatile, etc
-  call s:HL('StorageClass', s:black, s:white, s:bold)
+  call s:HL('StorageClass', s:black, s:none, s:bold)
 
   " struct, union, enum, etc.
-  call s:HL('Structure', s:black, s:white, s:bold)
+  call s:HL('Structure', s:black, s:none, s:bold)
 
   " typedef
-  call s:HL('Typedef', s:black, s:white, s:italic)
+  call s:HL('Typedef', s:black, s:none, s:italic)
 " }}}
 
 " Completion Menu: {{{
@@ -292,12 +316,12 @@ let g:colors_name = 'snappy'
 " }}}
 
 " Diffs: {{{
-  call s:HL('DiffDelete', s:red, s:white, s:inverse)
-  call s:HL('DiffAdd',    s:green, s:white, s:inverse)
+  call s:HL('DiffDelete', s:red, s:none, s:inverse)
+  call s:HL('DiffAdd',    s:green, s:none, s:inverse)
 
   " Alternative setting
-  call s:HL('DiffChange', s:blue, s:white, s:inverse)
-  call s:HL('DiffText',   s:purple, s:white, s:inverse)
+  call s:HL('DiffChange', s:blue, s:none, s:inverse)
+  call s:HL('DiffText',   s:purple, s:none, s:inverse)
 " }}}
 
 " Spelling: {{{
@@ -313,14 +337,14 @@ let g:colors_name = 'snappy'
 " }}}
 
 " Diff: {{{
-  call s:HL('diffAdded', s:green, s:white)
-  call s:HL('diffRemoved', s:red, s:white)
-  call s:HL('diffChanged', s:blue, s:white)
+  call s:HL('diffAdded', s:green, s:none)
+  call s:HL('diffRemoved', s:red, s:none)
+  call s:HL('diffChanged', s:blue, s:none)
 
-  call s:HL('diffFile', s:black, s:white)
-  call s:HL('diffNewFile', s:black, s:white, s:bold)
+  call s:HL('diffFile', s:black, s:none)
+  call s:HL('diffNewFile', s:black, s:none, s:bold)
 
-  call s:HL('diffLine', s:purple, s:white)
+  call s:HL('diffLine', s:purple, s:none)
 " }}}
 
 " Sneak: {{{
@@ -331,9 +355,9 @@ let g:colors_name = 'snappy'
 " }}}
 
 " Signify: {{{
-  call s:HL('SignifySignAdd', s:gray1, s:white)
-  call s:HL('SignifySignChange', s:gray1, s:white)
-  call s:HL('SignifySignDelete', s:gray1, s:white)
+  call s:HL('SignifySignAdd', s:gray1, s:none)
+  call s:HL('SignifySignChange', s:gray1, s:none)
+  call s:HL('SignifySignDelete', s:gray1, s:none)
 " }}}
 
 " Asynchronous Lint Engine: {{{
@@ -344,8 +368,37 @@ let g:colors_name = 'snappy'
 " }}}
 
 " Dirvish: {{{
-  call s:HL('DirvishPathTail', s:black, s:white, s:bold)
-  call s:HL('DirvishArg', s:blue, s:white, s:italic)
+  call s:HL('DirvishPathTail', s:black, s:none, s:bold)
+  call s:HL('DirvishArg', s:blue, s:none, s:italic)
 " }}}
 
+" Ruby specific Highlighting: {{{
+  call s:HL('rubyDefine', s:black, s:none, s:bold)
+  call s:HL('rubyStringDelimiter', s:green, s:none)
+" }}}
+
+" FIXME Colorscheme DEBUG highlight rules {{{
+  " NOTE: This is for debugging purposes.
+  " it highlights the color var names above in their own color to easily see the highlight rule that
+  " is applied
+  if g:snappy_dev == 1
+    syn match SnappyGrayOne contained 'gray1'
+    syn match SnappyGrayTwo contained 'gray2'
+    syn match SnappyGrayThree contained 'gray3'
+    " syn match SnappyGrayFour /\vgray4/
+    " syn match SnappyGrayFive "\vgray5"
+    " syn match SnappyGraySix "\vgray6"
+    " syn match SnappyGraySeven "\vgray7"
+    " syn match SnappyGrayEight "\vgray8"
+
+    call s:HL('SnappyGrayOne', s:gray1, s:none, s:inverse)
+    call s:HL('SnappyGrayTwo', s:gray2, s:none, s:inverse)
+    call s:HL('SnappyGrayThree', s:gray3, s:none, s:inverse)
+    " call s:HL('SnappyGrayFour', s:gray4, s:none, s:inverse)
+    " call s:HL('SnappyGrayFive', s:gray5, s:none, s:inverse)
+    " call s:HL('SnappyGraySix', s:gray6, s:none, s:inverse)
+    " call s:HL('SnappyGraySeven', s:gray7, s:none, s:inverse)
+    " call s:HL('SnappyGrayEight', s:gray8, s:none, s:inverse)
+  endif
+" }}}
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker:
