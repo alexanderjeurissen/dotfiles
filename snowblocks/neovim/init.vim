@@ -37,7 +37,7 @@
   set expandtab                                      " Use spaces instead of <Tab> for indentation.
   set number                                         " Enable line numbers
   set relativenumber                                 " Make line numbers relative
-  set numberwidth=5                                  " Set width of number column
+  set numberwidth=4                                  " Set width of number column
   set splitbelow                                     " Open new split panes at bottommost position
   set splitright                                     " Open new split panes at rightmost position
   set inccommand=nosplit                             " Show visual indication when using substitute.
