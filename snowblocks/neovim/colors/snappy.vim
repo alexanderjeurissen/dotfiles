@@ -139,18 +139,18 @@ augroup END
   " call s:HL('Normal', s:black, s:light_red_bg)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:gray2)
+  call s:HL('CursorLine', s:none , s:gray5)
 
   hi! link CursorColumn CursorLine
 
   " Match paired bracket under the cursor
-  call s:HL('MatchParen', s:white, s:black, s:bold)
+  call s:HL('MatchParen', s:blue, s:green, s:bold)
 
   " Concealed element: \lambda → λ
   call s:HL('Conceal', s:gray1, s:bold)
 
   " Line number of CursorLine
-  call s:HL('CursorLineNr', s:white, s:black)
+  call s:HL('CursorLineNr', s:gray1, s:gray4)
 
   " Non text is stuff like Tildes on the bottom of the page.
   call s:HL('NonText', s:gray1, s:none)
@@ -167,13 +167,13 @@ augroup END
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
-  call s:HL('StatusLine', s:gray3, s:gray1, s:inverse)
+  call s:HL('StatusLine', s:gray4, s:gray1, s:inverse)
   " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
   " SOURCE: https://tinyurl.com/yavjy26z
-  " call s:HL('StatusLineNC', s:black, s:white, s:inverse)
+  call s:HL('StatusLineNC', s:gray5, s:gray1, s:inverse)
 
   " The column separating vertically split windows
-  call s:HL('VertSplit', s:none, s:black)
+  call s:HL('VertSplit', s:none, s:none)
 
   " Current match in wildmenu completion
   call s:HL('WildMenu', s:purple, s:white, s:bold . s:inverse)
@@ -199,11 +199,11 @@ augroup END
 
 " Gutter: {{{
   " Line number for :number and :# commands
-  call s:HL('LineNr', s:gray2, s:gray5)
+  call s:HL('LineNr', s:gray3, s:gray5)
 
   " Column where signs are displayed
-  call s:HL('SignColumn', s:purple, s:none)
-  call s:HL('ColorColumn', s:none, s:gray3)
+  call s:HL('SignColumn', s:purple, s:gray4)
+  call s:HL('ColorColumn', s:none, s:gray5)
 
   " Line used for closed folds
   call s:HL('Folded', s:white, s:purple, s:italic)
@@ -355,9 +355,9 @@ augroup END
 " }}}
 
 " Signify: {{{
-  call s:HL('SignifySignAdd', s:gray1, s:none)
-  call s:HL('SignifySignChange', s:gray1, s:none)
-  call s:HL('SignifySignDelete', s:gray1, s:none)
+  call s:HL('SignifySignAdd', s:gray1, s:gray4)
+  call s:HL('SignifySignChange', s:gray1, s:gray4)
+  call s:HL('SignifySignDelete', s:gray1, s:gray4)
 " }}}
 
 " Asynchronous Lint Engine: {{{
@@ -365,6 +365,9 @@ augroup END
   " hi! link ALEErrorSign SnappyRedSign
   " hi! link ALEWarningSign SnappyYellowSign
   " hi! link ALEInfoSign SnappyBlueSign
+  call s:HL('ALEErrorSign', s:red, s:white, s:inverse)
+  call s:HL('ALEWarningSign', s:red, s:gray4, s:bold)
+  call s:HL('ALEInfoSign', s:blue, s:gray4, s:bold)
 " }}}
 
 " Dirvish: {{{
