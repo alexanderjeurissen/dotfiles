@@ -3,7 +3,7 @@
   set path=$PWD,$PWD/app/**                                   " Make :find more usable by default
   set wildmenu                                       " Show all matches when tab completing
   set wildmode=longest:list,full                     " Show longest match first
-  set re=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
+  set regexpengine=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
   set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
   set showmode                                       " show mode in bottom-left corner
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
@@ -15,7 +15,7 @@
   set textwidth=100                                  " Set maximum number of characters per line
   set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
   set sessionoptions+=globals                        " Persist global variables in vim session
-  set cc=+1                                          " Highlight first column after 'textwidth'
+  set colorcolumn=+1                                          " Highlight first column after 'textwidth'
   " set iskeyword-=_                                   " Treat underscore as a word boundary.
 
   set nolist
@@ -90,7 +90,7 @@
 " }}}
 
 " SETTINGS: Navigation {{{
-  if executable("rg")
+  if executable('rg')
     set grepprg=rg\ -H\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 

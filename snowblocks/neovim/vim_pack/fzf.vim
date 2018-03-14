@@ -87,7 +87,7 @@ function! s:fzf_Buffers()
 
   call fzf#run(fzf#wrap({
         \ 'source':  reverse(<sid>buflist()),
-        \ 'sink':    function('<sid>bufopen'),
+        \ 'sink':    function('s:bufopen'),
         \ 'options': g:fzf_default_options,
         \ }))
 endfunction
