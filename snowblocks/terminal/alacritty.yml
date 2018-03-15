@@ -83,31 +83,32 @@ render_timer: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: false
 
+# Colors Snappy
 colors:
   primary:
-    background: '0x2E3440'
-    foreground: '0xD8DEE9'
+    background: '0xECF0F1'
+    foreground: '0x000000'
   cursor:
     text: '0x2E3440'
     cursor: '0xD8DEE9'
   normal:
-    black: '0x3B4252'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x88C0D0'
-    white: '0xE5E9F0'
+    black: '0x000000'
+    red: '0xFF2600'
+    green: '0x00820C'
+    yellow: '0xFFFB00'
+    blue: '0x0000E0'
+    magenta: '0x800080'
+    cyan: '0x00FDFF'
+    white: '0xECF0F1'
   bright:
-    black: '0x4C566A'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x8FBCBB'
-    white: '0xECEFF4'
+    black: '0x000000'
+    red: '0xFF2600'
+    green: '0x00820C'
+    yellow: '0xFFFB00'
+    blue: '0x0000E0'
+    magenta: '0x800080'
+    cyan: '0x00FDFF'
+    white: '0xFFFFFF'
 
 
 # Visual Bell

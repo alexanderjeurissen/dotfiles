@@ -1,25 +1,24 @@
 #/usr/bin/env zsh
 
 # Git hooks {{{
-  ### Set highlighting based on dirty state
-  # Make sure you have added misc to your 'formats':  %m
+  # NOTE: Set highlighting based on dirty state
   +vi-git-status() {
     local action="${hook_com[action]}"
     local action_symbol
 
     if [[ -n $action ]]; then
       if [[ "$action" == "rebase" ]] || ; then
-        hook_com[misc]="%F{13}"
+        hook_com[misc]="%S%F{blue} "
       elif [[ "$action" == "rebase-i" ]]; then
-        hook_com[misc]="%F{13}"
+        hook_com[misc]="%S%F{magenta} "
       elif [[ "$action" == "merge" ]]; then
-        hook_com[misc]="%F{9}"
+        hook_com[misc]="%S%F{red} "
       fi
     else
       if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
-        hook_com[misc]="%F{10}"
+        hook_com[misc]="%S%F{green} "
       else
-        hook_com[misc]="%F{11}"
+        hook_com[misc]="%S "
       fi
     fi 
   }
@@ -27,27 +26,27 @@
 
 _generate_prompt() {
   local prompt_content="${prompt_newline}"
-  local prompt_sym
-  local ok_color
 
-  if [[ "$USER" == "root" ]]; then
-    prompt_sym="#"
-    ok_color="yellow"
-  else
-    prompt_sym="λ"
-    ok_color="green"
-  fi
+  # FIXME: instead of changing the prompt color, 
+  # having a different shell color would be more awesome
+  # if [[ "$USER" == "root" ]]; then
+  #   # prompt_sym="#"
+  #   ok_color="red"
+  # else
+  #   # prompt_sym=""
+  #   ok_color="green"
+  # fi
 
   # # get timestamp of command execution
   # prompt_content+="%F{8}%*%f"
 
   # Only print host name when connected through ssh
   if [[ "$SSH_CONNECTION" != '' ]]; then
-    prompt_content+="%F{yellow} %m%f"
+    prompt_content+="%F{blue} %m%f"
   fi
 
-  # add exit code based color to prompt symbol
-  prompt_content+="%B%(?.%F{${ok_color}} ${prompt_sym} %f.%F{red} ${prompt_sym} %f)%b"
+  # Add last exit code indicator
+  prompt_content+="%(?.  .  )"
 
   # Add vim mode indicator
   prompt_content+="› "
@@ -67,7 +66,7 @@ _generate_rprompt() {
     rprompt_content+="${vcs_info_msg_0_}"
   fi
 
-  RPROMPT="%F{blue}${rprompt_content}%f"
+  RPROMPT="%F{black}${rprompt_content}%f"
 }
 
 _snappy_keymap_select() {
@@ -76,7 +75,7 @@ _snappy_keymap_select() {
   [[ "$KEYMAP" == 'vicmd' ]] && PROMPT="${PROMPT/›/·}"
 
   zle reset-prompt
-  zle -R
+  # zle -R
 }
 
 _snappy_buffer_empty() {
@@ -96,11 +95,6 @@ _snappy_buffer_empty() {
     zle accept-line
   fi
 }
-
-# _snappy_line_init() {
-#   LAST_EXIT_CODE="$?"
-#   zle reset-prompt
-# }
 
 prompt_snappy_setup() {
   # prevent percentage showing up
@@ -123,8 +117,8 @@ prompt_snappy_setup() {
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' use-simple true
   zstyle ':vcs_info:*' max-exports 3
-  zstyle ':vcs_info:git*' formats ' %m %0.20b%f%u' '%R'
-  zstyle ':vcs_info:git*' actionformats ' %m %0.20b%f%u' '%0.20b|%a' '%R'
+  zstyle ':vcs_info:git*' formats ' %m %0.20b %f%u%%s' '%R'
+  zstyle ':vcs_info:git*' actionformats ' %m %0.20b %f%u%%s' '%0.20b|%a' '%R'
   zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
   add-zsh-hook precmd vcs_info

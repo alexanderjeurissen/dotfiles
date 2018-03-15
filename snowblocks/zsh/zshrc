@@ -68,11 +68,22 @@ fi
   ZSH_HIGHLIGHT_PATTERNS+=('No Revision' 'fg=blue,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('Abandoned' 'fg=default,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
-# }}}
+  ZSH_HIGHLIGHT_PATTERNS+=('sudo' 'fg=white,bold,bg=red')
 
-# Dir colors {{{
-  test -e ~/.dir_colors && \
-     eval `gdircolors -b ~/.dir_colors`
+  # FIXME: this should not be necessary if we dedicate the bright
+  # color variations for grays
+  # NOTE: Customize some zsh syntax highlight settings
+  typeset -A ZSH_HIGHLIGHT_STYLES
+  ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='none'
+  ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='none'
+  ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='none'
+  ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='none'
+  ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='none'
+  ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='none'
+  ZSH_HIGHLIGHT_STYLES[rc-quote]='none'
+  ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='none'
+  ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='none'
+  ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='none'
 # }}}
 
 # Vi mode {{{
@@ -159,34 +170,6 @@ fi
   alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
   alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
   alias burp="open $HOME/git/hackerij/burp.jar"
-# }}}
-
-# Aliases for TaskWarrior {{{
-  # alias t="task"
-  # alias todo='task add'
-  # alias today='task today'
-
-  # TICKLER file, snooze inbox items {{{
-    # tickle() {
-    #     local deadline=$1
-    #     shift
-    #     in +tickle wait:$deadline $@
-    # }
-    # alias tick=tickle
-  # }}}
-
-  # Defer tasks {{{
-    # defer() {
-    #   local task_nr=$1
-    #   local deadline=$2
-    #   task modify $task_nr +defered # add defered tag
-    #   shift 2
-    #   task $task_nr annotate wait:$deadline "DEFER REASON: $@" # add annotation
-    # }
-  # }}}
-
-  # Think something over ? like yes/no ? think alias!!
-  # alias think='tickle +1d'
 # }}}
 
 # Aliases / functions for TimeWarrior {{{
@@ -316,10 +299,6 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   zplug load
 fi
 # }}}
-
-# Gruvbox 256 colors support OSX
-# scurce "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-# source "$HOME/.config/nvim/plugged/gruvbox/gruvbox_256palette_osx.sh"
 
 # git aliases {{{
   source ~/.gitaliases
