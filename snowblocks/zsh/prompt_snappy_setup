@@ -6,17 +6,21 @@
     local action="${hook_com[action]}"
     local action_symbol
 
+    #          梨 煮 ﬅ ﬗ  ﯠ ﲋ 
     if [[ -n $action ]]; then
       if [[ "$action" == "rebase" ]] || ; then
-        hook_com[misc]="%S%F{blue} "
+        hook_com[misc]="%S "
+        # hook_com[misc]="%S "
       elif [[ "$action" == "rebase-i" ]]; then
-        hook_com[misc]="%S%F{magenta} "
+        hook_com[misc]="%S "
+        # hook_com[misc]="%S "
       elif [[ "$action" == "merge" ]]; then
-        hook_com[misc]="%S%F{red} "
+        hook_com[misc]="%S ﯠ"
+        # hook_com[misc]="%S "
       fi
     else
       if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
-        hook_com[misc]="%S%F{green} "
+        hook_com[misc]="%S "
       else
         hook_com[misc]="%S "
       fi
