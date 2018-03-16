@@ -299,6 +299,9 @@
     autocmd VimEnter * call ActivateColorScheme()
 
     autocmd User FzfStatusLine call fzf#Statusline()
+
+    " Terminal settings
+    autocmd TermOpen * call terminal#Settings()
   augroup END
 " }}}
 
