@@ -11,6 +11,7 @@ augroup SnappyReload
 autocmd!
     autocmd BufWritePost snappy.vim colo snappy
     autocmd BufWritePost snappy.vim let g:snappy_dev=1
+    autocmd BufWritePost snappy.vim set ft=vim
 augroup END
 
 " Functions: {{{
@@ -114,32 +115,61 @@ augroup END
 " }}}
 
 " COLORS: {{{
-  let s:black = '#000000'
-  " let s:white = '#FFFFFF'
-  let s:white = '#ECF0F1'
-  let s:gray1 = '#585858'
-  let s:gray2 = '#757575'
-  let s:gray3 = '#9E9E9E'
-  let s:gray4 = '#C4C4C4'
-  let s:gray5 = '#DDDBDB'
-  let s:gray6 = '#F2F2F2'
-  let s:gray7 = '#F5F5F5'
-  let s:gray8 = '#F9F9F9'
+  let s:black = '#000000'       " #000000
+  let s:gray1 = '#080808'       " #080808
+  let s:gray2 = '#111111'       " #111111
+  let s:gray3 = '#1a1a1a'       " #1a1a1a
+  let s:gray4 = '#232323'       " #232323
+  let s:gray5 = '#2b2b2b'       " #2b2b2b
+  let s:gray6 = '#343434'       " #343434
+  let s:gray7 = '#3d3d3d'       " #3d3d3d
+  let s:gray8 = '#464646'       " #464646
+  let s:gray9 = '#4f4f4f'       " #4f4f4f
+  let s:gray10 = '#575757'      " #575757
+  let s:gray11 = '#606060'      " #606060
+  let s:gray12 = '#696969'      " #696969
+  let s:gray13 = '#727272'      " #727272
+  let s:gray14 = '#7b7b7b'      " #7b7b7b
+  let s:gray15 = '#838383'      " #838383
+  let s:gray16 = '#8c8c8c'      " #8c8c8c
+  let s:gray17 = '#959595'      " #959595
+  let s:gray18 = '#9e9e9e'      " #9e9e9e
+  let s:gray19 = '#a7a7a7'      " #a7a7a7
+  let s:gray20 = '#afafaf'      " #afafaf
+  let s:gray21 = '#b8b8b8'      " #b8b8b8
+  let s:gray22 = '#c1c1c1'      " #c1c1c1
+  let s:gray23 = '#cacaca'      " #cacaca
+  let s:gray24 = '#d3d3d3'      " #d3d3d3
+  let s:gray25 = '#dbdbdb'      " #dbdbdb
+  let s:gray26 = '#e4e4e4'      " #e4e4e4
+  let s:gray27 = '#ededed'      " #ededed
+  let s:gray28 = '#f6f6f6'      " #f6f6f6
+  let s:white = '#ffffff'       " #ffffff
 
-  let s:red = 'Red'
-  let s:green = 'Green'
-  let s:blue = 'Blue'
-  let s:purple = 'Purple'
+  " NOTE: offsuite grays for UI elements
+  let s:uibg = '#ecf0f1'        " #ECF0F1
+  let s:ui1 = '#dedcd6'         " #DEDCD6
+  let s:ui2 = '#cac7bd'         " #cac7bd
+  let s:ui3 = '#b7b2a5'         " #b7b2a5
+  let s:ui4 = '#a39e8d'         " #a39e8d
+  let s:ui5 = '#908975'         " #908975
 
+  " NOTE: colors moddeled after the Win98 selected start menu item
+  " by changing hues to match the desired color name.
+  " These are used for highlighting important syntax
+  let s:red = '#800013'         " #800013
+  let s:green = '#00802c'       " #00802c
+  let s:blue = '#170080'        " #170080
+  let s:purple = '#410080'      " #410080
 " }}}
 
 " Normal UI {{{
   " Normal text
-  call s:HL('Normal', s:black, s:gray7)
+  call s:HL('Normal', s:black, s:white)
   " call s:HL('Normal', s:black, s:light_red_bg)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:gray5)
+  call s:HL('CursorLine', s:none , s:gray27)
 
   hi! link CursorColumn CursorLine
 
@@ -150,7 +180,7 @@ augroup END
   call s:HL('Conceal', s:gray1, s:bold)
 
   " Line number of CursorLine
-  call s:HL('CursorLineNr', s:gray1, s:gray4)
+  call s:HL('CursorLineNr', s:gray1, s:ui2, s:bold)
 
   " Non text is stuff like Tildes on the bottom of the page.
   call s:HL('NonText', s:gray1, s:none)
@@ -161,22 +191,22 @@ augroup END
   call s:HL('Visual', s:none, s:none, s:invert_selection)
   hi! link VisualNOS Visual
 
-  call s:HL('Search', s:purple, s:none, s:inverse)
-  call s:HL('IncSearch', s:purple, s:none, s:inverse)
+  call s:HL('Search', s:black, s:black, s:inverse)
+  call s:HL('IncSearch', s:black, s:none, s:inverse)
   call s:HL('CurrentSearchMatch', s:black, s:none, s:inverse . s:bold)
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
-  call s:HL('StatusLine', s:gray4, s:gray1, s:inverse)
+  call s:HL('StatusLine', s:ui2, s:black, s:inverse)
   " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
   " SOURCE: https://tinyurl.com/yavjy26z
-  call s:HL('StatusLineNC', s:gray5, s:gray1, s:inverse)
+  call s:HL('StatusLineNC', s:ui1, s:gray1, s:inverse)
 
   " The column separating vertically split windows
   call s:HL('VertSplit', s:none, s:none)
 
   " Current match in wildmenu completion
-  call s:HL('WildMenu', s:purple, s:white, s:bold . s:inverse)
+  call s:HL('WildMenu', s:blue, s:white, s:bold . s:inverse)
 
   " FIXME
   " " Directory names, special names in listing
@@ -199,16 +229,17 @@ augroup END
 
 " Gutter: {{{
   " Line number for :number and :# commands
-  call s:HL('LineNr', s:gray3, s:gray5)
+  call s:HL('LineNr', s:gray10, s:ui1)
 
   " Column where signs are displayed
-  call s:HL('SignColumn', s:purple, s:gray4)
-  call s:HL('ColorColumn', s:none, s:gray5)
+  call s:HL('SignColumn', s:blue, s:none)
+  " FIXME: this colorcolumn highlight is a bit intrusive currently
+  call s:HL('ColorColumn', s:none, s:ui2)
 
   " Line used for closed folds
-  call s:HL('Folded', s:white, s:purple, s:italic)
+  call s:HL('Folded', s:white, s:ui3, s:italic)
   " Column where folds are displayed
-  call s:HL('FoldColumn', s:white, s:gray1)
+  call s:HL('FoldColumn', s:white, s:ui3)
 " }}}
 
 " Cursor: {{{
@@ -225,7 +256,7 @@ augroup END
 
 " Syntax Highlighting: {{{
   call s:HL('Special', s:black, s:none, s:italic)
-  call s:HL('Comment', s:gray1, s:none, s:italic)
+  call s:HL('Comment', s:gray4, s:none, s:italic)
   " TODO and similar tags.
   call s:HL('Todo', s:purple, s:none, s:bold . s:italic)
   call s:HL('Error', s:red, s:none, s:bold . s:inverse)
@@ -306,13 +337,13 @@ augroup END
 
 " Completion Menu: {{{
   " Popup menu: normal item
-  call s:HL('Pmenu', s:white, s:purple)
+  call s:HL('Pmenu', s:black, s:ui3)
   " Popup menu: selected item
-  call s:HL('PmenuSel', s:white, s:black, s:bold)
+  call s:HL('PmenuSel', s:white, s:blue, s:bold)
   " Popup menu: scrollbar
-  call s:HL('PmenuSbar', s:none, s:black)
+  call s:HL('PmenuSbar', s:none, s:ui5)
   " Popup menu: scrollbar thumb
-  call s:HL('PmenuThumb', s:none, s:white)
+  call s:HL('PmenuThumb', s:none, s:blue)
 " }}}
 
 " Diffs: {{{
@@ -355,9 +386,9 @@ augroup END
 " }}}
 
 " Signify: {{{
-  call s:HL('SignifySignAdd', s:gray1, s:gray4)
-  call s:HL('SignifySignChange', s:gray1, s:gray4)
-  call s:HL('SignifySignDelete', s:gray1, s:gray4)
+  call s:HL('SignifySignAdd', s:green, s:none)
+  call s:HL('SignifySignChange', s:blue, s:none)
+  call s:HL('SignifySignDelete', s:red, s:none)
 " }}}
 
 " Asynchronous Lint Engine: {{{
@@ -366,8 +397,8 @@ augroup END
   " hi! link ALEWarningSign SnappyYellowSign
   " hi! link ALEInfoSign SnappyBlueSign
   call s:HL('ALEErrorSign', s:red, s:white, s:inverse)
-  call s:HL('ALEWarningSign', s:red, s:gray4, s:bold)
-  call s:HL('ALEInfoSign', s:blue, s:gray4, s:bold)
+  call s:HL('ALEWarningSign', s:red, s:none, s:bold)
+  call s:HL('ALEInfoSign', s:blue, s:none, s:bold)
 " }}}
 
 " Dirvish: {{{
