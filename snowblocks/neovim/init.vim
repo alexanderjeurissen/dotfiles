@@ -69,10 +69,6 @@
   set statusline=%!statusline#Init()
 " }}}
 
-" SETTINGS: terminal {{{
-  tnoremap <leader><ESC> <C-\><C-n>
-" }}}
-
 " SETTINGS: Colorscheme {{{
   if (has('termguicolors'))
     set termguicolors
@@ -245,7 +241,15 @@
   map <Leader>cd :lcd %:p:h<CR>:pwd<CR>
 " }}}
 
-" AUTOCMD: General {{{
+" KEYBINDINGS: terminal {{{
+  " NOTE: when trying to do movement commands using C-w
+  " auto escape out of term mode
+  tnoremap <C-w> <C-\><C-n><C-w>
+
+  tnoremap <leader><ESC> <C-\><C-n>
+" }}}
+
+" AUTOCMD: Autocmd groups  {{{
   augroup ALEXANDER_GENERAL
     autocmd!
     " When editing a file, always jump to the last known cursor position.
@@ -299,9 +303,21 @@
     autocmd VimEnter * call ActivateColorScheme()
 
     autocmd User FzfStatusLine call fzf#Statusline()
+  augroup END
 
-    " Terminal settings
+  augroup ALEXANDER_TERM
+    autocmd!
+    " NOTE: set some terminal buffer local overrrides
+    " such as no number, no relative number, no cursorline etc.
     autocmd TermOpen * call terminal#Settings()
+
+    " NOTE: leave and start insertmode when entering/leaving term buf
+    autocmd BufWinEnter,WinEnter term://* startinsert
+    autocmd BufLeave term://* stopinsert
+
+    " FIXME: this breaks on stuff like FzF
+    " NOTE: quit when a terminal closes instead of showing exit code
+    " autocmd TermClose * bd!|q
   augroup END
 " }}}
 

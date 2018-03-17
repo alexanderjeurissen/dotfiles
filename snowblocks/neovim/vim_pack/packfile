@@ -30,6 +30,7 @@
     - scss
     - css
     - html
+    - vim
   local: false
   name: "ap/vim-css-color"
   opt: true
