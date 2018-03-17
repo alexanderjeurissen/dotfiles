@@ -9,4 +9,9 @@ function! terminal#Settings()
   " NOTE: make sure we start in insertmode
   " so we can get typing right away
   startinsert
+
+  " NOTE: make C-d terminate the terminal like
+  " in other terminals
+  noremap <buffer> <C-d> :q<CR>
+
 endfunction
