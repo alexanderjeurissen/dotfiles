@@ -219,5 +219,10 @@
 - 
   category: default
   local: false
+  name: "vim-scripts/searchfold.vim"
+  opt: false
+- 
+  category: default
+  local: false
   name: w0rp/ale
   opt: false

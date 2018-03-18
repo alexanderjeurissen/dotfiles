@@ -95,6 +95,10 @@
     " bind K to grep word under cursor
     nnoremap K :grep! "\b<C-R><C-W>\b"<CR><CR>:cw<CR>
   endif
+
+  " NOTE: This makes it so that gx opens the url under cursor
+  " in Google Chrome
+  let g:netrw_browsex_viewer = "open -a '/Applications/Google Chrome.app'"
 " }}}
 
 " SETTINGS: DiffMode {{{
@@ -104,6 +108,7 @@
     set nocursorline
     set conceallevel=0
     set colorcolumn=0
+    set nofoldenable
   endif
 " }}}
 
@@ -207,8 +212,8 @@
 
   " auto-center on specific movement keys, and blink current search match
   nnoremap G Gzz
-  nnoremap n nzz:call general#HLNext(0.3)<cr>
-  nnoremap N Nzz:call general#HLNext(0.3)<cr>
+  nnoremap n nzz:call general#HLNext(0.1)<cr>
+  nnoremap N Nzz:call general#HLNext(0.1)<cr>
   nnoremap } }zz
   nnoremap { {zz
 " }}}
@@ -219,7 +224,6 @@
 
   " Open vimrc with <leader>fed
   nnoremap <leader>fed  :e $MYVIMRC<CR>
-  nnoremap <leader>feR :source $MYVIMRC<CR>
 
   " Rename current file with <leader>fr
   noremap <leader>fr :call general#RenameFile()<CR>
@@ -314,10 +318,12 @@
     " NOTE: leave and start insertmode when entering/leaving term buf
     autocmd BufWinEnter,WinEnter term://* startinsert
     autocmd BufLeave term://* stopinsert
+  augroup END
 
-    " FIXME: this breaks on stuff like FzF
-    " NOTE: quit when a terminal closes instead of showing exit code
-    " autocmd TermClose * bd!|q
+  " NOTE: reload init.vim when saving it to disk
+  augroup ALEXANDER_VIMRC_RELOAD
+    autocmd!
+    autocmd BufWritePost init.vim source %
   augroup END
 " }}}
 
