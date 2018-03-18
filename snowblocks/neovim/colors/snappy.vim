@@ -165,22 +165,22 @@ augroup END
 
 " Normal UI {{{
   " Normal text
-  call s:HL('Normal', s:black, s:white)
+  call s:HL('Normal', s:black, s:uibg)
   " call s:HL('Normal', s:black, s:light_red_bg)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:gray27)
+  call s:HL('CursorLine', s:none , s:ui1)
 
   hi! link CursorColumn CursorLine
 
   " Match paired bracket under the cursor
-  call s:HL('MatchParen', s:blue, s:green, s:bold)
+  call s:HL('MatchParen', s:blue, s:none, s:bold)
 
   " Concealed element: \lambda → λ
   call s:HL('Conceal', s:gray1, s:bold)
 
   " Line number of CursorLine
-  call s:HL('CursorLineNr', s:gray1, s:ui2, s:bold)
+  call s:HL('CursorLineNr', s:gray5, s:gray23, s:bold)
 
   " Non text is stuff like Tildes on the bottom of the page.
   call s:HL('NonText', s:gray1, s:none)
@@ -191,16 +191,16 @@ augroup END
   call s:HL('Visual', s:none, s:none, s:invert_selection)
   hi! link VisualNOS Visual
 
-  call s:HL('Search', s:black, s:black, s:inverse)
-  call s:HL('IncSearch', s:black, s:none, s:inverse)
-  call s:HL('CurrentSearchMatch', s:black, s:none, s:inverse . s:bold)
+  call s:HL('Search', s:ui2, s:black, s:inverse)
+  call s:HL('IncSearch', s:ui2, s:black, s:inverse)
+  call s:HL('CurrentSearchMatch', s:white, s:none, s:inverse . s:bold)
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
-  call s:HL('StatusLine', s:ui2, s:black, s:inverse)
+  call s:HL('StatusLine', s:ui1, s:gray5, s:inverse)
   " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
   " SOURCE: https://tinyurl.com/yavjy26z
-  call s:HL('StatusLineNC', s:ui1, s:gray1, s:inverse)
+  call s:HL('StatusLineNC', s:ui1, s:gray15, s:inverse)
 
   " The column separating vertically split windows
   call s:HL('VertSplit', s:none, s:none)
@@ -229,7 +229,7 @@ augroup END
 
 " Gutter: {{{
   " Line number for :number and :# commands
-  call s:HL('LineNr', s:gray10, s:ui1)
+  call s:HL('LineNr', s:gray15, s:gray26)
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:blue, s:none)
@@ -237,7 +237,7 @@ augroup END
   call s:HL('ColorColumn', s:none, s:ui2)
 
   " Line used for closed folds
-  call s:HL('Folded', s:white, s:ui3, s:italic)
+  call s:HL('Folded', s:gray5, s:ui2, s:italic)
   " Column where folds are displayed
   call s:HL('FoldColumn', s:white, s:ui3)
 " }}}
@@ -337,13 +337,13 @@ augroup END
 
 " Completion Menu: {{{
   " Popup menu: normal item
-  call s:HL('Pmenu', s:black, s:ui3)
+  call s:HL('Pmenu', s:black, s:ui1)
   " Popup menu: selected item
-  call s:HL('PmenuSel', s:white, s:blue, s:bold)
+  call s:HL('PmenuSel', s:white, s:black, s:bold)
   " Popup menu: scrollbar
-  call s:HL('PmenuSbar', s:none, s:ui5)
+  call s:HL('PmenuSbar', s:none, s:ui2)
   " Popup menu: scrollbar thumb
-  call s:HL('PmenuThumb', s:none, s:blue)
+  call s:HL('PmenuThumb', s:none, s:black)
 " }}}
 
 " Diffs: {{{
