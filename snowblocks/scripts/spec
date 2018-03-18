@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 file_path="$(echo $1 | cut -d':' -f1)"
 spec="$1"
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 last_commit=$(git log -1 --pretty=%B)
 stash_commit=$(echo $last_commit | grep 'TEMP_COMMIT:')
 if [[ -n $stash_commit ]]; then

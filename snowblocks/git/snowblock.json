@@ -1,6 +1,9 @@
 [
   {
-    "clean": ["~"]
+    "clean": [
+      "~",
+      "~/.git_template"
+    ]
   },
   {
     "dependencies": [
@@ -9,6 +12,10 @@
   },
   {
     "link": {
+      "~/.git_template": {
+        "create": true,
+        "relink": true
+      },
       "~/.gitconfig": {
         "relink": true
       },
