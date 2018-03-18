@@ -35,8 +35,8 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # FZF settings {{{
  export FZF_DEFAULT_OPTS='
-   --color fg:255,bg:5,hl:8,fg+:255,bg+:8,hl+:13
-   --color info:0,prompt:0,pointer:13,marker:13,spinner:255,header:8
+   --color fg:000000,bg:#dedcd6,hl:#170080,fg+:#ffffff,bg+:#000000,hl+:#ffffff
+   --color info:#000000,prompt:#000000,pointer:#ffffff,marker:#ffffff,spinner:#170080,header:8
  '
 # }}}
 
@@ -44,10 +44,9 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
 LS_COLORS='di=01;30' ; export LS_COLORS
 # }}}
 
-
 export VIM_CONFIG_PATH=$HOME/.config/nvim/
 
-# FIXES: issue with too many open files when refreshing paperclip thumbnails:
+# NOTE: fixes issue with too many open files when refreshing paperclip thumbnails:
 # https://github.com/thoughtbot/paperclip/issues/1326
 export RUN_AT_EXIT_HOOKS=true
 
