@@ -2,7 +2,6 @@ import os
 import subprocess
 import snowsaw
 
-
 class Dependencies(snowsaw.Plugin):
     """
     plugin to install dependencies for the current snowblock
