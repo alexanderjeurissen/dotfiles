@@ -28,13 +28,24 @@ fi
     fi
   }
 
-  # Run command n-times
+  # NOTE: Run command n-times
   # http://serverfault.com/questions/273238/how-to-run-a-command-multiple-times
   times() {
     number=$1
     shift
     for i in `seq $number`; do
       $@
+    done
+  }
+
+  # NOTE: Run command till the exit code is zero
+  try_loop() {
+    attempts=0
+    until $@
+    do
+      sleep 0.1
+      attempts = attempts + 1
+      echo "TRY_LOOP: attempt # ${attempt}"
     done
   }
 
@@ -148,15 +159,18 @@ fi
   alias create_commit_range_patch="git format-patch"
   alias prof="source ~/.zshrc && source ~/.zshenv && source ~/.zprofile"
   alias structuresql="g difftool develop -- db/structure.sql"
-  alias devdiff="g difftool develop --"
   alias check_failing_jenkins_specs="bin/rspec $(pbpaste)"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
   alias verify_approvals="approvals verify -d nvim -d  -a"
+  # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/14 {{{
   alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
   alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
+  # }}}
   alias eslintspecific="yarn run eslint:specific -- --fix"
+  # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/15 {{{
   alias yarn_global_add='yarn global add --global-folder=`yarn global bin` '
   alias yarn_global_remove='yarn global remove --global-folder=`yarn global bin` '
+  # }}}
   alias urldecode='python -c "import sys, urllib as ul; \
     print ul.unquote_plus(sys.argv[1])"'
 
@@ -164,24 +178,12 @@ fi
     print ul.quote_plus(sys.argv[1])"'
 # }}}
 
-# Alias for hackerij {{{
+# Alias for pentesting/hacking {{{
   alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
   alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 12345 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 12345"
   alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
   alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
   alias burp="open $HOME/git/hackerij/burp.jar"
-# }}}
-
-# Aliases / functions for TimeWarrior {{{
-  alias twt='timew today'
-  alias tww='timew week'
-
-  #default pomodoro session (minutes)
-  export POMODORO_TIMEOUT=25
-  #default pomodoro short break (minutes)
-  export POMODORO_STIMEOUT=5
-  #default pomodoro long break (minutes)
-  export POMODORO_LTIMEOUT=15
 # }}}
 
 # Aliases for common typo's {{{
@@ -191,10 +193,7 @@ fi
 # }}}
 
 # Nvim & vim aliases {{{
-  # alias vim='nvim'
-  alias vi='nvim'
   alias v='nvim'
-  alias vim='nvim'
 # }}}
 
 # Aliases for Arcanist {{{
@@ -202,11 +201,13 @@ fi
   alias diffb="arc diff --browse"
   alias diffu="arc diff --no-unit --excuse \"jenkins\" --verbatim"
 
-  nexttask() {
-    next_task=`arc task | egrep -o 'T\d+' | head -1`
-    echo $next_task | pbcopy
-    arc browse $next_task
-  }
+  # FIXME: {{{
+    nexttask() {
+      next_task=`arc task | egrep -o 'T\d+' | head -1`
+      echo $next_task | pbcopy
+      arc browse $next_task
+    }
+  # }}}
 
   browse() {
     case $1 in
@@ -234,7 +235,7 @@ fi
     arc browse "${chosen_object}"
   }
 
-  # Cherrypick diff by applying it without commit and no branch
+  # NOTE: Cherrypick diff by applying it without commit and no branch
   # Then commit it with message: "Patch <diff-id> (TODO: remove this commit before landing)
   cherrypick() {
     arc patch --nocommit --nobranch "${1}"
@@ -303,7 +304,6 @@ fi
 # git aliases {{{
   source ~/.gitaliases
   alias changedfiles= "git diff --name-only | uniq | xargs nvim"
-  # alias rebase_to_develop="git rebase -i HEAD~$(git log --oneline develop..|wc -l| tr -d ' ')"
 # }}}
 
 # History options {{{
@@ -406,7 +406,7 @@ bindkey '^e' autosuggest-accept
   # ctrl-d shows a diff of the stash against your current HEAD
   # ctrl-b checks the stash out as a branch, for easier merging
   zmodload zsh/mapfile # Needsed for mappin the files in fstash
-  fstash() {
+  stashlist() {
     local out q k sha
     while out=$(
       git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
