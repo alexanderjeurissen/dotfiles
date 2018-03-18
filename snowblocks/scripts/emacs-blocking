@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 socket_file=$(lsof -c Emacs | grep server | tr -s " " | cut -d' ' -f8)
 echo 'press any key to confirm your done editing'
