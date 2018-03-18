@@ -81,7 +81,7 @@
   endif
 
   function! ActivateColorScheme()
-    colorscheme snappy " fallback incase no colorscheme plugin is installed
+    colorscheme default " fallback incase no colorscheme plugin is installed
   endfunction
 " }}}
 

@@ -25,6 +25,11 @@
   name: "airblade/vim-rooter"
   opt: false
 - 
+  category: default
+  local: false
+  name: alexanderjeurissen/lumiere.vim
+  opt: false
+- 
   category: frontend
   for: 
     - scss
@@ -225,4 +230,9 @@
   category: default
   local: false
   name: w0rp/ale
+  opt: false
+- 
+  category: default
+  local: false
+  name: "yuttie/inkstained-vim"
   opt: false

@@ -5,13 +5,13 @@ if exists('syntax_on')
 endif
 
 set background=light
-let g:colors_name = 'snappy'
+let g:colors_name = 'lumiere'
 
-augroup SnappyReload
+augroup LumiereReload
 autocmd!
-    autocmd BufWritePost snappy.vim colo snappy
-    autocmd BufWritePost snappy.vim let g:snappy_dev=1
-    autocmd BufWritePost snappy.vim set ft=vim
+    autocmd BufWritePost lumiere_dev.vim colo lumiere_dev
+    autocmd BufWritePost lumiere_dev.vim let g:lumiere_dev=1
+    autocmd BufWritePost lumiere_dev.vim set ft=vim
 augroup END
 
 " Functions: {{{
@@ -56,57 +56,57 @@ augroup END
 " }}}
 
 " SETUP VARS: {{{
-  if !exists('g:snappy_bold')
-    let g:snappy_bold=1
+  if !exists('g:lumiere_bold')
+    let g:lumiere_bold=1
   endif
-  if !exists('g:snappy_italic')
+  if !exists('g:lumiere_italic')
     if has('nvim') || has('gui_running') || $TERM_ITALICS ==# 'true'
-      let g:snappy_italic=1
+      let g:lumiere_italic=1
     else
-      let g:snappy_italic=0
+      let g:lumiere_italic=0
     endif
   endif
-  if !exists('g:snappy_undercurl')
-    let g:snappy_undercurl=1
+  if !exists('g:lumiere_undercurl')
+    let g:lumiere_undercurl=1
   endif
-  if !exists('g:snappy_underline')
-    let g:snappy_underline=1
+  if !exists('g:lumiere_underline')
+    let g:lumiere_underline=1
   endif
-  if !exists('g:snappy_inverse')
-    let g:snappy_inverse=1
+  if !exists('g:lumiere_inverse')
+    let g:lumiere_inverse=1
   endif
-  if !exists('g:snappy_dev')
-    let g:snappy_dev=0
+  if !exists('g:lumiere_dev')
+    let g:lumiere_dev=0
   endif
 
   let s:bold = 'bold,'
-  if g:snappy_bold == 0
+  if g:lumiere_bold == 0
     let s:bold = ''
   endif
 
   let s:italic = 'italic,'
-  if g:snappy_italic == 0
+  if g:lumiere_italic == 0
     let s:italic = ''
   endif
 
   let s:underline = 'underline,'
-  if g:snappy_underline == 0
+  if g:lumiere_underline == 0
     let s:underline = ''
   endif
 
   let s:undercurl = 'undercurl,'
-  if g:snappy_undercurl == 0
+  if g:lumiere_undercurl == 0
     let s:undercurl = ''
   endif
 
   let s:inverse = 'inverse,'
-  if g:snappy_inverse == 0
+  if g:lumiere_inverse == 0
     let s:inverse = ''
   endif
 
   let s:invert_selection = s:inverse
-  if exists('g:snappy_invert_selection')
-    if g:snappy_invert_selection == 0
+  if exists('g:lumiere_invert_selection')
+    if g:lumiere_invert_selection == 0
       let s:invert_selection = ''
     endif
   endif
@@ -147,12 +147,14 @@ augroup END
   let s:white = '#ffffff'       " #ffffff
 
   " NOTE: offsuite grays for UI elements
-  let s:uibg = '#ecf0f1'        " #ECF0F1
-  let s:ui1 = '#dedcd6'         " #DEDCD6
-  let s:ui2 = '#cac7bd'         " #cac7bd
-  let s:ui3 = '#b7b2a5'         " #b7b2a5
-  let s:ui4 = '#a39e8d'         " #a39e8d
-  let s:ui5 = '#908975'         " #908975
+  let s:uibg = '#e7e5e2'        " #e7e5e2
+  let s:ui1 = '#dfddd7'         " #dfddd7
+  let s:ui2 = '#dedcd6'         " #dedcd6
+  let s:ui3 = '#d3d1cc'         " #d3d1cc
+  let s:ui4 = '#cac7bd'         " #cac7bd
+  let s:ui5 = '#b7b2a5'         " #b7b2a5
+  let s:ui6 = '#a39e8d'         " #a39e8d
+  let s:ui7 = '#908975'         " #908975
 
   " NOTE: colors moddeled after the Win98 selected start menu item
   " by changing hues to match the desired color name.
@@ -166,10 +168,9 @@ augroup END
 " Normal UI {{{
   " Normal text
   call s:HL('Normal', s:black, s:uibg)
-  " call s:HL('Normal', s:black, s:light_red_bg)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:ui1)
+  call s:HL('CursorLine', s:none , s:ui1, s:none)
 
   hi! link CursorColumn CursorLine
 
@@ -180,7 +181,7 @@ augroup END
   call s:HL('Conceal', s:gray1, s:bold)
 
   " Line number of CursorLine
-  call s:HL('CursorLineNr', s:gray5, s:gray23, s:bold)
+  call s:HL('CursorLineNr', s:gray5, s:ui3, s:bold)
 
   " Non text is stuff like Tildes on the bottom of the page.
   call s:HL('NonText', s:gray1, s:none)
@@ -191,13 +192,13 @@ augroup END
   call s:HL('Visual', s:none, s:none, s:invert_selection)
   hi! link VisualNOS Visual
 
-  call s:HL('Search', s:ui2, s:black, s:inverse)
-  call s:HL('IncSearch', s:ui2, s:black, s:inverse)
+  call s:HL('Search', s:none, s:none, s:invert_selection)
+  call s:HL('IncSearch', s:none, s:none, s:invert_selection)
   call s:HL('CurrentSearchMatch', s:white, s:none, s:inverse . s:bold)
 
   call s:HL('Underlined', s:black, s:none, s:underline)
 
-  call s:HL('StatusLine', s:ui1, s:gray5, s:inverse)
+  call s:HL('StatusLine', s:ui3, s:gray5, s:inverse)
   " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
   " SOURCE: https://tinyurl.com/yavjy26z
   call s:HL('StatusLineNC', s:ui1, s:gray15, s:inverse)
@@ -229,7 +230,7 @@ augroup END
 
 " Gutter: {{{
   " Line number for :number and :# commands
-  call s:HL('LineNr', s:gray15, s:gray26)
+  call s:HL('LineNr', s:gray15, s:ui1)
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:blue, s:none)
@@ -256,7 +257,7 @@ augroup END
 
 " Syntax Highlighting: {{{
   call s:HL('Special', s:black, s:none, s:italic)
-  call s:HL('Comment', s:gray4, s:none, s:italic)
+  call s:HL('Comment', s:gray14, s:none, s:italic)
   " TODO and similar tags.
   call s:HL('Todo', s:purple, s:none, s:bold . s:italic)
   call s:HL('Error', s:red, s:none, s:bold . s:inverse)
@@ -337,11 +338,11 @@ augroup END
 
 " Completion Menu: {{{
   " Popup menu: normal item
-  call s:HL('Pmenu', s:black, s:ui1)
+  call s:HL('Pmenu', s:black, s:ui5)
   " Popup menu: selected item
   call s:HL('PmenuSel', s:white, s:black, s:bold)
   " Popup menu: scrollbar
-  call s:HL('PmenuSbar', s:none, s:ui2)
+  call s:HL('PmenuSbar', s:none, s:ui5)
   " Popup menu: scrollbar thumb
   call s:HL('PmenuThumb', s:none, s:black)
 " }}}
@@ -379,9 +380,9 @@ augroup END
 " }}}
 
 " Sneak: {{{
-  augroup snappy
-    autocmd ColorScheme snappy hi! link Sneak Search
-    autocmd ColorScheme snappy hi! link SneakLabel Search
+  augroup lumiere
+    autocmd ColorScheme lumiere hi! link Sneak Search
+    autocmd ColorScheme lumiere hi! link SneakLabel Search
   augroup END
 " }}}
 
@@ -415,7 +416,7 @@ augroup END
   " NOTE: This is for debugging purposes.
   " it highlights the color var names above in their own color to easily see the highlight rule that
   " is applied
-  if g:snappy_dev == 1
+  if g:lumiere_dev == 1
     syn match SnappyGrayOne contained 'gray1'
     syn match SnappyGrayTwo contained 'gray2'
     syn match SnappyGrayThree contained 'gray3'
