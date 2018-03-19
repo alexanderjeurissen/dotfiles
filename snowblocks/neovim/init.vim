@@ -146,8 +146,10 @@
   " custom comma motion mapping
   nnoremap di, f,dT,
   nnoremap ci, f,cT,
-  nnoremap da, f,ld2F,i,<ESC>l "delete argument
-  nnoremap ca, f,ld7F,i,<ESC>a "delete arg and insert
+  "delete argument
+  nnoremap da, f,ld2F,i,<ESC>l
+  "delete arg and insert
+  nnoremap ca, f,ld7F,i,<ESC>a
 
   "FIXME: Replace mappings
   nnoremap <leader>rp {ma}mb:'a,'bs/
@@ -224,15 +226,13 @@
 
   " Open vimrc with <leader>fed
   nnoremap <leader>fed  :e $MYVIMRC<CR>
+  nnoremap <leader>feR  :source $MYVIMRC<CR>
 
   " Rename current file with <leader>fr
   noremap <leader>fr :call general#RenameFile()<CR>
 
   " Get a vimdiff of all approvals
   map <leader>v :!approvals verify -d vimdiff -a<cr>
-
-  " Safely exit neovim
-  nmap Q :confirm qall<CR>
 
   "w!! to save file with sudo
   cmap w!! w !sudo tee % > /dev/null
