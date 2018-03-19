@@ -179,10 +179,14 @@
 
   " Go to previous and next item in quickfix list
   noremap <leader>cn :cnext<CR>
+  noremap <leader>cN :cnfile<CR>
   noremap <leader>cp :cprev<CR>
+  noremap <leader>cP :cpfile<CR>
 
   noremap <leader>ln :lnext<CR>
+  noremap <leader>lN :lnfile<CR>
   noremap <leader>lp :lprev<CR>
+  noremap <leader>lP :lpfile<CR>
 
   " Split creation
   noremap <silent> <leader>wv <C-w>v
