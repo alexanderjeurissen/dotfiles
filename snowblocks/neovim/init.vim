@@ -332,12 +332,6 @@ scriptencoding utf-8
     autocmd!
     autocmd BufWritePost init.vim source %
   augroup END " }}}
-
-  " NOTE: open help files in a new tab
-  augroup ALEXANDER_HELP_IN_NEW_TAB " {{{
-    autocmd!
-    autocmd BufEnter *.txt call general#HelpInNewTab()
-  augroup END " }}}
 " }}}
 
 " EXTRA: Include local vim config {{{
