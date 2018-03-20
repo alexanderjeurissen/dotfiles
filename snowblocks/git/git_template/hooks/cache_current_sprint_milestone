@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+PATH="/usr/local/bin:$PATH"
+dir="`git rev-parse --git-dir`"
+trap 'rm -f "$dir/$$.current_sprint"' EXIT
+io="$dir/$$.current_sprint"
+
+json="$(
+  echo '{
+    "queryKey": "active",
+    "constraints": {
+      "isMilestone": true,
+      "parents": [
+        "PHID-PROJ-3uberatkc323lprcofx3"
+      ]
+    }
+  }' | arc call-conduit --conduit-uri https://phabricator.inverselink.com/ project.search
+)"
+
+sprint_phid=$(echo $json | jq '.response.data[0].phid' --raw-output)
+
+echo "$sprint_phid" > "$io"

@@ -4,3 +4,6 @@
 # https://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
 
 .git/hooks/ctags >/dev/null 2>&1 &
+
+# NOTE: Cache current phabricator sprint 
+.git/hooks/cache_current_sprint_milestone >/dev/null 2>&1 &
