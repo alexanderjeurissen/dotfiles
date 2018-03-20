@@ -105,11 +105,3 @@ function! general#ExecuteMacroOverVisualRange()
   echo '@'.getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
-
-" NOTE: obtained from Damian Conway Mastering Vim examples
-function! general#HelpInNewTab()
-  if &buftype ==? 'help'
-    "Convert the help window to a tab...
-    execute "normal \<C-W>T"
-  endif
-endfunction

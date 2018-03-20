@@ -192,7 +192,9 @@ augroup END
   let s:magentahl = '#d9b2fe'   " #d9b2fe
 
   let s:yellow = '#ffda40'      " #ffda40
-  let s:darkyellow = '#9f8000'  " #9f8000
+  " let s:darkyellow = '#9f8000'  " #9f8000
+  let s:darkyellow = '#4f4000'  " #4f4000
+
   let s:yellowhl = '#fff7d8'    " #fff7d8
 
   let s:orange = '#cc4c00'      " #cc4c00
