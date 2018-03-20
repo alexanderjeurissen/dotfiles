@@ -143,7 +143,8 @@ fi
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
   alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
-  alias migrate_redo="bin/rake db:migrate:redo VERSION="
+  alias migrate_redo="noglob bin/rake db:migrate:redo"
+  alias migrate_undo="noglob bin/rake db:migrate:down"
   alias chrome="CAPYBARA_DRIVER=\"selenium\""
   alias rerun="bundle exec cucumber -p rerun"
   alias routes="rails_routes | fzf | pbcopy"
@@ -271,7 +272,7 @@ export EDITOR="nvim"
 # --hidden: Search hidden files and folders
 # --follow: Follow symlinks
   # export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  export FZF_DEFAULT_COMMAND='rg --files --ignore-case --hidden --follow'
+  export FZF_DEFAULT_COMMAND='rg --files --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
