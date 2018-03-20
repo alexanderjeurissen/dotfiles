@@ -9,6 +9,7 @@ dist
 npm-debug.log
 app/bower_components
 .tern-project
+.yarn-cache
 
 # ruby
 *.ruby-version
@@ -26,8 +27,11 @@ app/languages/*.json
 *.swo
 swoopBuf
 .tern-port
-# apple temp files
+
+# apple temp files and code unrelated directories
 .DS_Store
+/Library
+~/Library
 
 # vim sessions and log files
 *.session
@@ -43,8 +47,12 @@ logfile.log
 # Gitlab cli config
 ~/.config/gitlab-cli/default.js
 
+# CACHE directories
+Caches
+.CACHES
+.cache
 
-
+# MISC
 .byebug_history
 public_
 bin/pretty
