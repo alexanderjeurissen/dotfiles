@@ -46,8 +46,8 @@ scriptencoding utf-8
   set nofoldenable                                   " collapse all folds.
   set foldmethod=syntax                              " Fold on the syntax
   set foldcolumn=0                                   " Don't indicate fold open/closed (redundant info)
-  set foldlevel=10                                   " Autofold nothing by default
-  set foldnestmax=1                                  " Only fold outer functions
+  set foldlevel=1                                    " Autofold nothing by default
+  set foldnestmax=3                                  " Only fold outer functions
 
   set modeline                                       " automatically settings options based on file comment
   set confirm                                        " Makes operations like qa ask for confirmation.
