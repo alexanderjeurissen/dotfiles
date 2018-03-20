@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " SETTINGS: General {{{
   set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
   set path=$PWD,$PWD/app/**                                   " Make :find more usable by default
@@ -54,8 +56,9 @@
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right
 
+  " FIXME temp disabling this to test tabnew help
   " Open help in a new split instead of vimbuffer
-  cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
+  " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
   let python3_host_prog = "python3"
   let python_host_prog = "python"
@@ -137,7 +140,7 @@
   " Macro related mappings
   command! Bufmacro bufdo execute "normal @a" | write
   command! Cmacro cdo execute "normal@a" | write
-  xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+  xnoremap @ :<C-u>call general#ExecuteMacroOverVisualRange()<CR>
 
   " Move visual block
   vnoremap J :m '>+1<CR>gv=gv
@@ -258,7 +261,7 @@
 " }}}
 
 " AUTOCMD: Autocmd groups  {{{
-  augroup ALEXANDER_GENERAL
+  augroup ALEXANDER_GENERAL " {{{
     autocmd!
     " When editing a file, always jump to the last known cursor position.
     " Don't do it for commit messages, when the position is invalid, or when
@@ -311,9 +314,9 @@
     autocmd VimEnter * call ActivateColorScheme()
 
     autocmd User FzfStatusLine call fzf#Statusline()
-  augroup END
+  augroup END " }}}
 
-  augroup ALEXANDER_TERM
+  augroup ALEXANDER_TERM " {{{
     autocmd!
     " NOTE: set some terminal buffer local overrrides
     " such as no number, no relative number, no cursorline etc.
@@ -322,13 +325,19 @@
     " NOTE: leave and start insertmode when entering/leaving term buf
     autocmd BufWinEnter,WinEnter term://* startinsert
     autocmd BufLeave term://* stopinsert
-  augroup END
+  augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk
-  augroup ALEXANDER_VIMRC_RELOAD
+  augroup ALEXANDER_VIMRC_RELOAD " {{{
     autocmd!
     autocmd BufWritePost init.vim source %
-  augroup END
+  augroup END " }}}
+
+  " NOTE: open help files in a new tab
+  augroup ALEXANDER_HELP_IN_NEW_TAB " {{{
+    autocmd!
+    autocmd BufEnter *.txt call general#HelpInNewTab()
+  augroup END " }}}
 " }}}
 
 " EXTRA: Include local vim config {{{
@@ -336,5 +345,4 @@
     source ~/.nvimrc.local
   endif
 " }}}
-
 " vim: foldmethod=marker:sw=2:foldlevel=10

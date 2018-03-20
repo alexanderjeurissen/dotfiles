@@ -82,11 +82,6 @@
 - 
   category: navigation
   local: false
-  name: "mhinz/vim-signify"
-  opt: false
-- 
-  category: navigation
-  local: false
   name: "moll/vim-bbye"
   opt: false
 - 

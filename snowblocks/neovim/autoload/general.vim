@@ -1,10 +1,10 @@
 " FIXME: this is current bugged due to conflicting tpope plugin
 " rename current file, via Gary Bernhardt
 function! general#RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'))
-  if new_name != '' && new_name != old_name
-    execute':Rename ' . new_name
+  let l:old_name = expand('%')
+  let l:new_name = input('New file name: ', expand('%'))
+  if l:new_name !=# '' && l:new_name != l:old_name
+    execute ':Rename ' . l:new_name
     redraw!
   endif
 endfunction
@@ -56,52 +56,60 @@ endfunction
 
 function! general#Preserve(command)
   " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
+  let l:s = @/
+  let l:l = line('.')
+  let l:c = col('.')
 
   " Do the business unless filetype is blacklisted
-  let blacklist = ['sql']
+  let l:blacklist = ['sql']
 
-  if index(blacklist, &ft) < 0
+  if index(l:blacklist, &filetype) < 0
     execute a:command
   endif
 
   " Clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
+  let @/ = l:s
+  call cursor(l:l, l:c)
 endfunction
 
 " save session
 function! general#WriteSession()
-  let cwd = fnamemodify('.', ':p:h:t')
+  let l:cwd = fnamemodify('.', ':p:h:t')
   " let dateStamp = strftime("%d-%m-%Y_%H:%M")
-  let extension = ".session"
+  let l:extension = '.session'
   " let fname = cwd . "_" . dateStamp . extension
-  let fname = cwd . extension
-  silent execute ":Obsession " . fname
-  echo "Wrote " . fname
+  let l:fname = l:cwd . l:extension
+  silent execute ':Obsession ' . l:fname
+  echo 'Wrote ' . l:fname
 endfun
 
 function! general#ExecVisualSelection()
-  let selection=s:get_visual_selection()
-  call jobstart("open ".selection)
+  let l:selection = s:get_visual_selection()
+  call jobstart("open " . l:selection)
 endfunc
 
 " source: http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript#6271254
 " original author of this function: xolox
 function! s:get_visual_selection()
   " Why is this not a built-in Vim script function?!
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  return join(lines, "\n")
+  let [l:lnum1, l:col1] = getpos("'<")[1:2]
+  let [l:lnum2, l:col2] = getpos("'>")[1:2]
+  let l:lines = getline(l:lnum1, l:lnum2)
+  let l:lines[-1] = l:lines[-1][: l:col2 - (&selection ==# 'inclusive' ? 1 : 2)]
+  let l:lines[0] = l:lines[0][l:col1 - 1:]
+  return join(l:lines, '\n')
 endfunction
 
 " Execute macro over visual selection
-function! ExecuteMacroOverVisualRange()
+function! general#ExecuteMacroOverVisualRange()
   echo '@'.getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
+endfunction
+
+" NOTE: obtained from Damian Conway Mastering Vim examples
+function! general#HelpInNewTab()
+  if &buftype ==? 'help'
+    "Convert the help window to a tab...
+    execute "normal \<C-W>T"
+  endif
 endfunction

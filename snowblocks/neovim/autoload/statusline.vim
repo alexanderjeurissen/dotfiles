@@ -1,15 +1,17 @@
-function! statusline#Init()
-  let statusline_items = ' ' " left padding
-  let statusline_items .= '%{statusline#FileInfoFlag()}'
-  let statusline_items .= '%t'
-  let statusline_items .= '%='
-  let statusline_items .= '%{statusline#PasteFlag()}'
-  "let statusline_items .= '%{statusline#SyntaxFlag()}'
-  let statusline_items .= '%{statusline#SpellFlag()}'
-  let statusline_items .= '%{statusline#HardTimeFlag()}'
-  let statusline_items .= '%{statusline#BranchFlag()}'
+scriptencoding utf-8
 
-  return statusline_items
+function! statusline#Init()
+  let l:statusline_items = ' ' " left padding
+  let l:statusline_items .= '%{statusline#FileInfoFlag()}'
+  let l:statusline_items .= '%t'
+  let l:statusline_items .= '%='
+  let l:statusline_items .= '%{statusline#PasteFlag()}'
+  "let statusline_items .= '%{statusline#SyntaxFlag()}'
+  let l:statusline_items .= '%{statusline#SpellFlag()}'
+  let l:statusline_items .= '%{statusline#HardTimeFlag()}'
+  let l:statusline_items .= '%{statusline#BranchFlag()}'
+
+  return l:statusline_items
 endfunction
 
 function! statusline#FileInfoFlag()
@@ -40,7 +42,7 @@ function! statusline#SyntaxFlag()
 endfunction
 
 function! statusline#HardTimeFlag()
-  if exists("b:hardtime_on") && b:hardtime_on == 1
+  if exists('b:hardtime_on') && b:hardtime_on == 1
     return '  '
   else
     return ''
@@ -54,5 +56,5 @@ function! statusline#BranchFlag()
     return l:branch[0].' '
   endif
 
-  return ""
+  return ''
 endfunction
