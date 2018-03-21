@@ -105,3 +105,18 @@ function! general#ExecuteMacroOverVisualRange()
   echo '@'.getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
+
+" NOTE: copied from Damian Conway's vimrc
+" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
+function! general#MarkMargin(on)
+  if exists('b:MarkMargin')
+      try
+          call matchdelete(b:MarkMargin)
+      catch /./
+      endtry
+      unlet b:MarkMargin
+  endif
+  if a:on
+      let b:MarkMargin = matchadd('ColorColumn', '\%>80v\s*\S', 100)
+  endif
+endfunction

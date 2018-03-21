@@ -273,8 +273,7 @@ augroup END
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:blue, s:none)
-  " FIXME: this colorcolumn highlight is a bit intrusive currently
-  call s:HL('ColorColumn', s:none, s:ui2)
+  call s:HL('ColorColumn', s:darkyellow, s:yellowhl)
 
   " Line used for closed folds
   call s:HL('Folded', s:gray5, s:ui2, s:italic)

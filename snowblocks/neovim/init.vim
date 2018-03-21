@@ -14,7 +14,8 @@ scriptencoding utf-8
   set cmdheight=2                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
-  set textwidth=100                                  " Set maximum number of characters per line
+  " FIXME: temp disabled to test out Conway's cc approach to text width
+  " set textwidth=100                                  " Set maximum number of characters per line
   set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
   set sessionoptions+=globals                        " Persist global variables in vim session
   set colorcolumn=+1                                          " Highlight first column after 'textwidth'
@@ -331,6 +332,15 @@ scriptencoding utf-8
   augroup ALEXANDER_VIMRC_RELOAD " {{{
     autocmd!
     autocmd BufWritePost init.vim source %
+  augroup END " }}}
+
+  " NOTE: copied from Damian Conway's vimrc
+  " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
+  augroup ALEXANDER_COLOR_COLUMN " {{{
+    autocmd!
+    autocmd  BufEnter  *       :call general#MarkMargin(1)
+    autocmd  BufEnter  *.sql*  :call general#MarkMargin(0)
+    autocmd  BufEnter  *.vp*   :call general#MarkMargin(0)
   augroup END " }}}
 " }}}
 
