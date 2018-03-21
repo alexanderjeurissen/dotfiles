@@ -261,7 +261,7 @@ fi
 # }}}
 
 # Alias for clearing the screen
-alias cl="clear && printf '\e[3J'"
+alias clear!="clear && printf '\e[3J'"
 
 # set nvim as defaut editor
 export EDITOR="nvim"
