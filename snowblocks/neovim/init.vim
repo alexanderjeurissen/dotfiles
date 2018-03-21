@@ -111,7 +111,6 @@ scriptencoding utf-8
     set nocursorline
     set conceallevel=0
     set colorcolumn=0
-    set nofoldenable
   endif
 " }}}
 
@@ -128,6 +127,7 @@ scriptencoding utf-8
   cnoreabbrev Qa qa
   cnoreabbrev W w
   cnoreabbrev WW w
+  cnoreabbrev Q q
 
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>

@@ -23,5 +23,4 @@ execute "normal \<C-W>T"
 
 
 " NOTE: change highlighting of help to distinguish it from regular buffers
-
-setlocal winhl=Normal:AleWarningLine
+setlocal winhl=Normal:AleWarningLine,TabLineSel:AleWarningLine,TabLine:AleWarningLine

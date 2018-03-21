@@ -192,7 +192,6 @@ augroup END
   let s:magentahl = '#d9b2fe'   " #d9b2fe
 
   let s:yellow = '#ffda40'      " #ffda40
-  " let s:darkyellow = '#9f8000'  " #9f8000
   let s:darkyellow = '#4f4000'  " #4f4000
 
   let s:yellowhl = '#fff7d8'    " #fff7d8
@@ -238,6 +237,10 @@ augroup END
   " NOTE: equal StatusLine and StatusLineNC cause statusline spacing to bug out
   " SOURCE: https://tinyurl.com/yavjy26z
   call s:HL('StatusLineNC', s:ui1, s:gray15, s:inverse)
+
+  call s:HL('TabLine', s:gray5, s:ui1)
+  call s:HL('TabLineFill', s:gray15, s:ui1)
+  call s:HL('TabLineSel', s:gray28, s:gray12, s:bold)
 
   " The column separating vertically split windows
   call s:HL('VertSplit', s:none, s:none)
