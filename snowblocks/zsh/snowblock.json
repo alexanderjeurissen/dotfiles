@@ -2,8 +2,7 @@
   {
     "clean": [
       "~",
-      "~/.zplug",
-      "/usr/local/share/zsh/site-functions/"
+      "~/.zplug"
     ]
   },
   {
@@ -19,8 +18,7 @@
       "~/.zshrc": { "relink": true },
       "~/.zprofile": { "relink": true },
       "~/.zshenv": { "relink": true },
-      "~/.zplug": { "relink": true },
-      "/usr/local/share/zsh/site-functions/prompt_snappy_setup": { "create": true, "relink": true }
+      "~/.zplug": { "relink": true }
     }
   }
 ]
