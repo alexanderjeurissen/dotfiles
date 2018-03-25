@@ -1,12 +1,12 @@
 scriptencoding utf-8
 
 " SETTINGS: General {{{
-  set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right directory
-  set path=$PWD,$PWD/app/**                                   " Make :find more usable by default
+  set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right dir
+  set path=$PWD,$PWD/app/**                          " Make :find more usable by default
   set wildmenu                                       " Show all matches when tab completing
   set wildmode=longest:list,full                     " Show longest match first
-  set regexpengine=1                                           " Better for ruby (https://tinyurl.com/ll948jk)
-  set noswapfile                                     " Disable swapfile (https://tinyurl.com/y9t8frrs)
+  set regexpengine=1                                 " Better for ruby (https://tinyurl.com/ll948jk)
+  set noswapfile                                     " Disable swap (https://tinyurl.com/y9t8frrs)
   set showmode                                       " show mode in bottom-left corner
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
   set autowrite                                      " Write before running commands.
@@ -16,10 +16,10 @@ scriptencoding utf-8
   set smartcase                                      " Search case incensitive.
   " FIXME: temp disabled to test out Conway's cc approach to text width
   " set textwidth=100                                  " Set maximum number of characters per line
-  set sessionoptions+=resize                         " Changes the effect of the |:mksession| command.
+  set sessionoptions+=resize                         " Changes the effect of the |:mksession| cmd.
   set sessionoptions+=globals                        " Persist global variables in vim session
-  set colorcolumn=+1                                          " Highlight first column after 'textwidth'
-  " set iskeyword-=_                                   " Treat underscore as a word boundary.
+  " set colorcolumn=+1                               " Highlight first column after 'textwidth'
+  " set iskeyword-=_                                 " Treat underscore as a word boundary.
 
   set nolist
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
@@ -34,7 +34,7 @@ scriptencoding utf-8
   set undolevels=1000                                " Number of changes to be saved.
   set undoreload=10000                               " Save whole buffer to undohist when reloading.
 
-  set tabstop=2                                      " Number of spaces existing <Tab> is rendered as.
+  set tabstop=2                                      " Number of spaces a <Tab> char is rendered as.
   set shiftwidth=2                                   " Number of spaces that >> and << count for.
   set softtabstop=2                                  " Number of spaces of <Tab> while editing.
   set expandtab                                      " Use spaces instead of <Tab> for indentation.
@@ -46,14 +46,14 @@ scriptencoding utf-8
   set inccommand=nosplit                             " Show visual indication when using substitute.
   set nofoldenable                                   " collapse all folds.
   set foldmethod=syntax                              " Fold on the syntax
-  set foldcolumn=0                                   " Don't indicate fold open/closed (redundant info)
+  set foldcolumn=0                                   " Don't indicate fold open/closed
   set foldlevel=1                                    " Autofold nothing by default
   set foldnestmax=3                                  " Only fold outer functions
 
-  set modeline                                       " automatically settings options based on file comment
-  set confirm                                        " Makes operations like qa ask for confirmation.
+  set modeline                                       " load vim settings from magic file comment
+  set confirm                                        " Makes operations like qa ask for confirmation
   set t_vb=                                          " Disable visual bell.
-  set cursorline cursorcolumn                        " Enable cursorline and cursorcolumn by default
+  set cursorline                                     " Enable cursorline by default
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right
 
