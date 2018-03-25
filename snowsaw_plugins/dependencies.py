@@ -65,7 +65,6 @@ class Dependencies(snowsaw.Plugin):
     def _process_dependencies(self, data):
         """
         Processes specified dependencies.
-
         :param data: The dependencies to process
         :return: True if the commands have been processed successfully, False otherwise
         """

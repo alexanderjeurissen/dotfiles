@@ -137,7 +137,7 @@ scriptencoding utf-8
   vnoremap o :call general#ExecVisualSelection()<cr>
 
   " NOTE: show the highlight group under the cursor  ighl
-  nnoremap <leader>toh :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+  nnoremap <leader>toh :echom "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
   \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
   \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
 " }}}
@@ -370,7 +370,7 @@ scriptencoding utf-8
   " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
   augroup ALEXANDER_COLOR_COLUMN " {{{
     autocmd!
-    autocmd  BufEnter  *       :call general#MarkMargin(1)
+    autocmd  BufEnter * :call general#MarkMargin(1)
   augroup END " }}}
 
   "FIXME: temporarily disabled as it's quite intrusive
