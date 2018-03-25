@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+main() {
+  echo "NOTE: fetching raw diff for diff: $1"
+
+  # NOTE: Obtain the phid for the given diff
+  phid_lookup_json="$(
+    echo '{
+      "names": [
+        "'"$1"'"
+      ]
+    }' | arc call-conduit --conduit-uri https://phabricator.inverselink.com/ phid.lookup
+  )"
+
+  diff_title=$(echo $phid_lookup_json | jq ".response.$1.fullName" --raw-output)
+  diff_url=$(echo $phid_lookup_json | jq ".response.$1.uri" --raw-output)
+  diff_phid=$(echo $phid_lookup_json | jq ".response.$1.phid" --raw-output)
+
+  # # NOTE: Obtain the diff id of the latest revision
+  # diff_lookup_json="$(
+  #   echo '{
+  #     "constraints": {
+  #       "revisionPHIDs": [
+  #         "'"$diff_phid"'"
+  #       ]
+  #     }
+  #   }' | arc call-conduit --conduit-uri https://phabricator.inverselink.com/ differential.diff.search
+  # )"
+
+  # latest_revision_id=$(echo $diff_lookup_json | jq '.response.data[0].id' --raw-output)
+
+  mkdir -p ".git/diffs"
+
+  dir="`git rev-parse --git-dir`"
+  tmpfile="$dir/diffs/$1.patch"
+
+  trap "rm -f '$tmpfile'" EXIT
+
+  # NOTE: Print metadata to file
+  echo "# =========================== META DATA ==============================" > "$tmpfile" 
+  echo "# $diff_title" >> "$tmpfile"
+  echo "# $diff_url" >> "$tmpfile"
+  echo "#=====================================================================" >> "$tmpfile"
+
+  # NOTE: Obtain the diff and print it to the patch file
+  arc export --revision $1 --git >> "$tmpfile"
+
+  # NOTE: open patch file in neovim 
+  nvim "$tmpfile"
+}
+
+main "$1"
