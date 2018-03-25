@@ -17,8 +17,8 @@ often are contained in this repository before I decide what to do with them.
 ![image](https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/screenshot.png)
 ![image](https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/commiting.png)
 
-## Powered by:
+## powered by:
 
-[![image](https://raw.githubusercontent.com/alexanderjeurissen/lumiere.vim/master/assets/lumiere_logo.png){:class="img-responsive"}](https://github.com/alexanderjeurissen/lumiere.vim)
-[![image](https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/sombre_logo.png){:class="img-responsive"}](https://github.com/alexanderjeurissen/sombre.tmux)
-[![image](https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/ombre_logo.png){:class="img-responsive"}](https://github.com/alexanderjeurissen/ombre.zsh)
+[<img src="https://raw.githubusercontent.com/alexanderjeurissen/lumiere.vim/master/assets/lumiere_logo.png" width=250 />](https://github.com/alexanderjeurissen/lumiere.vim)
+[<img src="https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/sombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/sombre.tmux)
+[<img src="https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/ombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/ombre.zsh)
