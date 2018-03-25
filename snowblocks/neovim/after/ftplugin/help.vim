@@ -11,6 +11,7 @@ setlocal iskeyword+=#
 setlocal iskeyword+=-
 setlocal nocursorline
 setlocal nocursorcolumn
+call general#MarkMargin(0)
 
 " Jump to links with o
 nmap <buffer> o <C-]>
@@ -23,4 +24,4 @@ execute "normal \<C-W>T"
 
 
 " NOTE: change highlighting of help to distinguish it from regular buffers
-setlocal winhl=Normal:AleWarningLine,TabLineSel:AleWarningLine,TabLine:AleWarningLine
+setlocal winhl=Normal:HelpNormal,TabLineSel:HelpNormal,TabLine:HelpNormal

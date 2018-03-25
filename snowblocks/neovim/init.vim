@@ -112,6 +112,7 @@ scriptencoding utf-8
     set nocursorline
     set conceallevel=0
     set colorcolumn=0
+    call general#MarkMargin(0)
   endif
 " }}}
 
@@ -135,6 +136,11 @@ scriptencoding utf-8
 
   " Open highlighted text with default program
   vnoremap o :call general#ExecVisualSelection()<cr>
+
+  " NOTE: show the highlight group under the cursor  ighl
+  nnoremap <leader>toh :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+  \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+  \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
 " }}}
 
 " KEYBINDINGS: Editing {{{
@@ -339,9 +345,16 @@ scriptencoding utf-8
   augroup ALEXANDER_COLOR_COLUMN " {{{
     autocmd!
     autocmd  BufEnter  *       :call general#MarkMargin(1)
-    autocmd  BufEnter  *.sql*  :call general#MarkMargin(0)
-    autocmd  BufEnter  *.vp*   :call general#MarkMargin(0)
   augroup END " }}}
+
+  "FIXME: temporarily disabled as it's quite intrusive
+  augroup ALEXANDER_ALE_BG "{{{
+    autocmd!
+    autocmd User ALELintPost call general#ErrorMode()
+    autocmd User ALEFixPost call general#ErrorMode()
+  augroup END
+  ""}}}
+
 " }}}
 
 " EXTRA: Include local vim config {{{
