@@ -47,6 +47,9 @@ class Dependencies(snowsaw.Plugin):
             elif "xcode-select" in cmd:
                 check = "if type xcode-select >&- && xpath=$( xcode-select --print-path ) && test -d \"${xpath}\" && test -x \"${xpath}\"; then return 0; else return -1; fi"
                 package_type = "Xcode developer tools"
+            elif "cargo install" in cmd:
+                check = "if cargo install --list | egrep -oh {} > /dev/null; then return 0; else return -1; fi".format(name)
+                package_type = "Cargo package"
             else:
                 return False # We can't check it assume we need to install dependency
 
