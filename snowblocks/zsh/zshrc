@@ -14,7 +14,6 @@ fi
 
 # prompt {{{
   autoload -U promptinit && promptinit
-  prompt snappy
 # }}}
 
 # general functions {{{
@@ -127,6 +126,7 @@ fi
 # Zplug plugin definitions {{{
   unset ZPLUG_CACHE_FILE # Fix for ZPLUG_CACHE_FILE deprecation
   source ~/.zplug/init.zsh
+  zplug "alexanderjeurissen/ombre.zsh", use:prompt_ombre_setup
   zplug "zsh-users/zsh-syntax-highlighting"
   zplug "zsh-users/zsh-completions"
   zplug "zsh-users/zsh-autosuggestions"
