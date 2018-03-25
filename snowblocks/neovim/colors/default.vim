@@ -210,8 +210,8 @@ augroup END
   call s:HL('HelpNormal', s:gray28, s:black)
 
   " Cursor line / column
-  call s:HL('CursorLine', s:none , s:ui1, s:none)
-  call s:HL('CursorColumn', s:none , s:ui1, s:none)
+  call s:HL('CursorLine', s:black, s:ui1)
+  call s:HL('CursorColumn', s:black, s:ui1)
 
   " Match paired bracket under the cursor
   call s:HL('MatchParen', s:blue, s:bluehl, s:bold)
@@ -277,7 +277,7 @@ augroup END
 
   " Column where signs are displayed
   call s:HL('SignColumn', s:blue, s:none)
-  call s:HL('ColorColumn', s:darkyellow, s:yellowhl)
+  call s:HL('ColorColumn', s:orange, s:orangehl)
 
   " Line used for closed folds
   call s:HL('Folded', s:gray5, s:ui2, s:italic)
