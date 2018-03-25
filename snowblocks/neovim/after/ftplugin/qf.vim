@@ -28,3 +28,5 @@ function! s:preview_file()
   execute 'vert resize '.(winwidth / 2)
   wincmd p
 endfunction
+
+call general#MarkMargin(0)

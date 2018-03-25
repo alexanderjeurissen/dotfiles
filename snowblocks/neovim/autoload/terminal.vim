@@ -6,6 +6,8 @@ function! terminal#Settings()
   setlocal nocursorline
   setlocal nocursorcolumn
 
+  call general#MarkMargin(0)
+
   " NOTE: make sure we start in insertmode
   " so we can get typing right away
   startinsert

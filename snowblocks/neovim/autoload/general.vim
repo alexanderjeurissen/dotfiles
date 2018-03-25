@@ -117,6 +117,16 @@ function! general#MarkMargin(on)
       unlet b:MarkMargin
   endif
   if a:on
-      let b:MarkMargin = matchadd('ColorColumn', '\%>80v\s*\S', 100)
+      let b:MarkMargin = matchadd('ColorColumn', '\%>100v\s*\S', 100)
+  endif
+endfunction
+
+function! general#ErrorMode()
+  let l:alestats = ale#statusline#Count(bufnr('%'))
+  if l:alestats['error'] > 0
+    setlocal nocursorline nocursorcolumn
+    setlocal winhl=Normal:ALEErrorBg,TabLineSel:AleErrorBg,TabLine:ALEErrorBg,LineNr:AleErrorBg,CursorLineNr:AleErrorLine
+  else
+    setlocal winhl=
   endif
 endfunction
