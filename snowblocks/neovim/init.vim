@@ -53,7 +53,6 @@ scriptencoding utf-8
   set modeline                                       " load vim settings from magic file comment
   set confirm                                        " Makes operations like qa ask for confirmation
   set t_vb=                                          " Disable visual bell.
-  set cursorline                                     " Enable cursorline by default
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right
 
