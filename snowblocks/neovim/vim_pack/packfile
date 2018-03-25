@@ -58,11 +58,6 @@
   category: default
   local: false
   name: "dhruvasagar/vim-prosession"
-  opt: false
-- 
-  category: navigation
-  local: false
-  name: hkupty/nvimux
   opt: true
 - 
   category: navigation
