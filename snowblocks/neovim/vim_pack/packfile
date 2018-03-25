@@ -100,6 +100,11 @@
   name: "roxma/nvim-completion-manager"
   opt: true
 - 
+  category: version_control
+  local: false
+  name: "sgeb/vim-diff-fold"
+  opt: false
+- 
   category: default
   local: false
   name: "sheerun/vim-polyglot"

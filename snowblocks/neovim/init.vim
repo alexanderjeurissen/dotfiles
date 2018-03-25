@@ -226,6 +226,31 @@ scriptencoding utf-8
   noremap / /\v
   noremap ? ?\v
 
+  " Repurpose the s and S key for search and replace
+  nmap S  :%s//g<LEFT><LEFT>
+  vmap s  :Blockwise s//g<LEFT><LEFT>
+
+  " Repurpose the H and L keys to quickly switch buffers
+  nnoremap H :bp<CR>
+  nnoremap L :bn<CR>
+
+  " Rebind the old H and L keyt to zh, zl
+  nnoremap zh H
+  nnoremap zm M
+  nnoremap zl L
+
+  " Create some additional fold movements
+  " nnoremap zn :normal zj<CR>:normal za<CR>:normal zt<CR>
+
+  nnoremap zN :normal zC<CR>/^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>
+  nnoremap zP :normal zC<CR>?^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>
+
+  nnoremap zn :normal zc<CR>/^@@<CR>:nohl<CR>:normal zv<CR>:normal zt<CR>
+  nnoremap zp :normal zc<CR>?^@@<CR>:nohl<CR>:normal zv<CR>:normal zb<CR>
+
+  nnoremap zgg :normal 100000000zk<CR>
+  nnoremap zG :normal  100000000zj<CR>
+
   " auto-center on specific movement keys, and blink current search match
   nnoremap G Gzz
   nnoremap n nzz:call general#HLNext(0.1)<cr>
@@ -273,9 +298,11 @@ scriptencoding utf-8
     " When editing a file, always jump to the last known cursor position.
     " Don't do it for commit messages, when the position is invalid, or when
     " inside an event handler (happens when dropping a file on gvim).
+    " In addition open folds till the cursor is visible
     autocmd BufReadPost *
           \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
           \   execute "normal g`\"" |
+          \   execute "normal zv" |
           \ endif
 
     " Disable linting and syntax highlighting for large files
