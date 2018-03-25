@@ -75,6 +75,16 @@
   name: "machakann/vim-highlightedyank"
   opt: false
 - 
+  category: version_control
+  local: false
+  name: "mattn/gist-vim"
+  opt: false
+- 
+  category: version_control
+  local: false
+  name: "mattn/webapi-vim"
+  opt: false
+- 
   category: navigation
   local: false
   name: "mhinz/vim-grepper"
