@@ -1,42 +1,52 @@
 #!/usr/bin/env ruby
 
-require "clipboard"
-require "csv"
-require "pry"
+require 'clipboard'
+require 'csv'
+require 'pry'
 
-transactions="#{Clipboard.paste}"
+transactions = Clipboard.paste.to_s
 
-fail "Clipboard content likely incompatible" unless transactions.include? "Transactie\nOmschrijving\nBedrag"
+unless transactions.include?('Transactie\nOmschrijving\nBedrag')
+  raise 'Clipboard content likely incompatible'
+end
 
-CSV.open(ARGV[0], "wb") do |csv|
-  csv << %w(Date Payee Category Memo Outflow Inflow)
+CSV.open(ARGV[0], 'wb') do |csv|
+  csv << %w[Date Payee Category Memo Outflow Inflow]
 
-  CSV.parse(transactions, col_sep:"\t") do |csv_row|
-    next if %w(Transactie Omschrijving Bedrag).include? csv_row.first  # headers were present in clipboard
-    next if csv_row.first == " "
+  CSV.parse(transactions, col_sep: '\t') do |csv_row|
+    # headers were present in clipboard
+    next if %w[Transactie Omschrijving Bedrag].include? csv_row.first
+    next if csv_row.first == ' '
 
-    fail "row \"#{csv_row}\" invalid format" if csv_row.count < 2
-    transaction_date = csv_row[0].gsub! '-', '/'
+    raise "row \"#{csv_row}\" invalid format" if csv_row.count < 2
+    transaction_date = csv_row[0].tr! '-', '/'
     payee = csv_row[1].split(/\W/).first
     memo = csv_row[1]
     category = ''
     inflow = ''
     outflow = ''
 
-    if csv_row[3].include? '-' 
+    if csv_row[3].include? '-'
       inflow = csv_row[3][1..-1].sub! ',', '.'
-    else 
+    else
       outflow = csv_row[3].sub! ',', '.'
     end
 
-    csv << %W{#{transaction_date} #{payee} #{category} #{memo} #{outflow} #{inflow}}
+    csv << %W[
+      #{transaction_date}
+      #{payee}
+      #{category}
+      #{memo}
+      #{outflow}
+      #{inflow}
+    ]
 
-    p "=========== PROCESSED TRANSACTION ======"
+    p '=========== PROCESSED TRANSACTION ======'
     p "transaction_date: #{transaction_date}"
     p "payee: #{payee}"
     p "memo: #{memo}"
     p "inflow: #{inflow}"
     p "outflow: #{outflow}"
-    p "======================================="
+    p '======================================='
   end
 end
