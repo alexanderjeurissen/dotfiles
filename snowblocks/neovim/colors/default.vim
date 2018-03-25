@@ -308,7 +308,7 @@ augroup END
   call s:HL('vimCommentTitle', s:gray28, s:black, s:bold . s:italic)
   call s:HL('vimCommentTitleLeader', s:gray28, s:black, s:bold . s:italic)
 
-  call s:HL('Error', s:red, s:none, s:bold . s:inverse)
+  call s:HL('Error', s:red, s:redhl)
 
   " Generic statement
   call s:HL('Statement', s:black, s:none, s:bold)
@@ -363,7 +363,7 @@ augroup END
   call s:HL('String', s:gray8, s:none, s:italic)
 
   " Boolean constant: TRUE, FALSE
-  call s:HL('Boolean', s:magenta, s:none, s:bold)
+  call s:HL('Boolean', s:blue, s:none, s:bold)
 
   " Number constant: 234, 0xff
   call s:HL('Number', s:magenta, s:none, s:italic)
@@ -434,6 +434,7 @@ augroup END
   call s:HL('gitcommitDiscardedFile', s:gray28, s:black)
   call s:HL('gitcommitUntrackedFile', s:gray28, s:black)
 " }}}
+
 " Sneak: {{{
   augroup lumiere
     autocmd ColorScheme lumiere hi! link Sneak Search
