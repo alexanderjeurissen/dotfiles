@@ -55,6 +55,11 @@
   name: "christoomey/vim-tmux-navigator"
   opt: false
 - 
+  category: default
+  local: false
+  name: "dhruvasagar/vim-prosession"
+  opt: false
+- 
   category: navigation
   local: false
   name: hkupty/nvimux
