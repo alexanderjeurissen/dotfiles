@@ -63,6 +63,7 @@ fi
   }
 
   port() { lsof -n -i:$@ | grep LISTEN; }
+  device() { lsof +f -- $@ }
 
   wifi_signal_strength() {
     while x=1; do /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep CtlRSSI; sleep 0.5; done
@@ -177,6 +178,7 @@ fi
 
   alias urlencode='python -c "import sys, urllib as ul; \
     print ul.quote_plus(sys.argv[1])"'
+  alias disable_mouse_acceleration='defaults write .GlobalPreferences com.apple.mouse.scaling -1'
 # }}}
 
 # Alias for pentesting/hacking {{{
