@@ -100,11 +100,6 @@
   name: "radenling/vim-dispatch-neovim"
   opt: false
 - 
-  category: autocomplete
-  local: false
-  name: "roxma/nvim-completion-manager"
-  opt: true
-- 
   category: version_control
   local: false
   name: "sgeb/vim-diff-fold"
