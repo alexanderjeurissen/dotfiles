@@ -87,11 +87,6 @@
 - 
   category: navigation
   local: false
-  name: "mhinz/vim-grepper"
-  opt: false
-- 
-  category: navigation
-  local: false
   name: "moll/vim-bbye"
   opt: false
 - 
@@ -230,6 +225,11 @@
   category: navigation
   local: false
   name: "tpope/vim-unimpaired"
+  opt: false
+- 
+  category: colorschemes
+  local: false
+  name: "trevordmiller/nova-vim"
   opt: false
 - 
   category: default
