@@ -1,0 +1,56 @@
+[
+  {
+    "clean": [
+      "~",
+      "~/.mutt"
+    ]
+  },
+  {
+    "dependencies": [
+      { "name": "gpgme", "cmd": "brew install gpgme" },
+      { "name": "isync", "cmd": "brew install isync" },
+      { "name": "khard", "cmd": "brew install khard" },
+      { "name": "msmtp", "cmd": "brew install msmtp" },
+      { "name": "mu", "cmd": "brew install mu" },
+      { "name": "neomutt", "cmd": "brew install neomutt --with-gpgme" },
+      { "name": "ripmime", "cmd": "brew install ripmime" },
+      { "name": "w3m", "cmd": "brew install w3m" },
+      { "name": "vdirsyncer", "cmd": "brew install vdirsyncer" },
+      { "name": "urlscan", "cmd": "pip2 install -I urlscan" },
+      { "name": "urlscan", "cmd": "pip3 install -I urlscan" }
+    ]
+  },
+  {
+    "link": {
+      "~/.mbsyncrc": { "create": true, "relink": true },
+      "~/.msmtprc": { "create": true, "relink": true },
+      "~/.muttrc": { "create": true, "relink": true },
+      "~/.mutt/signatures": { "create": true, "relink": true },
+      "~/.mutt/accounts": { "create": true, "relink": true },
+      "~/.mutt/colors": { "create": true, "relink": true },
+      "~/.mutt/mailcap": { "create": true, "relink": true }
+    },
+    "shell": [
+      [
+        "mkdir -p ~/Contacts",
+        "Create folder for contact files"
+      ],
+      [
+        "mkdir -p ~/Mail/personal/INBOX",
+        "Create folder for mail"
+      ],
+      [
+        "mkdir -p ~/mutt/tmp",
+        "Create tmp folder for mutt"
+      ],
+      [
+        "mkdir -p ~/mutt/cache/bodies",
+        "Create message_cache for mutt"
+      ],
+      [
+        "touch ~/.msmtp.log",
+        "Create log file for msmtp"
+      ]
+    ]
+  }
+]
