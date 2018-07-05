@@ -13,7 +13,7 @@ if [[ $TERM = dumb ]]; then
 fi
 
 # prompt {{{
-  autoload -U promptinit && promptinit
+  # autoload -U promptinit && promptinit
 # }}}
 
 # general functions {{{
@@ -27,6 +27,19 @@ fi
     fi
   }
 
+  # Override pack update to als call generate
+  # pack() {
+  #   cmd="$1"
+  #   pack_bin="/Users/alexanderjeurissen/.cargo/bin/pack"
+
+  #   if [[ $cmd == "update" ]]; then
+  #     $("$pack_bin") $@
+  #     $("$pack_bin") generate
+  #   else
+  #     $("$pack_bin") $@
+  #   fi
+  # }
+
   # NOTE: Run command n-times
   # http://serverfault.com/questions/273238/how-to-run-a-command-multiple-times
   times() {
@@ -39,12 +52,20 @@ fi
 
   # NOTE: Run command till the exit code is zero
   try_loop() {
-    attempts=0
-    until $@
+    until [ $? == 0 ]
     do
+      echo "LOOPING !!"
+      $@
       sleep 0.1
-      attempts = attempts + 1
-      echo "TRY_LOOP: attempt # ${attempt}"
+    done
+  }
+
+  until_fail() {
+    until [ $? != 0 ]
+    do
+      echo "TRY_FAIL_LOOP"
+      $@
+      sleep 0.1
     done
   }
 
@@ -100,6 +121,10 @@ fi
 # Vi mode {{{
   bindkey -v
   export KEYTIMEOUT=1
+
+  autoload -U edit-command-line
+  zle -N edit-command-line
+  bindkey -M vicmd v edit-command-line
 # }}}
 
 # completions {{{
@@ -134,13 +159,13 @@ fi
 # }}}
 
 # aliasses {{{
+  alias textedit="/Applications/TextEdit.app/Contents/MacOS/TextEdit"
   alias l="LC_COLLATE=C \gls -lAh --color=auto --time-style="+%Y-%m-%d +%H:%M:%S" --group-directories-first"
   alias ls="\gls --color=auto --group-directories-first"
   alias rls="cd && cd - && ls -G"
   alias fixtestdb="bin/rake db:test:prepare"
   alias upd="git pull origin develop:develop --rebase --ff-only"
   alias upm="git pull origin master:master --rebase --ff-only"
-  alias stash="git add -A && git commit -m 'TEMP_COMMIT: stashed changes on `date`'"
   alias rake="noglob bin/rake"
   alias console="bin/rails console"
   alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
@@ -179,6 +204,8 @@ fi
   alias urlencode='python -c "import sys, urllib as ul; \
     print ul.quote_plus(sys.argv[1])"'
   alias disable_mouse_acceleration='defaults write .GlobalPreferences com.apple.mouse.scaling -1'
+  alias no_unexpected='git checkout db/structure.sql app/models/bounty.rb'
+  alias clera="clear"
 # }}}
 
 # Alias for pentesting/hacking {{{
@@ -200,9 +227,9 @@ fi
 # }}}
 
 # Aliases for Arcanist {{{
-  alias diff="arc diff --no-unit --excuse \"jenkins\""
+  alias diff="arc diff --nounit --excuse \"jenkins\""
   alias diffb="arc diff --browse"
-  alias diffu="arc diff --no-unit --excuse \"jenkins\" --verbatim"
+  alias diffu="arc diff --nounit --excuse \"jenkins\" --verbatim"
 
   # FIXME: {{{
     nexttask() {
@@ -361,7 +388,7 @@ bindkey '^e' autosuggest-accept
       echo -n "${(q)item} " | cut -d'\' -f1
     done
     local ret=$?
-    echo
+    # echo
     return $ret
   }
 
@@ -387,7 +414,7 @@ bindkey '^e' autosuggest-accept
       echo -n "${(q)item} " | cut -d'\' -f1
     done
     local ret=$?
-    echo
+    # echo
     return $ret
   }
 
