@@ -55,6 +55,7 @@ scriptencoding utf-8
   set t_vb=                                          " Disable visual bell.
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right
+  set smartindent
 
   " FIXME temp disabling this to test tabnew help
   " Open help in a new split instead of vimbuffer
@@ -92,11 +93,6 @@ scriptencoding utf-8
   if executable('rg')
     set grepprg=rg\ -H\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
-
-    command! -nargs=+ -complete=file -bar Rg grep! <args>|cw
-
-    " bind K to grep word under cursor
-    nnoremap K :grep! "\b<C-R><C-W>\b"<CR><CR>:cw<CR>
   endif
 
   " NOTE: This makes it so that gx opens the url under cursor
@@ -212,7 +208,8 @@ scriptencoding utf-8
   imap <up> <nop>
   imap <down> <nop>
   imap <right> <nop>
-  imap <bs> <nop>
+  imap <BS> <nop>
+  imap <DEL> <nop>
 
   " Wrapped lines goes down/up to next row, rather than next line in file.
   noremap j gj
@@ -224,6 +221,12 @@ scriptencoding utf-8
   " default to very magic
   noremap / /\v
   noremap ? ?\v
+
+" bind <leader>/ to grep
+  nnoremap <leader>/ :grep -F ""<LEFT>
+
+" bind K to grep word under cursor
+  nnoremap K :grep! "\b<C-R><C-W>\b"<CR><CR>:cw<CR>
 
   " Repurpose the s and S key for search and replace
   nmap S  :%s//g<LEFT><LEFT>

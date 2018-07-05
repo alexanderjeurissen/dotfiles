@@ -83,8 +83,8 @@ augroup END
   if !exists('g:lumiere_inverse')
     let g:lumiere_inverse=1
   endif
-  if !exists('g:lumiere_low_contrast_mode')
-    let g:lumiere_low_contrast_mode=0
+  if !exists('g:lumiere_contrast')
+    let g:lumiere_contrast = 'normal'
   endif
 
   let s:bold = 'bold,'
@@ -160,8 +160,10 @@ augroup END
   " the light conditions. less harsh when low light
   " more bright when we have plenty of light.
 
-  if g:lumiere_low_contrast_mode == 1
+  if g:lumiere_contrast ==# 'low'
     let s:uibg = '#e7e5e2'        " #e7e5e2
+  elseif g:lumiere_contrast ==# 'high'
+    let s:uibg = '#ffffff'        " #ffffff
   else
     let s:uibg = '#ecf0f1'        " #ecf0f1
   end

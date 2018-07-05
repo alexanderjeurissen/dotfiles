@@ -26,7 +26,7 @@ let g:fzf_default_options = [
   let g:fzf_colors = {
     \ 'fg':      ['fg', 'Normal'],
     \ 'bg':      ['bg', 'Normal'],
-    \ 'hl':      ['fg', 'Comment'],
+    \ 'hl':      ['fg', 'ALEInfoLine'],
     \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
     \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
     \ 'hl+':     ['fg', 'Statement'],
