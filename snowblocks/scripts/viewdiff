@@ -29,9 +29,9 @@ main() {
 
   # latest_revision_id=$(echo $diff_lookup_json | jq '.response.data[0].id' --raw-output)
 
-  mkdir -p ".git/diffs"
 
   dir="`git rev-parse --git-dir`"
+  mkdir -p "$dir/diffs"
   tmpfile="$dir/diffs/$1.patch"
 
   trap "rm -f '$tmpfile'" EXIT
@@ -46,7 +46,7 @@ main() {
   arc export --revision $1 --git >> "$tmpfile"
 
   # NOTE: open patch file in neovim 
-  nvim "$tmpfile"
+  $EDITOR "$tmpfile"
 }
 
 main "$1"
