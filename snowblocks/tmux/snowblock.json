@@ -6,6 +6,12 @@
     ]
   },
   {
+    "dependencies": [
+      { "name": "pytz", "cmd": "pip3 install pytz" },
+      { "name": "pytz", "cmd": "pip2 install pytz" }
+    ]
+  },
+  {
     "link": {
       "~/.tmux.conf": { "relink": true }
     },
