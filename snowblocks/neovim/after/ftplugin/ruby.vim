@@ -6,3 +6,9 @@ setlocal makeprg=bundle\ exec\ rspec\ --require\ ~\/.config\/nvim\/make_programs
 
 " FIXME: Somehow relativenumber is disabled when entering ruby buffers
 setlocal number relativenumber
+
+
+" NOTE: poor man's snippets
+inoreabbr <buffer> iit it { is_expected.to be(true) }
+inoreabbr <buffer> iif it { is_expected.to be(false) }
+inoreabbr <buffer> pry binding.pry
