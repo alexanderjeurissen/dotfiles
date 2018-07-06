@@ -9,13 +9,11 @@ PassCmd "security find-generic-password -s '127.0.0.1' -a 'personal_email' -w"
 # SSLType NONE
 SSLType STARTTLS
 SSLVersions TLSv1.2
-
 CertificateFile ~/.cert/personal_email.crt
 
 # NOTE: command to generate a cert file:
 # openssl s_client -starttls imap -connect 127.0.0.1:1143 -showcerts
 # NOTE: Put the everything from "-----BEGIN CERTIFICATE-----" and "-----END CERTIFICATE-----" in the file.
-
 
 # Remote storage
 IMAPStore personal-remote
@@ -59,23 +57,8 @@ Create Both
 Expunge Both
 SyncState *
 
-
-# Spam
-Channel personal-spam
-Master :personal-remote:"Spam"
-Slave :personal-local:"spam"
-Create Both
-Expunge Both
-SyncState *
-
 Group personal
 Channel personal-inbox
 Channel personal-sent
-Channel personal-archive
 Channel personal-trash
-Channel personal-spam
-
-Group personal_imp
-Channel personal-inbox
 Channel personal-archive
-Channel personal-trash

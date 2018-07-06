@@ -17,6 +17,7 @@ unset confirmappend
 unset move
 unset mark_old
 unset beep_new
+set sleep_time=0                     # faster switching of mailboxes
 
 # compose View Options
 set envelope_from                    # which from?
@@ -91,12 +92,12 @@ set mail_check_stats
 
 # Mailboxes to show in the sidebar.
 mailboxes =personal
-mailboxes =personal/INBOX =personal/archive =personal/sent =personal/spam =personal/trash
+mailboxes =personal/INBOX =personal/archive =personal/sent =personal/trash
 
 # FIXME: source colors and keybindings
 # keeping those in one place makes it easier for my brain
 source ~/.mutt/colors
-# source ~/.mutt/bindings
+source ~/.mutt/bindings
 
 # And finally the account config for multiple accounts
 #############################################################

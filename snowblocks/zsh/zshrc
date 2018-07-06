@@ -179,6 +179,8 @@ fi
   alias urlencode='python -c "import sys, urllib as ul; \
     print ul.quote_plus(sys.argv[1])"'
   alias disable_mouse_acceleration='defaults write .GlobalPreferences com.apple.mouse.scaling -1'
+  alias mutt='TERM=screen-256color neomutt'
+  alias neomutt='TERM=screen-256color \neomutt'
 # }}}
 
 # Alias for pentesting/hacking {{{
