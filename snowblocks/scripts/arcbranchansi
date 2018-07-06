@@ -15,7 +15,7 @@ hl() {
   fi
 }
 
-arc branch --view-all | 
+arc branch | 
 hl 'Closed' 2 |
 hl 'Needs Review' 5 |
 hl 'Needs Revision' 1 |

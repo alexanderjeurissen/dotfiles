@@ -18,7 +18,7 @@
       { "name": "neovim", "cmd": "pip3 install --upgrade neovim" },
       { "name": "neovim", "cmd": "gem install neovim" },
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
-      { "name": "vim-vint", "cmd": "pip3 install vim-vint" },
+      { "name": "vim-vint", "cmd": "pip2 install vim-vint" },
       { "name": "language_server", "cmd": "gem install language_server" },
       { "name": "pack", "cmd": "cargo install --git https://github.com/maralla/pack.git" }
     ]
