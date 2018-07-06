@@ -28,6 +28,7 @@
       "~/.mutt/signatures": { "create": true, "relink": true },
       "~/.mutt/accounts": { "create": true, "relink": true },
       "~/.mutt/colors": { "create": true, "relink": true },
+      "~/.mutt/bindings": { "create": true, "relink": true },
       "~/.mutt/mailcap": { "create": true, "relink": true }
     },
     "shell": [
@@ -36,7 +37,7 @@
         "Create folder for contact files"
       ],
       [
-        "mkdir -p ~/Mail/personal/INBOX",
+        "mkdir -p ~/Mail/personal",
         "Create folder for mail"
       ],
       [

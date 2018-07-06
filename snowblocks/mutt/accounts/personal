@@ -11,8 +11,7 @@ set trash = "+personal/trash"
 
 color status black color250
 
-macro index o "<shell-escape>mbsync personal_imp<enter>" "run mbsync to sync mail for this account"
-macro index O "<shell-escape>mbsync personal<enter>" "run mbsync to sync mail for this account"
+macro index o "<shell-escape>mbsync personal<enter>" "run mbsync to sync mail for this account"
 
 # macro index,pager J \
 #   "<enter-command>set my_old_resolve=\$resolve noresolve<enter>\
@@ -21,9 +20,25 @@ macro index O "<shell-escape>mbsync personal<enter>" "run mbsync to sync mail fo
 #   "mark as read and move to junk folder"
 
 macro index,pager A \
-  "<save-message>+personal/archive<enter>"  \
+  ":set confirmappend=no delete=yes<enter><tag-prefix><save-message>+personal/archive<enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>"  \
   "move message to the archive"
 
+  # "<save-message>+personal/archive<enter>"  \
+  # "move message to the archive"
+
 macro index,pager I \
-  "<save-message>+personal/INBOX<enter>"  \
+  "<save-message>+personal/INBOX<enter><sync-mailbox>"  \
   "move message to the inbox"
+
+macro index,pager D \
+  "<delete-thread><enter><sync-mailbox>"  \
+  "move message-thread to the trash"
+
+macro index,pager d \
+  "<delete-message><enter><sync-mailbox>"  \
+  "move message to the trash"
+
+
+# shortcuts to folders
+macro index,pager gi "<change-vfolder>+personal/INBOX<Enter>"
+macro index,pager ga "<change-vfolder>+personal/archive<Enter>"
