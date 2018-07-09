@@ -1,0 +1,23 @@
+[
+  {
+    "clean": [
+      "~/.config/ranger"
+    ]
+  },
+  {
+    "_dependencies": [
+       { "name": "ranger-devicons", "cmd": "pip3 install ranger-devicons" }
+    ]
+  },
+  {
+    "link": {
+      "~/.config/ranger/rc.conf": { "create": true, "relink": true }
+    },
+    "shell": [
+      [
+        "mkdir -p ~/.config/ranger",
+        "Create folder for ranger config files"
+      ]
+    ]
+  }
+]
