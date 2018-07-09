@@ -1,7 +1,6 @@
+
 # Start tmux by default and exit terminal if tmux exits. {{{
-   if [ -n "$TMUX" ]; then
-     # export TERM=screen-256color-italic
-   else
+   if [ -z "$TMUX" ]; then
      # tmux attach-session || exec tmux new-session;
      tmux attach-session || exec tmux new-session && exit;
    fi
@@ -11,10 +10,6 @@
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
-
-# prompt {{{
-  # autoload -U promptinit && promptinit
-# }}}
 
 # general functions {{{
   silent_source() {
@@ -26,19 +21,6 @@ fi
       source "$path"
     fi
   }
-
-  # Override pack update to als call generate
-  # pack() {
-  #   cmd="$1"
-  #   pack_bin="/Users/alexanderjeurissen/.cargo/bin/pack"
-
-  #   if [[ $cmd == "update" ]]; then
-  #     $("$pack_bin") $@
-  #     $("$pack_bin") generate
-  #   else
-  #     $("$pack_bin") $@
-  #   fi
-  # }
 
   # NOTE: Run command n-times
   # http://serverfault.com/questions/273238/how-to-run-a-command-multiple-times
@@ -207,7 +189,8 @@ fi
   alias mutt='TERM=screen-256color neomutt'
   alias neomutt='TERM=screen-256color \neomutt'
   alias no_unexpected='git checkout db/structure.sql app/models/bounty.rb'
-  alias clera="clear"
+  # NOTE: needed seeing as remote servers likely won't have my custom tic
+  alias ssh='TERM=xterm-256color ssh'
 # }}}
 
 # Alias for pentesting/hacking {{{
@@ -222,6 +205,7 @@ fi
   alias cd..='cd ..'
   alias cd..l='cd .. && l'
   alias cd..ls='cd .. && ls'
+  alias clera="clear"
 # }}}
 
 # Nvim & vim aliases {{{

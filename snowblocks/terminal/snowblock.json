@@ -12,6 +12,7 @@
     },
     "shell": [
       [ "tic ./xterm-256color-italic.tic", "add xterm-256color-italic to tic file" ]
+      [ "tic ./tmux-256color-italic.terminfo", "add xterm-256color-italic to tic file" ]
     ]
   }
 ]
