@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+LOG_FILE=~/.mbsync_log
+MBSYNCRC=~/.mbsyncrc
+MAINTENANCE_SKIP=~/.mbsync_skip
+
+# NOTE: write <timestamp> :: log_text to ~/.mbsync_log
+function create_log_entry {
+	local log_entry=$1
+	local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+	echo "${timestamp} :: ${log_entry}" >> ${LOG_FILE}
+}
+
+# NOTE: escape hatch, if ~/.mbsync_skip file is present exit
+# Makes it possible to modify configuration and not have to deal with cron jobs failing. 
+function maintenance_skip {
+	if [ -e $MAINTENANCE_SKIP ]; then
+		create_log_entry "MAINTENANCE_SKIP: process not started due to ~/.mbsync_skip being present"
+		exit 0
+	fi
+}
+
+# NOTE: escape hatch, if process is already running exit.
+function process_running_skip {
+	if [[ $(ps -ef | grep -c mbsync)  -ne 1 ]]; then 
+		create_log_entry "SKIP_SYNC: process still running.."
+		exit 0
+	fi
+}
+
+function sync_mail {
+	# NOTE: kill any outstanding mbsync processes
+	# In theory we should never hit this due to 
+	# return statement in main routine.
+	killall mbsync &>/dev/null
+
+	result=$(mbsync -a -q 2>&1)
+
+	# NOTE: Grep on output to see if there are errors present.
+	# If there are errors, Append them to the log file indented by 4 spaces
+	local errors_p1=$(echo "${result}" | grep "Error:")
+	local errors_p2=$(echo "${result}" | grep "error:")
+	if [ -n "$errors_p1" ]; then echo "    ${errors_p1}" >> $LOG_FILE; fi
+	if [ -n "$errors_p2" ]; then echo "    ${errors_p2}" >> $LOG_FILE; fi
+}
+
+main() {
+	maintenance_skip
+	process_running_skip
+
+	# NOTE: poor man's version of getting execution time
+	local start=$(date '+%s')
+	create_log_entry "START_SYNC: start sync"
+	sync_mail 
+	local end=$(date '+%s')
+	local runtime=$((end-start))
+	create_log_entry "END_SYNC: duration(${runtime} seconds)"
+}
+
+# NOTE: make it so we can run this in the background
+# when invoked from mutt or another script.
+# source: http://mutt-users.mutt.narkive.com/DeIu1qrT/running-fetchmail-from-mutt-in-the-background
+main &
+disown
