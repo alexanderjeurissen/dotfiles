@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
-if echo `ifconfig` | egrep utun -A 1 | egrep 'inet 10' > /dev/null; then
+if [[ $(ifconfig | grep -c ipsec) -eq 1 ]]; then
   echo "#[bold]  VPN #[nobold]"
 else 
-  echo "#[bold]  NO VPN #[nobold]"
+  echo "#[bold]  VPN #[nobold]"
 fi
