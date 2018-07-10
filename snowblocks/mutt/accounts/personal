@@ -9,9 +9,9 @@ set record = "+personal/sent"
 set trash = "+personal/trash"
 # set spam = "+personal/spam"
 
-color status black color250
+color status black brightcyan
 
-macro index o "<shell-escape>mbsync personal<enter>" "run mbsync to sync mail for this account"
+macro index o "<shell-escape>~/.scripts/pollmail<enter>" "run mbsync to sync mail for this account"
 
 # macro index,pager J \
 #   "<enter-command>set my_old_resolve=\$resolve noresolve<enter>\
@@ -31,11 +31,11 @@ macro index,pager I \
   "move message to the inbox"
 
 macro index,pager D \
-  "<delete-thread><enter><sync-mailbox>"  \
-  "move message-thread to the trash"
+  ":set confirmappend=no delete=yes<enter><tag-prefix><delete-thread><enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>"  \
+  "move thread to the trash"
 
 macro index,pager d \
-  "<delete-message><enter><sync-mailbox>"  \
+  ":set confirmappend=no delete=yes<enter><tag-prefix><delete-message><enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>"  \
   "move message to the trash"
 
 

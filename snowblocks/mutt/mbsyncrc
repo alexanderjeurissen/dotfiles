@@ -24,41 +24,11 @@ MaildirStore personal-local
 Path ~/Mail/personal/
 Inbox ~/Mail/personal/INBOX
 
-# INBOX
-Channel personal-inbox
+# Channel mapping
+Channel personal
 Master :personal-remote:
 Slave :personal-local:
-Patterns "INBOX"
+Patterns INBOX Sent Archive Trash Spam
 Create Both
 Expunge Both
 SyncState *
-
-# SENT
-Channel personal-sent
-Master :personal-remote:"Sent"
-Slave :personal-local:"sent"
-Create Both
-Expunge Both
-SyncState *
-
-# ARCHIVE
-Channel personal-archive
-Master :personal-remote:"Archive"
-Slave :personal-local:"archive"
-Create Both
-Expunge Both
-SyncState *
-
-# TRASH
-Channel personal-trash
-Master :personal-remote:"Trash"
-Slave :personal-local:"trash"
-Create Both
-Expunge Both
-SyncState *
-
-Group personal
-Channel personal-inbox
-Channel personal-sent
-Channel personal-trash
-Channel personal-archive

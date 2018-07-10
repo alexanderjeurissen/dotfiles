@@ -5,9 +5,9 @@ color tilde         black           default
 color message       cyan            default
 color markers       red             white
 color attachment    white           default
-color search        brightmagenta   default
-color indicator     color234        color251
-color tree          green           default
+color search        black           yellow
+color indicator     white           black
+color tree          brightblack     white
 
 # sidebarh
 color sidebar_new   default blue
@@ -16,29 +16,30 @@ color sidebar_new   default blue
 
 color index         white           white         "~A"    # all messages
 color index         brightred       white         "~E"    # expired messages
-color index         white           blue          "~N"    # new messages
+color index         brightblack     white         "~N"    # new messages
 color index         red             white         "~O"    # old messages
 color index         cyan            white         "~Q"    # messages that have been replied to
 color index         color240        white         "~R"    # read messages
-color index         white           blue          "~U"    # unread messages
+color index         brightblack     white         "~U"    # unread messages
 color index         brightyellow    white         "~v"    # messages part of a collapsed thread
-color index         white           green         "~P"    # messages from me
-color index         white           red           "~F"    # flagged messages
+color index         color240        white         "~P"    # messages from me
+color index         magenta         brightmagenta "~F"    # flagged messages
 color index         red             white         "~D"    # deleted messages
 
 # message headers ------------------------------------------------------
 
-color hdrdefault    brightgreen     default
-color header        brightyellow    default       "^(From)"
-color header        blue            default       "^(Subject)"
+color hdrdefault    brightblack     white
+color header        brightblack     white       "^(From)"
+color header        brightwhite     black       "^(Subject)"
 
 # body -----------------------------------------------------------------
 
-color quoted        blue            default
-color quoted1       cyan            default
-color quoted2       yellow          default
-color quoted3       red             default
-color quoted4       brightred       default
+color quoted        white           black
+# FIXME: check if we need multi level quote coloring
+# color quoted1       cyan            default
+# color quoted2       yellow          default
+# color quoted3       red             default
+# color quoted4       brightred       default
 
 color signature     brightblack     default
 color bold          black           default
