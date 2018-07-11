@@ -64,6 +64,7 @@ scriptencoding utf-8
   let python3_host_prog = "python3"
   let python_host_prog = "python"
   let g:snappy_dev = 1
+  " let g:lumiere_low_contrast_mode = 1
 " }}}
 
 " SETTINGS: statusline {{{
