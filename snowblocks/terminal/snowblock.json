@@ -11,8 +11,8 @@
       "~/.inputrc": { "relink": true }
     },
     "shell": [
-      [ "tic ./xterm-256color-italic.tic", "add xterm-256color-italic to tic file" ]
-      [ "tic ./tmux-256color-italic.terminfo", "add xterm-256color-italic to tic file" ]
+      [ "tic -x ./xterm-256color-italic.tic", "add xterm-256color-italic to tic file" ],
+      [ "tic -x ./tmux-256color.terminfo", "add tmux-256color to tic file" ]
     ]
   }
 ]

@@ -5,8 +5,8 @@
     ]
   },
   {
-    "_dependencies": [
-       { "name": "ranger-devicons", "cmd": "pip3 install ranger-devicons" }
+    "dependencies": [
+       { "name": "ranger-devicons", "cmd": "pip3 install ranger-devicons", "skip": true }
     ]
   },
   {

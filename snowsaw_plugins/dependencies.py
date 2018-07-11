@@ -25,6 +25,11 @@ class Dependencies(snowsaw.Plugin):
             package_type = None
             name = dependency["name"]
             cmd = dependency["cmd"]
+            skip = dependency.get("skip", False)
+
+            if skip == True:
+                self._log.lowinfo("dependency '{}' skipped...".format(name))
+                return True
 
             if "brew cask" in cmd:
                 check = "if brew cask ls --versions {} > /dev/null; then return 0; else return -1; fi".format(name)
