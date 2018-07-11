@@ -6,14 +6,9 @@ Host 127.0.0.1
 Port 1143
 User alexander@jeurissen.email
 PassCmd "security find-generic-password -s '127.0.0.1' -a 'personal_email' -w"
-# SSLType NONE
 SSLType STARTTLS
 SSLVersions TLSv1.2
-CertificateFile ~/.cert/personal_email.crt
-
-# NOTE: command to generate a cert file:
-# openssl s_client -starttls imap -connect 127.0.0.1:1143 -showcerts
-# NOTE: Put the everything from "-----BEGIN CERTIFICATE-----" and "-----END CERTIFICATE-----" in the file.
+CertificateFile ~/.mutt/certificates/personal.crt
 
 # Remote storage
 IMAPStore personal-remote

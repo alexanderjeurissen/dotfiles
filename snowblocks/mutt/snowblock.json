@@ -30,7 +30,10 @@
       "~/.mutt/accounts": { "create": true, "relink": true },
       "~/.mutt/colors": { "create": true, "relink": true },
       "~/.mutt/bindings": { "create": true, "relink": true },
-      "~/.mutt/mailcap": { "create": true, "relink": true }
+      "~/.mutt/mailcap": { "create": true, "relink": true },
+      "~/.mutt/certificates/personal.crt": { "create": true },
+      "~/.mutt/certificates/gmail.crt": { "create": true },
+      "~/.mutt/certificates/google.crt": { "create": true }
     },
     "shell": [
       [
@@ -39,14 +42,14 @@
       ],
       [
         "mkdir -p ~/Mail/personal",
-        "Create folder for mail"
+        "Create folder for personal mail"
       ],
       [
-        "mkdir -p ~/mutt/tmp",
+        "mkdir -p ~/.mutt/tmp",
         "Create tmp folder for mutt"
       ],
       [
-        "mkdir -p ~/mutt/cache/bodies",
+        "mkdir -p ~/.mutt/cache/bodies",
         "Create message_cache for mutt"
       ],
       [
