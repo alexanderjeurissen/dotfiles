@@ -25,6 +25,7 @@
       "~/.mbsyncrc": { "create": true, "relink": true },
       "~/.msmtprc": { "create": true, "relink": true },
       "~/.muttrc": { "create": true, "relink": true },
+      "~/.urlview": { "create": true, "relink": true },
       "~/.mutt/signatures": { "create": true, "relink": true },
       "~/.mutt/accounts": { "create": true, "relink": true },
       "~/.mutt/colors": { "create": true, "relink": true },
@@ -51,6 +52,14 @@
       [
         "touch ~/.msmtp.log",
         "Create log file for msmtp"
+      ],
+      [
+        "touch ~/.mbsync_log",
+        "Create log file for mbsync"
+      ],
+      [
+        "touch ~/.mbsync_skip",
+        "Create skip file for mbsync"
       ]
     ]
   }

@@ -71,14 +71,6 @@ hdr_order from: to: cc: bcc: date: subject:
 alternative_order text/plain text/enriched text/html
 auto_view text/html
 
-# FIXME: sidebar patch config
-# set sidebar_visible
-# set sidebar_short_path
-# set sidebar_folder_indent
-# set sidebar_width = 25
-# set sidebar_divider_char = ' | '
-# set sidebar_indent_string = '  ''
-# set sidebar_format = "%B %* [%?N?%N / ?%S]"
 set mail_check_stats
 
 # FIXME: GPG/PGP
