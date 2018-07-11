@@ -4,10 +4,10 @@ set sendmail = "/usr/local/bin/msmtp -a personal"
 # Set folders
 set spoolfile = "+personal/INBOX"
 set mbox = "+personal/archive"
-# set postponed = "+personal/drafts"
+set postponed = "+personal/drafts"
 set record = "+personal/sent"
 set trash = "+personal/trash"
-# set spam = "+personal/spam"
+set junk = "+personal/spam"
 
 color status black brightcyan
 
