@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+function echo_step {
+  printf $'\e[37;44m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function echo_warning {
+  printf $'\e[7;49;31m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function get_column_phid {
+  local project_phid="$1"
+  local arcrc=$(<~/.arcrc)
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+
+  local query="{
+    \"constraints\": {
+      \"projects\": [
+        \"$project_phid\"
+      ]
+    }
+  }"
+
+  local json="$(
+    echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search
+  )"
+
+  echo $json | jq '.response.data[] | select(.fields.name | contains("Escalations")) | .phid'
+}
+
+function main {
+  local task_id=${1/T/} 
+  local arcrc=$(<~/.arcrc)
+  local project_phid=$(echo $arcrc | jq '.dotfiles_env_vars.project')
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+
+  if [[ -z $task_id ]]; then
+    echo_warning "No task number provided.."
+    return
+  fi
+
+  local column_phid=$(get_column_phid "$project_phid")
+
+  local query="{
+    \"transactions\": [
+      {
+        \"type\": \"projects.add\",
+        \"value\": [\"$project_phid\"]
+      },
+      {
+        \"type\": \"column\",
+        \"value\": [$column_phid]
+      }
+    ],
+    \"objectIdentifier\": \"$task_id\"
+  }"
+
+  local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
+  echo_step "Successfully escalated task $task_id to Interstellar"
+}
+
+main "$1"
