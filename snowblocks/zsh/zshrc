@@ -1,8 +1,8 @@
 
 # Start tmux by default and exit terminal if tmux exits. {{{
    if [ -z "$TMUX" ]; then
-     # tmux attach-session || exec tmux new-session;
-     tmux attach-session || exec tmux new-session && exit;
+     tmux attach-session || exec tmux new-session;
+     # tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
 
