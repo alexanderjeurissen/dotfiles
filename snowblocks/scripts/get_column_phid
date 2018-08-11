@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+function get_column_phid {
+  local arcrc=$(<~/.arcrc)
+
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
+  local sprint_phid="$1"
+  local search_query="$2"
+
+  local query="{
+    \"constraints\": {
+      \"projects\": [
+        \"$sprint_phid\"
+      ]
+    }
+  }"
+
+  local json="$(
+    echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search
+  )"
+
+  echo $json | jq ".response.data[] | select(.fields.name==\"$search_query\") | .phid"
+}
+
+get_column_phid "$1" "$2"
