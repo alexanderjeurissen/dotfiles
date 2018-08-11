@@ -2,14 +2,15 @@
 
 function get_last_milestone_phid {
   local arcrc=$(<~/.arcrc)
-  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
   local project_phid="$1"
+
   local query="{
     \"queryKey\": \"active\",
     \"constraints\": {
       \"isMilestone\": true,
       \"parents\": [
-        $project_phid
+        \"$project_phid\"
       ]
     }
   }"
