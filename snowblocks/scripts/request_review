@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+function echo_step {
+  printf $'\e[37;44m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function echo_warning {
+  printf $'\e[7;49;31m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function get_conduit_uri {
+  # NOTE: read conduit uri from ~/.arcrc
+  local arcrc=$(<~/.arcrc)
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+
+  echo conduit_uri
+}
+
+function get_column_phid {
+  local sprint_phid="$1"
+  local conduit_uri=$(get_conduit_uri) 
+  local query="{
+    \"constraints\": {
+      \"projects\": [
+        $sprint_phid
+      ]
+    }
+  }"
+  local json="$(
+    echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search
+  )"
+  echo $json | jq '.response.data[] | select(.fields.name=="In Review") | .phid'
+}
+
+function parse_branch_name {
+  type git >/dev/null 2>&1
+  
+  if [ "$?" -ne 0 ]; then
+	  return
+  fi
+
+  # Quit if this is not a Git repo.
+  branch=$(git symbolic-ref HEAD 2> /dev/null)
+  if [[ -z $branch ]] ; then
+	  # attempt to get short-sha-name
+	  branch=":$(git rev-parse --short HEAD 2> /dev/null)"
+  fi
+  if [ "$?" -ne 0 ]; then
+	  # this must not be a git repo
+	  return
+  fi
+
+  # Clean off unnecessary information.
+  echo "$branch" | egrep -o "T\d+"
+}
+
+function main {
+  local task_id=${1/T/} 
+  local conduit_uri=$(get_conduit_uri) 
+  if [[ -z $task_id ]]; then
+    task_id=$(parse_branch_name)
+  fi
+
+  if [[ -z $task_id ]]; then
+    echo_warning "Couldnt determine the task number of the current branch"
+    return
+  fi
+
+  local sprint_phid="$(get_last_milestone_phid)"
+  local column_phid=$(get_column_phid "$sprint_phid")
+
+  local query="{
+    \"transactions\": [
+      {
+        \"type\": \"column\",
+        \"value\": [$column_phid]
+      }
+    ],
+    \"objectIdentifier\": \"$task_id\"
+  }"
+  local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
+  echo_step "Successfully moved task $task_id to In Review"
+}
+
+main "$1"

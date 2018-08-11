@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git add -A && git commit -m "TEMP_COMMIT: stashed changes on `date`"
