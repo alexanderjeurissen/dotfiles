@@ -10,12 +10,20 @@ function echo_warning {
   echo $'\033[0m'
 }
 
+function get_conduit_uri {
+  # NOTE: read conduit uri from ~/.arcrc
+  local arcrc=$(<~/.arcrc)
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+
+  echo conduit_uri
+}
+
 function parse_branch_name {
   type git >/dev/null 2>&1
-  
   if [ "$?" -ne 0 ]; then
 	  return
   fi
+
 
   # Quit if this is not a Git repo.
   branch=$(git symbolic-ref HEAD 2> /dev/null)
@@ -34,8 +42,6 @@ function parse_branch_name {
 
 function main {
   local task_id=${1/T/} 
-  local arcrc=$(<~/.arcrc)
-  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
 
   if [[ -z $task_id ]]; then
     task_id=$(parse_branch_name)
@@ -46,11 +52,16 @@ function main {
     return
   fi
 
+  local conduit_uri=$(get_conduit_uri)
   local sprint_phid="$(get_last_milestone_phid)"
-  local column_phid=$(get_column_phid "$sprint_phid" "In Review")
+  local column_phid=$(get_column_phid "$sprint_phid" "Done")
 
   local query="{
     \"transactions\": [
+      {
+        \"type\": \"status\",
+        \"value\": \"resolved\"
+      },
       {
         \"type\": \"column\",
         \"value\": [$column_phid]
@@ -58,9 +69,8 @@ function main {
     ],
     \"objectIdentifier\": \"$task_id\"
   }"
-
   local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
-  echo_step "Successfully moved task $task_id to In Review"
+  echo_step "Successfully moved task $task_id to Done, and changed to Resolved"
 }
 
 main "$1"
