@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+function echo_step {
+  printf $'\e[37;44m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function get_branch_name {
+  local task_id="$1"
+
+  # NOTE: read conduit uri from ~/.arcrc
+  local arcrc=$(<~/.arcrc)
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+
+  local query="{
+    \"task_id\": $task_id
+  }"
+  local json="$(
+    echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.info
+  )"
+  local branch_desc=$(echo $json | jq '.response.title' | cut -d' ' -f1-3 | tr -cd "/\([:alpha:]\| \)/" | tr ' ' '-' | tr '[:upper:]' '[:lower:]')
+  echo "T$task_id/$branch_desc"
+}
+
+function main {
+  local task_id=${1/T/}
+  echo_step "fetching branch name.."
+  local branch_name="$(get_branch_name $task_id)"
+
+  echo "$branch_name"
+}
+
+main "$1"

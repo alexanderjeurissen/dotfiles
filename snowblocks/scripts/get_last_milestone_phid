@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function get_last_milestone_phid {
+  local arcrc=$(<~/.arcrc)
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+  local project_phid="$1"
+  local query="{
+    \"queryKey\": \"active\",
+    \"constraints\": {
+      \"isMilestone\": true,
+      \"parents\": [
+        $project_phid
+      ]
+    }
+  }"
+
+  local json="$(
+    echo $query | arc call-conduit --conduit-uri $conduit_uri project.search
+  )"
+
+  echo $json | jq '.response.data[0].phid'
+}
+
+get_last_milestone_phid "$1"
