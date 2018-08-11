@@ -13,9 +13,9 @@ function echo_warning {
 function get_conduit_uri {
   # NOTE: read conduit uri from ~/.arcrc
   local arcrc=$(<~/.arcrc)
-  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
 
-  echo conduit_uri
+  echo $conduit_uri
 }
 
 function parse_branch_name {
