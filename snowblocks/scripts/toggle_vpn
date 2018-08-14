@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $(ifconfig | perl -lne '$count++ if m/utun3/o; END { print $count }') -eq 1 ]]; then
+  ~/.scripts/novpn
+else
+  ~/.scripts/vpn
+fi
