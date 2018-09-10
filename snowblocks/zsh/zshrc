@@ -167,7 +167,7 @@ fi
   alias applypatch="git am --signoff <"
   alias create_commit_range_patch="git format-patch"
   alias prof="source ~/.zshrc && source ~/.zshenv && source ~/.zprofile"
-  alias structuresql="g difftool develop -- db/structure.sql"
+  alias structuresql="g difftool develop -- db/structure.sql && g diff develop -- db/structure.sql"
   alias check_failing_jenkins_specs="bin/rspec $(pbpaste)"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
   alias verify_approvals="approvals verify -d nvim -d  -a"
