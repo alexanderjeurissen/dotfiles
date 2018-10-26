@@ -10,14 +10,12 @@ function get_column_phid {
   local query="{
     \"constraints\": {
       \"projects\": [
-        \"$sprint_phid\"
+        $sprint_phid
       ]
     }
   }"
 
-  local json="$(
-    echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search
-  )"
+  local json="$(echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search)"
 
   echo $json | jq ".response.data[] | select(.fields.name==\"$search_query\") | .phid"
 }
