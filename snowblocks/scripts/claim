@@ -5,23 +5,6 @@ function echo_step {
   echo $'\033[0m'
 }
 
-function get_column_phid {
-  local sprint_phid="$1"
-  local conduit_uri="$2"
-  local query="{
-    \"constraints\": {
-      \"projects\": [
-        $sprint_phid
-      ]
-    }
-  }"
-
-  local json="$(
-    echo $query | arc call-conduit --conduit-uri $conduit_uri project.column.search
-  )"
-  echo $json | jq '.response.data[] | select(.fields.name=="In Progress") | .phid'
-}
-
 function main {
   local task_id=${1/T/}
   local branch_name="$(get_branch_name $task_id)"
@@ -31,12 +14,12 @@ function main {
     local arcrc=$(<~/.arcrc)
     local user_phid=$(echo $arcrc | jq '.dotfiles_env_vars.user')
     local project_phid=$(echo $arcrc | jq '.dotfiles_env_vars.project')
-    local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri')
+    local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
   # }}}
 
-  local sprint_phid="$(get_last_milestone_phid $project_phid)"
-  local column_phid=$(get_column_phid "$sprint_phid" "$conduit_uri")
-  
+  local sprint_phid=$(get_last_milestone_phid "$project_phid")
+  local column_phid=$(get_column_phid $sprint_phid "In Progress")
+
   local query="{
     \"transactions\": [
       {
