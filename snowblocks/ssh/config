@@ -1,2 +1,3 @@
 Host *
-    UseKeychain yes
+ AddKeysToAgent yes
+ UseKeychain yes
