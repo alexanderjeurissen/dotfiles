@@ -3,7 +3,7 @@ export ENABLE_SPRING=0
 export DEFAULT_USER=$USER
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-# export NO_SUGGESTED_REVIEWERS=no
+export NO_SUGGESTED_REVIEWERS=no
 
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
@@ -11,8 +11,8 @@ export LANG=en_US.UTF-8
 # }}}
 
 export PATH="$HOME/.bin:$PATH" # TODO: evaluate env var
-export PATH="/Users/alexanderjeurissen/.scripts:$PATH" # include my own scripts
-export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
+export PATH="/Users/alexander/.scripts:$PATH" # include my own scripts
+export PATH="$PATH:/Users/alexander/Development/arcanist/bin"
 
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:/Applications/FontForge.app/Contents/Resources/opt/local/bin" # fontcustom.app path

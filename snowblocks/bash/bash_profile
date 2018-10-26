@@ -9,3 +9,4 @@ if which nodenv > /dev/null; then eval "$(nodenv init - --no-rehash)"; fi
 # source $(brew --prefix nvm)/nvm.sh
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
+export PATH="/Users/alexander/Development/arcanist/bin:$PATH"

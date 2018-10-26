@@ -4,3 +4,4 @@
 # script that this line is already in my bashrc
 # I prefer defining these path variables in my bashprofile and profile
 # export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+export PATH="/Users/alexander/Development/arcanist/bin:$PATH"

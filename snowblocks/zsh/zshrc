@@ -260,13 +260,14 @@ fi
 # }}}
 
 # Aliases for directories {{{
-  alias h1="cd ~/git/hackerone/"
-  alias payments="cd ~/git/hackerone-payments/"
-  alias dotfiles="cd ~/git/dotfiles/"
+  alias h1="cd ~/Dev/hackerone/"
+  alias payments="cd ~/Dev/hackerone-payments/"
+  alias dotfiles="cd ~/Dev/dotfiles/"
 # }}}
 
 # Aliases for foreman and psql {{{
-  alias psql_rails='psql -U alexanderjeurissen -p 3100 -h localhost -d postgres'
+  alias psql_rails='psql -U alexander -p 3100 -h localhost -d postgres'
+  alias pg_dumpall_rails='pg_dumpall -U alexander -p 3100 -h localhost -f backup.sql'
   alias startServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1,payments_dev=1,payments_test=1,sidekiq=1"
   alias startBackend="rails s"
   alias startFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1"
@@ -451,6 +452,6 @@ $(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
 # NOTE: this hopefully fools workstation init
 # script that this line is already in my zshrc
 # I prefer defining these path variables in my zshenv
-# export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+# export PATH="/Users/alexander/Development/arcanist/bin:$PATH"
 
 # vim: foldmethod=marker:sw=2
