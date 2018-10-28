@@ -7,3 +7,6 @@
 [submodule "snowblocks/neovim/pack/autocomplete/opt/ultisnips"]
 	path = snowblocks/neovim/pack/autocomplete/opt/ultisnips
 	url = https://github.com/Sirver/ultisnips.git
+[submodule "snowblocks/neovim/pack/clojure/opt/vim-fireplace"]
+	path = snowblocks/neovim/pack/clojure/opt/vim-fireplace
+	url = https://github.com/tpope/vim-fireplace.git
