@@ -43,3 +43,27 @@
 [submodule "snowblocks/neovim/pack/default/start/vim-scriptease"]
 	path = snowblocks/neovim/pack/default/start/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
+[submodule "snowblocks/neovim/pack/editing/start/file-line"]
+	path = snowblocks/neovim/pack/editing/start/file-line
+	url = https://github.com/bogado/file-line.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-commentary"]
+	path = snowblocks/neovim/pack/editing/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-endwise"]
+	path = snowblocks/neovim/pack/editing/start/vim-endwise
+	url = https://github.com/tpope/vim-endwise.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-exchange"]
+	path = snowblocks/neovim/pack/editing/start/vim-exchange
+	url = https://github.com/tommcdo/vim-exchange.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-highlightedyank"]
+	path = snowblocks/neovim/pack/editing/start/vim-highlightedyank
+	url = https://github.com/machakann/vim-highlightedyank.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-repeat"]
+	path = snowblocks/neovim/pack/editing/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-sleuth"]
+	path = snowblocks/neovim/pack/editing/start/vim-sleuth
+	url = https://github.com/tpope/vim-sleuth.git
+[submodule "snowblocks/neovim/pack/editing/start/vim-surround"]
+	path = snowblocks/neovim/pack/editing/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git
