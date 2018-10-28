@@ -67,3 +67,39 @@
 [submodule "snowblocks/neovim/pack/editing/start/vim-surround"]
 	path = snowblocks/neovim/pack/editing/start/vim-surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule "snowblocks/neovim/pack/frontend/opt/vim-css-color"]
+	path = snowblocks/neovim/pack/frontend/opt/vim-css-color
+	url = https://github.com/ap/vim-css-color.git
+[submodule "snowblocks/neovim/pack/navigation/start/RootIgnore"]
+	path = snowblocks/neovim/pack/navigation/start/RootIgnore
+	url = https://github.com/octref/RootIgnore.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-bbye"]
+	path = snowblocks/neovim/pack/navigation/start/vim-bbye
+	url = https://github.com/moll/vim-bbye.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-delete-hidden-buffers"]
+	path = snowblocks/neovim/pack/navigation/start/vim-delete-hidden-buffers
+	url = https://github.com/arithran/vim-delete-hidden-buffers.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-dirvish"]
+	path = snowblocks/neovim/pack/navigation/start/vim-dirvish
+	url = https://github.com/justinmk/vim-dirvish.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-eunuch"]
+	path = snowblocks/neovim/pack/navigation/start/vim-eunuch
+	url = https://github.com/tpope/vim-eunuch.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-projectionist"]
+	path = snowblocks/neovim/pack/navigation/start/vim-projectionist
+	url = https://github.com/tpope/vim-projectionist.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-rooter"]
+	path = snowblocks/neovim/pack/navigation/start/vim-rooter
+	url = https://github.com/airblade/vim-rooter.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-sneak"]
+	path = snowblocks/neovim/pack/navigation/start/vim-sneak
+	url = https://github.com/justinmk/vim-sneak.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-tmux-navigator"]
+	path = snowblocks/neovim/pack/navigation/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-unimpaired"]
+	path = snowblocks/neovim/pack/navigation/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "snowblocks/neovim/pack/navigation/start/vim-visualstar"]
+	path = snowblocks/neovim/pack/navigation/start/vim-visualstar
+	url = https://github.com/thinca/vim-visualstar.git
