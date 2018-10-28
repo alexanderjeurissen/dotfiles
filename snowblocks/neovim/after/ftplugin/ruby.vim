@@ -1,3 +1,7 @@
+packadd vim-bundler
+packadd vim-cucumber
+packadd vim-rails
+
 " Get a vimdiff of structure.sql compared to develop
 lnoremap <leader>db :!git diff develop -- db/structure.sql -d vimdiff -a<cr>
 
@@ -6,7 +10,6 @@ setlocal makeprg=bundle\ exec\ rspec\ --require\ ~\/.config\/nvim\/make_programs
 
 " FIXME: Somehow relativenumber is disabled when entering ruby buffers
 setlocal number relativenumber
-
 
 " NOTE: poor man's snippets
 inoreabbr <buffer> iit it { is_expected.to be(true) }
