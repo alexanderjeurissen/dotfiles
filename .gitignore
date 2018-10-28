@@ -1,10 +1,11 @@
 .DS_Store
 elpa
-config/nvim/sessions/
-config/nvim/UndoHistory/
-config/nvim/.netrwhist
-config/nvim/plugged/
-config/nvim/spell/
+snowblocks/neovim/sessions/
+snowblocks/neovim/UndoHistory/
+snowblocks/neovim/.netrwhist
+snowblocks/neovim/plugged/
+snowblocks/neovim/spell/
+snowblocks/neovim/pack/
 __pycache__/
 *.orig
 *~
