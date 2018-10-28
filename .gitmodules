@@ -133,3 +133,6 @@
 [submodule "snowblocks/neovim/pack/colorschemes/start/lumiere.vim"]
 	path = snowblocks/neovim/pack/colorschemes/start/lumiere.vim
 	url = https://github.com/alexanderjeurissen/lumiere.vim.git
+[submodule "snowblocks/neovim/pack/navigation/start/fzf"]
+	path = snowblocks/neovim/pack/navigation/start/fzf
+	url = https://github.com/junegunn/fzf.git
