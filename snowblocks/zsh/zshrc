@@ -217,6 +217,7 @@ fi
 
 # Nvim & vim aliases {{{
   alias v='nvim'
+  alias v!='nvim -u NONE'
 # }}}
 
 # Aliases for Arcanist {{{
