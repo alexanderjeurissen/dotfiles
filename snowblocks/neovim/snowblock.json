@@ -29,7 +29,8 @@
       "~/.config/nvim/after": { "create": true, "relink": true },
       "~/.config/nvim/colors": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
-      "~/.config/nvim/make_programs": { "create": true, "relink": true }
+      "~/.config/nvim/make_programs": { "create": true, "relink": true },
+      "~/.config/nvim/pack": { "create": true, "relink": true }
     },
     "shell": [
       [

@@ -133,3 +133,6 @@
 [submodule "snowblocks/neovim/pack/window_management/start/vim-maximizer"]
 	path = snowblocks/neovim/pack/window_management/start/vim-maximizer
 	url = https://github.com/szw/vim-maximizer
+[submodule "snowblocks/neovim/pack/default/start/fzf"]
+	path = snowblocks/neovim/pack/default/start/fzf
+	url = https://github.com/junegunn/fzf
