@@ -103,3 +103,27 @@
 [submodule "snowblocks/neovim/pack/navigation/start/vim-visualstar"]
 	path = snowblocks/neovim/pack/navigation/start/vim-visualstar
 	url = https://github.com/thinca/vim-visualstar.git
+[submodule "snowblocks/neovim/pack/ruby/opt/vim-bundler"]
+	path = snowblocks/neovim/pack/ruby/opt/vim-bundler
+	url = https://github.com/tpope/vim-bundler.git
+[submodule "snowblocks/neovim/pack/ruby/opt/vim-cucumber"]
+	path = snowblocks/neovim/pack/ruby/opt/vim-cucumber
+	url = https://github.com/tpope/vim-cucumber.git
+[submodule "snowblocks/neovim/pack/ruby/opt/vim-rails"]
+	path = snowblocks/neovim/pack/ruby/opt/vim-rails
+	url = https://github.com/tpope/vim-rails.git
+[submodule "snowblocks/neovim/pack/version_control/start/gist-vim"]
+	path = snowblocks/neovim/pack/version_control/start/gist-vim
+	url = https://github.com/mattn/gist-vim.git
+[submodule "snowblocks/neovim/pack/version_control/start/vim-diff-fold"]
+	path = snowblocks/neovim/pack/version_control/start/vim-diff-fold
+	url = https://github.com/sgeb/vim-diff-fold.git
+[submodule "snowblocks/neovim/pack/version_control/start/vim-fugitive"]
+	path = snowblocks/neovim/pack/version_control/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "snowblocks/neovim/pack/version_control/start/vim-git"]
+	path = snowblocks/neovim/pack/version_control/start/vim-git
+	url = https://github.com/tpope/vim-git.git
+[submodule "snowblocks/neovim/pack/version_control/start/webapi-vim"]
+	path = snowblocks/neovim/pack/version_control/start/webapi-vim
+	url = https://github.com/mattn/webapi-vim.git
