@@ -127,3 +127,6 @@
 [submodule "snowblocks/neovim/pack/version_control/start/webapi-vim"]
 	path = snowblocks/neovim/pack/version_control/start/webapi-vim
 	url = https://github.com/mattn/webapi-vim.git
+[submodule "snowblocks/neovim/pack/window_management/start/vim-maximizer"]
+	path = snowblocks/neovim/pack/window_management/start/vim-maximizer
+	url = https://github.com/szw/vim-maximizer.git
