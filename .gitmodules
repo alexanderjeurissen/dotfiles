@@ -130,3 +130,6 @@
 [submodule "snowblocks/neovim/pack/window_management/start/vim-maximizer"]
 	path = snowblocks/neovim/pack/window_management/start/vim-maximizer
 	url = https://github.com/szw/vim-maximizer.git
+[submodule "snowblocks/neovim/pack/colorschemes/start/lumiere.vim"]
+	path = snowblocks/neovim/pack/colorschemes/start/lumiere.vim
+	url = https://github.com/alexanderjeurissen/lumiere.vim.git
