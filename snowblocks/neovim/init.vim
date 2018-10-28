@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 " SETTINGS: General {{{
-  set packpath+=$VIM_CONFIG_PATH                     " Make sure pack installs in the right dir
   set path=$PWD,$PWD/app/**                          " Make :find more usable by default
   set wildmenu                                       " Show all matches when tab completing
   set wildmode=longest:list,full                     " Show longest match first
