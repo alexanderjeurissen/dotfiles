@@ -10,3 +10,36 @@
 [submodule "snowblocks/neovim/pack/clojure/opt/vim-fireplace"]
 	path = snowblocks/neovim/pack/clojure/opt/vim-fireplace
 	url = https://github.com/tpope/vim-fireplace.git
+[submodule "snowblocks/neovim/pack/colorschemes/opt/nova-vim"]
+	path = snowblocks/neovim/pack/colorschemes/opt/nova-vim
+	url = https://github.com/trevordmiller/nova-vim.git
+[submodule "snowblocks/neovim/pack/colorschemes/opt/inkstained-vim"]
+	path = snowblocks/neovim/pack/colorschemes/opt/inkstained-vim
+	url = https://github.com/yuttie/inkstained-vim.git
+[submodule "snowblocks/neovim/pack/default/opt/vim-prosession"]
+	path = snowblocks/neovim/pack/default/opt/vim-prosession
+	url = https://github.com/dhruvasagar/vim-prosession.git
+[submodule "snowblocks/neovim/pack/default/start/FastFold"]
+	path = snowblocks/neovim/pack/default/start/FastFold
+	url = https://github.com/Konfekt/FastFold.git
+[submodule "snowblocks/neovim/pack/default/start/ale"]
+	path = snowblocks/neovim/pack/default/start/ale
+	url = https://github.com/w0rp/ale.git
+[submodule "snowblocks/neovim/pack/default/start/searchfold.vim"]
+	path = snowblocks/neovim/pack/default/start/searchfold.vim
+	url = https://github.com/vim-scripts/searchfold.vim.git
+[submodule "snowblocks/neovim/pack/default/start/vim-dispatch"]
+	path = snowblocks/neovim/pack/default/start/vim-dispatch
+	url = https://github.com/tpope/vim-dispatch.git
+[submodule "snowblocks/neovim/pack/default/start/vim-dispatch-neovim"]
+	path = snowblocks/neovim/pack/default/start/vim-dispatch-neovim
+	url = https://github.com/radenling/vim-dispatch-neovim.git
+[submodule "snowblocks/neovim/pack/default/start/vim-obsession"]
+	path = snowblocks/neovim/pack/default/start/vim-obsession
+	url = https://github.com/tpope/vim-obsession.git
+[submodule "snowblocks/neovim/pack/default/start/vim-polyglot"]
+	path = snowblocks/neovim/pack/default/start/vim-polyglot
+	url = https://github.com/sheerun/vim-polyglot.git
+[submodule "snowblocks/neovim/pack/default/start/vim-scriptease"]
+	path = snowblocks/neovim/pack/default/start/vim-scriptease
+	url = https://github.com/tpope/vim-scriptease.git
