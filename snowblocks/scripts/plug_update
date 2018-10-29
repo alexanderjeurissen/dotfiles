@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+git submodule update --remote --merge
+git submodule summary
+
+if ( test -z "$(command git submodule summary)" ); then
+  echo "Nothing to commit.."
+else
+  git add snowblocks/neovim/pack && git commit -m "SUBMODULES: updated vim plugins on `date`"
+fi
