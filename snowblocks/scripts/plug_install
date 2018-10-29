@@ -1,0 +1,4 @@
+#/usr/bin/env bash
+
+# git submodule deinit --force ./snowblocks/neovim/pack/${2}/${1##*/}
+git submodule add https://github.com/${1}.git ./snowblocks/neovim/pack/${2}/${1##*/}
