@@ -15,3 +15,7 @@ setlocal number relativenumber
 inoreabbr <buffer> iit it { is_expected.to be(true) }
 inoreabbr <buffer> iif it { is_expected.to be(false) }
 inoreabbr <buffer> pry binding.pry
+
+" tpope/vim-rails
+nnoremap <leader>rC :.Runner<CR>
+nnoremap <leader>rA :Runner<CR>

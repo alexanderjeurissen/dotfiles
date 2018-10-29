@@ -11,7 +11,7 @@ endfunction
 
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-function! AskQuit (msg, options, quit_option)
+function! general#AskQuit (msg, options, quit_option)
   if confirm(a:msg, a:options) == a:quit_option
     exit
   endif
@@ -32,7 +32,6 @@ function! general#EnsureDirExists ()
     endtry
   endif
 endfunction
-
 
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
@@ -88,8 +87,8 @@ function! general#ExecVisualSelection()
   call jobstart("open " . l:selection)
 endfunc
 
-" source: http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript#6271254
-" original author of this function: xolox
+" NOTE: get string that contains the visual selection
+" SOURCE: http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript#6271254
 function! s:get_visual_selection()
   " Why is this not a built-in Vim script function?!
   let [l:lnum1, l:col1] = getpos("'<")[1:2]
@@ -121,6 +120,7 @@ function! general#MarkMargin(on)
   endif
 endfunction
 
+" NOTE: makes the window red colored when syntax errors are present
 function! general#ErrorMode()
   let l:alestats = ale#statusline#Count(bufnr('%'))
   if l:alestats['error'] > 0
@@ -129,4 +129,14 @@ function! general#ErrorMode()
   else
     setlocal winhl=
   endif
+endfunction
+
+" NOTE: generates helptags for all plugins including lazy loaded ones
+" SOURCE: https://vi.stackexchange.com/questions/17210/generating-help-tags-for-packages-that-are-loaded-by-vim-8s-package-management
+function! general#GenerateHelpTags()
+  for p in glob('~/.config/nvim/pack/*/opt/*', 1, 1)
+    exe 'packadd ' . fnamemodify(p, ':t')
+  endfor
+
+  helptags ALL
 endfunction
