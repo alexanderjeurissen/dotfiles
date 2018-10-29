@@ -6,7 +6,6 @@
       "~/.config/nvim/after",
       "~/.config/nvim/colors",
       "~/.config/nvim/pack",
-      "~/.config/nvim/.pack",
       "~/.config/nvim/UltiSnips",
       "~/.config/nvim/make_programs"
     ]
@@ -20,8 +19,7 @@
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
       { "name": "vim-vint", "cmd": "pip2 install vim-vint" },
       { "name": "language_server", "cmd": "gem install language_server" },
-      { "name": "cmake", "cmd": "brew install cmake" },
-      { "name": "pack", "cmd": "cargo install --git https://github.com/maralla/pack.git" }
+      { "name": "cmake", "cmd": "brew install cmake" }
     ]
   },
   {
@@ -32,7 +30,7 @@
       "~/.config/nvim/colors": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
       "~/.config/nvim/make_programs": { "create": true, "relink": true },
-      "~/.config/nvim/.pack": { "create": true, "relink": true, "path": "vim_pack" }
+      "~/.config/nvim/pack": { "create": true, "relink": true }
     },
     "shell": [
       [
@@ -46,6 +44,10 @@
       [
         "mkdir -p ~/.config/nvim/sessions",
         "Create folder for vim sessions"
+      ],
+      [
+        "mkdir -p ~/.config/nvim/pack",
+        "Create folder for pack files"
       ]
     ]
   }
