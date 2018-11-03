@@ -136,6 +136,3 @@
 [submodule "snowblocks/neovim/pack/navigation/start/fzf"]
 	path = snowblocks/neovim/pack/navigation/start/fzf
 	url = https://github.com/junegunn/fzf.git
-[submodule "snowblocks/neovim/pack/colorschemes/opt/vim-monokai-pro"]
-	path = snowblocks/neovim/pack/colorschemes/opt/vim-monokai-pro
-	url = https://github.com/phanviet/vim-monokai-pro.git
