@@ -116,7 +116,7 @@ scriptencoding utf-8
   let mapleader="\<Space>"
   let g:mapleader="\<Space>"
 
-  " Fix annoying typo's of WQ, QA and Q
+  " Fix annoying typo's of WQ, QA and Q, and report
   cnoreabbrev qw wq
   cnoreabbrev Wq wq
   cnoreabbrev WQ wq
@@ -125,6 +125,9 @@ scriptencoding utf-8
   cnoreabbrev W w
   cnoreabbrev WW w
   cnoreabbrev Q q
+
+  inoreabbr <buffer> reprot report
+  inoreabbr <buffer> Reprot Report
 
   " session mappings
   noremap <leader>m :call general#WriteSession()<CR>
@@ -223,7 +226,7 @@ scriptencoding utf-8
   noremap ? ?\v
 
 " bind <leader>/ to grep
-  nnoremap <leader>/ :grep -F ""<LEFT>
+  nmap <leader>/ :grep -F ""<LEFT>
 
 " bind K to grep word under cursor
   nnoremap K :grep! "\b<C-R><C-W>\b"<CR><CR>:cw<CR>
