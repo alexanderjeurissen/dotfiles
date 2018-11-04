@@ -136,3 +136,6 @@
 [submodule "snowblocks/neovim/pack/navigation/start/fzf"]
 	path = snowblocks/neovim/pack/navigation/start/fzf
 	url = https://github.com/junegunn/fzf.git
+[submodule "snowblocks/neovim/pack/colorschemes/opt/Breve"]
+	path = snowblocks/neovim/pack/colorschemes/opt/Breve
+	url = https://github.com/AlessandroYorba/Breve.git
