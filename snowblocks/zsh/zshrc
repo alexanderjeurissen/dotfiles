@@ -1,11 +1,9 @@
-
 # Start tmux by default and exit terminal if tmux exits. {{{
    if [ -z "$TMUX" ]; then
      # tmux attach-session || exec tmux new-session;
      tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
-
 
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
@@ -55,20 +53,6 @@ fi
       echo "TRY_FAIL_LOOP"
       $@
       sleep 0.1
-    done
-  }
-
-  # Keep running cucumber or rspec till
-  find_random_fail() {
-    command="$1"
-    while true; do
-      if [[ $command == "cucumber" ]]; then
-        echo "running cukes"
-        bundle exec cucumber -p parallel
-      elif [[ $command == "rspec" ]]; then
-        echo "running rspec"
-        bin/rescue rspec --order random
-      fi
     done
   }
 
@@ -145,6 +129,7 @@ fi
   zplug "zsh-users/zsh-syntax-highlighting"
   zplug "zsh-users/zsh-completions"
   zplug "zsh-users/zsh-autosuggestions"
+  zplug "Valiev/almostontop"
 # }}}
 
 # aliasses {{{
@@ -152,41 +137,29 @@ fi
   alias l="LC_COLLATE=C \gls -lAh --color=auto --time-style="+%Y-%m-%d +%H:%M:%S" --group-directories-first"
   alias ls="\gls --color=auto --group-directories-first"
   alias rls="cd && cd - && ls -G"
-  alias fixtestdb="bin/rake db:test:prepare"
   alias upd="git pull origin develop:develop --rebase --ff-only"
   alias upm="git pull origin master:master --rebase --ff-only"
-  alias rake="noglob bin/rake"
+  alias rake="noglob rake"
   alias console="bin/rails console"
   alias migrate="bin/rake db:migrate && bin/rake db:test:prepare"
-  alias migrate_redo="noglob bin/rake db:migrate:redo"
-  alias migrate_undo="noglob bin/rake db:migrate:down"
-  alias chrome="CAPYBARA_DRIVER=\"selenium\""
   alias rerun="bundle exec cucumber -p rerun"
   alias routes="rails_routes | fzf | pbcopy"
-  alias pryr="pry -r ./config/environment -r rails/console/app -r rails/console/helpers"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
   alias showDriveUsage='sudo lsof'
-  alias tn='tmux new -s "${$(basename `PWD`)//./}" || tmux at -t "${$(basename `PWD`)//./}"'
-  alias kn='kak -d -s "${$(basename `PWD`)//./}"'
-  alias attach="tmux attach -t"
   alias findP="ps -ef | grep -v grep | grep "
   alias applypatch="git am --signoff <"
   alias create_commit_range_patch="git format-patch"
   alias prof="source ~/.zshrc && source ~/.zshenv && source ~/.zprofile"
   alias structuresql="g difftool develop -- db/structure.sql && g diff develop -- db/structure.sql"
-  alias check_failing_jenkins_specs="bin/rspec $(pbpaste)"
   alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
   alias verify_approvals="approvals verify -d nvim -d  -a"
   # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/14 {{{
   alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
   alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
+  alias changed_files="git diff develop --name-only"
   # }}}
   alias eslintspecific="yarn run eslint:specific -- --fix"
-  # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/15 {{{
-  alias yarn_global_add='yarn global add --global-folder=`yarn global bin` '
-  alias yarn_global_remove='yarn global remove --global-folder=`yarn global bin` '
-  # }}}
   alias urldecode='python -c "import sys, urllib as ul; \
     print ul.unquote_plus(sys.argv[1])"'
 
@@ -221,9 +194,8 @@ fi
 # }}}
 
 # Aliases for Arcanist {{{
-  alias diff="arc diff --nounit --excuse \"jenkins\""
+  alias diff="arc diff"
   alias diffb="arc diff --browse"
-  alias diffu="arc diff --nounit --excuse \"jenkins\" --verbatim"
 
   # FIXME: {{{
     nexttask() {
@@ -276,15 +248,10 @@ fi
 # Aliases for foreman and psql {{{
   alias psql_rails='psql -U alexander -p 3100 -h localhost -d postgres'
   alias pg_dumpall_rails='pg_dumpall -U alexander -p 3100 -h localhost -f backup.sql'
-  alias startServices="foreman start -c all=0,redis=1,postgresql=1,mailcatcher=1,payments_dev=1,payments_test=1,sidekiq=1"
-  alias startBackend="rails s"
-  alias startFrontend="foreman start -c all=0,sass=1,webpack=1,uidocs=1,karma=1"
-  alias startGuard="bundle exec guard -d --no-interactions"
-  alias startAll="startServices && startBackend && startFrontend"
   alias neo4j="db/neo4j/development/bin/neo4j"
 # }}}
 
-# Alias for clearing the screen
+# Alias for clearing the whole screen in tmux
 alias clear!="clear && printf '\e[3J'"
 
 # set nvim as defaut editor
@@ -328,7 +295,6 @@ fi
 
 # git aliases {{{
   source ~/.gitaliases
-  alias changedfiles= "git diff --name-only | uniq | xargs nvim"
 # }}}
 
 # History options {{{
