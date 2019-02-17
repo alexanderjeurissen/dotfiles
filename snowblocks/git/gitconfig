@@ -17,6 +17,9 @@
   who = blame
   sup = "submodule update --remote --merge"
 
+  ; diff aliases
+  diffFiles = diff --name-only
+
   ; push/commit aliases
   aa = add -A
   unadd = reset HEAD
@@ -26,9 +29,8 @@
 
   ;files changed between two commits
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
-	up = pull --rebase --autostash
+  up = pull --rebase --autostash
   ctags = !.git/hooks/ctags
-  ; up = pull --rebase --autostash
 
 [merge]
   tool = vimdiff
