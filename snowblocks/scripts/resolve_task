@@ -10,20 +10,12 @@ function echo_warning {
   echo $'\033[0m'
 }
 
-function get_conduit_uri {
-  # NOTE: read conduit uri from ~/.arcrc
-  local arcrc=$(<~/.arcrc)
-  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
-
-  echo $conduit_uri
-}
-
 function parse_branch_name {
   type git >/dev/null 2>&1
+  
   if [ "$?" -ne 0 ]; then
 	  return
   fi
-
 
   # Quit if this is not a Git repo.
   branch=$(git symbolic-ref HEAD 2> /dev/null)
@@ -41,36 +33,53 @@ function parse_branch_name {
 }
 
 function main {
-  local task_id=${1/T/} 
+  local points=$1 
+  local arcrc=$(<~/.arcrc)
+  local project_phid=$(echo $arcrc | jq '.dotfiles_env_vars.project')
+  local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
 
-  if [[ -z $task_id ]]; then
-    task_id=$(parse_branch_name)
-  fi
+  local task_id=$(parse_branch_name)
 
   if [[ -z $task_id ]]; then
     echo_warning "Couldnt determine the task number of the current branch"
     return
   fi
 
-  local conduit_uri=$(get_conduit_uri)
-  local sprint_phid="$(get_last_milestone_phid)"
-  local column_phid=$(get_column_phid "$sprint_phid" "Done")
+  local sprint_phid=$(get_last_milestone_phid "$project_phid")
+  local column_phid=$(get_column_phid $sprint_phid "Done")
 
-  local query="{
-    \"transactions\": [
-      {
-        \"type\": \"status\",
-        \"value\": \"resolved\"
-      },
-      {
-        \"type\": \"column\",
-        \"value\": [$column_phid]
-      }
-    ],
-    \"objectIdentifier\": \"$task_id\"
-  }"
+  if [[ -z $points ]]; then
+    local query="{
+      \"transactions\": [
+	{
+	  \"type\": \"column\",
+	  \"value\": [$column_phid]
+	}
+      ],
+      \"objectIdentifier\": \"$task_id\"
+    }"
+  else
+    local query="{
+      \"transactions\": [
+	{
+	  \"type\": \"column\",
+	  \"value\": [$column_phid]
+	},
+	{
+	  \"type\": \"points\",
+	  \"value\": $points
+	},
+	{
+	  \"type\": \"status\",
+	  \"value\": \"resolved\"
+	}
+      ],
+      \"objectIdentifier\": \"$task_id\"
+    }"  
+  fi
+
   local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
-  echo_step "Successfully moved task $task_id to Done, and changed to Resolved"
+  echo_step "Successfully moved task $task_id to Done"
 }
 
 main "$1"
