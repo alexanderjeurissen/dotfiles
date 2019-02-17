@@ -1,42 +1,28 @@
-" An action can be a reference to a function that processes selected lines
+" NOTE: An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
  copen
- " cc " Open first match
 endfunction
 
 let g:fzf_action = {
       \ 'ctrl-o': function('s:build_quickfix_list'),
-      \ 'ctrl-r': function('s:build_quickfix_list'),
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_default_options = [
-      \'--ansi',
-      \'--multi',
-      \'--sort',
-      \'--bind=ctrl-a:select-all,ctrl-d:deselect-all'
-      \ ]
+let g:fzf_default_options = '--inline-info --multi --sort --bind=ctrl-a:select-all,ctrl-d:deselect-all'
+" let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -'.&lines.'"'
+let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
 
-  " Replace current buffer with search window
-  let g:fzf_layout = { 'window': 'enew' }
+" NOTE: Replace current buffer with search window
+" let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': 'tabnew' }
 
-" Customize fzf colors to match your color scheme
-  let g:fzf_colors = {
-    \ 'fg':      ['fg', 'Normal'],
-    \ 'bg':      ['bg', 'Normal'],
-    \ 'hl':      ['fg', 'ALEInfoLine'],
-    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-    \ 'hl+':     ['fg', 'Statement'],
-    \ 'info':    ['fg', 'PreProc'],
-    \ 'prompt':  ['fg', 'Conditional'],
-    \ 'pointer': ['fg', 'Exception'],
-    \ 'marker':  ['fg', 'Keyword'],
-    \ 'spinner': ['fg', 'Label'],
-    \ 'header':  ['fg', 'Comment'] }
-" }}}
+" NOTE: Open a new tab with search window
+" let g:fzf_layout = { 'window': '-tabnew' }
+
+" NOTE: don't specify any colors, so it falls back on default opts --color bw
+let g:fzf_colors = {}
 
 " Keybindings & commands {{{
 command! Files call s:fzf_Files()
@@ -61,19 +47,14 @@ nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
 " }}}
 
 " Functions {{{
-function! s:fzf_Statusline()
-  echom "kerk"
-  setlocal statusline=%#fzf1#\ FZF\ -\ %{g:fzf_current_mode}
-endfunction
-
 function! s:fzf_Files()
-  let g:fzf_current_mode = 'Files'
-  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options }))
+  let g:fzf_current_mode = 'FILES'
+  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options . ' ' . g:fzf_files_options }))
 endfunction
 
 
 function! s:fzf_Buffers()
-  let g:fzf_current_mode = 'Buffers'
+  let g:fzf_current_mode = 'BUFFERS'
   function! s:buflist()
     redir => ls
     silent ls
@@ -95,7 +76,7 @@ endfunction
 
 "NOTE: Files that are in the same directory as the current buffer
 function! s:fzf_NeighbouringFiles()
-  let g:fzf_current_mode = 'NeighbouringFiles'
+  let g:fzf_current_mode = 'CWD_FILES'
   let current_file = expand("%")
   let cwd = fnamemodify(current_file, ':p:h')
   let command = $FZF_DEFAULT_COMMAND . ' --maxdepth 1'
@@ -110,7 +91,7 @@ endfunction
 
 "NOTE: Files that are tracked by Git in $PWD that are dirty
 function! s:fzf_GitFiles()
-  let g:fzf_current_mode = 'GitFiles'
+  let g:fzf_current_mode = 'GIT_FILES'
   let command = 'git diff --name-only'
 
   call fzf#run(fzf#wrap({
@@ -122,7 +103,7 @@ endfunction
 
 "NOTE: Files in $PWD that have changed in current branch compared to develop
 function! s:fzf_GitBranchFiles()
-  let g:fzf_current_mode = 'GitBranchFiles'
+  let g:fzf_current_mode = 'GIT_BRANCH_FILES'
   let command = 'git diff --name-only develop'
 
   call fzf#run(fzf#wrap({

@@ -10,6 +10,7 @@ scriptencoding utf-8
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
   set autowrite                                      " Write before running commands.
   set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
+  " FIXME: trying out default cmdheight for now
   set cmdheight=2                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
@@ -22,7 +23,7 @@ scriptencoding utf-8
 
   set nolist
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
-  set fillchars=vert:\                               " Strings in statuslines and vert separators.
+  set fillchars=vert:\▕,fold:\                                           " Strings in statuslines and vert separators.
 
   set hidden                                         " Allow for more then one unsaved buffer.
   set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
@@ -43,9 +44,9 @@ scriptencoding utf-8
   set splitbelow                                     " Open new split panes at bottommost position
   set splitright                                     " Open new split panes at rightmost position
   set inccommand=nosplit                             " Show visual indication when using substitute.
-  set nofoldenable                                   " collapse all folds.
+  set foldenable                                   " collapse all folds.
   set foldmethod=syntax                              " Fold on the syntax
-  set foldcolumn=0                                   " Don't indicate fold open/closed
+  set foldcolumn=1                                   " Don't indicate fold open/closed
   set foldlevel=1                                    " Autofold nothing by default
   set foldnestmax=3                                  " Only fold outer functions
 
@@ -60,10 +61,11 @@ scriptencoding utf-8
   " Open help in a new split instead of vimbuffer
   " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
 
-  let python3_host_prog = "python3"
-  let python_host_prog = "python"
+  " let python3_host_prog = "python3"
+  " let python_host_prog = "python"
   let g:snappy_dev = 1
-  " let g:lumiere_low_contrast_mode = 1
+  let g:lumiere_hide_fold_column = 1
+  let g:lumiere_dim_inactive_windows = 1
 " }}}
 
 " SETTINGS: statusline {{{
@@ -186,6 +188,8 @@ scriptencoding utf-8
   nnoremap gb :Buffers<CR>
 
   " Go to previous and next item in quickfix list
+  noremap <leader>cw :cwindow<CR><C-w>J
+  noremap <leader>cq <C-w><C-p>:cclose<CR>
   noremap <leader>cn :cnext<CR>
   noremap <leader>cN :cnfile<CR>
   noremap <leader>cp :cprev<CR>
@@ -379,19 +383,23 @@ scriptencoding utf-8
     autocmd  BufEnter * :call general#MarkMargin(1)
   augroup END " }}}
 
-  "FIXME: temporarily disabled as it's quite intrusive
   augroup ALEXANDER_ALE_BG "{{{
     autocmd!
     autocmd User ALELintPost call general#ErrorMode()
     autocmd User ALEFixPost call general#ErrorMode()
-  augroup END
-  ""}}}
+  augroup END " }}}
 
-" }}}
+  augroup ALEXANDER_DIM_INACTIVE "{{{
+    autocmd!
+    autocmd WinEnter * call general#UndimWindow()
+    autocmd BufEnter * call general#UndimWindow()
+    autocmd WinLeave * call general#DimWindow()
+  augroup END " }}}
 
 " EXTRA: Include local vim config {{{
   if filereadable(expand('~/.nvimrc.local'))
     source ~/.nvimrc.local
   endif
 " }}}
+
 " vim: foldmethod=marker:sw=2:foldlevel=10
