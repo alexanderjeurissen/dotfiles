@@ -17,8 +17,13 @@ function main {
     local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
   # }}}
 
-  local sprint_phid=$(get_last_milestone_phid "$project_phid")
-  local column_phid=$(get_column_phid $sprint_phid "In Progress")
+  # local sprint_phid=$(get_last_milestone_phid "$project_phid")
+
+  # NOTE: Project that uses milestone sprints
+  # local column_phid=$(get_column_phid $sprint_phid "In Progress")
+
+  # NOTE: Project that uses sprint columns
+  local column_phid=$(get_column_phid $project_phid "Engineering - In Progress")
 
   local query="{
     \"transactions\": [
@@ -39,4 +44,3 @@ function main {
 }
 
 main "$1"
-
