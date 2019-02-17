@@ -389,13 +389,6 @@ scriptencoding utf-8
     autocmd User ALEFixPost call general#ErrorMode()
   augroup END " }}}
 
-  augroup ALEXANDER_DIM_INACTIVE "{{{
-    autocmd!
-    autocmd WinEnter * call general#UndimWindow()
-    autocmd BufEnter * call general#UndimWindow()
-    autocmd WinLeave * call general#DimWindow()
-  augroup END " }}}
-
 " EXTRA: Include local vim config {{{
   if filereadable(expand('~/.nvimrc.local'))
     source ~/.nvimrc.local
