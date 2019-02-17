@@ -5,6 +5,11 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export NO_SUGGESTED_REVIEWERS=no
 
+
+# NOTE: H1 related env variables {{{
+  export SKIP_WAIT=1
+# }}}
+
 # recommended by brew doctor {{{
   export PATH="/usr/local/bin:$PATH"
   export PATH="/usr/local/sbin:$PATH"
@@ -40,10 +45,7 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # }}}
 
 # FZF settings {{{
- export FZF_DEFAULT_OPTS='
-   --color fg:000000,bg:#dedcd6,hl:#170080,fg+:#ffffff,bg+:#000000,hl+:#ffffff
-   --color info:#000000,prompt:#000000,pointer:#ffffff,marker:#ffffff,spinner:#170080,header:8
- '
+ export FZF_DEFAULT_OPTS='--color bw'
 # }}}
 
 # LSCOLORS {{{
