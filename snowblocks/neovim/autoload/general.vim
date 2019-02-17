@@ -22,12 +22,12 @@ endfunction
 function! general#EnsureDirExists ()
   let l:required_dir = expand('%:h')
   if !isdirectory(l:required_dir)
-    call AskQuit("Parent directory '" . l:required_dir . "' doesn't exist.",
+    call general#AskQuit("Parent directory '" . l:required_dir . "' doesn't exist.",
       \       "&Create it\nor &Quit?", 2)
     try
       call mkdir(l:required_dir, 'p')
     catch
-      call AskQuit("Can't create '" . l:required_dir . "'",
+      call general#AskQuit("Can't create '" . l:required_dir . "'",
         \            "&Quit\nor &Continue anyway?", 1)
     endtry
   endif
@@ -129,6 +129,14 @@ function! general#ErrorMode()
   else
     setlocal winhl=
   endif
+endfunction
+
+function! general#DimWindow()
+ " syntax region Dim start='' end='$$$end$$$'
+endfunction
+
+function! general#UndimWindow()
+  " ownsyntax
 endfunction
 
 " NOTE: generates helptags for all plugins including lazy loaded ones

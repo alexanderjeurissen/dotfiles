@@ -66,12 +66,7 @@
     "no-case-declarations": 2,
     "no-catch-shadow": 2,
     "no-cond-assign": 2,
-    "no-console": [
-      2,
-      {
-        "allow": ["warn", "error"]
-      }
-    ],
+    "no-console": 0,
     "no-constant-condition": 2,
     "no-continue": 0,
     "no-control-regex": 2,

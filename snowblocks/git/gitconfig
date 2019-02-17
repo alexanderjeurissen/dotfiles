@@ -7,8 +7,8 @@
   cmd= nvim -d $REMOTE $LOCAL
 [difftool]
   prompt = false
-[pager]
-  diff = diff-so-fancy | less --tabs=1,5 -R
+; [pager]
+;   diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
   ui = auto
 [alias]

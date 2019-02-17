@@ -22,6 +22,5 @@ nmap <buffer> H <C-T>
 " Maximize help buffer to a separate tab
 execute "normal \<C-W>T"
 
-
 " NOTE: change highlighting of help to distinguish it from regular buffers
-setlocal winhl=Normal:HelpNormal,TabLineSel:HelpNormal,TabLine:HelpNormal
+setlocal winhl=Normal:HelpNormal

@@ -74,5 +74,13 @@
         "cmd": "brew cask install viscosity"
       }
     ]
+  },
+  {
+    "shell": [
+      [
+        "defaults write com.apple.Dock autohide-delay -float 1 && killall Dock",
+        "Make it so that the dock only appears after mouse hits edge for 3 sec"
+      ]
+    ]
   }
 ]

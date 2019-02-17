@@ -30,3 +30,4 @@ function! s:preview_file()
 endfunction
 
 call general#MarkMargin(0)
+autocmd BufEnter qf :call general#MarkMargin(0)
