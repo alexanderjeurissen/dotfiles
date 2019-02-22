@@ -148,3 +148,6 @@
 [submodule "snowblocks/neovim/pack/random/opt/vim-keysound"]
 	path = snowblocks/neovim/pack/random/opt/vim-keysound
 	url = https://github.com/skywind3000/vim-keysound.git
+[submodule "snowblocks/neovim/pack/colorschemes/start/vim"]
+	path = snowblocks/neovim/pack/colorschemes/start/vim
+	url = https://github.com/dracula/vim.git
