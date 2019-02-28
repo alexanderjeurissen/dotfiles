@@ -151,3 +151,6 @@
 [submodule "snowblocks/neovim/pack/colorschemes/opt/space-vim-theme"]
 	path = snowblocks/neovim/pack/colorschemes/opt/space-vim-theme
 	url = https://github.com/liuchengxu/space-vim-theme.git
+[submodule "snowblocks/neovim/pack/colorschemes/start/vim-solarized8"]
+	path = snowblocks/neovim/pack/colorschemes/start/vim-solarized8
+	url = https://github.com/lifepillar/vim-solarized8.git
