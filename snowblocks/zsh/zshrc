@@ -1,6 +1,5 @@
 # Start tmux by default and exit terminal if tmux exits. {{{
    if [ -z "$TMUX" ]; then
-     # tmux attach-session || exec tmux new-session;
      tmux attach-session || exec tmux new-session && exit;
    fi
 # }}}
@@ -129,7 +128,7 @@ fi
   zplug "zsh-users/zsh-syntax-highlighting"
   zplug "zsh-users/zsh-completions"
   zplug "zsh-users/zsh-autosuggestions"
-  zplug "Valiev/almostontop"
+  # zplug "Valiev/almostontop"
 # }}}
 
 # aliasses {{{
@@ -191,6 +190,24 @@ fi
 # Nvim & vim aliases {{{
   alias v='nvim'
   alias v!='nvim -u NONE'
+  # v () {
+  #   if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
+  #     branch=$(git symbolic-ref HEAD 2> /dev/null)
+  #     if [[ -z $branch ]] ; then
+  #       # attempt to get short-sha-name
+  #       branch=":$(git rev-parse --short HEAD 2> /dev/null)"
+  #     fi
+  #     if [ "$?" -ne 0 ]; then
+  #       # this must not be a git repo
+  #       echo "abduco -A \"$PWD \" nvim"
+  #     fi
+
+  #     echo "abduco -A \"$PWD/$branch\" nvim"
+  #   else
+  #     nvr "$@"
+  #   fi
+  # }
+  # alias v=v
 # }}}
 
 # Aliases for Arcanist {{{

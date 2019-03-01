@@ -131,14 +131,6 @@ function! general#ErrorMode()
   endif
 endfunction
 
-function! general#DimWindow()
- " syntax region Dim start='' end='$$$end$$$'
-endfunction
-
-function! general#UndimWindow()
-  " ownsyntax
-endfunction
-
 " NOTE: generates helptags for all plugins including lazy loaded ones
 " SOURCE: https://vi.stackexchange.com/questions/17210/generating-help-tags-for-packages-that-are-loaded-by-vim-8s-package-management
 function! general#GenerateHelpTags()

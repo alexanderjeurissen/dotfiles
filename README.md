@@ -2,18 +2,20 @@
 [<img src="https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/sombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/sombre.tmux)
 [<img src="https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/ombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/ombre.zsh)
 
-Feel free to use the scripts in this repository to fine tune your own dotfiles. Some things you might want to check out:
+## Disclaimer
 
-1. Neovim configuration with minimalistic statusline.
-2. Some nifty lint error highlighting
-2. Several shell aliases that I gathered over the years.
-3. Custom zsh prompt.
-3. Custom tmux color configuration
-
+This repo contains the latest and greatest version of my dotfiles.
 I try to extract meaningful bits and pieces to separate plugins/repositories so they can be used by the broader public, however tweaks that are highly personal preference often first end up here before I decide what to do with them.
+
+In summary my work environment consists of:
+
+| purpose | tool |
+|---------+------|
+| editor | Neovim |
+| terminal multiplexer | Tmux |
+| shell | Zsh |
+| terminal application | Alacritty |
 
 ## Screenshots
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/lumiere.vim/master/assets/ruby.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/screenshot.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/commiting.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/assets/screenshots/solar.png

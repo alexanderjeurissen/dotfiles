@@ -11,7 +11,7 @@ scriptencoding utf-8
   set autowrite                                      " Write before running commands.
   set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
   " FIXME: trying out default cmdheight for now
-  set cmdheight=2                                    " Number of screen lines for the command-line.
+  set cmdheight=1                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
   " FIXME: temp disabled to test out Conway's cc approach to text width
@@ -20,10 +20,10 @@ scriptencoding utf-8
   set sessionoptions+=globals                        " Persist global variables in vim session
   " set colorcolumn=+1                               " Highlight first column after 'textwidth'
   " set iskeyword-=_                                 " Treat underscore as a word boundary.
-
+  set spellfile=~/.config/nvim/spell/en.utf-8.add
   set nolist
   set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
-  set fillchars=vert:\▕,fold:\                                           " Strings in statuslines and vert separators.
+  set fillchars=vert:\ ,fold:\                       " Strings in statuslines and vert separators.
 
   set hidden                                         " Allow for more then one unsaved buffer.
   set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
@@ -46,7 +46,7 @@ scriptencoding utf-8
   set inccommand=nosplit                             " Show visual indication when using substitute.
   set foldenable                                   " collapse all folds.
   set foldmethod=syntax                              " Fold on the syntax
-  set foldcolumn=1                                   " Don't indicate fold open/closed
+  set foldcolumn=0                                   " Don't indicate fold open/closed
   set foldlevel=1                                    " Autofold nothing by default
   set foldnestmax=3                                  " Only fold outer functions
 
@@ -64,7 +64,6 @@ scriptencoding utf-8
   " let python3_host_prog = "python3"
   " let python_host_prog = "python"
   let g:snappy_dev = 1
-  let g:lumiere_hide_fold_column = 1
   let g:lumiere_dim_inactive_windows = 1
 " }}}
 
@@ -109,6 +108,7 @@ scriptencoding utf-8
     set nocursorline
     set conceallevel=0
     set colorcolumn=0
+
     call general#MarkMargin(0)
   endif
 " }}}
