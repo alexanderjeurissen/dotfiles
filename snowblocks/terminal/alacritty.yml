@@ -141,32 +141,34 @@ persistent_logging: false
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors Snappy
+# Colors (Solarized Dark)
 colors:
+  # Default colors
   primary:
-    background: '0xF1F1F1'
-    foreground: '0x424242'
-  cursor:
-    text: '0x2E3440'
-    cursor: '0xD8DEE9'
+    background: '0x002b36' # base03
+    foreground: '0x839496' # base0
+
+  # Normal colors
   normal:
-    black: '0x000000'
-    red: '0x800013'
-    green: '0x00802c'
-    yellow: '0x585858'
-    blue: '0x170080'
-    magenta: '0x410080'
-    cyan: '0x757575'
-    white: '0xECF0F1'
+    black:   '0x073642' # base02
+    red:     '0xdc322f' # red
+    green:   '0x859900' # green
+    yellow:  '0xb58900' # yellow
+    blue:    '0x268bd2' # blue
+    magenta: '0xd33682' # magenta
+    cyan:    '0x2aa198' # cyan
+    white:   '0xeee8d5' # base2
+
+  # Bright colors
   bright:
-    black: '0x000000'
-    red: '0x800013'
-    green: '0x00802c'
-    yellow: '0x585858'
-    blue: '0x170080'
-    magenta: '0x410080'
-    cyan: '0x757575'
-    white: '0xECF0F1'
+    black:   '0x002b36' # base03
+    red:     '0xcb4b16' # orange
+    green:   '0x586e75' # base01
+    yellow:  '0x657b83' # base00
+    blue:    '0x839496' # base0
+    magenta: '0x6c71c4' # violet
+    cyan:    '0x93a1a1' # base1
+    white:   '0xfdf6e3' # base3
 
   # Cursor colors
   #
