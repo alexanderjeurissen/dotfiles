@@ -12,6 +12,13 @@ env:
   # available, otherwise 'xterm-256color' is used.
   TERM: xterm-256color-italic
 
+shell:
+ program: /bin/zsh
+ args:
+   - --login
+   - -c
+   - 'tmux attach-session || exec tmux new-session && exit'
+
 window:
   # Window dimensions (changes require restart)
   #
@@ -48,10 +55,10 @@ window:
   #     - none: Neither borders nor title bar
   #     - buttonless: Title bar, transparent background and title bar buttons
   #     - transparent: Title bar, transparent background, but no title bar buttons
-  decorations: full
+  decorations: none
 
   # When true, alacritty starts maximized.
-  start_maximized: false
+  start_maximized: true
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.

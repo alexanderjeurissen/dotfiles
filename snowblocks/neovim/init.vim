@@ -26,8 +26,8 @@ scriptencoding utf-8
   set fillchars=vert:\ ,fold:\                       " Strings in statuslines and vert separators.
 
   set hidden                                         " Allow for more then one unsaved buffer.
-  set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
-  " set lazyredraw                                   " Don't unnecessarily redraw screen.
+  " set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+  set lazyredraw                                   " Don't unnecessarily redraw screen.
 
   set undofile                                       " Save undo's after file closes.
   set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
@@ -85,9 +85,23 @@ scriptencoding utf-8
     let &t_Ce = "\e[24m"
   endif
 
-  function! ActivateColorScheme()
-    colorscheme default " fallback incase no colorscheme plugin is installed
-  endfunction
+  let g:solarized_term_italics = 1
+  let g:nd_themes = [
+    \ ['sunrise+0',   'solarized8_high', 'light' ],
+    \ ['sunrise+1/2', 'solarized8_low', 'light' ],
+    \ ['sunset+0',    'solarized8_high', 'dark'  ],
+    \ ['sunset+1/3',  'solarized8_low',  'dark' ],
+    \ ]
+
+  " NOTE: Groningen
+  let g:nd_latitude = '55'
+
+  " NOTE: San Francisco
+  " let g:nd_latitude = '40'
+
+  " TODO: implement conditional setting of timeshift based on daylight saving
+  " time
+  let g:nd_timeshift = '0'
 " }}}
 
 " SETTINGS: Navigation {{{
@@ -353,8 +367,8 @@ scriptencoding utf-8
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
 
-    " Set colorscheme if vim is loaded
-    autocmd VimEnter * call ActivateColorScheme()
+    " Clear info thing
+    autocmd VimEnter * echom ""
 
     autocmd User FzfStatusLine call fzf#Statusline()
   augroup END " }}}

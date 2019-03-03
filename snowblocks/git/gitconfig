@@ -50,10 +50,10 @@
 [push]
   default = current
 [git-up "rebase"]
-	auto = false
+  auto = false
 [git-up "bundler"]
-	check = true
-	rbenv = true
-	autoinstall = true
+  check = true
+  rbenv = true
+  autoinstall = true
 [init]
-	templatedir = ~/.git_template
+  templatedir = ~/.git_template
