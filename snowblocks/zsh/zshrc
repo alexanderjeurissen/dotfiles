@@ -1,9 +1,3 @@
-# Start tmux by default and exit terminal if tmux exits. {{{
-   if [ -z "$TMUX" ]; then
-     tmux attach-session || exec tmux new-session && exit;
-   fi
-# }}}
-
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
@@ -73,21 +67,6 @@ fi
   ZSH_HIGHLIGHT_PATTERNS+=('Abandoned' 'fg=default,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
   ZSH_HIGHLIGHT_PATTERNS+=('sudo' 'fg=white,bold,bg=red')
-
-  # FIXME: this should not be necessary if we dedicate the bright
-  # color variations for grays
-  # NOTE: Customize some zsh syntax highlight settings
-  typeset -A ZSH_HIGHLIGHT_STYLES
-  ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='none'
-  ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='none'
-  ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='none'
-  ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='none'
-  ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='none'
-  ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='none'
-  ZSH_HIGHLIGHT_STYLES[rc-quote]='none'
-  ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='none'
-  ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='none'
-  ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='none'
 # }}}
 
 # Vi mode {{{
@@ -170,106 +149,70 @@ fi
   alias no_unexpected='git checkout db/structure.sql app/models/bounty.rb'
   # NOTE: needed seeing as remote servers likely won't have my custom tic
   alias ssh='TERM=xterm-256color ssh'
-# }}}
+  alias clear!="clear && printf '\e[3J'" # Alias for clearing the whole screen in tmux
 
-# Alias for pentesting/hacking {{{
-  alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
-  alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 12345 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 12345"
-  alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
-  alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
-  alias burp="open $HOME/git/hackerij/burp.jar"
-# }}}
+  # Alias for pentesting/hacking {{{
+    alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
+    alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 12345 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 12345"
+    alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
+    alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
+    alias burp="open $HOME/git/hackerij/burp.jar"
+  # }}}
 
-# Aliases for common typo's {{{
-  alias cd..='cd ..'
-  alias cd..l='cd .. && l'
-  alias cd..ls='cd .. && ls'
-  alias clera="clear"
-# }}}
+  # Aliases for common typo's {{{
+    alias cd..='cd ..'
+    alias cd..l='cd .. && l'
+    alias cd..ls='cd .. && ls'
+    alias clera="clear"
+  # }}}
 
-# Nvim & vim aliases {{{
-  alias v='nvim'
-  alias v!='nvim -u NONE'
-  # v () {
-  #   if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
-  #     branch=$(git symbolic-ref HEAD 2> /dev/null)
-  #     if [[ -z $branch ]] ; then
-  #       # attempt to get short-sha-name
-  #       branch=":$(git rev-parse --short HEAD 2> /dev/null)"
-  #     fi
-  #     if [ "$?" -ne 0 ]; then
-  #       # this must not be a git repo
-  #       echo "abduco -A \"$PWD \" nvim"
-  #     fi
+  # Nvim & vim aliases {{{
+    alias v='nvim'
+    alias v!='nvim -u NONE'
+    # v () {
+    #   if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
+    #     branch=$(git symbolic-ref HEAD 2> /dev/null)
+    #     if [[ -z $branch ]] ; then
+    #       # attempt to get short-sha-name
+    #       branch=":$(git rev-parse --short HEAD 2> /dev/null)"
+    #     fi
+    #     if [ "$?" -ne 0 ]; then
+    #       # this must not be a git repo
+    #       echo "abduco -A \"$PWD \" nvim"
+    #     fi
 
-  #     echo "abduco -A \"$PWD/$branch\" nvim"
-  #   else
-  #     nvr "$@"
-  #   fi
-  # }
-  # alias v=v
-# }}}
+    #     echo "abduco -A \"$PWD/$branch\" nvim"
+    #   else
+    #     nvr "$@"
+    #   fi
+    # }
+    # alias v=v
+  # }}}
 
-# Aliases for Arcanist {{{
-  alias diff="arc diff"
-  alias diffb="arc diff --browse"
+  # Aliases for Arcanist {{{
+    alias diff="arc diff"
+    alias diffb="arc diff --browse"
 
-  # FIXME: {{{
-    nexttask() {
-      next_task=`arc task | egrep -o 'T\d+' | head -1`
-      echo $next_task | pbcopy
-      arc browse $next_task
+    # NOTE: Cherrypick diff by applying it without commit and no branch
+    # Then commit it with message: "Patch <diff-id> (TODO: remove this commit before landing)
+    cherrypick() {
+      arc patch --nocommit --nobranch "${1}"
+      git commit -a -m "Patch ${1} (TODO: remove this commit before landing)"
     }
   # }}}
 
-  browse() {
-    case $1 in
-      diffs)
-        objects=`arc list`
-        [ -z $objects ] && return 1
-        chosen_object=`echo $objects | fzf | egrep -o 'D\d+'`
-        ;;
+  # Aliases for directories {{{
+    alias h1="cd ~/Dev/hackerone/"
+    alias payments="cd ~/Dev/hackerone-payments/"
+    alias dotfiles="cd ~/Dev/dotfiles/"
+  # }}}
 
-      tasks)
-        objects=`arc tasks`
-        [ -z $objects ] && return 1
-        chosen_object=`echo $objects | fzf | egrep -o 'T\d+'`
-        ;;
-      *)
-        echo "Usage: $0 {diffs|tasks}"
-        return 1
-    esac
-
-    if [ -z $chosen_object ]; then
-      echo "operation cancelled"
-      return 1
-    fi
-
-    arc browse "${chosen_object}"
-  }
-
-  # NOTE: Cherrypick diff by applying it without commit and no branch
-  # Then commit it with message: "Patch <diff-id> (TODO: remove this commit before landing)
-  cherrypick() {
-    arc patch --nocommit --nobranch "${1}"
-    git commit -a -m "Patch ${1} (TODO: remove this commit before landing)"
-  }
+  # Aliases for foreman and psql {{{
+    alias psql_rails='psql -U alexander -p 3100 -h localhost -d postgres'
+    alias pg_dumpall_rails='pg_dumpall -U alexander -p 3100 -h localhost -f backup.sql'
+    alias neo4j="db/neo4j/development/bin/neo4j"
+  # }}}
 # }}}
-
-# Aliases for directories {{{
-  alias h1="cd ~/Dev/hackerone/"
-  alias payments="cd ~/Dev/hackerone-payments/"
-  alias dotfiles="cd ~/Dev/dotfiles/"
-# }}}
-
-# Aliases for foreman and psql {{{
-  alias psql_rails='psql -U alexander -p 3100 -h localhost -d postgres'
-  alias pg_dumpall_rails='pg_dumpall -U alexander -p 3100 -h localhost -f backup.sql'
-  alias neo4j="db/neo4j/development/bin/neo4j"
-# }}}
-
-# Alias for clearing the whole screen in tmux
-alias clear!="clear && printf '\e[3J'"
 
 # set nvim as defaut editor
 export EDITOR="nvim"
