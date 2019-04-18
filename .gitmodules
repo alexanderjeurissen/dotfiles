@@ -154,9 +154,6 @@
 [submodule "snowblocks/neovim/pack/colorschemes/start/vim-solarized8"]
 	path = snowblocks/neovim/pack/colorschemes/start/vim-solarized8
 	url = https://github.com/lifepillar/vim-solarized8.git
-[submodule "snowblocks/neovim/pack/colorschemes/start/night-and-day"]
-	path = snowblocks/neovim/pack/colorschemes/start/night-and-day
-	url = https://github.com/nightsense/night-and-day.git
 [submodule "snowblocks/neovim/pack/colorschemes/start/AfterColors.vim"]
 	path = snowblocks/neovim/pack/colorschemes/start/AfterColors.vim
 	url = https://github.com/vim-scripts/AfterColors.vim.git
