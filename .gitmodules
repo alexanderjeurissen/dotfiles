@@ -22,9 +22,6 @@
 [submodule "snowblocks/neovim/pack/default/start/FastFold"]
 	path = snowblocks/neovim/pack/default/start/FastFold
 	url = https://github.com/Konfekt/FastFold.git
-[submodule "snowblocks/neovim/pack/default/start/ale"]
-	path = snowblocks/neovim/pack/default/start/ale
-	url = https://github.com/w0rp/ale.git
 [submodule "snowblocks/neovim/pack/default/start/searchfold.vim"]
 	path = snowblocks/neovim/pack/default/start/searchfold.vim
 	url = https://github.com/vim-scripts/searchfold.vim.git
