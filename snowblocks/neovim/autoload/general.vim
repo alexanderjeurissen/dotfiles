@@ -120,17 +120,6 @@ function! general#MarkMargin(on)
   endif
 endfunction
 
-" NOTE: makes the window red colored when syntax errors are present
-function! general#ErrorMode()
-  let l:alestats = ale#statusline#Count(bufnr('%'))
-  if l:alestats['error'] > 0
-    setlocal nocursorline nocursorcolumn
-    setlocal winhl=Normal:ALEErrorBg,TabLineSel:AleErrorBg,TabLine:ALEErrorBg,LineNr:AleErrorBg,CursorLineNr:AleErrorLine
-  else
-    setlocal winhl=
-  endif
-endfunction
-
 " NOTE: generates helptags for all plugins including lazy loaded ones
 " SOURCE: https://vi.stackexchange.com/questions/17210/generating-help-tags-for-packages-that-are-loaded-by-vim-8s-package-management
 function! general#GenerateHelpTags()
@@ -141,6 +130,9 @@ function! general#GenerateHelpTags()
   helptags ALL
 endfunction
 
+
+" NOTE: Create a floating window using either a new buffer
+" or by putting the supplied buffer in the floating window.
 function! general#FloatingWindow(...)
   if a:0
     let buf = a:0

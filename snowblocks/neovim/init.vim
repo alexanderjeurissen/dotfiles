@@ -85,10 +85,17 @@ scriptencoding utf-8
     let &t_Ce = "\e[24m"
   endif
 
-  colorscheme space_vim_theme
+  " NOTE: try to use space_vim_theme if it's not present fall back to a
+  " buildin colorscheme that looks decent on light background.
+  try
+    colorscheme space_vim_theme
+    hi link xmlEndTag function
+  catch
+    colorscheme delek
+  endtry
   set background=light
+
   hi CurrentSearchMatch gui=reverse guifg=#073642 guibg=#eee8d5
-  hi link xmlEndTag function
 " }}}
 
 " SETTINGS: Navigation {{{
@@ -369,12 +376,6 @@ scriptencoding utf-8
   augroup ALEXANDER_COLOR_COLUMN " {{{
     autocmd!
     autocmd  BufEnter * :call general#MarkMargin(1)
-  augroup END " }}}
-
-  augroup ALEXANDER_ALE_BG "{{{
-    autocmd!
-    autocmd User ALELintPost call general#ErrorMode()
-    autocmd User ALEFixPost call general#ErrorMode()
   augroup END " }}}
 
 " EXTRA: Include local vim config {{{
