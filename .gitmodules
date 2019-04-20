@@ -130,9 +130,6 @@
 [submodule "snowblocks/neovim/pack/colorschemes/opt/Breve"]
 	path = snowblocks/neovim/pack/colorschemes/opt/Breve
 	url = https://github.com/AlessandroYorba/Breve.git
-[submodule "snowblocks/neovim/pack/colorschemes/opt/vim-colors-plain"]
-	path = snowblocks/neovim/pack/colorschemes/opt/vim-colors-plain
-	url = https://github.com/nerdypepper/vim-colors-plain.git
 [submodule "snowblocks/neovim/pack/editing/opt/vim-journal"]
 	path = snowblocks/neovim/pack/editing/opt/vim-journal
 	url = https://github.com/junegunn/vim-journal.git
