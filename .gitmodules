@@ -157,3 +157,6 @@
 [submodule "snowblocks/neovim/pack/colorschemes/start/AfterColors.vim"]
 	path = snowblocks/neovim/pack/colorschemes/start/AfterColors.vim
 	url = https://github.com/vim-scripts/AfterColors.vim.git
+[submodule "snowblocks/neovim/pack/autocomplete/start/coc.nvim"]
+	path = snowblocks/neovim/pack/autocomplete/start/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git
