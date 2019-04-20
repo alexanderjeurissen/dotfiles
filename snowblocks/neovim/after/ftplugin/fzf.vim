@@ -1,8 +1,7 @@
-setlocal statusline=%#fzf1#\ %{g:fzf_current_mode}
+  setlocal nonumber
+  setlocal norelativenumber
+  setlocal nocursorline
+  setlocal nocursorcolumn
 
-" NOTE: clear mode and ruler on enter, and reinstate on bufleave
-set noshowmode noruler
-autocmd BufLeave <buffer> set showmode ruler
+  call general#MarkMargin(0)
 
-" NOTE: this clears the command line window
-echom ""
