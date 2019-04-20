@@ -29,7 +29,8 @@
 
   ;files changed between two commits
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
-  up = pull --rebase --autostash
+	up = pull --rebase --autostash
+  upb = "!git fetch -pP  && git merge develop origin/develog kkjp"
   ctags = !.git/hooks/ctags
 
 [merge]

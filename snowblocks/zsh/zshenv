@@ -48,11 +48,6 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
  export FZF_DEFAULT_OPTS='--color bw'
 # }}}
 
-# LSCOLORS {{{
-# LS_COLORS='di=01;30' ; export LS_COLORS
-unset LS_COLORS
-# }}}
-
 export VIM_CONFIG_PATH=$HOME/.config/nvim/
 
 # NOTE: fixes issue with too many open files when refreshing paperclip thumbnails:

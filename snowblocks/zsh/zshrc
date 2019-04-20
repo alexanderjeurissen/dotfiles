@@ -164,6 +164,7 @@ fi
     alias cd..l='cd .. && l'
     alias cd..ls='cd .. && ls'
     alias clera="clear"
+    alias celar="clear"
   # }}}
 
   # Nvim & vim aliases {{{
@@ -205,6 +206,7 @@ fi
     alias h1="cd ~/Dev/hackerone/"
     alias payments="cd ~/Dev/hackerone-payments/"
     alias dotfiles="cd ~/Dev/dotfiles/"
+    alias gpodder="cd ~/Library/Application Support/gPodder"
   # }}}
 
   # Aliases for foreman and psql {{{
