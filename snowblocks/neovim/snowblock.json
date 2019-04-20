@@ -7,7 +7,8 @@
       "~/.config/nvim/colors",
       "~/.config/nvim/pack",
       "~/.config/nvim/UltiSnips",
-      "~/.config/nvim/make_programs"
+      "~/.config/nvim/make_programs",
+      "~/.config/nvim/spell"
     ]
   },
   {
@@ -25,13 +26,15 @@
   {
     "link": {
       "~/.config/nvim/init.vim": { "create": true, "relink": true },
+      "~/.config/nvim/coc-settings.json": { "create": true, "relink": true },
       "~/.config/nvim/autoload": { "create": true, "relink": true },
       "~/.config/nvim/after": { "create": true, "relink": true },
       "~/.config/nvim/colors": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
       "~/.config/nvim/make_programs": { "create": true, "relink": true },
       "~/.config/nvim/pack": { "create": true, "relink": true },
-      "~/.config/nvim/plugin": { "create": true, "relink": true }
+      "~/.config/nvim/plugin": { "create": true, "relink": true },
+      "~/.config/nvim/spell": { "create": true, "relink": true }
     },
     "shell": [
       [
