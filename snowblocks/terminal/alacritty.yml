@@ -148,34 +148,29 @@ persistent_logging: false
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (Solarized Dark)
+# Colors (SpaceVim)
 colors:
-  # Default colors
   primary:
-    background: '0x002b36' # base03
-    foreground: '0x839496' # base0
-
-  # Normal colors
+    background: '0xFBF8EF'
+    foreground: '0x655370'
   normal:
-    black:   '0x073642' # base02
-    red:     '0xdc322f' # red
-    green:   '0x859900' # green
-    yellow:  '0xb58900' # yellow
-    blue:    '0x268bd2' # blue
-    magenta: '0xd33682' # magenta
-    cyan:    '0x2aa198' # cyan
-    white:   '0xeee8d5' # base2
-
-  # Bright colors
+    black: '0x292b2e'
+    red: '0xd26487'
+    green: '0x35a8a5'
+    yellow: '0xb89f33'
+    blue: '0x6981c5'
+    magenta: '0xa15ea7'
+    cyan: '0x288668'
+    white: '0x5b5b5b'
   bright:
-    black:   '0x002b36' # base03
-    red:     '0xcb4b16' # orange
-    green:   '0x586e75' # base01
-    yellow:  '0x657b83' # base00
-    blue:    '0x839496' # base0
-    magenta: '0x6c71c4' # violet
-    cyan:    '0x93a1a1' # base1
-    white:   '0xfdf6e3' # base3
+    black: '0x44505c'
+    red: '0xf2241f'
+    green: '0x67b11d'
+    yellow: '0xb1951d'
+    blue: '0x4f97d7'
+    magenta: '0xbc6ec5'
+    cyan: '0x2d9574'
+    white: '0xb2b2b2'
 
   # Cursor colors
   #

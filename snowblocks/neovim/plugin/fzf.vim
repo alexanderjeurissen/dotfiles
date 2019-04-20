@@ -10,13 +10,15 @@ let g:fzf_action = {
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_default_options = '--inline-info --multi --sort --bind=ctrl-a:select-all,ctrl-d:deselect-all'
+let g:fzf_default_options = '--inline-info --multi --sort --layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all'
 " let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -'.&lines.'"'
 let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
 
 " NOTE: Replace current buffer with search window
 " let g:fzf_layout = { 'window': 'enew' }
-let g:fzf_layout = { 'window': 'tabnew' }
+" let g:fzf_layout = { 'window': 'tabnew' }
+" let g:fzf_layout = { 'window': 'tabnew' }
+let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
 
 " NOTE: Open a new tab with search window
 " let g:fzf_layout = { 'window': '-tabnew' }

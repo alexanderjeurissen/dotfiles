@@ -11,7 +11,11 @@ let g:ale_linters = {
   \   'python' : ['flake8'],
   \   'markdown' : ['mdl']
   \}
-let g:ale_fixers = {'javascript': ['prettier']}
+let g:ale_fixers = {
+      \ 'javascript': ['prettier'],
+      \ 'sql': ['sqlfmt'],
+      \ 'psql': ['sqlfmt']
+      \}
 let g:ale_linter_aliases = {'jsx': 'css'}
 
 let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'

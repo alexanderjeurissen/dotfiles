@@ -140,3 +140,32 @@ function! general#GenerateHelpTags()
 
   helptags ALL
 endfunction
+
+function! general#FloatingWindow(...)
+  if a:0
+    let buf = a:0
+  else
+    let buf = nvim_create_buf(v:false, v:true)
+  end
+
+  call setbufvar(buf, '&signcolumn', 'no')
+  call setbufvar(buf, '&showmode', 0)
+  call setbufvar(buf, '&number', 0)
+  call setbufvar(buf, '&relativenumber', 0)
+  call setbufvar(buf, '&ruler', 0)
+
+  let height = float2nr(&lines - (&lines * 2 / 10))
+  let width = float2nr(&columns - (&columns * 2 / 10))
+  let row = float2nr((&lines - height) / 2)
+  let col = float2nr((&columns - width) / 2)
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': row,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height
+        \ }
+
+  let win = nvim_open_win(buf, v:true, opts)
+endfunction

@@ -59,7 +59,7 @@ scriptencoding utf-8
 
   " FIXME temp disabling this to test tabnew help
   " Open help in a new split instead of vimbuffer
-  " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'rightbelow help' : 'h'
+  " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'enew help' : 'h'
 
   " let python3_host_prog = "python3"
   " let python_host_prog = "python"
@@ -85,23 +85,10 @@ scriptencoding utf-8
     let &t_Ce = "\e[24m"
   endif
 
-  let g:solarized_term_italics = 1
-  let g:nd_themes = [
-    \ ['sunrise+0',   'solarized8_high', 'light' ],
-    \ ['sunrise+1/2', 'solarized8_low', 'light' ],
-    \ ['sunset+0',    'solarized8_high', 'dark'  ],
-    \ ['sunset+1/3',  'solarized8_low',  'dark' ],
-    \ ]
-
-  " NOTE: Groningen
-  let g:nd_latitude = '55'
-
-  " NOTE: San Francisco
-  " let g:nd_latitude = '40'
-
-  " TODO: implement conditional setting of timeshift based on daylight saving
-  " time
-  let g:nd_timeshift = '0'
+  colorscheme space_vim_theme
+  set background=light
+  hi CurrentSearchMatch gui=reverse guifg=#073642 guibg=#eee8d5
+  hi link xmlEndTag function
 " }}}
 
 " SETTINGS: Navigation {{{
@@ -369,19 +356,6 @@ scriptencoding utf-8
 
     " Clear info thing
     autocmd VimEnter * echom ""
-
-    autocmd User FzfStatusLine call fzf#Statusline()
-  augroup END " }}}
-
-  augroup ALEXANDER_TERM " {{{
-    autocmd!
-    " NOTE: set some terminal buffer local overrrides
-    " such as no number, no relative number, no cursorline etc.
-    autocmd TermOpen * call terminal#Settings()
-
-    " NOTE: leave and start insertmode when entering/leaving term buf
-    autocmd BufWinEnter,WinEnter term://* startinsert
-    autocmd BufLeave term://* stopinsert
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk
