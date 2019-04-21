@@ -18,4 +18,4 @@ In summary my work environment consists of:
 
 ## Screenshots
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/assets/screenshots/space.png
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/assets/screenshots/space.png)
