@@ -10,7 +10,7 @@ I try to extract meaningful bits and pieces to separate plugins/repositories so 
 In summary my work environment consists of:
 
 | purpose | tool |
-|---------+------|
+|---------|------|
 | editor | Neovim |
 | terminal multiplexer | Tmux |
 | shell | Zsh |
