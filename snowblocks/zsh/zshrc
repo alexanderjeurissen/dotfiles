@@ -67,6 +67,10 @@ fi
   ZSH_HIGHLIGHT_PATTERNS+=('Abandoned' 'fg=default,bold,bg=default')
   ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
   ZSH_HIGHLIGHT_PATTERNS+=('sudo' 'fg=white,bold,bg=red')
+  ZSH_HIGHLIGHT_PATTERNS+=('git push master' 'fg=white,bold,bg=red')
+  ZSH_HIGHLIGHT_PATTERNS+=('git push develop' 'fg=white,bold,bg=red')
+  ZSH_HIGHLIGHT_PATTERNS+=('git push develop' 'fg=white,bold,bg=red')
+  ZSH_HIGHLIGHT_PATTERNS+=('git merge master' 'fg=white,bold,bg=red')
 # }}}
 
 # Vi mode {{{
@@ -81,6 +85,7 @@ fi
 # completions {{{
   zmodload zsh/complist
   autoload -U compinit && compinit
+
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
   # use the tag name as group name
   zstyle ':completion:*' group-name ''
@@ -98,6 +103,54 @@ fi
   zstyle ':completion:::::' completer _complete _approximate
   # limit to 2 errors
   zstyle ':completion:*:approximate:*' max-errors 2
+
+  _fzf_complete_git() {
+      ARGS="$@"
+      local branches
+      local files
+
+      if [[ $ARGS == 'git checkout -- '* ]]; then
+          files=$(git ls-files)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$files"
+          )
+      elif [[ $ARGS == 'git checkout'* ]]; then
+          branches=$(git branch -vv)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$branches"
+          )
+      else
+          eval "zle ${fzf_default_completion:-expand-or-complete}"
+      fi
+  }
+
+  _fzf_complete_git_post() {
+    awk '{print $1}'
+  }
+
+  _fzf_complete_gco() {
+      ARGS="$@"
+      local branches
+      local files
+
+      if [[ $ARGS == 'gco -- '* ]]; then
+          files=$(git ls-files)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$files"
+          )
+      elif [[ $ARGS == 'gco'* ]]; then
+          branches=$(git branch -vv)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$branches"
+          )
+      else
+          eval "zle ${fzf_default_completion:-expand-or-complete}"
+      fi
+  }
+
+  _fzf_complete_gco_post() {
+    awk '{print $1}'
+  }
 # }}}
 
 # Zplug plugin definitions {{{
@@ -152,11 +205,9 @@ fi
   alias clear!="clear && printf '\e[3J'" # Alias for clearing the whole screen in tmux
 
   # Alias for pentesting/hacking {{{
-    alias burp='java -jar -Xmx3072m ~/Git/hackerij/burp.jar'
     alias proxy-on="sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 12345 && sudo networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 12345"
     alias proxy-off="sudo networksetup -setsecurewebproxystate 'Wi-Fi' off && sudo networksetup -setwebproxystate 'Wi-Fi' off"
     alias subbrute="$HOME/git/hackerij/subbrute/subbrute.py"
-    alias burp="open $HOME/git/hackerij/burp.jar"
   # }}}
 
   # Aliases for common typo's {{{
@@ -203,9 +254,9 @@ fi
   # }}}
 
   # Aliases for directories {{{
-    alias h1="cd ~/Dev/hackerone/"
-    alias payments="cd ~/Dev/hackerone-payments/"
-    alias dotfiles="cd ~/Dev/dotfiles/"
+    alias h1="cd ~/Development/hackerone/"
+    alias payments="cd ~/Development/hackerone-payments/"
+    alias dotfiles="cd ~/Development/dotfiles/"
     alias gpodder="cd ~/Library/Application Support/gPodder"
   # }}}
 
@@ -293,101 +344,11 @@ fi
 # }}}
 
 # Auto suggestions {{{
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
-bindkey '^e' autosuggest-accept
+  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+  bindkey '^e' autosuggest-accept
 # }}}
-
-# Fzf functions {{{
-  # fbr - checkout git branch (including remote branches)
-  __fzf_branch() {
-    local cmd='git branch'
-
-    if which arc > /dev/null; then
-      cmd="arcbranchansi"
-    fi
-
-    setopt localoptions pipefail 2> /dev/null
-    eval "$cmd" | FZF_DEFAULT_OPTS="--ansi --height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
-      echo -n "${(q)item} " | cut -d'\' -f1
-    done
-    local ret=$?
-    # echo
-    return $ret
-  }
-
-  branch-widget() {
-    LBUFFER="${LBUFFER}$(__fzf_branch)"
-    local ret=$?
-    zle redisplay
-    typeset -f zle-line-init >/dev/null && zle zle-line-init
-    return $ret
-  }
-  zle     -N   branch-widget
-  bindkey '^B' branch-widget
-
-  __fzf_tasks() {
-    if ! which arc > /dev/null; then
-      return 1
-    fi
-
-    local cmd="arctasksansi"
-
-    setopt localoptions pipefail 2> /dev/null
-    eval "$cmd" | FZF_DEFAULT_OPTS="--ansi --height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
-      echo -n "${(q)item} " | cut -d'\' -f1
-    done
-    local ret=$?
-    # echo
-    return $ret
-  }
-
-  tasks-widget() {
-    LBUFFER="${LBUFFER}$(__fzf_tasks)"
-    local ret=$?
-    zle redisplay
-    typeset -f zle-line-init >/dev/null && zle zle-line-init
-    return $ret
-  }
-
-  bindkey '^F' fzf-file-widget # use ^F for file completion insetad of ^T which I use for tasks
-  zle     -N   tasks-widget
-  bindkey '^T' tasks-widget
-
-  # fstash - easier way to deal with stashes
-  # type fstash to get a list of your stashes
-  # enter shows you the contents of the stash
-  # ctrl-d shows a diff of the stash against your current HEAD
-  # ctrl-b checks the stash out as a branch, for easier merging
-  zmodload zsh/mapfile # Needsed for mappin the files in fstash
-  stashlist() {
-    local out q k sha
-    while out=$(
-      git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
-      fzf --ansi --no-sort --query="$q" --print-query \
-          --expect=ctrl-d,ctrl-b);
-    do
-      $mapfile -t out <<< "$out"
-      q="${out[0]}"
-      k="${out[1]}"
-      sha="${out[-1]}"
-      sha="${sha%% *}"
-      [[ -z "$sha" ]] && continue
-      if [[ "$k" == 'ctrl-d' ]]; then
-        git diff $sha
-      elif [[ "$k" == 'ctrl-b' ]]; then
-        git stash branch "stash-$sha" $sha
-        break;
-      else
-        git stash show -p $sha
-      fi
-    done
-  }
-# }}}
-$(silent_source "$HOME/Development/arcanist/resources/shell/bash-completion")
-
-# NOTE: this hopefully fools workstation init
-# script that this line is already in my zshrc
-# I prefer defining these path variables in my zshenv
-# export PATH="/Users/alexander/Development/arcanist/bin:$PATH"
 
 # vim: foldmethod=marker:sw=2
+eval "$(rbenv init -)"
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh

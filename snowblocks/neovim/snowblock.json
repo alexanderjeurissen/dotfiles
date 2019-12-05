@@ -14,11 +14,10 @@
   {
     "dependencies": [
       { "name": "neovim", "cmd": "brew install neovim --head" },
-      { "name": "neovim", "cmd": "pip2 install --upgrade neovim" },
       { "name": "neovim", "cmd": "pip3 install --upgrade neovim" },
       { "name": "neovim", "cmd": "gem install neovim" },
       { "name": "neovim-remote", "cmd": "pip3 install neovim-remote" },
-      { "name": "vim-vint", "cmd": "pip2 install vim-vint" },
+      { "name": "vim-vint", "cmd": "pip3 install vim-vint" },
       { "name": "language_server", "cmd": "gem install language_server" },
       { "name": "cmake", "cmd": "brew install cmake" }
     ]
@@ -29,12 +28,10 @@
       "~/.config/nvim/coc-settings.json": { "create": true, "relink": true },
       "~/.config/nvim/autoload": { "create": true, "relink": true },
       "~/.config/nvim/after": { "create": true, "relink": true },
-      "~/.config/nvim/colors": { "create": true, "relink": true },
       "~/.config/nvim/UltiSnips": { "create": true, "relink": true },
       "~/.config/nvim/make_programs": { "create": true, "relink": true },
       "~/.config/nvim/pack": { "create": true, "relink": true },
-      "~/.config/nvim/plugin": { "create": true, "relink": true },
-      "~/.config/nvim/spell": { "create": true, "relink": true }
+      "~/.config/nvim/plugin": { "create": true, "relink": true }
     },
     "shell": [
       [

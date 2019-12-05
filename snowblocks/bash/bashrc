@@ -5,3 +5,6 @@
 # I prefer defining these path variables in my bashprofile and profile
 # export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
 export PATH="/Users/alexander/Development/arcanist/bin:$PATH"
+eval "$(rbenv init -)"
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh

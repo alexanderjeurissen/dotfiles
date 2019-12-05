@@ -8,13 +8,14 @@ if ! [ -f $file_path ]; then
   exit 1
 fi
 
-cucumber_command='bundle exec cucumber' 
-rspec_command='bundle exec rspec --color' 
+cucumber_command='bin/cucumber' 
+rspec_command='bin/rspec --color' 
 
 if [[ $file_path == *.feature ]]; then
   $cucumber_command $spec
 elif [[ $file_path == *_spec.rb ]]; then
-  FIVEMAT_PROFILE=1 $rspec_command $spec --format Fivemat
+  # FIVEMAT_PROFILE=1 $rspec_command $spec --format Fivemat
+  $rspec_command $spec 
 else
   echo "Invalid spec file given."
   exit 1
