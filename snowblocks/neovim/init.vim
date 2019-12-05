@@ -88,7 +88,7 @@ scriptencoding utf-8
   " NOTE: try to use space_vim_theme if it's not present fall back to a
   " buildin colorscheme that looks decent on light background.
   try
-    colorscheme space_vim_theme
+    colorscheme default
     hi link xmlEndTag function
   catch
     colorscheme delek
