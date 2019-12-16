@@ -9,7 +9,7 @@ scriptencoding utf-8
   set showmode                                       " show mode in bottom-left corner
   set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
   set autowrite                                      " Write before running commands.
-  set shortmess=aAIsT                                " Reduce |hit-enter| prompts.
+  set shortmess=aAIsTF                               " Reduce |hit-enter| prompts.
   " FIXME: trying out default cmdheight for now
   set cmdheight=1                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
@@ -67,6 +67,187 @@ scriptencoding utf-8
   let g:lumiere_dim_inactive_windows = 1
 " }}}
 
+" DEIN: start {{{
+  "Note: install dein if not present
+  let g:dein_path='$HOME/.config/nvim/dein'
+
+  if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
+   if executable('git')
+     exec '!git clone https://github.com/Shougo/dein.vim ' . g:dein_path . '/repos/github.com/Shougo/dein.vim'
+   else
+     echohl WarningMsg | echom "You need install git!" | echohl None
+   endif
+
+   autocmd VimEnter * source $MYVIMRC
+  endif
+
+  " Add dein.vim to runtimepath
+  set runtimepath^=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim
+
+  let g:plugin_path='$HOME/.config/nvim/dein'
+
+  if dein#load_state(expand(g:plugin_path))
+   " tell dein where the plugins live
+   call dein#begin(
+         \ expand(g:plugin_path),
+         \ [expand('$HOME/.config/nvim/init.vim')]
+         \)
+   call dein#add('Shougo/dein.vim') " Let dein manage dein
+" }}}
+
+
+   " PLUGINS: ColorSchemes {{{
+   " call dein#add('morhetz/gruvbox', {
+   "       \ 'hook_post_source': "
+   "       \    let g:gruvbox_italic=1\n
+   "       \    let g:gruvbox_italicize_strings=1\n
+   "       \    let g:gruvbox_contrast_dark='soft'\n
+   "       \    let g:gruvbox_contrast_light='soft'\n
+   "       \    colorscheme gruvbox\n
+   "       \    set background=dark\n
+   "       \ "
+   "       \ })
+
+   " call dein#add('ajmwagar/vim-deus', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    colorscheme deus\n
+   "         \    set background=dark\n
+   "         \ "
+   "         \ })
+
+   call dein#add('lifepillar/vim-solarized8', {
+           \ 'hook_post_source': "
+           \    syntax enable\n
+           \    let g:solarized_extra_hi_groups=1\n
+           \    colorscheme solarized8\n
+           \    set background=dark\n
+           \ "
+           \ })
+
+
+   " call dein#add('liuchengxu/space-vim-theme', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    colorscheme space_vim_theme\n
+   "         \    set background=light\n
+   "         \ "
+   "         \ })
+
+
+   " call dein#add('rakr/vim-one', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    let g:one_allow_italics = 1\n
+   "         \    colorscheme one\n
+   "         \    set background=light\n
+   "         \ "
+   "         \ })
+
+
+   " call dein#add('mhartington/oceanic-next', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    let g:oceanic_next_terminal_bold = 1\n
+   "         \    let g:oceanic_next_terminal_italic = 1\n
+   "         \    colorscheme OceanicNext\n
+   "         \ "
+   "         \ })
+
+
+   " call dein#add('mhartington/oceanic-next', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    let g:oceanic_next_terminal_bold = 1\n
+   "         \    let g:oceanic_next_terminal_italic = 1\n
+   "         \    colorscheme OceanicNext\n
+   "         \ "
+   "         \ })
+
+   " }}}
+
+   " PLUGINS: Core {{{
+     call dein#add('Konfekt/FastFold')
+     call dein#add('vim-scripts/searchfold.vim')
+     call dein#add('tpope/vim-dispatch') " run tasks in a tmux split to not block vim
+     call dein#add('radenling/vim-dispatch-neovim', {'depends': 'vim-dispatch'})
+     call dein#add('tpope/vim-obsession') " improve vim session handling
+     call dein#add('sheerun/vim-polyglot') " Syntax highlighting, indent, etc. for various file types
+     call dein#add('tpope/vim-scriptease') " a Vim plugin for making Vim plugins.
+     " call dein#add('neovim/nvim-lsp') " Common configurations for Neovim Language Servers NOTE: commented out for now till this feature matures in Nvim core
+     call dein#add('neoclide/coc.nvim', {'rev': 'release'})
+   " }}}
+
+   " PLUGINS: Editing {{{
+     " call dein#add('tpope/vim-abolish', { 'on_cmd': ['Abolish', 'Subvert'] }) " better search
+     call dein#add('tpope/vim-endwise') " insert end after certain keywords in ruby
+     call dein#add('tpope/vim-commentary') " easy commenting using vim motions
+     call dein#add('bogado/file-line') " allow opening files with line number e.g. file.txt:30
+     call dein#add('tommcdo/vim-exchange')
+     call dein#add('tpope/vim-repeat')
+     call dein#add('tpope/vim-surround', { 'depends': 'vim-repeat' })
+     call dein#add('tpope/vim-sleuth') " smart indent width based on buffer and neigbouring files
+     call dein#add('machakann/vim-highlightedyank')
+   " }}}
+
+   " PLUGINS: Frontend {{{
+     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss']})
+   " }}}
+
+   " PLUGINS: Ruby {{{
+     call dein#add('tpope/vim-bundler') " run bundler commands in Vim
+     call dein#add('tpope/vim-cucumber', { 'on_ft': 'cucumber' }) " fancy cucumber highlighting
+     call dein#add('tpope/vim-rails', { 'on_ft': ['ruby', 'cucumber'] }) " rails specific config and highlight
+   " }}}
+
+   " PLUGINS: Navigation {{{
+     call dein#add('octref/RootIgnore')
+     call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
+     " call dein#add('junegunn/fzf.vim', { 'depends': '.fzf' })
+     call dein#add('moll/vim-bbye') " add nice buffer deleting
+     call dein#add('arithran/vim-delete-hidden-buffers')
+     call dein#add('justinmk/vim-dirvish')
+     call dein#add('tpope/vim-eunuch')
+     call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
+     "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
+     "   call dein#add('christoomey/vim-tmux-navigator') " easy navigation between tmux and vim splits
+     call dein#add('tpope/vim-unimpaired') " pairs of handy bracket mappings like [f and ]f for file switching
+     call dein#add('thinca/vim-visualstar', { 'on_map': '*' }) " allows to use the * motion in visual mode
+   " }}}
+
+   " PLUGINS: Version Control {{{
+     call dein#add('sgeb/vim-diff-fold')
+     call dein#add('tpope/vim-fugitive') " adds git commands for checking git status, commit etc.
+     call dein#add('tpope/vim-git') " Vim runtime files and syntax highlighting
+   " }}}
+
+   " PLUGINS: Window Management {{{
+     call dein#add('szw/vim-maximizer')
+   " }}}
+
+" DEIN: end {{{
+
+   call dein#end()
+   call dein#call_hook('source') " call hooks of non lazy plugins
+   call dein#save_state() " Save dein state (cache)
+  endif
+
+  filetype plugin indent on
+
+  if dein#check_install()
+    " Installation check.
+    let g:dein#types#git#default_protocol = "ssh"
+    call dein#install() " install plugins that aren't installed yet
+    call dein#remote_plugins() " Install remote plugins
+    call dein#check_lazy_plugins() " check for lazy plugins that don't have /plugin
+    call map(dein#check_clean(), "delete(v:val, 'rf')") " remove unused plugins
+  endif
+
+  " Execute post_source hooks after plugins are sourced
+  autocmd VimEnter * call dein#call_hook('post_source')
+" }}}
+
+
 " SETTINGS: statusline {{{
   set laststatus=2
   set guioptions-=e
@@ -88,12 +269,12 @@ scriptencoding utf-8
   " NOTE: try to use space_vim_theme if it's not present fall back to a
   " buildin colorscheme that looks decent on light background.
   try
-    colorscheme default
+    colorscheme solarized8
     hi link xmlEndTag function
   catch
     colorscheme delek
   endtry
-  set background=light
+  " set background=light
 
   hi CurrentSearchMatch gui=reverse guifg=#073642 guibg=#eee8d5
 " }}}
@@ -377,6 +558,14 @@ scriptencoding utf-8
     autocmd!
     autocmd  BufEnter * :call general#MarkMargin(1)
   augroup END " }}}
+
+  " NOTE: open quickfix window after vim grep
+  " ref: https://www.reddit.com/r/vim/comments/bmh977/automatically_open_quickfix_window_after/
+  augroup quickfix
+      autocmd!
+      autocmd QuickFixCmdPost [^l]* cwindow
+      autocmd QuickFixCmdPost l* lwindow
+  augroup END
 
 " EXTRA: Include local vim config {{{
   if filereadable(expand('~/.nvimrc.local'))
