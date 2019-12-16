@@ -289,8 +289,6 @@ export EDITOR="nvim"
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-  bindkey '^F' fzf-file-widget # use ^F for file completion insetad of ^T which I use for tasks
 # }}}
 
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
@@ -360,6 +358,9 @@ fi
 # }}}
 
 # vim: foldmethod=marker:sw=2
-eval "$(rbenv init -)"
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+
+# NOTE: The following lines fool setup setup script that those lines are already present in my
+# terminal config. I prefer setting these in the zprofile
+# eval "$(rbenv init -)"
+# export NVM_DIR=~/.nvm
+# source $(brew --prefix nvm)/nvm.sh
