@@ -1,9 +1,19 @@
 {
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
-  "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact"],
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact", "ruby"],
+  "eslint.autoFixOnSave": true,
   "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
+
+  "solargraph.formatting": true,
+  "solargraph.completion": true,
+  "solargraph.definitions": true,
+  "solargraph.symbols": true,
+  "solargraph.hover": true,
+  "solargraph.references": true,
+
   "diagnostic.errorSign": "•",
   "diagnostic.warningSign": "•",
-  "diagnostic.infoSign": "•"
+  "diagnostic.infoSign": "•",
+  "diagnostic.checkCurrentLine": true
 }

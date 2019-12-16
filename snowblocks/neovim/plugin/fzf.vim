@@ -18,7 +18,7 @@ let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers
 " let g:fzf_layout = { 'window': 'enew' }
 " let g:fzf_layout = { 'window': 'tabnew' }
 " let g:fzf_layout = { 'window': 'tabnew' }
-let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
+" let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
 
 " NOTE: Open a new tab with search window
 " let g:fzf_layout = { 'window': '-tabnew' }

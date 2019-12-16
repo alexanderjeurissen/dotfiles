@@ -1,3 +1,12 @@
+# Start tmux by default and exit terminal if tmux exits. {{{
+  if [ -n "$TMUX" ]; then
+    # export TERM=screen-256color-italic
+  else
+    # tmux attach-session || exec tmux new-session;
+    tmux attach-session || exec tmux new-session && exit;
+  fi
+# }}}
+
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
@@ -280,6 +289,8 @@ export EDITOR="nvim"
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+  bindkey '^F' fzf-file-widget # use ^F for file completion insetad of ^T which I use for tasks
 # }}}
 
 export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64

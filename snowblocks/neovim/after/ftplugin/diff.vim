@@ -9,4 +9,6 @@ set conceallevel=0
 set colorcolumn=0
 call general#MarkMargin(0)
 
+let g:solarized_diffmode="high"
+
 normal zv
