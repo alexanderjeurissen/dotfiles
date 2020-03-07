@@ -1,7 +1,0 @@
-#/usr/bin/env bash
-
-git unadd .
-git submodule add https://github.com/${1}.git ./snowblocks/neovim/pack/${2}/${1##*/}
-git add ./snowblocks/neovim/pack/${2}/${1##*/}
-git commit -m "Added ${1} to plugin group ${2}"
-

@@ -6,15 +6,12 @@ function echo_step {
 }
 
 function main {
-  local task_id=${1/T/}
-  local branch_name="$(get_branch_name $task_id)"
-  (git checkout "$branch_name" 2>/dev/null) || (git checkout develop && git pull origin && git checkout -b "$branch_name")
+  local issue_id=${1/hackerone\/issues\/issues/}
+  # local branch_name="$(get_branch_name $task_id)"
+  # (git checkout "$branch_name" 2>/dev/null) || (git checkout develop && git pull origin && git checkout -b "$branch_name")
 
   # NOTE: read user phid, project phid, and conduit_uri env vars from ~/.arcrc {{{
-    local arcrc=$(<~/.arcrc)
-    local user_phid=$(echo $arcrc | jq '.dotfiles_env_vars.user')
-    local project_phid=$(echo $arcrc | jq '.dotfiles_env_vars.project')
-    local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
+    # local conduit_uri=$(echo $arcrc | jq '.dotfiles_env_vars.conduit_uri' --raw-output)
   # }}}
 
   # local sprint_phid=$(get_last_milestone_phid "$project_phid")
@@ -23,24 +20,24 @@ function main {
   # local column_phid=$(get_column_phid $sprint_phid "In Progress")
 
   # NOTE: Project that uses sprint columns
-  local column_phid=$(get_column_phid $project_phid "Engineering - In Progress")
+  # local column_phid=$(get_column_phid $project_phid "Engineering - In Progress")
 
-  local query="{
-    \"transactions\": [
-      {
-        \"type\": \"owner\",
-        \"value\": $user_phid
-      },
-      {
-        \"type\": \"column\",
-        \"value\": [$column_phid]
-      }
-    ],
-    \"objectIdentifier\": \"$task_id\"
-  }"
+  # local query="{
+  #   \"transactions\": [
+  #     {
+  #       \"type\": \"owner\",
+  #       \"value\": $user_phid
+  #     },
+  #     {
+  #       \"type\": \"column\",
+  #       \"value\": [$column_phid]
+  #     }
+  #   ],
+  #   \"objectIdentifier\": \"$task_id\"
+  # }"
 
-  local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
-  echo_step "Successfully claimed task $1 and moved it to In Progress"
+  # local result=$(echo $query | arc call-conduit --conduit-uri $conduit_uri maniphest.edit)
+  echo_step "Successfully claimed task $issue_id and moved it to In Progress"
 }
 
 main "$1"
