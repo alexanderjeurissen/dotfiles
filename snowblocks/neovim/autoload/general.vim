@@ -161,3 +161,16 @@ function! general#FloatingWindow(...)
 
   let win = nvim_open_win(buf, v:true, opts)
 endfunction
+
+" NOTE: insert the result of a function / command
+function! general#insertOutput(function_to_capture)
+  redir =>output
+    call a:function_to_capture()
+  redir END
+
+  call general#AppendToLine(output)
+endfunction
+
+function! general#AppendToLine(str)
+  execute ":normal i" . a:str
+endfunction

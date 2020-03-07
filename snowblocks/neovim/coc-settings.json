@@ -11,6 +11,10 @@
   "solargraph.symbols": true,
   "solargraph.hover": true,
   "solargraph.references": true,
+  "codeLens.enable": true,
+  "solargraph.useBundler": true,
+
+  "svg.prettySvg": true,
 
   "diagnostic.errorSign": "•",
   "diagnostic.warningSign": "•",
