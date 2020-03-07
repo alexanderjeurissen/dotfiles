@@ -116,14 +116,22 @@ scriptencoding utf-8
    "         \ "
    "         \ })
 
-   call dein#add('lifepillar/vim-solarized8', {
-           \ 'hook_post_source': "
-           \    syntax enable\n
-           \    let g:solarized_extra_hi_groups=1\n
-           \    colorscheme solarized8\n
-           \    set background=dark\n
-           \ "
-           \ })
+   " call dein#add('lifepillar/vim-solarized8', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    let g:solarized_extra_hi_groups=1\n
+   "         \    colorscheme solarized8\n
+   "         \    set background=dark\n
+   "         \ "
+   "         \ })
+
+   " call dein#add('arcticicestudio/nord-vim', {
+   "         \ 'hook_post_source': "
+   "         \    syntax enable\n
+   "         \    colorscheme nord\n
+   "         \    set background=dark\n
+   "         \ "
+   "         \ })
 
 
    " call dein#add('liuchengxu/space-vim-theme', {
@@ -134,7 +142,6 @@ scriptencoding utf-8
    "         \ "
    "         \ })
 
-
    " call dein#add('rakr/vim-one', {
    "         \ 'hook_post_source': "
    "         \    syntax enable\n
@@ -144,7 +151,6 @@ scriptencoding utf-8
    "         \ "
    "         \ })
 
-
    " call dein#add('mhartington/oceanic-next', {
    "         \ 'hook_post_source': "
    "         \    syntax enable\n
@@ -154,15 +160,13 @@ scriptencoding utf-8
    "         \ "
    "         \ })
 
-
-   " call dein#add('mhartington/oceanic-next', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    let g:oceanic_next_terminal_bold = 1\n
-   "         \    let g:oceanic_next_terminal_italic = 1\n
-   "         \    colorscheme OceanicNext\n
-   "         \ "
-   "         \ })
+   call dein#add('NLKNguyen/papercolor-theme', {
+           \ 'hook_post_source': "
+           \    syntax enable\n
+           \    colorscheme papercolor\n
+           \    set background=light\n
+           \ "
+           \ })
 
    " }}}
 
@@ -191,7 +195,7 @@ scriptencoding utf-8
    " }}}
 
    " PLUGINS: Frontend {{{
-     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss']})
+     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss', 'conf']})
    " }}}
 
    " PLUGINS: Ruby {{{
@@ -206,7 +210,7 @@ scriptencoding utf-8
      " call dein#add('junegunn/fzf.vim', { 'depends': '.fzf' })
      call dein#add('moll/vim-bbye') " add nice buffer deleting
      call dein#add('arithran/vim-delete-hidden-buffers')
-     call dein#add('justinmk/vim-dirvish')
+     call dein#add('tpope/vim-vinegar')
      call dein#add('tpope/vim-eunuch')
      call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
      "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
@@ -269,8 +273,8 @@ scriptencoding utf-8
   " NOTE: try to use space_vim_theme if it's not present fall back to a
   " buildin colorscheme that looks decent on light background.
   try
-    colorscheme solarized8
-    hi link xmlEndTag function
+    colorscheme papercolor
+    " hi link xmlEndTag function
   catch
     colorscheme delek
   endtry
@@ -287,7 +291,8 @@ scriptencoding utf-8
 
   " NOTE: This makes it so that gx opens the url under cursor
   " in Google Chrome
-  let g:netrw_browsex_viewer = "open -a '/Applications/Google Chrome.app'"
+  let g:netrw_browsex_viewer = "open -a '/Applications/Firefox Developer Edition.app'"
+  let g:netrw_keepdir=0
 " }}}
 
 " SETTINGS: DiffMode {{{

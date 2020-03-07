@@ -24,7 +24,7 @@ let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers
 " let g:fzf_layout = { 'window': '-tabnew' }
 
 " NOTE: don't specify any colors, so it falls back on default opts --color bw
-let g:fzf_colors = {}
+" let g:fzf_colors = {}
 
 " Keybindings & commands {{{
 command! Files call s:fzf_Files()
@@ -46,9 +46,21 @@ nnoremap <silent> <leader>rs :<C-u>FZF spec<CR>
 nnoremap <silent> <leader>rf :<C-u>FZF spec/factories<CR>
 nnoremap <silent> <leader>rfi :<C-u>FZF spec/fixtures<CR>
 nnoremap <silent> <leader>rmi :FZF db/migrate<CR>
+imap <silent> <C-F> <C-O>:call <sid>fzf_insert_file_path()<CR>
+
 " }}}
 
 " Functions {{{
+function! s:fzf_insert_file_path()
+  let command = $FZF_DEFAULT_COMMAND
+
+  call fzf#run(fzf#wrap({
+        \ 'source':  command,
+        \ 'sink':    function('general#AppendToLine'),
+        \ 'options': g:fzf_default_options,
+        \ }))
+endfunction
+
 function! s:fzf_Files()
   let g:fzf_current_mode = 'FILES'
   call fzf#run(fzf#wrap({ 'options': g:fzf_default_options . ' ' . g:fzf_files_options }))

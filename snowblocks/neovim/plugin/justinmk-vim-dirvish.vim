@@ -1,2 +1,4 @@
-" Enable fugitive in dirvish buffers
-autocmd Filetype dirvish call fugitive#detect(@%)
+" fix fugitive#detect issue
+" https://github.com/justinmk/vim-dirvish/issues/160
+" autocmd! dirvish_ftdetect FileType dirvish
+autocmd! FileType dirvish
