@@ -6,7 +6,7 @@
 [difftool "vim-diff-tool"]
   cmd= nvim -d $REMOTE $LOCAL
 [difftool]
-  prompt = false
+  prompt = 0
 ; [pager]
 ;   diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
@@ -37,7 +37,9 @@
   tool = vimdiff
   conflictstyle = diff3
 [mergetool "vimdiff"]
-  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+  cmd = nvim -d $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+[mergetool]
+  prompt = 0
 
 # vim: set et :
 [credential]
