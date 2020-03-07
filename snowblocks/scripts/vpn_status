@@ -1,7 +1,0 @@
-#!/usr/bin/env bash 
-
-if [[ $(ifconfig | grep -c utun3) -eq 1 ]]; then
-  echo "#[bold]  VPN #[nobold]"
-else 
-  echo "#[bold]  VPN #[nobold]"
-fi
