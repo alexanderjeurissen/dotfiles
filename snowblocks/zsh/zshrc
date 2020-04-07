@@ -1,42 +1,18 @@
-# Start tmux by default and exit terminal if tmux exits. {{{
-  if [ -n "$TMUX" ]; then
-    # export TERM=screen-256color-italic
-  else
-    # tmux attach-session || exec tmux new-session;
-    tmux attach-session || exec tmux new-session && exit;
-  fi
-# }}}
+# vim:foldmethod=marker:sw=2
+
+# NOTE: Helps with profiling zsh startup time
+# zmodload zsh/zprof
 
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
 
 # general functions {{{
-  silent_source() {
-    path="$1"
-
-    [ -n "$path" ] && return 1
-
-    if [ -f "$path" ]; then
-      source "$path"
-    fi
-  }
-
   # NOTE: Make a directory and move into it
   # https://unix.stackexchange.com/questions/125385/combined-mkdir-and-cd
   mkcdir() {
     mkdir -p -- "$1" &&
       cd -P -- "$1"
-  }
-
-  # NOTE: Run command n-times
-  # http://serverfault.com/questions/273238/how-to-run-a-command-multiple-times
-  times() {
-    number=$1
-    shift
-    for i in `seq $number`; do
-      $@
-    done
   }
 
   # NOTE: Run command till the exit code is zero
@@ -83,6 +59,9 @@ fi
 # }}}
 
 # Vi mode {{{
+  # set nvim as defaut editor
+  export EDITOR="nvim"
+
   bindkey -v
   export KEYTIMEOUT=1
 
@@ -93,7 +72,6 @@ fi
 
 # completions {{{
   zmodload zsh/complist
-  autoload -U compinit && compinit
 
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
   # use the tag name as group name
@@ -118,12 +96,12 @@ fi
       local branches
       local files
 
-      if [[ $ARGS == 'git checkout -- '* ]]; then
+      if [[ $ARGS == 'git checkout -- '* ]] || [[ $ARGS == 'git reset -- '* ]]; then
           files=$(git ls-files)
           _fzf_complete "--reverse --multi" "$@" < <(
               echo "$files"
           )
-      elif [[ $ARGS == 'git checkout'* ]]; then
+      elif [[ $ARGS == 'git checkout'* ]] || [[ $ARGS == 'git merge'* ]]; then
           branches=$(git branch -vv)
           _fzf_complete "--reverse --multi" "$@" < <(
               echo "$branches"
@@ -134,6 +112,30 @@ fi
   }
 
   _fzf_complete_git_post() {
+    awk '{print $1}'
+  }
+
+  _fzf_complete_g() {
+      ARGS="$@"
+      local branches
+      local files
+
+      if [[ $ARGS == 'g checkout -- '* ]] || [[ $ARGS == 'g reset -- '* ]]; then
+          files=$(git ls-files)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$files"
+          )
+      elif [[ $ARGS == 'g checkout'* ]] || [[ $ARGS == 'g merge'* ]]; then
+          branches=$(git branch -vv)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$branches"
+          )
+      else
+          eval "zle ${fzf_default_completion:-expand-or-complete}"
+      fi
+  }
+
+  _fzf_complete_g_post() {
     awk '{print $1}'
   }
 
@@ -162,14 +164,21 @@ fi
   }
 # }}}
 
-# Zplug plugin definitions {{{
-  unset ZPLUG_CACHE_FILE # Fix for ZPLUG_CACHE_FILE deprecation
-  source ~/.zplug/init.zsh
-  zplug "alexanderjeurissen/ombre.zsh", use:prompt_ombre_setup
-  zplug "zsh-users/zsh-syntax-highlighting"
-  zplug "zsh-users/zsh-completions"
-  zplug "zsh-users/zsh-autosuggestions"
-  # zplug "Valiev/almostontop"
+# Zgen plugin definitions {{{
+  source "${HOME}/.zgen/zgen.zsh"
+
+  # if the init script doesn't exist
+  if ! zgen saved; then
+    zgen load "denysdovhan/spaceship-prompt" spaceship # use:spaceship.zsh, from:github, as:theme
+    # zgen load "alexanderjeurissen/ombre.zsh" prompt_ombre_setup
+    zgen load "zsh-users/zsh-syntax-highlighting"
+    zgen load "zsh-users/zsh-completions"
+    zgen load "zsh-users/zsh-autosuggestions"
+
+
+    # generate the init script from plugins above
+    zgen save
+  fi
 # }}}
 
 # aliasses {{{
@@ -186,13 +195,12 @@ fi
   alias routes="rails_routes | fzf | pbcopy"
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-  alias showDriveUsage='sudo lsof'
+  alias disk_usage='sudo lsof'
   alias findP="ps -ef | grep -v grep | grep "
   alias applypatch="git am --signoff <"
   alias create_commit_range_patch="git format-patch"
   alias prof="source ~/.zshrc && source ~/.zshenv && source ~/.zprofile"
   alias structuresql="g difftool develop -- db/structure.sql && g diff develop -- db/structure.sql"
-  alias remove_zsh_cache="rm ~/.zcompdump && rm -rf ~/.zsh_cache/ && rm -rf ~/.zplug/zcompdump && rm -rf ~/.zplug/zcompdump.zwc"
   alias verify_approvals="approvals verify -d nvim -d  -a"
   # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/14 {{{
   alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
@@ -200,6 +208,7 @@ fi
   alias changed_files="git diff develop --name-only"
   # }}}
   alias eslintspecific="yarn run eslint:specific -- --fix"
+  alias cucumber_step="CAPYBARA_STEP=1 bundle exec cucumber"
   alias urldecode='python -c "import sys, urllib as ul; \
     print ul.unquote_plus(sys.argv[1])"'
 
@@ -276,10 +285,7 @@ fi
   # }}}
 # }}}
 
-# set nvim as defaut editor
-export EDITOR="nvim"
-
-# FZF {{{
+# Fzf {{{
 # --files: List files that would be searched but do not search
 # --ignore: Do respect .gitignore, etc...
 # --hidden: Search hidden files and folders
@@ -291,29 +297,51 @@ export EDITOR="nvim"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 
-export TMPDIR="/private/tmp" # fix vim-dispatch/issues/64
+# Prompt {{{
+  export SPACESHIP_PROMPT_ADD_NEWLINE=true
 
-# Zplug {{{
-# Can manage local plugins
-# zplug "~/.zsh", from:local
+  export SPACESHIP_DIR_PREFIX=''
+  export SPACESHIP_DIR_COLOR='white'
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-  printf "Install? [y/N]: "
+  export SPACESHIP_HOST_PREFIX='@'
+  export SPACESHIP_HOST_COLOR='white'
+  export SPACESHIP_HOST_COLOR_SSH='red'
 
-  if read -q; then
-    echo; zplug install
-  fi
-fi
+  export SPACESHIP_CHAR_SYMBOL='➜  '
+  export SPACESHIP_CHAR_COLOR_SUCCESS='white'
+
+  export SPACESHIP_NODE_SHOW=false
+  export SPACESHIP_RUBY_SHOW=false
+
+  export SPACESHIP_VI_MODE_SHOW=false
+
+  export SPACESHIP_GIT_BRANCH_COLOR='cyan'
+
+  export SPACESHIP_GIT_STATUS_COLOR='yellow'
+  export SPACESHIP_GIT_STATUS_PREFIX=''
+  export SPACESHIP_GIT_STATUS_SUFFIX=''
+
+  export SPACESHIP_GIT_STATUS_UNMERGED='  '
+  export SPACESHIP_GIT_STATUS_DIVERGED='  '
+  export SPACESHIP_GIT_STATUS_AHEAD='  '
+  export SPACESHIP_GIT_STATUS_BEHIND='  '
+
+  export SPACESHIP_GIT_STATUS_STASHED='  '
+
+  export SPACESHIP_GIT_STATUS_UNTRACKED=' ? '
+  export SPACESHIP_GIT_STATUS_ADDED=' 樂 '
+  export SPACESHIP_GIT_STATUS_MODIFIED='  '
+  export SPACESHIP_GIT_STATUS_RENAMED=' » '
+  export SPACESHIP_GIT_STATUS_DELETED=' ✘ '
+# }}}
 
 # Then, source plugins and add commands to $PATH
 # Only source zplugins when a new terminal is opened not when source ~/.zshrc
 # This is due to conflict between some plugins that causes a crash
 # https://github.com/zsh-users/zsh-autosuggestions/issues/205
 if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
-  zplug load
+  # zplug load
 fi
-# }}}
 
 # git aliases {{{
   source ~/.gitaliases
@@ -357,10 +385,26 @@ fi
   bindkey '^e' autosuggest-accept
 # }}}
 
-# vim: foldmethod=marker:sw=2
-
 # NOTE: The following lines fool setup setup script that those lines are already present in my
 # terminal config. I prefer setting these in the zprofile
 # eval "$(rbenv init -)"
 # export NVM_DIR=~/.nvm
 # source $(brew --prefix nvm)/nvm.sh
+
+
+# NOTE: Helps with profiling zsh startup time
+# zprof
+
+### Added by Zinit's installer
+# if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+#     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
+#     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+#     command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
+#         print -P "%F{160}▓▒░ The clone has failed.%f"
+# fi
+# source "$HOME/.zinit/bin/zinit.zsh"
+# autoload -Uz _zinit
+# (( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit installer's chunk
+#

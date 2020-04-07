@@ -1,13 +1,60 @@
 # export NODENV_ROOT=/usr/local/var/nodenv
 
 if which rbenv > /dev/null; then eval "$(rbenv init - --no-rehash)"; fi
-if which nodenv > /dev/null; then
-  eval "$(nodenv init - --no-rehash)"
-  source $(brew --prefix nodenv)/completions/nodenv.zsh
-fi
+if which nodenv > /dev/null; then eval "$(nodenv init - --no-rehash)"; fi
+
+# Defines environment variables.
+export ENABLE_SPRING=0
+export DEFAULT_USER=$USER
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export NO_SUGGESTED_REVIEWERS=no
+
+export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+
+# NOTE: H1 related env variables {{{
+  export SKIP_WAIT=1
+# }}}
+
+export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+
+export PATH="$HOME/.bin:$PATH" # TODO: evaluate env var
+export PATH="/Users/alexanderjeurissen/.scripts:$PATH" # include my own scripts
+export PATH="$PATH:/Users/alexanderjeurissen/Development/arcanist/bin"
 
 export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.nodenv/shims:$PATH"
+
+# TMUX needs screen-256-color
+if [ -n "$TMUX" ]; then
+  export TERM=tmux-256color;
+else
+  export TERM=xterm-256color-italic
+fi
+
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
+
+# Java settings {{{
+  export JAVA_HOME=`/usr/libexec/java_home`
+  export MAVENPATH=$HOME/.maven
+  export PATH=$PATH:$MAVENPATH/bin
+# }}}
+
+# FZF settings {{{
+ export FZF_DEFAULT_OPTS='--color bw'
+# }}}
+
+export VIM_CONFIG_PATH=$HOME/.config/nvim/
+
+# NOTE: fixes issue with too many open files when refreshing paperclip thumbnails:
+# https://github.com/thoughtbot/paperclip/issues/1326
+export RUN_AT_EXIT_HOOKS=true
+
 
 # makes sure global bin is respected when doing yarn global add
 # https://github.com/yarnpkg/yarn/issues/1027
