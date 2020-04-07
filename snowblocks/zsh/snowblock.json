@@ -1,10 +1,6 @@
 [
   {
-    "clean": [
-      "~",
-      "/usr/share/zsh/site-functions",
-      "~/.zplug"
-    ]
+    "clean": ["~", "/usr/share/zsh/site-functions", "~/.zsh_autoload"]
   },
   {
     "dependencies": [
@@ -28,24 +24,13 @@
   },
   {
     "link": {
-      "/usr/local/share/zsh/site-functions/completions": {
-        "create": true,
-        "relink": true
-      }
-    }
-  },
-  {
-    "link": {
       "~/.zshrc": {
         "relink": true
       },
       "~/.zprofile": {
         "relink": true
       },
-      "~/.zshenv": {
-        "relink": true
-      },
-      "~/.zplug": {
+      "~/.zsh_autoload": {
         "relink": true
       }
     }
