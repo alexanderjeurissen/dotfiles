@@ -1,0 +1,241 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+# NOTE: Let dein manage dein
+
+# PLUGINS: ColorSchemes {{{
+  # [[plugins]]
+  # repo = 'morhetz/gruvbox'
+  # hook_post_source = '''
+  #   let g:gruvbox_italic=1
+  #   let g:gruvbox_italicize_strings=1
+  #   let g:gruvbox_contrast_dark='soft'
+  #   let g:gruvbox_contrast_light='soft'
+
+  #   colorscheme gruvbox
+  #   set background=dark
+  # '''
+
+  # [[plugins]]
+  # repo = 'ajmwagar/vim-deus'
+  # hook_post_source = '''
+  #   syntax enable
+  #   colorscheme deus
+  #   set background=dark
+  # '''
+
+  [[plugins]]
+  repo = 'lifepillar/vim-solarized8'
+  hook_post_source = '''
+    syntax enable
+    let g:solarized_extra_hi_groups=1
+    let g:solarized_italics = 1
+    colorscheme solarized8
+    set background=light
+  '''
+
+  # [[plugins]]
+  # repo='alexanderjeurissen/nord-vim'
+  # hook_post_source = '''
+  #   syntax enable
+  #   colorscheme nord
+  #   set background=dark
+  # '''
+
+  # [[plugins]]
+  # repo='liuchengxu/space-vim-theme'
+  # hook_post_source = '''
+  #  "         \    syntax enable\n
+  #  "         \    colorscheme space_vim_theme\n
+  #  "         \    set background=light\n
+  # '''
+
+  # [[plugins]]
+  # repo='rakr/vim-one'
+  # hook_post_source = '''
+  #  "         \    syntax enable\n
+  #  "         \    let g:one_allow_italics = 1\n
+  #  "         \    colorscheme one\n
+  #  "         \    set background=light\n
+  # '''
+
+
+  # [[plugins]]
+  # repo='mhartington/oceanic-next'
+  # hook_post_source = '''
+  #  "         \    syntax enable\n
+  #  "         \    let g:oceanic_next_terminal_bold = 1\n
+  #  "         \    let g:oceanic_next_terminal_italic = 1\n
+  #  "         \    colorscheme OceanicNext\n
+  # '''
+# }}}
+
+# PLUGINS: Core {{{
+  [[plugins]]
+  repo = 'Konfekt/FastFold'
+
+  [[plugins]]
+  repo = 'vim-scripts/searchfold.vim'
+
+  [[plugins]]
+  repo = 'tpope/vim-dispatch'
+  # NOTE: run tasks in a tmux split to not block vim
+
+  [[plugins]]
+  repo = 'radenling/vim-dispatch-neovim'
+  depends = 'vim-dispatch'
+  # NOTE: run tasks in a tmux split to not block vim
+
+  [[plugins]]
+  repo = 'tpope/vim-obsession'
+  # NOTE: improve vim session handling
+
+  [[plugins]]
+  repo = 'sheerun/vim-polyglot'
+  # NOTE: Syntax highlighting, indent, etc. for various file types
+
+  [[plugins]]
+  repo = 'tpope/vim-scriptease'
+  # NOTE: A Vim plugin for making Vim plugins.
+
+  [[plugins]]
+  repo = 'neovim/nvim-lsp'
+  # NOTE: Common configurations for Neovim Language Servers NOTE: commented out for now till this feature matures in Nvim core
+
+  [[plugins]]
+  repo = 'haorenW1025/completion-nvim'
+  # NOTE: LSP autocomplete
+
+  [[plugins]]
+  repo = 'dense-analysis/ale'
+  # NOTE: linting and autofix
+# }}}
+
+
+# PLUGINS: Editing {{{
+  [[plugins]]
+  repo = 'tpope/vim-abolish'
+  on_cmd = ['Abolish', 'Subvert']
+  # NOTE: better search and replace
+
+  [[plugins]]
+  repo = 'tpope/vim-endwise'
+  # NOTE: insert end after certain keywords in ruby
+
+  [[plugins]]
+  repo = 'tpope/vim-commentary'
+  # NOTE: Easy commenting using vim motions
+
+  [[plugins]]
+  repo = 'bogado/file-line'
+  # NOTE: allow opening files with line number e.g. file.txt:30
+
+  [[plugins]]
+  repo = 'tommcdo/vim-exchange'
+  # NOTE: ...
+
+  [[plugins]]
+  repo = 'tpope/vim-repeat'
+  # NOTE: ...
+
+  [[plugins]]
+  repo = 'tpope/vim-surround'
+  depends = 'vim-repeat'
+  # NOTE: ...
+
+  [[plugins]]
+  repo = 'tpope/vim-sleuth'
+  # NOTE: smart indent width based on buffer and neigbouring files
+
+  [[plugins]]
+  repo = 'machakann/vim-highlightedyank'
+  # NOTE: yank visual selections
+# }}}
+
+# PLUGINS: Frontend {{{
+  [[plugins]]
+  repo = 'ap/vim-css-color'
+  on_ft = ['css', 'scss', 'conf', 'javascript']
+  # NOTE: yank visual selections
+# }}}
+
+# PLUGINS: Ruby {{{
+  [[plugins]]
+  repo = 'tpope/vim-bundler'
+  # NOTE: run bundler commands in Vim
+
+  [[plugins]]
+  repo = 'tpope/vim-cucumber'
+  on_ft = 'cucumber'
+  # NOTE: fancy cucumber highlighting
+
+  [[plugins]]
+  repo = 'tpope/vim-rails'
+  on_ft = ['ruby', 'cucumber']
+  # NOTE: rails specific config and highlight
+# }}}
+
+
+# PLUGINS: Navigation {{{
+  [[plugins]]
+  repo = 'octref/RootIgnore'
+  # NOTE: ...
+
+  [[plugins]]
+  repo = 'junegunn/fzf'
+  build = './install --all'
+  merged = 0
+  # NOTE: Fuzzy finder / selector
+
+  [[plugins]]
+  repo = 'moll/vim-bbye'
+  # NOTE: add nice buffer deleting
+
+  [[plugins]]
+  repo = 'arithran/vim-delete-hidden-buffers'
+  # NOTE: rails specific config and highlight
+
+  [[plugins]]
+  repo = 'tpope/vim-vinegar'
+  # NOTE: File browser
+
+  [[plugins]]
+  repo = 'tpope/vim-eunuch'
+  # NOTE: ...
+
+  [[plugins]]
+  repo = 'airblade/vim-rooter'
+  # NOTE: change vim root to vcs root when editing a file
+
+  [[plugins]]
+  repo = 'tpope/vim-unimpaired'
+  # NOTE: pairs of handy bracket mappings like [f and ]f for file switching
+
+  [[plugins]]
+  repo = 'thinca/vim-visualstar'
+  on_map = '*'
+  # NOTE: allows to use the * motion in visual mode
+# }}}
+
+
+# PLUGINS: Version Control {{{
+  [[plugins]]
+  repo = 'sgeb/vim-diff-fold'
+  # NOTE: allows to fold vim diffs
+
+  [[plugins]]
+  repo = 'tpope/vim-fugitive'
+  # NOTE: adds git commands for checking git status, commit etc.
+
+  [[plugins]]
+  repo = 'tpope/vim-git'
+  # NOTE: Vim runtime files and syntax highlighting
+# }}}
+
+
+# PLUGINS: Window Management {{{
+  [[plugins]]
+  repo = 'szw/vim-maximizer'
+  # NOTE: allows to zoom into splits
+# }}}
+
+# vim: foldmethod=marker:sw=2:foldlevel=10

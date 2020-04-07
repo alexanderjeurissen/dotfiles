@@ -1,38 +1,22 @@
 scriptencoding utf-8
 
 " SETTINGS: General {{{
-  set path=$PWD,$PWD/app/**                          " Make :find more usable by default
-  set wildmenu                                       " Show all matches when tab completing
-  set wildmode=longest:list,full                     " Show longest match first
-  set regexpengine=1                                 " Better for ruby (https://tinyurl.com/ll948jk)
-  set noswapfile                                     " Disable swap (https://tinyurl.com/y9t8frrs)
-  set showmode                                       " show mode in bottom-left corner
-  set synmaxcol=200                                  " Only syntax highlight 200 chars (performance)
-  set autowrite                                      " Write before running commands.
-  set shortmess=aAIsTF                               " Reduce |hit-enter| prompts.
   " FIXME: trying out default cmdheight for now
   set cmdheight=1                                    " Number of screen lines for the command-line.
   set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
   set smartcase                                      " Search case incensitive.
-  " FIXME: temp disabled to test out Conway's cc approach to text width
-  " set textwidth=100                                  " Set maximum number of characters per line
-  set sessionoptions+=resize                         " Changes the effect of the |:mksession| cmd.
-  set sessionoptions+=globals                        " Persist global variables in vim session
   " set colorcolumn=+1                               " Highlight first column after 'textwidth'
   " set iskeyword-=_                                 " Treat underscore as a word boundary.
   set spellfile=~/.config/nvim/spell/en.utf-8.add
   set nolist
-  set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
-  set fillchars=vert:\ ,fold:\                       " Strings in statuslines and vert separators.
+  " set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
 
   set hidden                                         " Allow for more then one unsaved buffer.
-  " set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
-  set lazyredraw                                   " Don't unnecessarily redraw screen.
+  set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
+  " set lazyredraw                                   " Don't unnecessarily redraw screen.
 
   set undofile                                       " Save undo's after file closes.
-  set undodir=$HOME/.config/nvim/undo/               " Location of Undo files.
   set undolevels=1000                                " Number of changes to be saved.
-  set undoreload=10000                               " Save whole buffer to undohist when reloading.
 
   set tabstop=2                                      " Number of spaces a <Tab> char is rendered as.
   set shiftwidth=2                                   " Number of spaces that >> and << count for.
@@ -52,24 +36,19 @@ scriptencoding utf-8
 
   set modeline                                       " load vim settings from magic file comment
   set confirm                                        " Makes operations like qa ask for confirmation
-  set t_vb=                                          " Disable visual bell.
   set scrolloff=2                                    " Keep at least 2 lines above/below
   set sidescrolloff=5                                " Keep at least 5 lines left/right
   set smartindent
 
-  " FIXME temp disabling this to test tabnew help
-  " Open help in a new split instead of vimbuffer
-  " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'enew help' : 'h'
 
   " let python3_host_prog = "python3"
   " let python_host_prog = "python"
-  let g:snappy_dev = 1
-  let g:lumiere_dim_inactive_windows = 1
 " }}}
 
-" DEIN: start {{{
+" SETTINGS: Dein.vim {{{
   "Note: install dein if not present
   let g:dein_path='$HOME/.config/nvim/dein'
+  let g:dein#auto_recache=1
 
   if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
    if executable('git')
@@ -84,152 +63,19 @@ scriptencoding utf-8
   " Add dein.vim to runtimepath
   set runtimepath^=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 
-  let g:plugin_path='$HOME/.config/nvim/dein'
 
-  if dein#load_state(expand(g:plugin_path))
+let s:plugin_path='$HOME/.config/nvim/dein'
+let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
+
+  if dein#load_state(expand(s:plugin_path))
    " tell dein where the plugins live
    call dein#begin(
-         \ expand(g:plugin_path),
+         \ expand(s:plugin_path),
+         \ expand(s:dein_toml),
          \ [expand('$HOME/.config/nvim/init.vim')]
          \)
-   call dein#add('Shougo/dein.vim') " Let dein manage dein
-" }}}
 
-
-   " PLUGINS: ColorSchemes {{{
-   " call dein#add('morhetz/gruvbox', {
-   "       \ 'hook_post_source': "
-   "       \    let g:gruvbox_italic=1\n
-   "       \    let g:gruvbox_italicize_strings=1\n
-   "       \    let g:gruvbox_contrast_dark='soft'\n
-   "       \    let g:gruvbox_contrast_light='soft'\n
-   "       \    colorscheme gruvbox\n
-   "       \    set background=dark\n
-   "       \ "
-   "       \ })
-
-   " call dein#add('ajmwagar/vim-deus', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    colorscheme deus\n
-   "         \    set background=dark\n
-   "         \ "
-   "         \ })
-
-   " call dein#add('lifepillar/vim-solarized8', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    let g:solarized_extra_hi_groups=1\n
-   "         \    colorscheme solarized8\n
-   "         \    set background=dark\n
-   "         \ "
-   "         \ })
-
-   " call dein#add('arcticicestudio/nord-vim', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    colorscheme nord\n
-   "         \    set background=dark\n
-   "         \ "
-   "         \ })
-
-
-   " call dein#add('liuchengxu/space-vim-theme', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    colorscheme space_vim_theme\n
-   "         \    set background=light\n
-   "         \ "
-   "         \ })
-
-   " call dein#add('rakr/vim-one', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    let g:one_allow_italics = 1\n
-   "         \    colorscheme one\n
-   "         \    set background=light\n
-   "         \ "
-   "         \ })
-
-   " call dein#add('mhartington/oceanic-next', {
-   "         \ 'hook_post_source': "
-   "         \    syntax enable\n
-   "         \    let g:oceanic_next_terminal_bold = 1\n
-   "         \    let g:oceanic_next_terminal_italic = 1\n
-   "         \    colorscheme OceanicNext\n
-   "         \ "
-   "         \ })
-
-   call dein#add('NLKNguyen/papercolor-theme', {
-           \ 'hook_post_source': "
-           \    syntax enable\n
-           \    colorscheme papercolor\n
-           \    set background=light\n
-           \ "
-           \ })
-
-   " }}}
-
-   " PLUGINS: Core {{{
-     call dein#add('Konfekt/FastFold')
-     call dein#add('vim-scripts/searchfold.vim')
-     call dein#add('tpope/vim-dispatch') " run tasks in a tmux split to not block vim
-     call dein#add('radenling/vim-dispatch-neovim', {'depends': 'vim-dispatch'})
-     call dein#add('tpope/vim-obsession') " improve vim session handling
-     call dein#add('sheerun/vim-polyglot') " Syntax highlighting, indent, etc. for various file types
-     call dein#add('tpope/vim-scriptease') " a Vim plugin for making Vim plugins.
-     " call dein#add('neovim/nvim-lsp') " Common configurations for Neovim Language Servers NOTE: commented out for now till this feature matures in Nvim core
-     call dein#add('neoclide/coc.nvim', {'rev': 'release'})
-   " }}}
-
-   " PLUGINS: Editing {{{
-     " call dein#add('tpope/vim-abolish', { 'on_cmd': ['Abolish', 'Subvert'] }) " better search
-     call dein#add('tpope/vim-endwise') " insert end after certain keywords in ruby
-     call dein#add('tpope/vim-commentary') " easy commenting using vim motions
-     call dein#add('bogado/file-line') " allow opening files with line number e.g. file.txt:30
-     call dein#add('tommcdo/vim-exchange')
-     call dein#add('tpope/vim-repeat')
-     call dein#add('tpope/vim-surround', { 'depends': 'vim-repeat' })
-     call dein#add('tpope/vim-sleuth') " smart indent width based on buffer and neigbouring files
-     call dein#add('machakann/vim-highlightedyank')
-   " }}}
-
-   " PLUGINS: Frontend {{{
-     call dein#add('ap/vim-css-color', {'on_ft': ['css', 'scss', 'conf']})
-   " }}}
-
-   " PLUGINS: Ruby {{{
-     call dein#add('tpope/vim-bundler') " run bundler commands in Vim
-     call dein#add('tpope/vim-cucumber', { 'on_ft': 'cucumber' }) " fancy cucumber highlighting
-     call dein#add('tpope/vim-rails', { 'on_ft': ['ruby', 'cucumber'] }) " rails specific config and highlight
-   " }}}
-
-   " PLUGINS: Navigation {{{
-     call dein#add('octref/RootIgnore')
-     call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
-     " call dein#add('junegunn/fzf.vim', { 'depends': '.fzf' })
-     call dein#add('moll/vim-bbye') " add nice buffer deleting
-     call dein#add('arithran/vim-delete-hidden-buffers')
-     call dein#add('tpope/vim-vinegar')
-     call dein#add('tpope/vim-eunuch')
-     call dein#add('airblade/vim-rooter') " change vim root to vcs root when editing a file
-     "   call dein#add('justinmk/vim-sneak' " diagonal movements using S + 2 charaters
-     "   call dein#add('christoomey/vim-tmux-navigator') " easy navigation between tmux and vim splits
-     call dein#add('tpope/vim-unimpaired') " pairs of handy bracket mappings like [f and ]f for file switching
-     call dein#add('thinca/vim-visualstar', { 'on_map': '*' }) " allows to use the * motion in visual mode
-   " }}}
-
-   " PLUGINS: Version Control {{{
-     call dein#add('sgeb/vim-diff-fold')
-     call dein#add('tpope/vim-fugitive') " adds git commands for checking git status, commit etc.
-     call dein#add('tpope/vim-git') " Vim runtime files and syntax highlighting
-   " }}}
-
-   " PLUGINS: Window Management {{{
-     call dein#add('szw/vim-maximizer')
-   " }}}
-
-" DEIN: end {{{
+   call dein#load_toml(s:dein_toml)
 
    call dein#end()
    call dein#call_hook('source') " call hooks of non lazy plugins
@@ -240,10 +86,11 @@ scriptencoding utf-8
 
   if dein#check_install()
     " Installation check.
-    let g:dein#types#git#default_protocol = "ssh"
+    let g:dein#types#git#default_protocol = 'ssh'
     call dein#install() " install plugins that aren't installed yet
     call dein#remote_plugins() " Install remote plugins
     call dein#check_lazy_plugins() " check for lazy plugins that don't have /plugin
+
     call map(dein#check_clean(), "delete(v:val, 'rf')") " remove unused plugins
   endif
 
@@ -261,19 +108,25 @@ scriptencoding utf-8
 
 " SETTINGS: Colorscheme {{{
   if (has('termguicolors'))
-    set termguicolors
-    set t_8f=^[[38;2;%lu;%lu;%lum
-    set t_8b=^[[48;2;%lu;%lu;%lum
+    " NOTE: temp disabled for iterm tmux integration
+    " set t_8f=^[[38;2;%lu;%lu;%lum
+    " set t_8b=^[[48;2;%lu;%lu;%lum
+
+    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+
     set t_Cs =^[[6m"
     set t_Ce =^[[24m"
     let &t_Cs = "\e[6m"
     let &t_Ce = "\e[24m"
+
+    set termguicolors
   endif
 
   " NOTE: try to use space_vim_theme if it's not present fall back to a
   " buildin colorscheme that looks decent on light background.
   try
-    colorscheme papercolor
+    colorscheme solarized8
     " hi link xmlEndTag function
   catch
     colorscheme delek
@@ -512,6 +365,7 @@ scriptencoding utf-8
     autocmd BufReadPre *
                 \   if getfsize(expand("%")) > 10000000 |
                 \   syntax off |
+                \   let g:ale_enabled=0 |
                 \   endif
 
     " http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
@@ -541,9 +395,6 @@ scriptencoding utf-8
     " NOTE: Ensure directory structure exists when opening a new file
     autocmd  BufNewFile  *  :call general#EnsureDirExists()
 
-    " NOTE: Makes sure we don't end up with double completions
-    autocmd CompleteDone * :call general#UndoubleCompletions()
-
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
 
@@ -572,10 +423,11 @@ scriptencoding utf-8
       autocmd QuickFixCmdPost l* lwindow
   augroup END
 
-" EXTRA: Include local vim config {{{
-  if filereadable(expand('~/.nvimrc.local'))
-    source ~/.nvimrc.local
+" EXTRA: Include lua config {{{
+  if filereadable(expand('~/.config/nvim/lua/init.lua'))
+    lua require('init')
   endif
 " }}}
+
 
 " vim: foldmethod=marker:sw=2:foldlevel=10
