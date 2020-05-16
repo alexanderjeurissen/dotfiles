@@ -34,3 +34,5 @@ require'nvim_lsp'.solargraph.setup({
 EOF
 
 setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+let b:ale_fixers = {'ruby': ['rubocop']}

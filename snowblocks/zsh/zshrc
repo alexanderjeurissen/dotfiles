@@ -130,6 +130,11 @@ fi
           _fzf_complete "--reverse --multi" "$@" < <(
               echo "$branches"
           )
+      elif [[ $ARGS == 'g log -- '* ]]; then
+          files=$(git ls-files)
+          _fzf_complete "--reverse --multi" "$@" < <(
+              echo "$files"
+          )
       else
           eval "zle ${fzf_default_completion:-expand-or-complete}"
       fi
