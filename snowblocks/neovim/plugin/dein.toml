@@ -67,6 +67,9 @@ repo = 'Shougo/dein.vim'
   #  "         \    let g:oceanic_next_terminal_italic = 1\n
   #  "         \    colorscheme OceanicNext\n
   # '''
+
+  [[plugins]]
+  repo='tsiemens/vim-aftercolors'
 # }}}
 
 # PLUGINS: Core {{{

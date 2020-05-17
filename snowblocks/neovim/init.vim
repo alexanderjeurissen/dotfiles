@@ -1,49 +1,5 @@
 scriptencoding utf-8
-
-" SETTINGS: General {{{
-  " FIXME: trying out default cmdheight for now
-  set cmdheight=1                                    " Number of screen lines for the command-line.
-  set nowrap                                         " Don't wrap lines as it makes j/k unintuitive.
-  set smartcase                                      " Search case incensitive.
-  " set colorcolumn=+1                               " Highlight first column after 'textwidth'
-  " set iskeyword-=_                                 " Treat underscore as a word boundary.
-  set spellfile=~/.config/nvim/spell/en.utf-8.add
-  set nolist
-  " set listchars=tab:▸\ ,trail:-,extends:>,precedes:<,space:·,eol:¬ " Strings in 'list' mode.
-
-  set hidden                                         " Allow for more then one unsaved buffer.
-  set nolazyredraw                                   " Disable lazy redraw due to issues neovim#6366
-  " set lazyredraw                                   " Don't unnecessarily redraw screen.
-
-  set undofile                                       " Save undo's after file closes.
-  set undolevels=1000                                " Number of changes to be saved.
-
-  set tabstop=2                                      " Number of spaces a <Tab> char is rendered as.
-  set shiftwidth=2                                   " Number of spaces that >> and << count for.
-  set softtabstop=2                                  " Number of spaces of <Tab> while editing.
-  set expandtab                                      " Use spaces instead of <Tab> for indentation.
-  set number                                         " Enable line numbers
-  set relativenumber                                 " Make line numbers relative
-  set numberwidth=4                                  " Set width of number column
-  set splitbelow                                     " Open new split panes at bottommost position
-  set splitright                                     " Open new split panes at rightmost position
-  set inccommand=nosplit                             " Show visual indication when using substitute.
-  set foldenable                                   " collapse all folds.
-  set foldmethod=syntax                              " Fold on the syntax
-  set foldcolumn=0                                   " Don't indicate fold open/closed
-  set foldlevel=1                                    " Autofold nothing by default
-  set foldnestmax=3                                  " Only fold outer functions
-
-  set modeline                                       " load vim settings from magic file comment
-  set confirm                                        " Makes operations like qa ask for confirmation
-  set scrolloff=2                                    " Keep at least 2 lines above/below
-  set sidescrolloff=5                                " Keep at least 5 lines left/right
-  set smartindent
-
-
-  " let python3_host_prog = "python3"
-  " let python_host_prog = "python"
-" }}}
+  let g:python_host_prog="python3"
 
 " SETTINGS: Dein.vim {{{
   "Note: install dein if not present
@@ -54,7 +10,7 @@ scriptencoding utf-8
    if executable('git')
      exec '!git clone https://github.com/Shougo/dein.vim ' . g:dein_path . '/repos/github.com/Shougo/dein.vim'
    else
-     echohl WarningMsg | echom "You need install git!" | echohl None
+     echohl WarningMsg | echom 'You need install git!' | echohl None
    endif
 
    autocmd VimEnter * source $MYVIMRC
@@ -127,13 +83,11 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   " buildin colorscheme that looks decent on light background.
   try
     colorscheme solarized8
-    " hi link xmlEndTag function
   catch
     colorscheme delek
   endtry
-  " set background=light
+  set background=light
 
-  hi CurrentSearchMatch gui=reverse guifg=#073642 guibg=#eee8d5
 " }}}
 
 " SETTINGS: Navigation {{{
@@ -393,13 +347,13 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
       \ | endif
 
     " NOTE: Ensure directory structure exists when opening a new file
-    autocmd  BufNewFile  *  :call general#EnsureDirExists()
+    autocmd  BufNewFile  *  :lua require('general').EnsureDirExists()
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
 
     " Clear info thing
-    autocmd VimEnter * echom ""
+    " autocmd VimEnter * echom ""
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk
@@ -425,7 +379,7 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
 
 " EXTRA: Include lua config {{{
   if filereadable(expand('~/.config/nvim/lua/init.lua'))
-    lua require('init')
+    lua require('init').init()
   endif
 " }}}
 

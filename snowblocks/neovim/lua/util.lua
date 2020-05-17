@@ -1,13 +1,40 @@
 --- NVIM SPECIFIC SHORTCUTS
-vim = vim or {}
-api = vim.api
-fn = vim.fn
+local vim = vim or {}
+local api = vim.api
+local fn = vim.fn
 
+
+local Util = {}
+
+Util.nvim_command = api.nvim_command
+Util.nvim_call_function = api.nvim_call_function
 
 -- NOTE: Set an option in Neovim
-function nvim_set(option, value)
+function Util.set(option)
+  for k, v in pairs(option) do
+    if v == true or v == false then
+      api.nvim_command('set ' .. k)
+    elseif type(v) == 'table' then
+      local values = ''
+      for k2, v2 in pairs(v) do
+        if k2 == 1 then
+          values = values .. v2
+        else
+          values = values .. ',' .. v2
+        end
+      end
+      api.nvim_command('set ' .. k .. '=' .. values)
+    else
+      api.nvim_command('set ' .. k .. '=' .. v)
+    end
+  end
+end
+
+-- NOTE: let an option in Neovim
+function Util.let(option)
+for k, v in pairs(option) do
   if v == true or v == false then
-    vim.api.nvim_command('set ' .. k)
+    api.nvim_command('let ' .. k)
   elseif type(v) == 'table' then
     local values = ''
     for k2, v2 in pairs(v) do
@@ -17,47 +44,37 @@ function nvim_set(option, value)
         values = values .. ',' .. v2
       end
     end
-    vim.api.nvim_command('set ' .. k .. '=' .. values)
+    api.nvim_command('let ' .. k .. '=' .. values)
   else
-    vim.api.nvim_command('set ' .. k .. '=' .. v)
+    api.nvim_command('let ' .. k .. '=' .. v)
   end
 end
+end
+
 --VISUAL_MODE = {
 --  line = "line"; -- linewise
 --  block = "block"; -- characterwise
 --  char = "char"; -- blockwise-visual
 --}
 
---file_separator = is_windows and '\\' or '/'
---is_windows = vim.loop.os_uname().version:match("Windows")
+-- Check if a file or directory exists in this path
+function Util.exists(path)
+return io.open(path, "r") and true or false
+end
 
---function log(item)
---  print(vim.inspect(item))
---end
+-- create directory if it doesn't exist yet
+function Util.mkdir(path)
+if not exists(path) then
+  return os.execute('mkdir ' .. path) and true or false
+end
 
------ Check if a file or directory exists in this path
---function exists(file)
---  local ok, err, code = os.rename(file, file)
---  if not ok then
---    if code == 13 then
---      -- Permission denied, but it exists
---      return true
---    end
---  end
---  return ok, err
---end
+return false
+end
 
------ Check if a directory exists in this path
---function isdir(path)
---  -- "/" works on both Unix and Windows
---  return exists(path.."/")
---end
-
-
---function getPath(str)
---  local s = str:gsub("%-","")
---  return s:match("(.*[/\\])")
---end
+function Util.getPath(str)
+local s = str:gsub("%-","")
+return s:match("(.*[/\\])")
+end
 
 ---- Equivalent to `echo vim.inspect(...)`
 --function nvim_print(...)
@@ -69,16 +86,16 @@ end
 --  vim.api.nvim_out_write("\n")
 --end
 
------ Equivalent to `echo` EX command
---function nvim_echo(...)
---  for i = 1, select("#", ...) do
---    local part = select(i, ...)
---    vim.api.nvim_out_write(tostring(part))
---    -- vim.api.nvim_out_write("\n")
---    vim.api.nvim_out_write(" ")
---  end
---  vim.api.nvim_out_write("\n")
---end
+-- Equivalent to `echo` EX command
+-- function nvim_echo(...)
+--   for i = 1, select("#", ...) do
+--     local part = select(i, ...)
+--     vim.api.nvim_out_write(tostring(part))
+--     -- vim.api.nvim_out_write("\n")
+--     vim.api.nvim_out_write(" ")
+--   end
+--   vim.api.nvim_out_write("\n")
+-- end
 
 --function nvim_source_current_buffer()
 --  loadstring(table.concat(nvim_buf_get_region_lines(nil, 1, -1, VISUAL_MODE.line), '\n'))()
@@ -263,27 +280,6 @@ end
 --  end
 --end
 
--- set options
-function setOptions(options)
-  for k, v in pairs(options) do
-    if v == true or v == false then
-      vim.api.nvim_command('set ' .. k)
-    elseif type(v) == 'table' then
-      local values = ''
-      for k2, v2 in pairs(v) do
-        if k2 == 1 then
-          values = values .. v2
-        else
-          values = values .. ',' .. v2
-        end
-      end
-      vim.api.nvim_command('set ' .. k .. '=' .. values)
-    else
-      vim.api.nvim_command('set ' .. k .. '=' .. v)
-    end
-  end
-end
-
 -- function map_cmd(cmd_string, buflocal)
 --   return { ("<Cmd>%s<CR>"):format(cmd_string), noremap = true; buffer = buflocal;}
 -- end
@@ -306,3 +302,5 @@ end
 --     end
 --   end
 -- end
+
+return Util
