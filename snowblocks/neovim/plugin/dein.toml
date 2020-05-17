@@ -23,6 +23,15 @@ repo = 'Shougo/dein.vim'
   #   set background=dark
   # '''
 
+  # [[plugins]]
+  # repo = 'cormacrelf/vim-colors-github'
+  # hook_post_source = '''
+  #   syntax enable
+  #   colorscheme github
+  #   hi clear signcolumn
+  #   set background=light
+  # '''
+
   [[plugins]]
   repo = 'lifepillar/vim-solarized8'
   hook_post_source = '''
@@ -111,6 +120,10 @@ repo = 'Shougo/dein.vim'
   [[plugins]]
   repo = 'dense-analysis/ale'
   # NOTE: linting and autofix
+
+  [[plugins]]
+  repo = 'Vigemus/nvimux'
+  # NOTE: Tmux like behaviour in neovim
 # }}}
 
 
