@@ -9,37 +9,6 @@ function! general#RenameFile()
   endif
 endfunction
 
-" NOTE: copied from Damian Conway's vimrc
-" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-function! general#AskQuit (msg, options, quit_option)
-  if confirm(a:msg, a:options) == a:quit_option
-    exit
-  endif
-endfunction
-
-" NOTE: copied from Damian Conway's vimrc
-" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-function! general#EnsureDirExists ()
-  let l:required_dir = expand('%:h')
-  if !isdirectory(l:required_dir)
-    call general#AskQuit("Parent directory '" . l:required_dir . "' doesn't exist.",
-      \       "&Create it\nor &Quit?", 2)
-    try
-      call mkdir(l:required_dir, 'p')
-    catch
-      call general#AskQuit("Can't create '" . l:required_dir . "'",
-        \            "&Quit\nor &Continue anyway?", 1)
-    endtry
-  endif
-endfunction
-
-" NOTE: copied from Damian Conway's vimrc
-" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-function! general#UndoubleCompletions()
-  let l:col = getpos('.')[2]
-  let l:line = getline('.')
-  call setline('.', substitute(l:line, '\(\k\+\)\%'.l:col.'c\zs\1', '', ''))
-endfunction
 
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
@@ -120,17 +89,6 @@ function! general#MarkMargin(on)
   endif
 endfunction
 
-" NOTE: generates helptags for all plugins including lazy loaded ones
-" SOURCE: https://vi.stackexchange.com/questions/17210/generating-help-tags-for-packages-that-are-loaded-by-vim-8s-package-management
-function! general#GenerateHelpTags()
-  for p in glob('~/.config/nvim/pack/*/opt/*', 1, 1)
-    exe 'packadd ' . fnamemodify(p, ':t')
-  endfor
-
-  helptags ALL
-endfunction
-
-
 " NOTE: Create a floating window using either a new buffer
 " or by putting the supplied buffer in the floating window.
 function! general#FloatingWindow(...)
@@ -160,15 +118,6 @@ function! general#FloatingWindow(...)
         \ }
 
   let win = nvim_open_win(buf, v:true, opts)
-endfunction
-
-" NOTE: insert the result of a function / command
-function! general#insertOutput(function_to_capture)
-  redir =>output
-    call a:function_to_capture()
-  redir END
-
-  call general#AppendToLine(output)
 endfunction
 
 function! general#AppendToLine(str)
