@@ -211,6 +211,13 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   nmap <down> <C-w>5-
   nmap <right> <C-w>5>
 
+  " Split navigation
+  noremap <silent> <c-h> <C-w><left>
+  noremap <silent> <c-j> <C-w><down>
+  noremap <silent> <c-k> <C-w><up>
+  noremap <silent> <c-l> <C-w><right>
+  noremap <silent> <c-\> <C-w><w>
+
   " NOTE: disable arrows and BS in insert mode
   imap <left> <nop>
   imap <up> <nop>
@@ -300,6 +307,12 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   tnoremap <C-w> <C-\><C-n><C-w>
 
   tnoremap <leader><ESC> <C-\><C-n>
+
+  tnoremap <silent> <c-h> <C-\><C-n><C-w><left>
+  tnoremap <silent> <c-j> <C-\><C-n><C-w><down>
+  tnoremap <silent> <c-k> <C-\><C-n><C-w><up>
+  tnoremap <silent> <c-l> <C-\><C-n><C-w><right>
+  tnoremap <silent> <c-\> <C-\><C-n><C-w><w>
 " }}}
 
 " AUTOCMD: Autocmd groups  {{{
@@ -351,6 +364,9 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
+
+    autocmd TermOpen,TermEnter * :call terminal#Init()
+    autocmd TermLeave * :call terminal#Cleanup()
 
     " Clear info thing
     " autocmd VimEnter * echom ""
