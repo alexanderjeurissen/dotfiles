@@ -5,6 +5,11 @@ inoreabbr <buffer>classname className
 lua << EOF
 require'nvim_lsp'.tsserver.setup{
   cmd = { "typescript-language-server", "--stdio" },
+  formatting = true,
+  completion = true,
+  symbols = true,
+  hover = false,
+  references = true,
   on_attach = require'completion'.on_attach
 }
 EOF
