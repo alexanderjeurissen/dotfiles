@@ -32,12 +32,12 @@ window:
   #
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
-  padding:
-    x: 2
-    y: 2
+  # padding:
+  #   x: 2
+  #   y: 2
 
   # Spread additional padding evenly around the terminal content.
-  dynamic_padding: false
+  # dynamic_padding: false
 
   # Window decorations
   #
@@ -55,10 +55,10 @@ window:
   #     - none: Neither borders nor title bar
   #     - buttonless: Title bar, transparent background and title bar buttons
   #     - transparent: Title bar, transparent background, but no title bar buttons
-  decorations: none
+  decorations: full
 
   # When true, alacritty starts maximized.
-  start_maximized: true
+  startup_mode: 'Windowed'
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -69,59 +69,43 @@ scrolling:
   # scrollback is enabled (history > 0).
   multiplier: 3
 
-  # Faux Scrolling
-  #
-  # The `faux_multiplier` setting controls the number of lines the terminal
-  # should scroll when the alternate screen buffer is active. This is used
-  # to allow mouse scrolling for applications like `man`.
-  #
-  # Specifying `0` will disable faux scrolling.
-  faux_multiplier: 3
-
-  # Scroll to the bottom when new text is written to the terminal.
-  auto_scroll: false
-
-# Spaces per Tab (changes require restart)
-#
-# This setting defines the width of a tab in cells.
-#
-# Some applications, like Emacs, rely on knowing about the width of a tab.
-# To prevent unexpected behavior in these applications, it's also required to
-# change the `it` value in terminfo when altering this setting.
-tabspaces: 8
-
 # Font configuration (changes require restart)
 font:
   # The normal (roman) font face to use.
   normal:
-    family: FuraCode Nerd Font
-    style: Retina
+    family: JetBrainsMono Nerd Font
+    style: Regular
 
   # The bold font face
   bold:
-    family: FuraCode Nerd Font
+    family: JetBrainsMono Nerd Font
     style: Bold
 
   # The italic font face
   italic:
-    family: FuraCode Nerd Font
-    style: Light
+    family: JetBrainsMono Nerd Font
+    style: Italic
+
+  # The bold italic font face
+  bold_italic:
+    family: JetBrainsMono Nerd Font
+    style: Bold Italic
 
   # Point size of the font
-  size: 18.0
+  size: 13.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
   offset:
     x: 0
-    y: 0
+    y: 1
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the right,
   # increasing `y` moves the glyph upwards.
-  glyph_offset:
-    x: 0
-    y: 0
+  # glyph_offset:
+  #   x: 0
+  #   y: 0
 
   # Thin stroke font rendering (OS X only)
   #
@@ -139,46 +123,42 @@ font:
   # effect.
   use_thin_strokes: true
 
-# Display the time it takes to redraw each frame.
-render_timer: false
-
-# Keep the log file after quitting Alacritty.
-persistent_logging: false
-
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (SpaceVim)
+# Colors (Solarized Light)
 colors:
+  # Default colors
   primary:
-    background: '0xFBF8EF'
-    foreground: '0x655370'
-  normal:
-    black: '0x292b2e'
-    red: '0xd26487'
-    green: '0x35a8a5'
-    yellow: '0xb89f33'
-    blue: '0x6981c5'
-    magenta: '0xa15ea7'
-    cyan: '0x288668'
-    white: '0x5b5b5b'
-  bright:
-    black: '0x44505c'
-    red: '0xf2241f'
-    green: '0x67b11d'
-    yellow: '0xb1951d'
-    blue: '0x4f97d7'
-    magenta: '0xbc6ec5'
-    cyan: '0x2d9574'
-    white: '0xb2b2b2'
+    background: '#fdf6e3' # base3
+    foreground: '#657b83' # base00
 
   # Cursor colors
-  #
-  # Colors which should be used to draw the terminal cursor. If these are unset,
-  # the cursor color will be the inverse of the cell color.
-  #cursor:
-  #  text: '0x000000'
-  #  cursor: '0xffffff'
+  cursor:
+    text:   '#fdf6e3' # base3
+    cursor: '#657b83' # base00
+
+  # Normal colors
+  normal:
+    black:   '#073642' # base02
+    red:     '#dc322f' # red
+    green:   '#859900' # green
+    yellow:  '#b58900' # yellow
+    blue:    '#268bd2' # blue
+    magenta: '#d33682' # magenta
+    cyan:    '#2aa198' # cyan
+    white:   '#eee8d5' # base2
+
+  # Bright colors
+  bright:
+    black:   '#002b36' # base03
+    red:     '#cb4b16' # orange
+    green:   '#586e75' # base01
+    yellow:  '#657b83' # base00
+    blue:    '#839496' # base0
+    magenta: '#6c71c4' # violet
+    cyan:    '#93a1a1' # base1
+    white:   '#fdf6e3' # base3
 
   # Indexed Colors
   #
