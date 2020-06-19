@@ -180,7 +180,6 @@ fi
     zgen load "zsh-users/zsh-completions"
     zgen load "zsh-users/zsh-autosuggestions"
 
-
     # generate the init script from plugins above
     zgen save
   fi
@@ -242,33 +241,33 @@ fi
   # }}}
 
   # Nvim & vim aliases {{{
-    # alias v='nvim'
+    alias v='nvim'
     alias v!='nvim -u NONE'
 
-    v () {
-      if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
-        branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        basename=$(basename $PWD)
-        session_name=""
+    # v () {
+    #   if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
+    #     branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    #     basename=$(basename $PWD)
+    #     session_name=""
 
-        if [[ -z $branch ]] ; then
-          # attempt to get short-sha-name
-          branch=":$(git rev-parse --short HEAD 2> /dev/null)"
-        fi
+    #     if [[ -z $branch ]] ; then
+    #       # attempt to get short-sha-name
+    #       branch=":$(git rev-parse --short HEAD 2> /dev/null)"
+    #     fi
 
-        if [ "$?" -me 0 ]; then
-          # NOTE: this must not be a git repo
-          session_name="$basename"
-        else
-          session_name="${basename}_${branch}"
-        fi
+    #     if [ "$?" -me 0 ]; then
+    #       # NOTE: this must not be a git repo
+    #       session_name="$basename"
+    #     else
+    #       session_name="${basename}_${branch}"
+    #     fi
 
-        abduco -e ^z -A "$session_name" nvr "$@"
-      else
-        nvr "$@"
-      fi
-    }
-    # alias v=v
+    #     abduco -e ^z -A "$session_name" nvim "$@"
+    #   else
+    #     nvr -s "$@"
+    #   fi
+    # }
+    alias vlint="nvim -q <(yarn run eslint-f `git diff --name-only HEAD  $(git merge-base HEAD origin/develop)`)"
   # }}}
 
   # Aliases for Arcanist {{{
@@ -313,14 +312,14 @@ fi
   export SPACESHIP_PROMPT_ADD_NEWLINE=true
 
   export SPACESHIP_DIR_PREFIX=''
-  export SPACESHIP_DIR_COLOR='black'
+  export SPACESHIP_DIR_COLOR='default'
 
   export SPACESHIP_HOST_PREFIX='@'
-  export SPACESHIP_HOST_COLOR='black'
+  export SPACESHIP_HOST_COLOR='default'
   export SPACESHIP_HOST_COLOR_SSH='red'
 
   export SPACESHIP_CHAR_SYMBOL='➜  '
-  export SPACESHIP_CHAR_COLOR_SUCCESS='black'
+  export SPACESHIP_CHAR_COLOR_SUCCESS='default'
 
   export SPACESHIP_NODE_SHOW=false
   export SPACESHIP_RUBY_SHOW=false
@@ -419,4 +418,3 @@ fi
 # autoload -Uz _zinit
 # (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit installer's chunk
-#
