@@ -6,15 +6,7 @@ function! terminal#Init()
   setlocal nocursorline
   setlocal nocursorcolumn
 
-  " call general#MarkMargin(0)
-
-  if exists('b:MarkMargin')
-      try
-          call matchdelete(b:MarkMargin)
-      catch /./
-      endtry
-      unlet b:MarkMargin
-  endif
+  call general#MarkMargin(0)
 
   " NOTE: make sure we start in insertmode
   " so we can get typing right away
@@ -22,10 +14,10 @@ function! terminal#Init()
 
   " NOTE: make C-d terminate the terminal like
   " in other terminals
-  noremap <buffer> <C-d> :q<CR>
+  " noremap <buffer> <C-d> :q<CR>
 
 
-  set winhighlight=Normal:NormalTerm
+  " set winhighlight=Normal:NormalTerm
 endfunction
 
 function! terminal#Cleanup()

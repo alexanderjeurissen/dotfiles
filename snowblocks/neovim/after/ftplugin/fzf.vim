@@ -4,4 +4,3 @@
   setlocal nocursorcolumn
 
   call general#MarkMargin(0)
-

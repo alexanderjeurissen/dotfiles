@@ -13,6 +13,9 @@ inoreabbr <buffer> iif it { is_expected.to be(false) }
 inoreabbr <buffer> pry binding.pry
 inoreabbr <buffer> bp binding.pry
 inoreabbr <buffer> bb byebug
+inoreabbr <buffer> frozen frozen_string_literal: true
+
+call general#MarkMargin(1, 80)
 
 " tpope/vim-rails
 nnoremap <leader>rC :.Runner<CR>

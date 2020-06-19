@@ -1,8 +1,3 @@
-" set keywordprg=mdn
-inoreabbr <buffer>classname className
-
-call general#MarkMargin(1, 100)
-
 " lua << EOF
 " require'nvim_lsp'.tsserver.setup{
 "   cmd = { "typescript-language-server", "--stdio" },
