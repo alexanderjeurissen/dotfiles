@@ -1,12 +1,6 @@
 [user]
   name = Alexander Jeurissen
   email = 1220084+alexanderjeurissen@users.noreply.github.com
-[diff]
-  tool = vim-diff-tool
-[difftool "vim-diff-tool"]
-  cmd= nvim -d $REMOTE $LOCAL
-[difftool]
-  prompt = 0
 ; [pager]
 ;   diff = diff-so-fancy | less --tabs=1,5 -R
 [color]
@@ -33,11 +27,22 @@
   upb = "!git fetch -pP  && git merge develop origin/develog kkjp"
   ctags = !.git/hooks/ctags
 
+[diff]
+  tool = nvim
+[difftool "nvim"]
+  cmd= nvim -d $REMOTE $LOCAL
+[difftool "nvr"]
+  cmd = nvr -s -d $LOCAL $REMOTE
+[difftool]
+  prompt = 1
+
 [merge]
-  tool = vimdiff
+  tool = nvim
   conflictstyle = diff3
-[mergetool "vimdiff"]
+[mergetool "nvim"]
   cmd = nvim -d $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+[mergetool "nvr"]
+  cmd = nvr -cc tabnew -s -d $LOCAL $BASE $REMOTE $MERGED -c 'wincmd J | wincmd ='
 [mergetool]
   prompt = 0
 
@@ -49,6 +54,7 @@
 [core]
   excludesfile = /Users/alexanderjeurissen/.gitignore
   editor = nvim
+  ; editor = nvr -cc tabnew --remote-wait-silent
   pager = diff-so-fancy | less --tabs=1,5 -R
 [push]
   default = current
