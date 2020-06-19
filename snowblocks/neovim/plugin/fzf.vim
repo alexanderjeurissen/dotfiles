@@ -12,13 +12,12 @@ let g:fzf_action = {
 
 let g:fzf_default_options = '--inline-info --multi --sort --layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all'
 " let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -'.&lines.'"'
-let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
+" let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
 
 " NOTE: Replace current buffer with search window
 " let g:fzf_layout = { 'window': 'enew' }
 " let g:fzf_layout = { 'window': 'tabnew' }
-" let g:fzf_layout = { 'window': 'tabnew' }
-" let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
+let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
 
 " NOTE: Open a new tab with search window
 " let g:fzf_layout = { 'window': '-tabnew' }
@@ -57,13 +56,13 @@ function! s:fzf_insert_file_path()
   call fzf#run(fzf#wrap({
         \ 'source':  command,
         \ 'sink':    function('general#AppendToLine'),
-        \ 'options': g:fzf_default_options,
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors(),
         \ }))
 endfunction
 
 function! s:fzf_Files()
   let g:fzf_current_mode = 'FILES'
-  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options . ' ' . g:fzf_files_options }))
+  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options.fzf#get_fzf_colors() }))
 endfunction
 
 
@@ -83,7 +82,7 @@ function! s:fzf_Buffers()
   call fzf#run(fzf#wrap({
         \ 'source':  reverse(<sid>buflist()),
         \ 'sink':    function('s:bufopen'),
-        \ 'options': g:fzf_default_options,
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
         \ }))
 endfunction
 
@@ -98,7 +97,7 @@ function! s:fzf_NeighbouringFiles()
   call fzf#run(fzf#wrap({
         \ 'source': command,
         \ 'dir': cwd,
-        \ 'options': g:fzf_default_options
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
         \ }))
 endfunction
 
@@ -110,7 +109,7 @@ function! s:fzf_GitFiles()
 
   call fzf#run(fzf#wrap({
         \ 'source': command,
-        \ 'options': g:fzf_default_options
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
         \ }))
 endfunction
 
@@ -122,7 +121,37 @@ function! s:fzf_GitBranchFiles()
 
   call fzf#run(fzf#wrap({
         \ 'source': command,
-        \ 'options': g:fzf_default_options
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
         \ }))
+endfunction
+
+
+" NOTE: generate color settings string based on colorscheme, to be put in .zprofile
+function! fzf#get_fzf_colors()
+  let rules =
+  \ { 'fg':      [['WildMenu',       'bg#']],
+    \ 'bg':      [['WildMenu',       'fg#']],
+    \ 'hl':      [['Comment',      'fg#']],
+    \ 'fg+':     [['MatchParen', 'fg#'], ['Normal', 'fg#']],
+    \ 'bg+':     [['MatchParen', 'bg#']],
+    \ 'hl+':     [['Statement',    'fg#']],
+    \ 'info':    [['PreProc',      'fg#']],
+    \ 'prompt':  [['Conditional',  'fg#']],
+    \ 'pointer': [['Exception',    'fg#']],
+    \ 'marker':  [['Keyword',      'fg#']],
+    \ 'spinner': [['Label',        'fg#']],
+    \ 'header':  [['Comment',      'fg#']] }
+  let cols = []
+  for [name, pairs] in items(rules)
+    for pair in pairs
+      let code = synIDattr(synIDtrans(hlID(pair[0])), pair[1])
+      if !empty(name) && !empty(code)
+        call add(cols, name.':'.code)
+        break
+      endif
+    endfor
+  endfor
+  " echom ' --color='.join(cols, ',')
+  return ' --color='.join(cols, ',')
 endfunction
 " }}}

@@ -12,3 +12,7 @@ call general#MarkMargin(0)
 let g:solarized_diffmode="high"
 
 normal zv
+
+" NOTE: Ensures that :q and :x work with neovim-remote
+" https://github.com/mhinz/neovim-remote#typical-use-cases
+set bufhidden=delete

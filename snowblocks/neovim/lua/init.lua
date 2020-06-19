@@ -78,14 +78,13 @@ function Init.init()
 
    -- Globals
    vim.g.snappy_dev = 1
-   vim.g.lumiere_dim_inactive_windows = 0
+   -- vim.g.lumiere_dim_inactive_windows = 0
   -- }}}
 
-  -- SETTINGS: statusline {{{
-  set { laststatus=2 }
+-- SETTINGS: statusline {{{
+  set { laststatus=0 } -- Disable bottom statusline
   -- set { guioptions-=e } TODO: fix
-
-  -- }}}
+-- }}}
 end
 
 return Init

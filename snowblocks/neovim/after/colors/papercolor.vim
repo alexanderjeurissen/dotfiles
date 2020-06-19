@@ -1,0 +1,1 @@
+hi! CurrentSearchMatch gui=reverse

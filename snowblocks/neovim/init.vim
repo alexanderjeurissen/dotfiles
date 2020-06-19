@@ -78,16 +78,6 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
 
     set termguicolors
   endif
-
-  " NOTE: try to use space_vim_theme if it's not present fall back to a
-  " buildin colorscheme that looks decent on light background.
-  try
-    colorscheme solarized8
-  catch
-    colorscheme delek
-  endtry
-  set background=light
-
 " }}}
 
 " SETTINGS: Navigation {{{
@@ -274,6 +264,9 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   nnoremap N Nzz:call general#HLNext(0.1)<cr>
   nnoremap } }zz
   nnoremap { {zz
+
+  " NOTE: overload :help to open in a floating window
+  command! -complete=help -nargs=? Help call general#FloatingWindowHelp(<q-args>)
 " }}}
 
 " KEYBINDINGS: File manipulation {{{
@@ -347,6 +340,7 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
     " Add html highlighting when editing rails views & handlebar templates
     autocmd BufRead,BufNewFile *.html setlocal filetype=html.javascript
     autocmd BufRead,BufNewFile *.erb setlocal filetype=eruby.html
+    autocmd BufRead,BufNewFile *.arb setlocal filetype=ruby
     autocmd BufRead,BufNewFile *.hbs setlocal filetype=handlebars.html
 
     " Automatically remove trailing whitespaces unless file is blacklisted
@@ -368,21 +362,19 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
     autocmd TermOpen,TermEnter * :call terminal#Init()
     autocmd TermLeave * :call terminal#Cleanup()
 
-    " Clear info thing
-    " autocmd VimEnter * echom ""
+    " Start in terminal
+    " autocmd VimEnter *
+    "       \ if v:vim_did_enter |
+    "       \ exec ':terminal' |
+    "       \ exec ':startinsert' |
+    "       \ endif
+
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk
   augroup ALEXANDER_VIMRC_RELOAD " {{{
     autocmd!
     autocmd BufWritePost init.vim source %
-  augroup END " }}}
-
-  " NOTE: copied from Damian Conway's vimrc
-  " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-  augroup ALEXANDER_COLOR_COLUMN " {{{
-    autocmd!
-    autocmd  BufEnter * :call general#MarkMargin(1)
   augroup END " }}}
 
   " NOTE: open quickfix window after vim grep
