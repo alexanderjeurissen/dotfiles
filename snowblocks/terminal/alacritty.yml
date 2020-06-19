@@ -16,8 +16,8 @@ shell:
  program: /bin/zsh
  args:
    - --login
-   # - -c
-   # - 'tmux attach-session || exec tmux new-session && exit'
+   - -c
+   - 'tmux attach-session || exec tmux new-session && exit'
 
 window:
   # Window dimensions (changes require restart)
@@ -58,7 +58,7 @@ window:
   decorations: full
 
   # When true, alacritty starts maximized.
-  startup_mode: 'Windowed'
+  startup_mode: 'SimpleFullscreen'
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -92,7 +92,7 @@ font:
     style: Bold Italic
 
   # Point size of the font
-  size: 13.0
+  size: 18.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -130,7 +130,8 @@ draw_bold_text_with_bright_colors: false
 colors:
   # Default colors
   primary:
-    background: '#fdf6e3' # base3
+    background: '#002b36' # base3
+    # background: '#fdf6e3' # base3
     foreground: '#657b83' # base00
 
   # Cursor colors
