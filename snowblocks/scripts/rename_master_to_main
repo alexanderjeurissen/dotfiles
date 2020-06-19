@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+
+set -e
+
+function echoStep {
+  export __TOTAL_START="${__TOTAL_START:-$(date +'%s')}"
+  __STEP=$1
+  __STEP_START=$(date +'%s')
+  printf $'\e[37;44m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+function echoDone {
+    __STEP_DONE=$(date +'%s')
+    __STEP_TIME=$(($__STEP_DONE - $__STEP_START))
+    __TOTAL_TIME=$(($__STEP_DONE - $__TOTAL_START))
+    printf $'\e[42m\033[30m'"$__STEP - DONE in ($__STEP_TIME s) of total ($__TOTAL_TIME s)"
+    echo $'\033[0m\n'
+}
+
+function echoWarning {
+  printf $'\e[7;49;31m\033[1m'"$1"
+  echo $'\033[0m'
+}
+
+echoStep "Renaming local master branch -> main"
+git branch -m master main
+
+echoStep "copy origin/master -> origin/main"
+read -s -k '?Press any key to continue.'
+git push origin :master main
+
+echoStep "Delete origin/master"
+echoWarning "NOTE: Please change the default branch before continuing"
+read -s -k '?Press any key to continue .'
+git push origin --delete master
+echoDone
