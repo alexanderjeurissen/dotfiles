@@ -17,7 +17,7 @@ shell:
  args:
    - --login
    - -c
-   - 'tmux attach-session || exec tmux new-session && exit'
+   - 'tmux attach-session || exec tmux new-session'
 
 window:
   # Window dimensions (changes require restart)
@@ -25,16 +25,18 @@ window:
   # Specified in number of columns/lines, not pixels.
   # If both are `0`, this setting is ignored.
   dimensions:
-    columns: 80
-    lines: 24
+    columns: 0
+    lines: 0
+    # columns: 80
+    # lines: 24
 
   # Window padding (changes require restart)
   #
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   # padding:
-  #   x: 2
-  #   y: 2
+    # x: 2
+    # y: 2
 
   # Spread additional padding evenly around the terminal content.
   # dynamic_padding: false
@@ -130,9 +132,16 @@ draw_bold_text_with_bright_colors: false
 colors:
   # Default colors
   primary:
-    background: '#002b36' # base3
+    # NOTE: light background
     # background: '#fdf6e3' # base3
+
+    # NOTE: dark background
+    background: '#002b36' # base3
     foreground: '#657b83' # base00
+
+    # NOTE: PMenu style
+    background: '#073642'
+    foreground: '#93a1a1'
 
   # Cursor colors
   cursor:
