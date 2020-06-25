@@ -11,7 +11,8 @@ let g:fzf_action = {
       \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_default_options = '--inline-info --multi --sort --layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all'
-" let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -'.&lines.'"'
+" let g:fzf_files_options = ' --preview "bat --theme=\"Solarized (light)\" --style=changes --color always {} | head -'.&lines.'"'
+let g:fzf_files_options =''
 " let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
 
 " NOTE: Replace current buffer with search window
@@ -19,20 +20,15 @@ let g:fzf_default_options = '--inline-info --multi --sort --layout=reverse --bin
 " let g:fzf_layout = { 'window': 'tabnew' }
 let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
 
-" NOTE: Open a new tab with search window
-" let g:fzf_layout = { 'window': '-tabnew' }
-
-" NOTE: don't specify any colors, so it falls back on default opts --color bw
-" let g:fzf_colors = {}
-
 " Keybindings & commands {{{
 command! Files call s:fzf_Files()
+command! RG call s:fzf_Grep()
 command! NeighbouringFiles call s:fzf_NeighbouringFiles()
 command! GitFiles call s:fzf_GitFiles()
 command! GitBranchFiles call s:fzf_GitBranchFiles()
 command! Buffers call s:fzf_Buffers()
 
-nnoremap <silent> <leader>fc :<C-u>NeighbouringFiles<CR>
+nnoremap <silent> <leader>fn :<C-u>NeighbouringFiles<CR>
 nnoremap <silent> <leader>pf :<C-u>Files<CR>
 nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
 nnoremap <silent> <leader>gf :<C-u>GitFiles<CR>
@@ -50,6 +46,7 @@ imap <silent> <C-F> <C-O>:call <sid>fzf_insert_file_path()<CR>
 " }}}
 
 " Functions {{{
+" NOTE: inline path completion for import statements
 function! s:fzf_insert_file_path()
   let command = $FZF_DEFAULT_COMMAND
 
@@ -60,12 +57,48 @@ function! s:fzf_insert_file_path()
         \ }))
 endfunction
 
+" NOTE: Fuzzy find files
 function! s:fzf_Files()
   let g:fzf_current_mode = 'FILES'
-  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options.fzf#get_fzf_colors() }))
+  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options. g:fzf_files_options . fzf#get_fzf_colors() }))
+endfunction
+
+" NOTE: Grep using RG
+function! s:fzf_Grep()
+  let g:fzf_current_mode = 'GREP'
+  let command = 'rg --vimgrep -H --no-heading --column --smart-case -P "%s"'
+
+  function! s:rg_to_qf(line)
+    let parts = split(a:line, ':')
+    return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
+          \ 'text': join(parts[3:], ':')}
+  endfunction
+
+  function! s:rg_handler(lines)
+    if len(a:lines) < 2 | return | endif
+
+    let list = map(a:lines[1:], 's:rg_to_qf(v:val)')
+
+    let first = list[0]
+    execute first.lnum
+    execute 'normal!' first.col.'|zz'
+
+    if len(list) > 1
+      call setqflist(list)
+      copen
+      wincmd p
+    endif
+  endfunction
+
+  call fzf#run(fzf#wrap({
+        \ 'source':  printf(command,  escape('^(?=.)', '"\')),
+        \ 'sink*':   function('s:rg_handler'),
+        \ 'options': g:fzf_default_options.fzf#get_fzf_colors().'--delimiter : --nth 4..'
+        \ }))
 endfunction
 
 
+" NOTE: Open buffers
 function! s:fzf_Buffers()
   let g:fzf_current_mode = 'BUFFERS'
   function! s:buflist()
@@ -129,17 +162,17 @@ endfunction
 " NOTE: generate color settings string based on colorscheme, to be put in .zprofile
 function! fzf#get_fzf_colors()
   let rules =
-  \ { 'fg':      [['WildMenu',       'bg#']],
-    \ 'bg':      [['WildMenu',       'fg#']],
-    \ 'hl':      [['Comment',      'fg#']],
+  \ { 'fg':      [['NormalFloat',       'fg#']],
+    \ 'bg':      [['NormalFloat',       'bg#']],
+    \ 'hl':      [['MatchParen',      'fg#']],
     \ 'fg+':     [['MatchParen', 'fg#'], ['Normal', 'fg#']],
-    \ 'bg+':     [['MatchParen', 'bg#']],
-    \ 'hl+':     [['Statement',    'fg#']],
-    \ 'info':    [['PreProc',      'fg#']],
-    \ 'prompt':  [['Conditional',  'fg#']],
-    \ 'pointer': [['Exception',    'fg#']],
-    \ 'marker':  [['Keyword',      'fg#']],
-    \ 'spinner': [['Label',        'fg#']],
+    \ 'bg+':     [['PMenuSBar', 'bg#']],
+    \ 'hl+':     [['MatchParen',    'fg#']],
+    \ 'info':    [['MatchParen',      'fg#']],
+    \ 'prompt':  [['MatchParen',  'fg#']],
+    \ 'pointer': [['MatchParen',    'fg#']],
+    \ 'marker':  [['MatchParen',      'fg#']],
+    \ 'spinner': [['MatchParen',        'fg#']],
     \ 'header':  [['Comment',      'fg#']] }
   let cols = []
   for [name, pairs] in items(rules)
@@ -152,6 +185,6 @@ function! fzf#get_fzf_colors()
     endfor
   endfor
   " echom ' --color='.join(cols, ',')
-  return ' --color='.join(cols, ',')
+  return ' --color='.join(cols, ',').' '
 endfunction
 " }}}

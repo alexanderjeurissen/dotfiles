@@ -22,7 +22,4 @@ nmap <buffer> H <C-T>
 " Maximize help buffer to a separate tab
 " execute "normal \<C-W>T"
 " setlocal hidden
-" call general#FloatingWindow(bufnr('%'))
 " set hidden
-" NOTE: change highlighting of help to distinguish it from regular buffers
-" setlocal winhl=Normal:HelpNormal
