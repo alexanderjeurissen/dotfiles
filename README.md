@@ -1,6 +1,6 @@
 [<img src="https://raw.githubusercontent.com/alexanderjeurissen/lumiere.vim/master/assets/lumiere_logo.png" width=250 />](https://github.com/alexanderjeurissen/lumiere.vim)
 [<img src="https://raw.githubusercontent.com/alexanderjeurissen/sombre.tmux/master/assets/sombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/sombre.tmux)
-[<img src="https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/master/assets/ombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/ombre.zsh)
+[<img src="https://raw.githubusercontent.com/alexanderjeurissen/ombre.zsh/main/assets/ombre_logo.png" width=250 />](https://github.com/alexanderjeurissen/ombre.zsh)
 
 ## Disclaimer
 
