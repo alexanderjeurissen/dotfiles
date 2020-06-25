@@ -302,7 +302,7 @@ fi
 # --hidden: Search hidden files and folders
 # --follow: Follow symlinks
   # export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  export FZF_DEFAULT_COMMAND='rg --files --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+  export FZF_DEFAULT_COMMAND='rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -50,6 +50,10 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog" # TODO: evaluate env var
   export PATH=$PATH:$MAVENPATH/bin
 # }}}
 
+# Scarf settings {{{
+  export PATH=$PATH:$HOME/.scarf/bin
+# }}}
+
 # FZF settings {{{
  # export FZF_DEFAULT_OPTS='--color bw'
   # --color fg:240,bg:230,hl:33,fg+:241,bg+:221,hl+:33
