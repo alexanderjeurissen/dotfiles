@@ -1,17 +1,24 @@
 # javascript
 node_modules
+jspm_packages/
 bower_components
 coverage
 dist
+.grunt
 .tmp
-npm-debug.log
 app/bower_components
 .tern-project
-.yarn-cache
+.lock-wscript
+build/Release
+.yarn-integrity
+
+# Compressed files
+*.tgz
+*.zip
+*.tar.gz
 
 # ruby
 *.ruby-version
-.sass-cache
 .bundle
 
 #temp json output of yaml translations
@@ -45,14 +52,40 @@ logfile.log
 # Gitlab cli config
 ~/.config/gitlab-cli/default.js
 
-# CACHE directories
+# cache directories
 Caches
 .CACHES
 .cache
+.yarn-cache
+.sass-cache
+.npm
+.eslintcache
 
-# MISC
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# misc
 .byebug_history
 public_
+public
 bin/pretty
 
+# dotenv environment variable files
+.env*
+
+# fzf / RG
+.git
+
+# H1 specific
 Procfile.local
+
