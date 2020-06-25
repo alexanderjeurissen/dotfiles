@@ -265,8 +265,11 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   nnoremap } }zz
   nnoremap { {zz
 
-  " NOTE: overload :help to open in a floating window
+  " NOTE: overload :help and :h to open in a floating window
   command! -complete=help -nargs=? Help call general#FloatingWindowHelp(<q-args>)
+  cnoremap help Help
+  cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'Help' : 'h'
+  " cnoremap h Help
 " }}}
 
 " KEYBINDINGS: File manipulation {{{

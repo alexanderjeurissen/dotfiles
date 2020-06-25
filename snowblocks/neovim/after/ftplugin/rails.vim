@@ -2,6 +2,8 @@
 nnoremap <leader>rC :.Runner<CR>
 nnoremap <leader>rA :Runner<CR>
 
+call general#MarkMargin(1, 80)
+
 lua << EOF
 require'nvim_lsp'.solargraph.setup({
   cmd = { "solargraph", "stdio" },

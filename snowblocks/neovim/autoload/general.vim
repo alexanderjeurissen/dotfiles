@@ -77,7 +77,7 @@ endfunction
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
 function! general#MarkMargin(on, ...)
-  let s:text_length=get(a:, 1, 100)
+  let s:text_length=get(a:, 1, 80)
 
   if exists('b:MarkMargin')
       try
@@ -87,7 +87,7 @@ function! general#MarkMargin(on, ...)
       unlet b:MarkMargin
   endif
   if a:on
-      let b:MarkMargin = matchadd('ColorColumn', '\%>100v\s*\S', s:text_length)
+      let b:MarkMargin = matchadd('ColorColumn', '\%>80v\s*\S', s:text_length)
   endif
 endfunction
 
