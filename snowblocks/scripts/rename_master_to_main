@@ -48,72 +48,60 @@ echo ""
 echo ""
 
 echoStep "RENAME local master -> main"
+  master_branch=$(git branch -l master)
+  if [[ -z "${master_branch// }" ]]; then 
+   echo "- master branch present ? [NO]"
+   # echoWarning "Master branch not present in this repository, exiting.. "
+   # exit 1
+  else 
+   echo "- master branch present ? [YES]"
+  fi
 
-master_branch=$(git branch -l master)
-if [[ -z "${master_branch// }" ]]; then 
- echo "- master branch present ? [NO]"
- echoWarning "Master branch not present in this repository, exiting.. "
- exit 1
-else 
- echo "- master branch present ? [YES]"
-fi
-
-main_branch=$(git branch -l main)
-if [[ -z "${main_branch// }" ]]; then 
- echo "- main branch present ? [NO]"
- git branch -m master main
-else 
- echo "- main branch present ? [YES]"
-fi
+  main_branch=$(git branch -l main)
+  if [[ -z "${main_branch// }" ]]; then 
+   echo "- main branch present ? [NO]"
+   git branch -m master main
+  else 
+   echo "- main branch present ? [YES]"
+  fi
 echoDone
 
-echo ""
-read -s -k '?Press any key to continue.'
-echo ""
 echo ""
 
 echoStep "COPY remote:master -> remote:main"
-remote_master_branch=$(git ls-remote --heads git@github.com:$1.git master)
-if [[ -z "${remote_master_branch// }" ]]; then
-  echo "- remote master branch present ? [NO]"
   git push origin main -u
-else
-  echo "- remote master branch present ? [YES]"
-  git push origin :master main
-fi
 echoDone
 
 echo ""
-read -s -k '?Press any key to continue.'
-echo ""
-echo ""
 
-echoStep "[STEP 3] CHANGE default branch -> main"
- main_default_branch=$(hub api repos/$1 | jq '.default_branch == "main"')
- 
- if [[ "$main_default_branch" == "true" ]]; then
-   echo "3.1 current default_branch = main? [YES]"
- else
-   echo "3.1 default_branch is set to main? [NO]"
+echoStep "CHANGE default branch -> main"
+  main_default_branch=$(hub api repos/$1 | jq '.default_branch == "main"')
+
+  if [[ "$main_default_branch" == "true" ]]; then
+   echo "- current default_branch = main? [YES]"
+  else
+   echo "- default_branch is set to main? [NO]"
 
    hub api repos/$1 -X PATCH -F default_branch=main &> /dev/null
    new_default_branch=$(hub api repos/$1 | jq '.default_branch == "main"')
    if [[ "$new_default_branch" == "true" ]]; then
-     echo "3.2 default_branch changed to main? [YES]"
+     echo "- default_branch changed to main? [YES]"
    else
-     echo "3.2 default_branch changed to main? [NO]"
+     echo "- default_branch changed to main? [NO]"
      echoWarning "Something went wrong changing the default branch, please complete this step manually"
      read -s -k '?Press any key to continue .'
    fi
- fi
+  fi
+echoDone
 
-echoStep "[STEP 3] DELETE remote master"
+echo ""
 
-remote_master_branch=$(git ls-remote --heads git@github.com:$1.git master)
-if [[ -z "${remote_master_branch// }" ]]; then
-  echo "- remote master branch present ? [NO]"
-else
-  echo "- remote master branch present ? [YES]"
-  git push origin --delete master
-fi
+echoStep "DELETE remote master"
+  remote_master_branch=$(git ls-remote --heads git@github.com:$1.git master)
+  if [[ -z "${remote_master_branch// }" ]]; then
+    echo "- remote master branch present ? [NO]"
+  else
+    echo "- remote master branch present ? [YES]"
+    git push origin --delete master
+  fi
 echoDone
