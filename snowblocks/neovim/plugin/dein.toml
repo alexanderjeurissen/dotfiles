@@ -155,16 +155,18 @@ repo = 'Shougo/dein.vim'
   repo = 'tpope/vim-scriptease'
   # NOTE: A Vim plugin for making Vim plugins.
 
-  # [[plugins]]
-  # repo = 'neovim/nvim-lsp'
-  # NOTE: Common configurations for Neovim Language Servers NOTE: commented out for now till this feature matures in Nvim core
+  [[plugins]]
+  repo = 'neoclide/coc.nvim'
+  rev = 'release'
+  merged = 0
+  # NOTE: Common configurations for Neovim Language Servers
 
   [[plugins]]
   repo = 'haorenW1025/completion-nvim'
   # NOTE: LSP autocomplete
 
-  [[plugins]]
-  repo = 'dense-analysis/ale'
+  # [[plugins]]
+  # repo = 'dense-analysis/ale'
   # NOTE: linting and autofix
 
   [[plugins]]

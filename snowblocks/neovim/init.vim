@@ -54,7 +54,6 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   autocmd VimEnter * call dein#call_hook('post_source')
 " }}}
 
-
 " SETTINGS: statusline {{{
   set laststatus=2
   set guioptions-=e
@@ -108,7 +107,6 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
   " Use <space> as leader
   let mapleader="\<Space>"
   let g:mapleader="\<Space>"
-
   " Fix annoying typo's of WQ, QA and Q, and report
   cnoreabbrev qw wq
   cnoreabbrev Wq wq
@@ -362,8 +360,8 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
 
-    autocmd TermOpen,TermEnter * :call terminal#Init()
-    autocmd TermLeave * :call terminal#Cleanup()
+    " autocmd TermOpen,TermEnter * :call terminal#Init()
+    " autocmd TermLeave * :call terminal#Cleanup()
 
     " Start in terminal
     " autocmd VimEnter *

@@ -1,10 +1,25 @@
 {
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
-  "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact", "ruby"],
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "javascriptreact",
+    "ruby",
+    "rails"
+  ],
   "eslint.autoFixOnSave": true,
-  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
-
+  "eslint.filetypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact"
+  ],
+  "npm.binPath": "/Users/alexanderjeurissen/.yarn/bin/yarn",
+  "solargraph.autoformat": true,
+  "solargraph.diagnostics": true,
   "solargraph.formatting": true,
   "solargraph.completion": true,
   "solargraph.definitions": true,
@@ -12,9 +27,6 @@
   "solargraph.hover": true,
   "solargraph.references": true,
   "codeLens.enable": true,
-  "solargraph.useBundler": true,
-
-  "svg.prettySvg": true,
 
   "diagnostic.errorSign": "•",
   "diagnostic.warningSign": "•",

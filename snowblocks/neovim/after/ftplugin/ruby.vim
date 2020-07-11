@@ -20,5 +20,3 @@ call general#MarkMargin(1, 80)
 " tpope/vim-rails
 nnoremap <leader>rC :.Runner<CR>
 nnoremap <leader>rA :Runner<CR>
-
-let b:ale_fixers = {'ruby': ['rubocop']}
