@@ -174,7 +174,6 @@ fi
 
   # if the init script doesn't exist
   if ! zgen saved; then
-    zgen load "denysdovhan/spaceship-prompt" spaceship # use:spaceship.zsh, from:github, as:theme
     # zgen load "alexanderjeurissen/ombre.zsh" prompt_ombre_setup
     zgen load "zsh-users/zsh-syntax-highlighting"
     zgen load "zsh-users/zsh-completions"
@@ -187,8 +186,8 @@ fi
 
 # aliasses {{{
   alias textedit="/Applications/TextEdit.app/Contents/MacOS/TextEdit"
-  alias l="LC_COLLATE=C \gls -lAh --color=auto --time-style="+%Y-%m-%d +%H:%M:%S" --group-directories-first"
-  alias ls="\gls --color=auto --group-directories-first"
+  alias l="exa -lah --time-style='long-iso' --group-directories-first"
+  alias ls="exa --group-directories-first"
   alias rls="cd && cd - && ls -G"
   alias upd="git pull origin develop:develop --rebase --ff-only"
   alias upm="git pull origin master:master --rebase --ff-only"
@@ -308,44 +307,6 @@ fi
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 
-# Prompt {{{
-  export SPACESHIP_PROMPT_ADD_NEWLINE=true
-
-  export SPACESHIP_DIR_PREFIX=''
-  export SPACESHIP_DIR_COLOR='default'
-
-  export SPACESHIP_HOST_PREFIX='@'
-  export SPACESHIP_HOST_COLOR='default'
-  export SPACESHIP_HOST_COLOR_SSH='red'
-
-  export SPACESHIP_CHAR_SYMBOL='➜  '
-  export SPACESHIP_CHAR_COLOR_SUCCESS='default'
-
-  export SPACESHIP_NODE_SHOW=false
-  export SPACESHIP_RUBY_SHOW=false
-
-  export SPACESHIP_VI_MODE_SHOW=false
-
-  export SPACESHIP_GIT_BRANCH_COLOR='cyan'
-
-  export SPACESHIP_GIT_STATUS_COLOR='yellow'
-  export SPACESHIP_GIT_STATUS_PREFIX=''
-  export SPACESHIP_GIT_STATUS_SUFFIX=''
-
-  export SPACESHIP_GIT_STATUS_UNMERGED='  '
-  export SPACESHIP_GIT_STATUS_DIVERGED='  '
-  export SPACESHIP_GIT_STATUS_AHEAD='  '
-  export SPACESHIP_GIT_STATUS_BEHIND='  '
-
-  export SPACESHIP_GIT_STATUS_STASHED='  '
-
-  export SPACESHIP_GIT_STATUS_UNTRACKED=' ? '
-  export SPACESHIP_GIT_STATUS_ADDED=' 樂 '
-  export SPACESHIP_GIT_STATUS_MODIFIED='  '
-  export SPACESHIP_GIT_STATUS_RENAMED=' » '
-  export SPACESHIP_GIT_STATUS_DELETED=' ✘ '
-# }}}
-
 # Then, source plugins and add commands to $PATH
 # Only source zplugins when a new terminal is opened not when source ~/.zshrc
 # This is due to conflict between some plugins that causes a crash
@@ -406,15 +367,4 @@ fi
 # NOTE: Helps with profiling zsh startup time
 # zprof
 
-### Added by Zinit's installer
-# if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-#     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
-#     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-#     command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
-#         print -P "%F{160}▓▒░ The clone has failed.%f"
-# fi
-# source "$HOME/.zinit/bin/zinit.zsh"
-# autoload -Uz _zinit
-# (( ${+_comps} )) && _comps[zinit]=_zinit
-### End of Zinit installer's chunk
+eval "$(starship init zsh)"
