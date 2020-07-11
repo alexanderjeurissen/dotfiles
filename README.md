@@ -18,5 +18,5 @@ In summary my work environment consists of:
 
 ## Screenshots
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/assets/screenshots/solar8_light.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/assets/screenshots/solar8_dark.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/_assets/screenshots/solar8_light.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/_assets/screenshots/solar8_dark.png)
