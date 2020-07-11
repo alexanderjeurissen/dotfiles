@@ -60,7 +60,8 @@ window:
   decorations: full
 
   # When true, alacritty starts maximized.
-  startup_mode: 'SimpleFullscreen'
+  # startup_mode: 'SimpleFullscreen'
+  startup_mode: 'Maximized'
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -136,8 +137,8 @@ colors:
     # background: '#fdf6e3' # base3
 
     # NOTE: dark background
-    background: '#002b36' # base3
-    foreground: '#657b83' # base00
+    # background: '#002b36' # base3
+    # foreground: '#657b83' # base00
 
     # NOTE: PMenu style
     background: '#073642'
@@ -145,8 +146,12 @@ colors:
 
   # Cursor colors
   cursor:
-    text:   '#fdf6e3' # base3
-    cursor: '#657b83' # base00
+    # text:   '#fdf6e3' # base3
+    # cursor: '#657b83' # base00
+    text:   # inverse
+    cursor: # inverse
+    # text:   CellForeground # base3
+    # cursor: CellBackground # base00
 
   # Normal colors
   normal:
