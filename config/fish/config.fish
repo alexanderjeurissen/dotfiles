@@ -1,5 +1,7 @@
 starship init fish | source
 
+bind -M insert \cE forward-char
+
 set -Ux ENABLE_SPRING 0
 set -g DEFAULT_USER $USER
 
