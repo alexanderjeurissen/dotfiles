@@ -1,0 +1,120 @@
+add_newline = true
+
+[character]
+symbol = "➜"
+
+[aws]
+disabled = true
+
+[conda]
+disabled = true
+
+[crystal]
+disabled = true
+
+[directory]
+prefix=""
+style="bold blue"
+
+[dotnet]
+disabled = true
+
+[elixir]
+disabled = true
+
+[elm]
+disabled = true
+
+[erlang]
+disabled = true
+
+[git_branch]
+symbol=''
+style="bold yellow"
+
+[git_commit]
+disabled = true
+
+[git_state]
+disabled = true
+
+[git_status]
+prefix = ""
+suffix = ""
+style="yellow"
+
+ahead = " "
+behind = " "
+diverged = " "
+untracked = "? "
+stashed = " "
+modified = " "
+staged = "樂"
+renamed = "» "
+deleted = "✘ "
+conflicted = " "
+
+# staged.value = "++"
+# staged.style = "green"
+# staged_count.enabled = true
+# staged_count.style = "green"
+
+[golang]
+disabled = true
+
+[hostname]
+ssh_only = true
+prefix = "@"
+style = "bold red"
+
+[java]
+disabled = true
+
+[julia]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[memory_usage]
+disabled = false
+threshold = 100
+
+[hg_branch]
+disabled = true
+
+[nim]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[ocaml]
+disabled = true
+
+[php]
+disabled = true
+
+[python]
+disabled = true
+
+[ruby]
+disabled = true
+
+[rust]
+disabled = true
+
+[singularity]
+disabled = true
+
+[terraform]
+disabled = true
+
+[zig]
+disabled = true
+
+[purescript]
+disabled = true
