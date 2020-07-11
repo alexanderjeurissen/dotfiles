@@ -1,10 +1,125 @@
+# javascript
+node_modules
+jspm_packages/
+bower_components
+coverage
+# dist
+.grunt
+.tmp
+app/bower_components
+.tern-project
+.lock-wscript
+build/Release
+.yarn-integrity
+
+# Compressed files
+*.tgz
+*.zip
+*.tar.gz
+
+# ruby
+*.ruby-version
+.bundle
+
+#temp json output of yaml translations
+app/languages/*.json
+
+# Webstorm files
+.idea/*
+
+# vim swap files
+*.swp
+*.swo
+swoopBuf
+.tern-port
+
+# apple temp files and code unrelated directories
 .DS_Store
-elpa
-snowblocks/neovim/sessions/
-snowblocks/neovim/UndoHistory/
-snowblocks/neovim/.netrwhist
-snowblocks/neovim/plugged/
-snowblocks/neovim/spell/
+/Library
+~/Library
+
+# vim sessions and log files
+*.session
+logfile.log
+
+# Intheam config files
+*.pem
+.intheam/*
+
+# Visual studio code
+.vscode/*
+
+# Gitlab cli config
+~/.config/gitlab-cli/default.js
+
+# cache directories
+Caches
+.CACHES
+.cache
+.yarn-cache
+.sass-cache
+.npm
+.eslintcache
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# misc
+.byebug_history
+public_
+public
+bin/pretty
+
+# dotenv environment variable files
+.env*
+
+# fzf / RG
+.git
+
+# H1 specific
+Procfile.local
+
+# RCM specific
 __pycache__/
 *.orig
 *~
+config/neovim/sessions/
+config/neovim/UndoHistory/
+config/neovim/undo/
+config/neovim/.netrwhist
+config/neovim/plugged/
+config/neovim/spell/
+config/neovim/dein/
+
+config/karabiner/assets
+config/karabiner/automatic_backups/
+
+config/yarn
+
+config/coc/history.json
+config/coc/lists
+config/coc/memos.json
+config/coc/mru
+
+config/configstore/
+
+config/fish/completions
+config/fish/functions
+config/fish/conf.d
+config/fisher/
+
+config/gatsby/
+
+config/ranger/plugins/
+config/wireshark
+config/hub
