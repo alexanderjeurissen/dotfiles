@@ -13,10 +13,7 @@ In summary my work environment consists of:
 |---------|------|
 | editor | Neovim |
 | terminal multiplexer | Tmux |
-| shell | Zsh |
+| shell | Fish |
 | terminal application | Alacritty |
 
-## Screenshots
-
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/_assets/screenshots/solar8_light.png)
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/_assets/screenshots/solar8_dark.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/_assets/screenshots/solarized8_fish.png)
