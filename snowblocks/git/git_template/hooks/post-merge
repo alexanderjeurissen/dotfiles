@@ -5,5 +5,4 @@
 
 .git/hooks/ctags >/dev/null 2>&1 &
 
-# NOTE: Cache current phabricator sprint 
-.git/hooks/cache_current_sprint_milestone >/dev/null 2>&1 &
+bundle check || bundle install
