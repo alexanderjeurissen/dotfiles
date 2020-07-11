@@ -1,0 +1,13 @@
+{
+  "ecmaVersion": 6,
+  "libs": [
+    "browser",
+    "ecmascript",
+    "react"
+  ],
+ "plugins": {
+    "node": {},
+    "complete_strings": {},
+    "es_modules": {}
+ }
+}
