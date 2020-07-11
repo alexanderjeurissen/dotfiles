@@ -13,10 +13,10 @@ env:
   TERM: xterm-256color-italic
 
 shell:
- program: /bin/zsh
+ program: /usr/local/bin/fish
  args:
    - --login
-   - -c
+   - -C
    - 'tmux attach-session || exec tmux new-session'
 
 window:

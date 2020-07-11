@@ -1,0 +1,43 @@
+# This file contains fish universal variable definitions.
+# VERSION: 3.0
+SETUVAR --export CPPFLAGS:\x2dI/usr/local/opt/openssl\x401\x2e1/include
+SETUVAR --export ENABLE_SPRING:0
+SETUVAR --export FZF_CTRL_T_COMMAND:rg\x20\x2d\x2dfiles\x20\x2d\x2dignore\x20\x2d\x2dsmart\x2dcase\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dno\x2dmessages\x20\x2d\x2dignore\x2dfile\x20\x7e/\x2egitignore
+SETUVAR --export FZF_DEFAULT_COMMAND:rg\x20\x2d\x2dfiles\x20\x2d\x2dignore\x20\x2d\x2dsmart\x2dcase\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dno\x2dmessages\x20\x2d\x2dignore\x2dfile\x20\x7e/\x2egitignore
+SETUVAR --export FZF_DEFAULT_OPTS:\x2d\x2dcolor\x3dbg\x2b\x3a\x23073642\x2cbg\x3a\x23eee8d5\x2cspinner\x3a\x23859900\x2chl\x3a\x23586e75\x2cfg\x3a\x23073642\x2cpointer\x3a\x23859900\x2cinfo\x3a\x23cb4b16\x2cfg\x2b\x3a\x23fdf6e3\x2cmarker\x3a\x23859900\x2cheader\x3a\x23586e75\x2cprompt\x3a\x23859900\x2chl\x2b\x3a\x23859900
+SETUVAR --export JAVA_HOME:/Library/Java/JavaVirtualMachines/jdk1\x2e8\x2e0_231\x2ejdk/Contents/Home
+SETUVAR --export LDFLAGS:\x2dL/usr/local/opt/openssl\x401\x2e1/lib
+SETUVAR --export --path MAVENPATH:/Users/alexanderjeurissen/\x2emaven
+SETUVAR --export PROCFILE_NAME:Procfile\x2elocal
+SETUVAR --export SKIP_WAIT:1
+SETUVAR __fish_initialized:3100
+SETUVAR fish_color_autosuggestion:586e75
+SETUVAR fish_color_cancel:\x2dr
+SETUVAR fish_color_command:93a1a1
+SETUVAR fish_color_comment:586e75
+SETUVAR fish_color_cwd:green
+SETUVAR fish_color_cwd_root:red
+SETUVAR fish_color_end:268bd2
+SETUVAR fish_color_error:dc322f
+SETUVAR fish_color_escape:00a6b2
+SETUVAR fish_color_history_current:\x2d\x2dbold
+SETUVAR fish_color_host:normal
+SETUVAR fish_color_host_remote:yellow
+SETUVAR fish_color_match:\x2d\x2dbackground\x3dbrblue
+SETUVAR fish_color_normal:normal
+SETUVAR fish_color_operator:00a6b2
+SETUVAR fish_color_param:839496
+SETUVAR fish_color_quote:657b83
+SETUVAR fish_color_redirection:6c71c4
+SETUVAR fish_color_search_match:bryellow\x1e\x2d\x2dbackground\x3dblack
+SETUVAR fish_color_selection:white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
+SETUVAR fish_color_status:red
+SETUVAR fish_color_user:brgreen
+SETUVAR fish_color_valid_path:\x2d\x2dunderline
+SETUVAR fish_greeting:Welcome\x20to\x20fish\x2c\x20the\x20friendly\x20interactive\x20shell\x0aType\x20\x60help\x60\x20for\x20instructions\x20on\x20how\x20to\x20use\x20fish
+SETUVAR fish_key_bindings:fish_vi_key_bindings
+SETUVAR fish_pager_color_completion:B3A06D
+SETUVAR fish_pager_color_description:B3A06D
+SETUVAR fish_pager_color_prefix:cyan\x1e\x2d\x2dunderline
+SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
+SETUVAR fish_user_paths:/Users/alexanderjeurissen/\x2econfig/nvim/dein/repos/github\x2ecom/junegunn/fzf/bin

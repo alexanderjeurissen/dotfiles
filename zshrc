@@ -206,8 +206,6 @@ fi
   alias structuresql="g difftool develop -- db/structure.sql && g diff develop -- db/structure.sql"
   alias verify_approvals="approvals verify -d nvim -d  -a"
   # FIXME: https://github.com/alexanderjeurissen/dotfiles/issues/14 {{{
-  alias fixlint="git add -A && git commit -m 'Addressed lint warnings.'"
-  alias fixspecs="git add -A && git commit -m 'fixed failing specs.'"
   alias changed_files="git diff develop --name-only"
   # }}}
   alias eslintspecific="yarn run eslint:specific -- --fix"
