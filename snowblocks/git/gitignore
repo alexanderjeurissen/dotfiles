@@ -3,7 +3,7 @@ node_modules
 jspm_packages/
 bower_components
 coverage
-dist
+# dist
 .grunt
 .tmp
 app/bower_components
