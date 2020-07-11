@@ -284,7 +284,7 @@ fi
   # Aliases for directories {{{
     alias h1="cd ~/Development/hackerone/"
     alias payments="cd ~/Development/hackerone-payments/"
-    alias dotfiles="cd ~/Development/dotfiles/"
+    alias dotfiles="cd ~/.dotfiles/"
     alias gpodder="cd ~/Library/Application Support/gPodder"
   # }}}
 
