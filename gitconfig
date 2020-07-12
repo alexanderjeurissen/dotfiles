@@ -6,25 +6,8 @@
 [color]
   ui = auto
 [alias]
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative
-  lgo = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --date=relative
-  who = blame
-  sup = "submodule update --remote --merge"
-
-  ; diff aliases
-  diffFiles = diff --name-only
-
-  ; push/commit aliases
-  aa = add -A
-  unadd = reset HEAD
-
-  ; stash aliases
-  stash = stash -u
-
   ;files changed between two commits
   changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
-	up = pull --rebase --autostash
-  upb = "!git fetch -pP  && git merge develop origin/develog kkjp"
   ctags = !.git/hooks/ctags
 
 [diff]

@@ -59,5 +59,3 @@ set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # makes sure global bin is respected when doing yarn global add
 # https://github.com/yarnpkg/yarn/issues/1027
 set PATH $PATH (yarn global bin)
-
-source ~/.gitaliases
