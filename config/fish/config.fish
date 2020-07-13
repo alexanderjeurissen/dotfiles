@@ -1,16 +1,24 @@
+# NOTE: init starship prompt
 starship init fish | source
 
+# NOTE: init zoxide (improved cd)
+zoxide init fish | source
+
+# NOTE: allow expanding commands using C-e
 bind -M insert \cE forward-char
 
-set -Ux ENABLE_SPRING 0
-set -g DEFAULT_USER $USER
+# NOTE: disables "Welcome to Fish" greeting
+set fish_greeting
 
-set -Ux LDFLAGS "-L/usr/local/opt/openssl@1.1/lib"
-set -Ux CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
+set -gx ENABLE_SPRING 0
+set -gx DEFAULT_USER $USER
+
+set -gx LDFLAGS "-L/usr/local/opt/openssl@1.1/lib"
+set -gx CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
 
 # NOTE: H1 related env variables {{{
-  set -Ux SKIP_WAIT 1
-  set -Ux PROCFILE_NAME 'Procfile.local'
+  set -gx SKIP_WAIT 1
+  set -gx PROCFILE_NAME 'Procfile.local'
 # }}}
 
 set PATH "/usr/local/bin" $PATH
@@ -35,15 +43,16 @@ end
 set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # Java settings {{{
-  set -Ux JAVA_HOME (/usr/libexec/java_home)
-  set -Ux MAVENPATH $HOME/.maven
+  set -gx JAVA_HOME (/usr/libexec/java_home)
+  set -gx MAVENPATH $HOME/.maven
   set PATH $PATH "$MAVENPATH/bin"
 # }}}
 
 # FZF settings {{{
- set -Ux FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
- set -Ux FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
- set -Ux FZF_CTRL_T_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+ set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
+ set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
+ set -gx FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+ set -gx FZF_CTRL_T_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
 # }}}
 
 # The following two are required to make yarn install binaries and
@@ -59,3 +68,5 @@ set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # makes sure global bin is respected when doing yarn global add
 # https://github.com/yarnpkg/yarn/issues/1027
 set PATH $PATH (yarn global bin)
+
+source ~/.gitaliases
