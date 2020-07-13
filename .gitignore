@@ -101,11 +101,6 @@ config/neovim/plugged/
 config/neovim/spell/
 config/neovim/dein/
 
-config/karabiner/assets
-config/karabiner/automatic_backups/
-
-config/yarn
-
 config/coc/history.json
 config/coc/lists
 config/coc/memos.json
@@ -114,12 +109,7 @@ config/coc/mru
 config/configstore/
 
 config/fish/completions
-config/fish/functions
 config/fish/conf.d
 config/fisher/
 
-config/gatsby/
-
 config/ranger/plugins/
-config/wireshark
-config/hub
