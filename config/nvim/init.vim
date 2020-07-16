@@ -1,6 +1,10 @@
 scriptencoding utf-8
   let g:python_host_prog="python3"
 
+  if &shell =~# 'fish$'
+    set shell=sh
+  endif
+
 " SETTINGS: Dein.vim {{{
   "Note: install dein if not present
   let g:dein_path='$HOME/.config/nvim/dein'

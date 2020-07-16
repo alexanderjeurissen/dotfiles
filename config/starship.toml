@@ -2,6 +2,7 @@ add_newline = true
 
 [character]
 symbol = "➜"
+# disabled = true
 
 [aws]
 disabled = true
@@ -13,7 +14,6 @@ disabled = true
 disabled = true
 
 [directory]
-prefix=""
 style="bold blue"
 
 [dotnet]
