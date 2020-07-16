@@ -39,6 +39,7 @@
   editor = nvim
   ; editor = nvr -cc tabnew --remote-wait-silent
   pager = diff-so-fancy | less --tabs=1,5 -R
+	attributesfile = ~/.gitattributes
 [push]
   default = current
 [git-up "rebase"]
@@ -56,3 +57,6 @@
 	required = true
 [pull]
 	rebase = false
+[merge "merge-structure-sql"]
+	name = Rails structure.sql merge driver
+	driver = git-merge-structure-sql %A %O %B
