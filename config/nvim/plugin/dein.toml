@@ -138,9 +138,9 @@ repo = 'Shougo/dein.vim'
   repo = 'tpope/vim-dispatch'
   # NOTE: run tasks in a tmux split to not block vim
 
-  [[plugins]]
-  repo = 'radenling/vim-dispatch-neovim'
-  depends = 'vim-dispatch'
+  # [[plugins]]
+  # repo = 'radenling/vim-dispatch-neovim'
+  # depends = 'vim-dispatch'
   # NOTE: run tasks in a tmux split to not block vim
 
   [[plugins]]
