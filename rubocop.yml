@@ -1,11 +1,3 @@
----
-AllCops:
-  TargetRubyVersion: 2.3
-  Exclude:
-    - 'db/**/*'
-    - 'tmp/**/*'
-    - 'config/**/*'
-
 Bundler/OrderedGems:
   Enabled: true
 
@@ -31,19 +23,16 @@ Metrics/PerceivedComplexity:
   Enabled: false
 
 # We want our code to document itself
-Documentation:
+Style/Documentation:
   Enabled: false
 
 # Since v2.0, UTF-8 is the default encoding
 # http://www.ruby-doc.org/core-2.1.3/Encoding.html#class-Encoding-label-Script+encoding
-Encoding:
+Style/Encoding:
   Enabled: false
 
-EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
-
-LineLength:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_fail
@@ -54,61 +43,52 @@ Style/Alias:
 Style/SymbolArray:
   Enabled: false
 
-Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: comma
-
-Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: comma
-
-Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: comma
-
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: comma
-
-TrailingWhitespace:
+Layout/TrailingWhitespace:
   Enabled: false
 
-WordArray:
+Style/WordArray:
   Enabled: false
 
 # This isn't always better
 # http://blog.rubybestpractices.com/posts/gregory/041-issue-10.5-uses-for-modules.html
-ModuleFunction:
+Style/ModuleFunction:
   Enabled: false
 
-UnlessElse:
+Style/UnlessElse:
   Enabled: true
 
 # Alignment configuration.
-AlignParameters:
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
-IndentArray:
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-IndentHash:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-AlignHash:
+Layout/HashAlignment:
   Enabled: false
 
-MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
-SingleLineBlockParams:
+Style/SingleLineBlockParams:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
-Performance/TimesMap:
+Metrics/ParameterLists:
   Enabled: false
 
-AmbiguousBlockAssociation:
+Lint/AmbiguousBlockAssociation:
   Enabled: false
 
 RSpec/DescribeClass:
@@ -125,3 +105,9 @@ RSpec/MultipleExpectations:
 
 RSpec/NestedGroups:
   Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/Focus:
+  Enabled: true
