@@ -19,6 +19,7 @@ set -gx CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
 # NOTE: H1 related env variables {{{
   set -gx SKIP_WAIT 1
   set -gx PROCFILE_NAME 'Procfile.local'
+  set -gx LINT_STAGED 1
 # }}}
 
 set PATH "/usr/local/bin" $PATH
