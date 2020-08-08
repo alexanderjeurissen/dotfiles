@@ -8,7 +8,8 @@
     "json",
     "javascriptreact",
     "ruby",
-    "rails"
+    "rails",
+    "rust"
   ],
   "eslint.autoFixOnSave": true,
   "eslint.filetypes": [

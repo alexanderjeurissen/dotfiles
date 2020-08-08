@@ -1,8 +1,9 @@
 scriptencoding utf-8
   let g:python_host_prog="python3"
+  let test#strategy='dispatch'
 
   if &shell =~# 'fish$'
-    set shell=sh
+    set shell=/bin/sh
   endif
 
 " SETTINGS: Dein.vim {{{
@@ -25,7 +26,7 @@ scriptencoding utf-8
 
 
 let s:plugin_path='$HOME/.config/nvim/dein'
-let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
+let s:dein_toml='$HOME/.config/nvim/plugins.toml'
 
   if dein#load_state(expand(s:plugin_path))
    " tell dein where the plugins live
@@ -342,11 +343,12 @@ let s:dein_toml='$HOME/.config/nvim/plugin/dein.toml'
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile Appraisals setlocal filetype=ruby
 
-    " Add html highlighting when editing rails views & handlebar templates
+    " Add html highlighting when editing rails views
     autocmd BufRead,BufNewFile *.html setlocal filetype=html.javascript
     autocmd BufRead,BufNewFile *.erb setlocal filetype=eruby.html
-    autocmd BufRead,BufNewFile *.arb setlocal filetype=ruby
-    autocmd BufRead,BufNewFile *.hbs setlocal filetype=handlebars.html
+
+    " Add sh highlighthing when editing fish files
+    autocmd BufRead,BufNewfile *.fish setlocal filetype=sh
 
     " Automatically remove trailing whitespaces unless file is blacklisted
     autocmd BufWritePre *.* :call general#Preserve("%s/\\s\\+$//e")

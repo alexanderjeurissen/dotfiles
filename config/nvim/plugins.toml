@@ -31,30 +31,6 @@ repo = 'Shougo/dein.vim'
   #   set background=light
   # '''
 
-  # [[plugins]]
-  # repo = 'NLKNguyen/papercolor-theme'
-  # hook_post_source = '''
-  #   syntax enable
-  #   let g:PaperColor_Theme_Options = {
-  #     \   'theme': {
-  #     \     'default.light': {
-  #     \       'allow_bold': 1,
-  #     \       'allow_italic': 1,
-  #     \     }
-  #     \   }
-  #     \}
-  #   colorscheme papercolor
-  #   set background=light
-  # '''
-
-  # [[plugins]]
-  # repo = 'andreypopp/vim-colors-plain'
-  # hook_post_source = '''
-  #   syntax enable
-  #   colorscheme plain
-  #   set background=light
-  # '''
-
   [[plugins]]
   repo = 'lifepillar/vim-solarized8'
   hook_post_source = '''
@@ -62,31 +38,6 @@ repo = 'Shougo/dein.vim'
     let g:solarized_extra_hi_groups=1
     let g:solarized_italics = 1
   '''
-
-  # [[plugins]]
-  # repo='alexanderjeurissen/nord-vim'
-  # hook_post_source = '''
-  #   syntax enable
-  #   colorscheme nord
-  #   set background=dark
-  # '''
-
-  # [[plugins]]
-  # repo='rakr/vim-one'
-  # hook_post_source = '''
-  #   syntax enable
-  #   let g:one_allow_italics = 1
-  #   colorscheme one
-  #   set background=light
-  # '''
-
-  # [[plugins]]
-  # repo='junegunn/seoul256.vim'
-  # hook_post_source = '''
-  #   syntax enable
-  #   let g:seoul256_background = 252
-  #   colorscheme seoul256
-  # '''
 
   # [[plugins]]
   # repo='liuchengxu/space-vim-theme'
@@ -103,7 +54,6 @@ repo = 'Shougo/dein.vim'
 
   [[plugins]]
   repo='tsiemens/vim-aftercolors'
-
 
   [[plugins]]
   repo='nightsense/night-and-day'
@@ -138,18 +88,21 @@ repo = 'Shougo/dein.vim'
   repo = 'tpope/vim-dispatch'
   # NOTE: run tasks in a tmux split to not block vim
 
-  # [[plugins]]
-  # repo = 'radenling/vim-dispatch-neovim'
-  # depends = 'vim-dispatch'
-  # NOTE: run tasks in a tmux split to not block vim
-
   [[plugins]]
   repo = 'tpope/vim-obsession'
   # NOTE: improve vim session handling
 
   [[plugins]]
-  repo = 'sheerun/vim-polyglot'
-  # NOTE: Syntax highlighting, indent, etc. for various file types
+  repo = 'nvim-treesitter/nvim-treesitter'
+  merged = 0
+  # NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
+
+  [[plugins]]
+  repo = 'vim-test/vim-test'
+  on_cmd = ['TestNearest	', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']
+  hook_post_source = '''
+    let test#strategy = "dispatch"
+  '''
 
   [[plugins]]
   repo = 'tpope/vim-scriptease'
@@ -165,15 +118,8 @@ repo = 'Shougo/dein.vim'
   repo = 'haorenW1025/completion-nvim'
   # NOTE: LSP autocomplete
 
-  # [[plugins]]
-  # repo = 'dense-analysis/ale'
-  # NOTE: linting and autofix
-
   [[plugins]]
   repo = 'christoomey/vim-tmux-navigator'
-  # [[plugins]]
-  # repo = 'Vigemus/nvimux'
-  # NOTE: Tmux like behaviour in neovim
 # }}}
 
 # PLUGINS: Editing {{{
@@ -226,9 +172,9 @@ repo = 'Shougo/dein.vim'
   on_ft = ['css', 'scss', 'conf', 'javascript']
   # NOTE: yank visual selections
 
-  [[plugins]]
-  repo = 'billyvg/tigris.nvim'
-  on_ft = ['javascript', 'html.javascript']
+  # [[plugins]]
+  # repo = 'billyvg/tigris.nvim'
+  # on_ft = ['javascript', 'html.javascript']
   # NOTE: semantic highlighting for javascript
 
 # }}}
@@ -243,9 +189,9 @@ repo = 'Shougo/dein.vim'
   on_ft = 'cucumber'
   # NOTE: fancy cucumber highlighting
 
-  [[plugins]]
-  repo = 'tpope/vim-rails'
-  on_ft = ['ruby', 'cucumber']
+  # [[plugins]]
+  # repo = 'tpope/vim-rails'
+  # on_ft = ['ruby', 'cucumber']
   # NOTE: rails specific config and highlight
 # }}}
 
