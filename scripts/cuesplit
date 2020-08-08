@@ -1,22 +1,25 @@
 #!/usr/bin/env bash
 
 main() {
-  local cueFile=$1
+  local ext=$1
   local flacFile=$2
+  local cueFile=$3
 
-  if [ -z $cueFile ]; then cueFile=$(ls _scans/*.cue | head -1); fi
-  if [ -z $flacFile ]; then flacFile=$(ls *.flac | head -1); fi
-  if [ -z $flacFile ]; then flacFile=$(ls *.wav | head -1); fi
+  if [ -z $ext ]; then ext="flac"; fi
+  if [ -z $cueFile ]; then cueFile=$(ls ./_scans/*.cue | head -1); fi
+  if [ -z $flacFile ]; then flacFile=$(ls "./*.${ext}" | head -1); fi
+  if [ -z $flacFile ]; then flacFile=$(ls ./*.wav | head -1); fi
+  if [ -z $flacFile ]; then flacFile=$(ls ./*.wv | head -1); fi
   
-  local flacFilesBeforeSplitting=$(ls *.flac | wc -l)
+  local flacFilesBeforeSplitting=$(ls "*.${ext}" | wc -l)
 
   # NOTE: split the flac file.
-  shnsplit -f "$cueFile" -t %n-%t -o flac "$flacFile" &
+  shnsplit -f "$cueFile" -t "%n. %t" -o $ext "$flacFile" &
   wait
 
   # NOTE: print stats to see if everything went according to plan
   local cueLines=$(cueprint -d '%N\n' "$cueFile")
-  local flacFilesAfterSplitting=$(ls *.flac | wc -l)
+  local flacFilesAfterSplitting=$(ls "./*.${ext}" | wc -l)
   local createdFlacFiles=$((flacFilesAfterSplitting-flacFilesBeforeSplitting))
 
   echo "============================[Stats]================================="
@@ -34,4 +37,4 @@ main() {
   fi
 }
 
-main "$1" "$2"
+main "$1" "$2" "$3"

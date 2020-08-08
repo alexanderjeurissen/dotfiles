@@ -2,7 +2,7 @@ add_newline = true
 
 [character]
 symbol = "➜"
-# disabled = true
+disabled = true
 
 [aws]
 disabled = true
