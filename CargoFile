@@ -1,0 +1,9 @@
+bin-wrapper v1.0.0 (https://github.com/alexanderjeurissen/bin-wrapper.git?branch=main#9a3025bc):
+    bin-wrapper
+cargo-script v0.2.8:
+    cargo-script
+    run-cargo-script
+git-delta v0.3.0:
+    delta
+lint-emit v0.3.3:
+    lint-emit
