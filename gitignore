@@ -76,8 +76,6 @@ pids
 
 # misc
 .byebug_history
-public_
-public
 bin/pretty
 
 # dotenv environment variable files

@@ -1,62 +1,77 @@
-[user]
-  name = Alexander Jeurissen
-  email = 1220084+alexanderjeurissen@users.noreply.github.com
-; [pager]
-;   diff = diff-so-fancy | less --tabs=1,5 -R
-[color]
-  ui = auto
 [alias]
-  ;files changed between two commits
-  changes = "log --name-only --pretty=oneline --full-index $1..$2 | grep -vE '^[0-9a-f]{40} ' | sort | uniq"
   ctags = !.git/hooks/ctags
 
-[diff]
-  tool = nvim
-[difftool "nvim"]
-  cmd= nvim -d $REMOTE $LOCAL
-[difftool "nvr"]
-  cmd = nvr -s -d $LOCAL $REMOTE
-[difftool]
-  prompt = 1
+[color]
+  ui = auto
 
-[merge]
-  tool = nvim
-  conflictstyle = diff3
-[mergetool "nvim"]
-  cmd = nvim -d $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
-[mergetool "nvr"]
-  cmd = nvr -cc tabnew -s -d $LOCAL $BASE $REMOTE $MERGED -c 'wincmd J | wincmd ='
-[mergetool]
-  prompt = 0
-
-# vim: set et :
-[credential]
-  helper = cache --timeout=36000
-[github]
-  user = alexanderjeurissen
 [core]
   excludesfile = /Users/alexanderjeurissen/.gitignore
   editor = nvim
   ; editor = nvr -cc tabnew --remote-wait-silent
-  pager = diff-so-fancy | less --tabs=1,5 -R
-	attributesfile = ~/.gitattributes
-[push]
-  default = current
-[git-up "rebase"]
-  auto = false
-[git-up "bundler"]
-  check = true
-  rbenv = true
-  autoinstall = true
+  pager = delta
+  attributesfile = ~/.gitattributes
+
+[credential]
+  helper = cache --timeout=36000
+
+[delta]
+  line-numbers = true
+  line-numbers-minus-style = "red"
+  line-numbers-plus-style = "green"
+  line-numbers-zero-style = "brightyellow"
+  file-style = "bold white"
+  syntax-theme = "Solarized (dark)"
+
+[diff]
+  tool = nvim
+
+[difftool "nvim"]
+  cmd= nvim -d $REMOTE $LOCAL
+
+[difftool "nvr"]
+  cmd = nvr -s -d $LOCAL $REMOTE
+
+[difftool]
+  prompt = 1
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+
+[github]
+  user = alexanderjeurissen
+
 [init]
   templatedir = ~/.git_template
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[pull]
-	rebase = false
+
+[interactive]
+  diffFilter = delta --color-only
+
 [merge "merge-structure-sql"]
-	name = Rails structure.sql merge driver
-	driver = git-merge-structure-sql %A %O %B
+  name = Rails structure.sql merge driver
+  driver = git-merge-structure-sql %A %O %B
+
+[merge]
+  tool = nvim
+  conflictstyle = diff3
+
+[mergetool "nvim"]
+  cmd = nvim -d $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+
+[mergetool "nvr"]
+  cmd = nvr -cc tabnew -s -d $LOCAL $BASE $REMOTE $MERGED -c 'wincmd J | wincmd ='
+
+[mergetool]
+  prompt = 0
+
+[pull]
+  rebase = false
+
+[push]
+  default = current
+
+[user]
+  name = Alexander Jeurissen
+  email = 1220084+alexanderjeurissen@users.noreply.github.com
