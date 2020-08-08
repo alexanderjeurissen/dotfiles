@@ -1,5 +1,5 @@
 # NOTE: init starship prompt
-starship init fish | source
+# starship init fish | source
 
 # NOTE: init zoxide (improved cd)
 zoxide init fish | source
