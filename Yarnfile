@@ -1,0 +1,30 @@
+# Bundler for global yarn packages 
+@alexanderjeurissen/yarn-bundle@1.0.2
+# CLI to rename a npm package 
+@tiaanduplessis/pkg-rename@1.0.1
+# Makes eslint the fastest linter on the planet 
+eslint_d@9.1.1
+# Gatsby command-line interface for creating new sites and running Gatsby commands 
+gatsby-cli@2.12.50
+# Create a merge request from command line in gitlab 
+git-lab-cli@2.0.7
+# Simple and convenient Git tool to easily recall what you've done 
+git-recall@1.2.4
+# Command line tool for common GraphQL development workflows 
+graphql-cli@4.0.0
+# A toolkit for JavaScript codemods 
+jscodeshift@0.10.0
+# Simple proxy to bypass CORS issues. This was built as a local dev only solution to enable prototyping against existing APIs without having to worry about CORS. 
+local-cors-proxy@1.1.0
+# Node.js native addon build tool 
+node-gyp@7.0.0
+# CLI for PostCSS 
+postcss-cli@7.1.1
+# Use react-devtools outside of the browser 
+react-devtools@4.7.0
+# A framework for building native apps using React 
+react-native@0.62.2
+# A transform module to make vim support RPC request as neovim 
+vim-node-rpc@0.1.34
+# CLI for webpack & friends 
+webpack-cli@3.3.12
