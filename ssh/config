@@ -1,6 +1,14 @@
 Host *
   AddKeysToAgent yes
-  UseKeychain yes
+  HashKnownHosts yes
+  VisualHostKey yes
+  ChallengeResponseAuthentication no
+  StrictHostKeyChecking ask
+  VerifyHostKeyDNS yes
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Trusted no
+
 
 Host gitlab.inverselink.com
   HostName git.pdx1.inverselink.com
@@ -9,4 +17,6 @@ Host gitlab.inverselink.com
 
 Host github
   HostName github.com
-  IdentityFile ~/.ssh/id_personal
+  ControlMaster no
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_yubikey.pub
