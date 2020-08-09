@@ -148,10 +148,10 @@ colors:
   cursor:
     # text:   '#fdf6e3' # base3
     # cursor: '#657b83' # base00
-    text:   # inverse
-    cursor: # inverse
-    # text:   CellForeground # base3
-    # cursor: CellBackground # base00
+    # text:   # inverse
+    # cursor: # inverse
+    text:   CellBackground # base3
+    cursor: CellForeground # base00
 
   # Normal colors
   normal:
@@ -203,7 +203,7 @@ colors:
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
   color: '0xffffff'
