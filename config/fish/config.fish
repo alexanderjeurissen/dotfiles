@@ -44,9 +44,9 @@ end
 set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # Java settings {{{
-  set -gx JAVA_HOME (/usr/libexec/java_home)
-  set -gx MAVENPATH $HOME/.maven
-  set PATH $PATH "$MAVENPATH/bin"
+  # set -gx JAVA_HOME (/usr/libexec/java_home)
+  # set -gx MAVENPATH $HOME/.maven
+  # set PATH $PATH "$MAVENPATH/bin"
 # }}}
 
 # FZF settings {{{
@@ -70,4 +70,12 @@ set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # https://github.com/yarnpkg/yarn/issues/1027
 set PATH $PATH (yarn global bin)
 
+# GPG settings {{{
+  gpgconf --launch gpg-agent
+  set -gx GPG_TTY (tty)
+  set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+# }}}
+
 source ~/.gitaliases
+
+# vim: foldmethod=marker:sw=2:foldlevel=10
