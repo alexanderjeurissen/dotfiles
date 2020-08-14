@@ -8,3 +8,5 @@ export EDITOR='vim'
 if which nodenv > /dev/null; then eval "$(nodenv init - --no-rehash)"; fi
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/Users/alexanderjeurissen/Development/arcanist/bin:$PATH"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

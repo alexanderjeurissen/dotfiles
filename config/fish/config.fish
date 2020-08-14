@@ -66,10 +66,6 @@ set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # yarn config set prefix `nodenv prefix`
 # yarn config set global-folder `nodenv prefix`
 
-# makes sure global bin is respected when doing yarn global add
-# https://github.com/yarnpkg/yarn/issues/1027
-set PATH $PATH (yarn global bin)
-
 # GPG settings {{{
   gpgconf --launch gpg-agent
   set -gx GPG_TTY (tty)
