@@ -1,5 +1,6 @@
 [alias]
   ctags = !.git/hooks/ctags
+	up = pull --rebase --autostash
 
 [color]
   ui = auto
@@ -50,8 +51,8 @@
   diffFilter = delta --color-only
 
 [merge "merge-structure-sql"]
-  name = Rails structure.sql merge driver
-  driver = git-merge-structure-sql %A %O %B
+	name = Rails structure.sql merge driver
+	driver = git-merge-structure-sql %A %O %B
 
 [merge]
   tool = nvim
@@ -74,4 +75,7 @@
 
 [user]
   name = Alexander Jeurissen
-  email = 1220084+alexanderjeurissen@users.noreply.github.com
+  email = alexander@jeurissen.email
+  signingkey = 0xEAAA67C4CA6E219A
+[commit]
+	gpgsign = true
