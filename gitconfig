@@ -78,4 +78,4 @@
   email = alexander@jeurissen.email
   signingkey = 0xEAAA67C4CA6E219A
 [commit]
-	gpgsign = true
+  gpgsign = true
