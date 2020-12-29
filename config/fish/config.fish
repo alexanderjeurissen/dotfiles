@@ -13,8 +13,8 @@ set fish_greeting
 set -gx ENABLE_SPRING 0
 set -gx DEFAULT_USER $USER
 
-set -gx LDFLAGS "-L/usr/local/opt/openssl@1.1/lib"
-set -gx CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
+# set -gx LDFLAGS "-L/usr/local/opt/openssl@1.1/lib"
+# set -gx CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
 
 # NOTE: H1 related env variables {{{
   set -gx SKIP_WAIT 1
@@ -22,17 +22,14 @@ set -gx CPPFLAGS "-I/usr/local/opt/openssl@1.1/include"
   set -gx LINT_STAGED 1
 # }}}
 
-set PATH "/usr/local/bin" $PATH
-set PATH "/usr/local/sbin" $PATH
-
+set PATH "/home/linuxbrew/.linuxbrew/bin" $PATH # NOTE: linux brew
 set PATH "$HOME/.bin" $PATH # TODO: evaluate env var
+set PATH "$HOME/bin" $PATH # NOTE: linux usr bin
+set PATH "$HOME/.local/bin" $PATH # NOTE: linux usr bin
 set PATH "$HOME/.scripts" $PATH # include my own scripts
 
 set PATH "$HOME/.yarn/bin" $PATH
 set PATH "$HOME/.cargo/bin" $PATH
-
-set PATH "$HOME/.rbenv/shims" $PATH
-set PATH "$HOME/.nodenv/shims" $PATH
 
 # TMUX needs screen-256-color
 if set -q TMUX
@@ -41,7 +38,7 @@ else
   set TERM xterm-256color-italic
 end
 
-set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
+# set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
 # Java settings {{{
   # set -gx JAVA_HOME (/usr/libexec/java_home)
@@ -67,9 +64,9 @@ set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 # yarn config set global-folder `nodenv prefix`
 
 # GPG settings {{{
-  gpgconf --launch gpg-agent
-  set -gx GPG_TTY (tty)
-  set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  # gpgconf --launch gpg-agent
+  # set -gx GPG_TTY (tty)
+  # set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 # }}}
 
 source ~/.gitaliases
