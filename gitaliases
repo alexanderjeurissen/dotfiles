@@ -68,11 +68,11 @@ abbr --add gix git rm -r --cached
 abbr --add giX git rm -rf --cached
 
 # Log (l)
-abbr --add gls git log --topo-order --stat --pretty=format:\"%C\(bold\)Commit:%C\(reset\) %C\(green\)%H%C\(red\)%d%n%C\(bold\)Author:%C\(reset\) %C\(cyan\)%an \<%ae\>%n%C\(bold\)Date:%C\(reset\)   %C\(blue\)%ai \(%ar\)%C\(reset\)%n%+B\"
-abbr --add gld git log --topo-order --stat --patch --full-diff --pretty=format:\"%C\(bold\)Commit:%C\(reset\) %C\(green\)%H%C\(red\)%d%n%C\(bold\)Author:%C\(reset\) %C\(cyan\)%an \<%ae\>%n%C\(bold\)Date:%C\(reset\)   %C\(blue\)%ai \(%ar\)%C\(reset\)%n%+B\"
-abbr --add glo git log --topo-order --pretty=format:\"%C\(green\)%h%C\(reset\) %s%C\(red\)%d%C\(reset\)%n\"
-abbr --add glg git log --topo-order --all --graph --pretty=format:\"%C\(green\)%h%C\(reset\) %s%C\(red\)%d%C\(reset\)%n\"
-abbr --add glb git log --topo-order --pretty=format:\"%C\(green\)%h%C\(reset\) %s%n%C\(blue\)\(%ar by %an\)%C\(red\)%d%C\(reset\)%n\"
+abbr --add gls git log --topo-order --stat --pretty=format:\"%C\(bold\)Commit:%C\(reset\) %C\(green\)%H%C\(red\)%d%n%C\(bold\)Author:%C\(reset\) %C\(cyan\)%an \<%ae\>%n%C\(bold\)Date:%C\(reset\)   %C\(blue\)%ai \(%ar\)%C\(reset\)%n%+B\" --show-signature
+abbr --add gld git log --topo-order --stat --patch --full-diff --pretty=format:\"%C\(bold\)Commit:%C\(reset\) %C\(green\)%H%C\(red\)%d%n%C\(bold\)Author:%C\(reset\) %C\(cyan\)%an \<%ae\>%n%C\(bold\)Date:%C\(reset\)   %C\(blue\)%ai \(%ar\)%C\(reset\)%n%+B\" --show-signature
+abbr --add glo git log --topo-order --pretty=format:\"%C\(green\)%h%C\(reset\) %s%C\(red\)%d%C\(reset\)%n\" --show-signature
+abbr --add glg git log --topo-order --all --graph --pretty=format:\"%C\(green\)%h%C\(reset\) %s%C\(red\)%d%C\(reset\)%n\" --show-signature
+abbr --add glb git log --topo-order --pretty=format:\"%C\(green\)%h%C\(reset\) %s%n%C\(blue\)\(%ar by %an\)%C\(red\)%d%C\(reset\)%n\" --show-signature
 abbr --add glc git shortlog --summary --numbered
 
 # Merge (m)

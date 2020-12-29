@@ -6,29 +6,11 @@ repo = 'Shougo/dein.vim'
   # [[plugins]]
   # repo = 'morhetz/gruvbox'
   # hook_post_source = '''
+  #   syntax enable
   #   let g:gruvbox_italic=1
   #   let g:gruvbox_italicize_strings=1
   #   let g:gruvbox_contrast_dark='soft'
   #   let g:gruvbox_contrast_light='soft'
-
-  #   colorscheme gruvbox
-  #   set background=light
-  # '''
-
-  # [[plugins]]
-  # repo = 'ajmwagar/vim-deus'
-  # hook_post_source = '''
-  #   syntax enable
-  #   colorscheme deus
-  #   set background=dark
-  # '''
-
-  # [[plugins]]
-  # repo = 'zefei/cake16'
-  # hook_post_source = '''
-  #   syntax enable
-  #   colorscheme cake16
-  #   set background=light
   # '''
 
   [[plugins]]
@@ -37,44 +19,12 @@ repo = 'Shougo/dein.vim'
     syntax enable
     let g:solarized_extra_hi_groups=1
     let g:solarized_italics = 1
+
+    color solarized8_high
   '''
-
-  # [[plugins]]
-  # repo='liuchengxu/space-vim-theme'
-  # hook_post_source = '''
-  #    syntax enable
-  #    set background=light
-
-  #    let g:space_vim_italic = 1
-  #    let g:space_vim_italicize_strings = 1
-  #    let g:space_vim_plugin_hi_groups = 1
-
-  #    colorscheme space_vim_theme
-  # '''
 
   [[plugins]]
   repo='tsiemens/vim-aftercolors'
-
-  [[plugins]]
-  repo='nightsense/night-and-day'
-  hook_add = '''
-    " NOTE: Groningen
-    let g:nd_latitude = '55'
-
-    " NOTE: San Francisco
-    " let g:nd_latitude = '40'
-
-    " TODO: implement conditional setting of timeshift based on daylight saving
-    " time
-    let g:nd_timeshift = '0'
-
-    let g:nd_themes = [
-        \ ['sunrise+0',   'solarized8_high', 'light' ],
-        \ ['sunrise+2/3', 'solarized8_low', 'light' ],
-        \ ['sunset+0', 'solarized8_high', 'dark' ],
-        \ ['sunset+1/3',  'solarized8_low',  'dark' ]
-    \ ]
-  '''
 # }}}
 
 # PLUGINS: Core {{{
@@ -89,17 +39,13 @@ repo = 'Shougo/dein.vim'
   # NOTE: run tasks in a tmux split to not block vim
 
   [[plugins]]
-  repo = 'tpope/vim-obsession'
-  # NOTE: improve vim session handling
-
-  [[plugins]]
   repo = 'nvim-treesitter/nvim-treesitter'
   merged = 0
   # NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
 
   [[plugins]]
   repo = 'vim-test/vim-test'
-  on_cmd = ['TestNearest	', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']
+  on_cmd = ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']
   hook_post_source = '''
     let test#strategy = "dispatch"
   '''
@@ -114,8 +60,8 @@ repo = 'Shougo/dein.vim'
   merged = 0
   # NOTE: Common configurations for Neovim Language Servers
 
-  [[plugins]]
-  repo = 'haorenW1025/completion-nvim'
+  # [[plugins]]
+  # repo = 'haorenW1025/completion-nvim'
   # NOTE: LSP autocomplete
 
   [[plugins]]

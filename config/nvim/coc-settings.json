@@ -1,6 +1,8 @@
 {
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
+  "suggest.floatEnable": false,
+  "coc.preferences.signatureHelpTarget": "echo",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "typescript",
@@ -29,6 +31,7 @@
   "solargraph.references": true,
   "codeLens.enable": true,
 
+  "diagnostic.messageTarget": "echo",
   "diagnostic.errorSign": "•",
   "diagnostic.warningSign": "•",
   "diagnostic.infoSign": "•",

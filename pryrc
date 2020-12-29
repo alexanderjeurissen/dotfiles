@@ -5,6 +5,7 @@ rescue LoadError => err
   puts "no awesome_print :("
 end
 
+# NOTE: pry byebug aliases
 if defined?(PryByebug)
   Pry.commands.alias_command 'c', 'continue'
   Pry.commands.alias_command 's', 'step'
@@ -12,7 +13,15 @@ if defined?(PryByebug)
   Pry.commands.alias_command 'f', 'finish'
 end
 
-# Hit Enter to repeat last command
-Pry::Commands.command /^$/, "repeat last command" do
-  _pry_.run_command Pry.history.to_a.last
+# NOTE: better colors
+Pry.config.color = true
+Pry.config.theme = "solarized"
+Pry.config.ls.separator = "\n" # new lines between methods
+Pry.config.ls.heading_color = :magenta
+Pry.config.ls.public_method_color = :green
+Pry.config.ls.protected_method_color = :yellow
+Pry.config.ls.private_method_color = :bright_black
+
+Pry::Commands.command /^clear$/, "clear console" do
+  system('clear')
 end

@@ -79,8 +79,8 @@ function! WarmMargin (mode)
         for delta in range( max( [len(heat), len(heatbg)] ) )
 
             exec 'highlight WarmMargin_'. delta
-            \           . ' ctermfg=' . get(heat,   delta, get(heat,   0, 'Red'  ))
-            \           . ' ctermbg=' . get(heatbg, delta, get(heatbg, 0, 'Black'))
+            \           . ' guifg=' . get(heat,   delta, get(heat,   0, 'Red'  ))
+            \           . ' guibg=' . get(heatbg, delta, get(heatbg, 0, 'Black'))
 
             call add(s:highlights,
             \        matchadd(

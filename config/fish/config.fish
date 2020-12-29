@@ -20,6 +20,7 @@ set -gx DEFAULT_USER $USER
   set -gx SKIP_WAIT 1
   set -gx PROCFILE_NAME 'Procfile.local'
   set -gx LINT_STAGED 1
+  set -gx PULL_LOCK 1
 # }}}
 
 set PATH "/home/linuxbrew/.linuxbrew/bin" $PATH # NOTE: linux brew
@@ -47,6 +48,7 @@ end
 # }}}
 
 # FZF settings {{{
+ # set -gx FZF_DEFAULT_OPTS '--color=bw'
  set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'

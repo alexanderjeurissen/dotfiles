@@ -18,7 +18,7 @@ build/Release
 *.tar.gz
 
 # ruby
-*.ruby-version
+# *.ruby-version
 .bundle
 
 #temp json output of yaml translations
@@ -32,6 +32,7 @@ app/languages/*.json
 *.swo
 swoopBuf
 .tern-port
+*.orig
 
 # apple temp files and code unrelated directories
 .DS_Store
@@ -86,3 +87,6 @@ bin/pretty
 
 # H1 specific
 Procfile.local
+*.patch
+
+.stylelintrc
