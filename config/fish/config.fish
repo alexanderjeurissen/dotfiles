@@ -66,9 +66,10 @@ end
 # yarn config set global-folder `nodenv prefix`
 
 # GPG settings {{{
-  # gpgconf --launch gpg-agent
-  # set -gx GPG_TTY (tty)
-  # set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  gpgconf --launch gpg-agent
+  set -gx GPG_TTY (tty)
+  set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  # set -gx SSH_AUTH_SOCK "/Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
 # }}}
 
 source ~/.gitaliases
