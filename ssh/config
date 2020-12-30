@@ -19,4 +19,4 @@ Host github
   HostName github.com
   ControlMaster no
   IdentitiesOnly yes
-  IdentityFile ~/.ssh/id_secretive_github
+  IdentityFile ~/.ssh/id_github
