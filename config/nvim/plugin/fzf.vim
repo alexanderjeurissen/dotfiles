@@ -161,6 +161,7 @@ endfunction
 
 " NOTE: generate color settings string based on colorscheme, to be put in .zprofile
 function! fzf#get_fzf_colors()
+  return ''
   let rules =
   \ { 'fg':      [['NormalFloat',       'fg#']],
     \ 'bg':      [['NormalFloat',       'bg#']],
