@@ -48,8 +48,8 @@ end
 # }}}
 
 # FZF settings {{{
- # set -gx FZF_DEFAULT_OPTS '--color=bw'
- set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
+ set -gx FZF_DEFAULT_OPTS '--color=bw'
+ # set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
  set -gx FZF_CTRL_T_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
@@ -68,7 +68,8 @@ end
 # GPG settings {{{
   gpgconf --launch gpg-agent
   set -gx GPG_TTY (tty)
-  set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  # set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  fish_ssh_agent
   # set -gx SSH_AUTH_SOCK "/Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
 # }}}
 
