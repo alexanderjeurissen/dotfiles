@@ -66,24 +66,6 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
   set statusline=%!statusline#Init()
 " }}}
 
-" SETTINGS: Colorscheme {{{
-  if (has('termguicolors'))
-    " NOTE: temp disabled for iterm tmux integration
-    " set t_8f=^[[38;2;%lu;%lu;%lum
-    " set t_8b=^[[48;2;%lu;%lu;%lum
-
-    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-
-    set t_Cs =^[[6m"
-    set t_Ce =^[[24m"
-    let &t_Cs = "\e[6m"
-    let &t_Ce = "\e[24m"
-
-    set termguicolors
-  endif
-" }}}
-
 " SETTINGS: Navigation {{{
   if executable('rg')
     set grepprg=rg\ -H\ --vimgrep\ --no-heading
@@ -106,6 +88,11 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
 
     call general#MarkMargin(0)
   endif
+" }}}
+
+" SETTINGS: Color {{{
+  syntax enable
+  colorscheme flattened_dark
 " }}}
 
 " KEYBINDINGS: General {{{
