@@ -5,6 +5,11 @@
 [color]
   ui = auto
 
+[color "status"]
+  branch = bold white
+  localBranch = bold white
+  remoteBranch = bold yellow
+
 [core]
   excludesfile = /Users/alexanderjeurissen/.gitignore
   editor = nvim
