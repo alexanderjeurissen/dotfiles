@@ -319,6 +319,7 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
                 \   if getfsize(expand("%")) > 10000000 |
                 \   syntax off |
                 \   let g:ale_enabled=0 |
+                \   let g:coc_enabled=0 |
                 \   endif
 
     " http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
@@ -352,17 +353,6 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
 
     " let terminal resize scale the internal windows
     autocmd VimResized * :wincmd =
-
-    " autocmd TermOpen,TermEnter * :call terminal#Init()
-    " autocmd TermLeave * :call terminal#Cleanup()
-
-    " Start in terminal
-    " autocmd VimEnter *
-    "       \ if v:vim_did_enter |
-    "       \ exec ':terminal' |
-    "       \ exec ':startinsert' |
-    "       \ endif
-
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk
