@@ -28,6 +28,8 @@ repo = 'Shougo/dein.vim'
   on_cmd = ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']
   hook_post_source = '''
     let test#strategy = "dispatch"
+
+    let test#ruby#rspec#options = { 'all': '--order defined --fail-fast' }
   '''
 
   [[plugins]]
@@ -114,6 +116,11 @@ repo = 'Shougo/dein.vim'
   repo = 'tpope/vim-cucumber'
   on_ft = 'cucumber'
   # NOTE: fancy cucumber highlighting
+
+  [[plugins]]
+  repo = 'greggroth/vim-cucumber-folding'
+  on_ft = 'cucumber'
+  # NOTE: cucumber folding pattern
 
   # [[plugins]]
   # repo = 'tpope/vim-rails'
