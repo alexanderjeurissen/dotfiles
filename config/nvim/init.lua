@@ -55,23 +55,23 @@ end
 -- }}}
 
 -- OPTIONS: Window {{{
-  wo.wrap = false                                                                        -- Don't wrap lines as it makes j/k unintuitive.
+  wo.wrap = false                                                                       -- Don't wrap lines as it makes j/k unintuitive.
   wo.list = false
 
   -- wo.colorcolumn = +1                                                                    -- Highlight first column after 'textwidth'
 
-  wo.number = true                                                                       -- Enable line numbers
-  wo.relativenumber = true                                                               -- Make line numbers relative
-  wo.numberwidth = 4                                                                     -- Set width of number column
+  wo.number = true                                                                      -- Enable line numbers
+  wo.relativenumber = true                                                              -- Make line numbers relative
+  wo.numberwidth = 4                                                                    -- Set width of number column
 
-  wo.foldenable = true                                                                   -- collapse all folds.
-  wo.foldmethod = 'syntax'                                                               -- Fold on the syntax
-  wo.foldcolumn = '0'                                                                    -- Don't indicate fold open/closed
-  wo.foldlevel = 1                                                                       -- Autofold nothing by default
-  wo.foldnestmax = 3                                                                     -- Only fold outer functions
+  wo.foldenable = true                                                                  -- collapse all folds.
+  wo.foldmethod = 'syntax'                                                              -- Fold on the syntax
+  wo.foldcolumn = '0'                                                                   -- Don't indicate fold open/closed
+  wo.foldlevel = 1                                                                      -- Autofold nothing by default
+  wo.foldnestmax = 3                                                                    -- Only fold outer functions
 
 
-  if wo.diff == true then                                                                 -- Set diff mode specific window options
+  if wo.diff == true then                                                               -- Set diff mode specific window options
     wo.list = false
     wo.cursorcolumn = false
     wo.cursorline = false
@@ -91,15 +91,22 @@ end
 
    -- vim.g.lumiere_dim_inactive_windows = 0
 
-  vim.g.netrw_browsex_viewer = "open -a '/Applications/Google Chrome.app'"               -- ensure gx opens the url under cursor
-  vim.g.netrw_keepdir = 0
+   vim.g.netrw_browsex_viewer = "open -a '/Applications/Google Chrome.app'"             -- ensure gx opens the url under cursor
+   vim.g.netrw_keepdir = 0
 
-  vim.g.mapleader = "<Space>" -- Set mapleader to <space>
+   vim.g.mapleader = "<Space>" -- Set mapleader to <space>
 -- }}}
 
--- COMMANDS: configuration ex_commands {{{
+-- SETUP: configure ex_commands {{{
   vim.cmd('syntax enable')
   vim.cmd('colorscheme flattened_dark')
+-- }}}
+
+-- SETUP: source config still written in vimscript {{{
+  vim.cmd('source ' .. home .. '/.config/nvim/vim/misc.vim')
+  vim.cmd('source ' .. home .. '/.config/nvim/vim/dein.vim')
+  vim.cmd('source ' .. home .. '/.config/nvim/vim/keybindings.vim')
+  vim.cmd('source ' .. home .. '/.config/nvim/vim/augroups.vim')
 -- }}}
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10

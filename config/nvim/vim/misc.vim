@@ -1,0 +1,1 @@
+set statusline=%!statusline#Init()
