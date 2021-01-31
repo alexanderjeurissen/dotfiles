@@ -24,15 +24,6 @@ repo = 'Shougo/dein.vim'
   # NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
 
   [[plugins]]
-  repo = 'vim-test/vim-test'
-  on_cmd = ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']
-  hook_post_source = '''
-    let test#strategy = "dispatch"
-
-    let test#ruby#rspec#options = { 'all': '--order defined --fail-fast' }
-  '''
-
-  [[plugins]]
   repo = 'tpope/vim-scriptease'
   # NOTE: A Vim plugin for making Vim plugins.
 
@@ -41,10 +32,6 @@ repo = 'Shougo/dein.vim'
   rev = 'release'
   merged = 0
   # NOTE: Common configurations for Neovim Language Servers
-
-  # [[plugins]]
-  # repo = 'haorenW1025/completion-nvim'
-  # NOTE: LSP autocomplete
 
   [[plugins]]
   repo = 'christoomey/vim-tmux-navigator'

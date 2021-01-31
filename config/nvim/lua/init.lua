@@ -82,7 +82,7 @@ function Init.init()
   -- }}}
 
 -- SETTINGS: statusline {{{
-  set { laststatus=0 } -- Disable bottom statusline
+  set { laststatus=2 } -- Disable bottom statusline
   -- set { guioptions-=e } TODO: fix
 -- }}}
 end
