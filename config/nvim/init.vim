@@ -1,16 +1,13 @@
 scriptencoding utf-8
-  let g:python_host_prog="python3"
-  let test#strategy='dispatch'
 
-  if &shell =~# 'fish$'
-    set shell=/bin/sh
+" EXTRA: Include lua config {{{
+  if filereadable(expand('~/.config/nvim/lua/init.lua'))
+    lua require('init')
   endif
+" }}}
 
 " SETTINGS: Dein.vim {{{
   "Note: install dein if not present
-  let g:dein_path='$HOME/.config/nvim/dein'
-  let g:dein#auto_recache=1
-
   if !filereadable(expand(g:dein_path) . '/repos/github.com/Shougo/dein.vim/README.md')
    if executable('git')
      exec '!git clone https://github.com/Shougo/dein.vim ' . g:dein_path . '/repos/github.com/Shougo/dein.vim'
@@ -24,9 +21,8 @@ scriptencoding utf-8
   " Add dein.vim to runtimepath
   set runtimepath^=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 
-
-let s:plugin_path='$HOME/.config/nvim/dein'
-let s:dein_toml='$HOME/.config/nvim/plugins.toml'
+  let s:plugin_path='$HOME/.config/nvim/dein'
+  let s:dein_toml='$HOME/.config/nvim/plugins.toml'
 
   if dein#load_state(expand(s:plugin_path))
    " tell dein where the plugins live
@@ -60,45 +56,12 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
 " }}}
 
 " SETTINGS: statusline {{{
-  set laststatus=2
-  set guioptions-=e
-
   set statusline=%!statusline#Init()
-" }}}
-
-" SETTINGS: Navigation {{{
-  if executable('rg')
-    set grepprg=rg\ -H\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-  endif
-
-  " NOTE: This makes it so that gx opens the url under cursor
-  " in Google Chrome
-  let g:netrw_browsex_viewer = "open -a '/Applications/Firefox Developer Edition.app'"
-  let g:netrw_keepdir=0
-" }}}
-
-" SETTINGS: DiffMode {{{
-  if &diff
-    set nolist
-    set nocursorcolumn
-    set nocursorline
-    set conceallevel=0
-    set colorcolumn=0
-
-    call general#MarkMargin(0)
-  endif
-" }}}
-
-" SETTINGS: Color {{{
-  syntax enable
-  colorscheme flattened_dark
 " }}}
 
 " KEYBINDINGS: General {{{
   " Use <space> as leader
   let mapleader="\<Space>"
-  let g:mapleader="\<Space>"
   " Fix annoying typo's of WQ, QA and Q, and report
   cnoreabbrev qw wq
   cnoreabbrev Wq wq
@@ -359,6 +322,7 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
   augroup ALEXANDER_VIMRC_RELOAD " {{{
     autocmd!
     autocmd BufWritePost init.vim source %
+    autocmd BufWritePost init.lua luafile %
   augroup END " }}}
 
   " NOTE: open quickfix window after vim grep
@@ -368,12 +332,6 @@ let s:dein_toml='$HOME/.config/nvim/plugins.toml'
       autocmd QuickFixCmdPost [^l]* cwindow
       autocmd QuickFixCmdPost l* lwindow
   augroup END
-
-" EXTRA: Include lua config {{{
-  if filereadable(expand('~/.config/nvim/lua/init.lua'))
-    lua require('init').init()
-  endif
-" }}}
 
 
 " vim: foldmethod=marker:sw=2:foldlevel=10

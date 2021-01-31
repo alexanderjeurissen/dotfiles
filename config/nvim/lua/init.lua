@@ -1,91 +1,105 @@
-local Init = {}
-
-function Init.init()
-  local Util = require 'util'
-  local home = os.getenv("HOME")
-  local pwd = os.getenv("PWD")
-
-  local set = Util.set
-
-  -- SETTINGS: General {{{
-    set { path = pwd .. ',' .. pwd .. '/**' }                       -- Make :find more usable by default
-    set { wildmenu = true }                                         -- Show all matches when tab completing
-    set { wildmode= 'longest:list,full' }                           -- Show longest match first
-    set { regexpengine = 0 }                                        -- Better for ruby (https://tinyurl.com/ll948jk)
-    set { noswapfile = true }                                       -- Disable swap (https://tinyurl.com/y9t8frrs)
-    set { showmode = true }                                         -- show mode in bottom-left corner
-    set { synmaxcol = 200 }                                         -- Only syntax highlight 200 chars (performance)
-    set { autowrite = true }                                        -- Write before running commands.
-    set { shortmess = 'aAIsTF' }                                    -- Reduce |hit-enter| prompts.
-    set { cmdheight = 1 }                                           -- Number of screen lines for the command-line.
-    set { nowrap = true }                                           -- Don't wrap lines as it makes j/k unintuitive.
-    set { smartcase = true }                                        -- Search case incensitive.
-    -- set { textwidth = 100 }                                         -- Set maximum number of characters per line
-    set {
-      sessionoptions = {                                                  -- Changes the effect of the |:mksession| cmd.
-        'blank',
-        'buffers',
-        'curdir',
-        'folds',
-        'help',
-        'tabpages',
-        'winsize',
-        'resize',
-        'globals'
-      }
-    }
-    -- set { colorcolumn = +1 }                                        -- Highlight first column after 'textwidth'
-    set { spellfile= home .. '/.config/nvim/spell/en.utf-8.add' }
-    set { nolist = true }
-    set {
-      listchars = {                                                       -- Strings in 'list' mode.
-        'trail:-',
-        'extends:»',
-        'precedes:«',
-        'space:·',
-        'nbsp:·',
-        'eol:¬'
-      }
-    }
-    set { hidden = true }                                           -- Allow for more then one unsaved buffer.
-    -- set { nolazyredraw = true }                                     -- Disable lazy redraw due to issues neovim#6366
-    set { lazyredraw = true }                                       -- Don't unnecessarily redraw screen.
-
-    set { undofile = true }                                         -- Save undo's after file closes.
-    set { undolevels = 1000 }                                       -- Number of changes to be saved.
-
-    set { tabstop = 2 }                                             -- Number of spaces a <Tab> char is rendered as.
-    set { shiftwidth = 2 }                                          -- Number of spaces that >> and << count for.
-    set { softtabstop = 2 }                                         -- Number of spaces of <Tab> while editing.
-    set { expandtab = true }                                        -- Use spaces instead of <Tab> for indentation.
-    set { number = true }                                           -- Enable line numbers
-    set { relativenumber = true }                                   -- Make line numbers relative
-    set { numberwidth = 4 }                                         -- Set width of number column
-    set { splitbelow = true }                                       -- Open new split panes at bottommost position
-    set { splitright = true }                                       -- Open new split panes at rightmost position
-    set { inccommand = 'nosplit' }                                  -- Show visual indication when using substitute.
-    set { foldenable = true }                                       -- collapse all folds.
-    set { foldmethod = 'syntax' }                                   -- Fold on the syntax
-    set { foldcolumn = 0 }                                          -- Don't indicate fold open/closed
-    set { foldlevel = 1 }                                           -- Autofold nothing by default
-    set { foldnestmax = 3 }                                         -- Only fold outer functions
-
-    set { modeline = true }                                         -- load vim settings from magic file comment
-    set { confirm = true }                                          -- Makes operations like qa ask for confirmation
-    set { scrolloff = 2 }                                           -- Keep at least 2 lines above/below
-    set { sidescrolloff = 5 }                                       -- Keep at least 5 lines left/right
-    set { smartindent = true }
-
-   -- Globals
-   vim.g.snappy_dev = 1
-   -- vim.g.lumiere_dim_inactive_windows = 0
-  -- }}}
-
--- SETTINGS: statusline {{{
-  set { laststatus=2 } -- Disable bottom statusline
-  -- set { guioptions-=e } TODO: fix
+-- Meta accessors for vim options {{{
+  local o = vim.o
+  local bo = vim.bo
+  local wo = vim.wo
+  local fn = vim.fn
 -- }}}
+
+local home = os.getenv("HOME")
+local pwd = os.getenv("PWD")
+
+function _G.dump(...)
+  local objects = vim.tbl_map(vim.inspect, {...})
+  print(unpack(objects))
 end
 
-return Init
+-- OPTIONS: Editor {{{
+  o.path = pwd .. ',' .. pwd .. '/**'                                                   -- Make :find more usable by default
+  o.wildmenu = true                                                                     -- Show all matches when tab completing
+  o.wildmode= 'longest:list,full'                                                       -- Show longest match first
+  o.regexpengine = 0                                                                    -- Better for ruby (https://tinyurl.com/ll948jk)
+  o.swapfile = false                                                                    -- Disable swap (https://tinyurl.com/y9t8frrs)
+  o.showmode = true                                                                     -- show mode in bottom-left corner
+  o.synmaxcol = 200                                                                     -- Only syntax highlight 200 chars (performance)
+  o.autowrite = true                                                                    -- Write before running commands.
+  o.shortmess = 'aAIsTF'                                                                -- Reduce |hit-enter| prompts.
+  o.cmdheight = 1                                                                       -- Number of screen lines for the command-line.
+  o.smartcase = true                                                                    -- Search case incensitive.
+  -- o.textwidth = 100                                                                     -- Set maximum number of characters per line
+  o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,resize,globals"  -- Changes the effect of the |:mksession| cmd.
+  o.spellfile = home .. '/.config/nvim/spell/en.utf-8.add'
+  o.listchars = "trail:-,extends:»,precedes:«,space:·,nbsp:·,eol:¬"                     -- Strings in 'list' mode.
+  o.hidden = true                                                                       -- Allow for more then one unsaved buffer.
+  o.lazyredraw = true                                                                   -- Don't unnecessarily redraw screen.
+  o.undofile = true                                                                     -- Save undo's after file closes.
+  o.undolevels = 1000                                                                   -- Number of changes to be saved.
+  o.tabstop = 2                                                                         -- Number of spaces a <Tab> char is rendered as.
+  o.shiftwidth = 2                                                                      -- Number of spaces that >> and << count for.
+  o.softtabstop = 2                                                                     -- Number of spaces of <Tab> while editing.
+  o.expandtab = true                                                                    -- Use spaces instead of <Tab> for indentation.
+  o.splitbelow = true                                                                   -- Open new split panes at bottommost position
+  o.splitright = true                                                                   -- Open new split panes at rightmost position
+  o.inccommand = 'nosplit'                                                              -- Show visual indication when using substitute.
+  o.modeline = true                                                                     -- load vim settings from magic file comment
+  o.confirm = true                                                                      -- Makes operations like qa ask for confirmation
+  o.scrolloff = 2                                                                       -- Keep at least 2 lines above/below
+  o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
+  o.smartindent = true
+  o.laststatus = 2                                                                      -- Disable/enable bottom statusline
+  o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
+
+  if fn.executable('rg') == 1 then
+    o.grepprg = "rg -H --vimgrep --no-heading"                                          -- Set RipGrep as the default grep program (if it exists)
+    o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+  end
+-- }}}
+
+-- OPTIONS: Window {{{
+  wo.wrap = false                                                                        -- Don't wrap lines as it makes j/k unintuitive.
+  wo.list = false
+
+  -- wo.colorcolumn = +1                                                                    -- Highlight first column after 'textwidth'
+
+  wo.number = true                                                                       -- Enable line numbers
+  wo.relativenumber = true                                                               -- Make line numbers relative
+  wo.numberwidth = 4                                                                     -- Set width of number column
+
+  wo.foldenable = true                                                                   -- collapse all folds.
+  wo.foldmethod = 'syntax'                                                               -- Fold on the syntax
+  wo.foldcolumn = '0'                                                                    -- Don't indicate fold open/closed
+  wo.foldlevel = 1                                                                       -- Autofold nothing by default
+  wo.foldnestmax = 3                                                                     -- Only fold outer functions
+
+
+  if wo.diff == true then                                                                 -- Set diff mode specific window options
+    wo.list = false
+    wo.cursorcolumn = false
+    wo.cursorline = false
+    wo.conceallevel = 0
+    wo.colorcolumn = 0
+
+    vim.call('general#MarkMargin', 0)
+  end
+-- }}}
+
+-- VARIABLES: global {{{
+   vim.g.snappy_dev = 1
+   vim.g.python_host_prog = "python3"
+
+   vim.g.dein_path = '$HOME/.config/nvim/dein'
+   vim.api.nvim_set_var('dein#auto_recache', 1)
+
+   -- vim.g.lumiere_dim_inactive_windows = 0
+
+  vim.g.netrw_browsex_viewer = "open -a '/Applications/Google Chrome.app'"               -- ensure gx opens the url under cursor
+  vim.g.netrw_keepdir = 0
+
+  vim.g.mapleader = "<Space>" -- Set mapleader to <space>
+-- }}}
+
+-- COMMANDS: configuration ex_commands {{{
+  vim.cmd('syntax enable')
+  vim.cmd('colorscheme flattened_dark')
+-- }}}
+
 -- vim: foldmethod=marker:sw=2:foldlevel=10
