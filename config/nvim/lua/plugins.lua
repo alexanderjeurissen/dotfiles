@@ -36,7 +36,11 @@ return require('packer').startup(function()
     use 'tpope/vim-scriptease'
 
     -- NOTE: Common configurations for Neovim Language Servers
-    use { 'neoclide/coc.nvim', branch = 'release' }
+    use {
+      'neoclide/coc.nvim',
+      branch = 'release',
+      config = function() require 'plugins/neoclide-coc' end
+    }
     -- merged = 0
 
     -- NOTE: Tmux navigation keybindings
