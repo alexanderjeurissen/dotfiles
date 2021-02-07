@@ -40,7 +40,10 @@ return require('packer').startup(function()
     -- merged = 0
 
     -- NOTE: Tmux navigation keybindings
-    use 'christoomey/vim-tmux-navigator'
+    use {
+      'christoomey/vim-tmux-navigator',
+      config = function() require 'plugins/christoomey-vim-tmux-navigator' end
+    }
   -- }}}
 
   -- PLUGINS: Editing {{{
@@ -51,7 +54,8 @@ return require('packer').startup(function()
     use 'tpope/vim-endwise'
 
     -- NOTE: Easy commenting using vim motions
-    use 'tpope/vim-commentary'
+    -- use { 'tpope/vim-commentary', disabled=true }
+    use 'b3nj5m1n/kommentary'
 
     -- NOTE: allow opening files with line number e.g. file.txt:30
     use 'bogado/file-line'
@@ -104,10 +108,27 @@ return require('packer').startup(function()
 
     -- NOTE: Fuzzy finder / selector
     use { 'junegunn/fzf', run = './install --all' }
-    -- merged = 0
+
+    -- NOTE: Fuzzy finder / selector
+    use {
+      'nvim-telescope/telescope.nvim',
+      requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
+      config = function() require 'plugins/telescope' end,
+      disabled = true
+    }
+
+    use { 'nvim-telescope/telescope-fzy-native.nvim', disabled = true }
+
+    use {
+      'shoumodip/ido.nvim',
+      config = function() require 'plugins/ido' end
+    }
 
     -- NOTE: add nice buffer deleting
-    use 'moll/vim-bbye'
+    use {
+      'moll/vim-bbye',
+      config = function() require 'plugins/moll-vim-bbye' end
+    }
 
     -- NOTE: rails specific config and highlight
     use 'arithran/vim-delete-hidden-buffers'
@@ -122,7 +143,10 @@ return require('packer').startup(function()
     -- use 'gcmt/taboo.vim'
 
     -- NOTE: change vim root to vcs root when editing a file
-    use 'airblade/vim-rooter'
+    use {
+      'airblade/vim-rooter',
+      config = function() require 'plugins/airblade-vim-rooter' end
+    }
 
     -- NOTE: pairs of handy bracket mappings like [f and ]f for file switching
     use 'tpope/vim-unimpaired'
@@ -144,7 +168,10 @@ return require('packer').startup(function()
 
   -- PLUGINS: Window Management {{{
     -- NOTE: allows to zoom into splits
-    use 'szw/vim-maximizer'
+    use {
+      'szw/vim-maximizer',
+      config = function() require 'plugins/szw-vim-maximizer' end
+    }
   -- }}}
 end)
 

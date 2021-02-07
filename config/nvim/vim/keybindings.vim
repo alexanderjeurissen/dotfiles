@@ -172,7 +172,7 @@ scriptencoding utf-8
 
   " Open vimrc with <leader>fed
   nnoremap <leader>fed  :e $MYVIMRC<CR>
-  nnoremap <leader>feR  :source $MYVIMRC<CR>
+  nnoremap <leader>feR  :luafile $MYVIMRC<CR>
 
   " Rename current file with <leader>fr
   noremap <leader>fr :call general#RenameFile()<CR>
