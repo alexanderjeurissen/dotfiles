@@ -1,3 +1,5 @@
+require 'plugins'
+
 -- Meta accessors for vim options {{{
   local o = vim.o
   local bo = vim.bo
@@ -76,7 +78,7 @@ end
     wo.cursorcolumn = false
     wo.cursorline = false
     wo.conceallevel = 0
-    wo.colorcolumn = 0
+    wo.colorcolumn = '0'
 
     vim.call('general#MarkMargin', 0)
   end
@@ -104,7 +106,7 @@ end
 
 -- SETUP: source config still written in vimscript {{{
   vim.cmd('source ' .. home .. '/.config/nvim/vim/misc.vim')
-  vim.cmd('source ' .. home .. '/.config/nvim/vim/dein.vim')
+  -- vim.cmd('source ' .. home .. '/.config/nvim/vim/dein.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/keybindings.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/augroups.vim')
 -- }}}
