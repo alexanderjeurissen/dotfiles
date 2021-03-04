@@ -13,7 +13,7 @@ jobs:
     - uses: actions/stale@v3.0.17
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Stale issue message'
-        stale-pr-message: 'Stale pull request message'
-        stale-issue-label: 'no-issue-activity'
-        stale-pr-label: 'no-pr-activity'
+        stale-issue-message: 'This issue has not seen any recent activity and therefore has been marked as `stale`. If the issue is no longer relevant, please attend the author so that the issue can be closed.'
+        stale-pr-message: 'This pull-request has not seen any recent activity. If the proposed change is no longer desired, please attend the author so that the PR can be closed.'
+        stale-issue-label: 'stale-issue'
+        stale-pr-label: 'stale-pr'
