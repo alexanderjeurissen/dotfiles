@@ -135,8 +135,8 @@ abbr --add gSu git submodule foreach git pull origin master
 abbr --add gSx git-submodule-remove
 
 # Working Copy (w)
-abbr --add gws git status --ignore-submodules=all --short
-abbr --add gwS git status --ignore-submodules=all
+abbr --add gws git status --short
+abbr --add gwS git status
 abbr --add gwd git diff --no-ext-diff
 abbr --add gwD git diff --no-ext-diff --word-diff
 abbr --add gwr git reset --soft
