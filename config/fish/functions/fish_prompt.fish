@@ -1,29 +1,27 @@
 function fish_prompt
   set -l last_status $status
+  set -l prompt_char ''
+  set -l prompt_status_color 'blue'
 
   set_color normal
-  printf " "
-
-  # NOTE: directory segment
-  set -l pwd (prompt_pwd)
-  set -l segments (string split / $pwd)
-  set -l prefix (string join / $segments[1..-2])
-
-  set_color brgreen; printf "$prefix/"
+  printf "\n "
 
   if test -e .git
-    set -gx git_status (git status 2> /dev/null)
+    set -l vcs_status (git diff-index --quiet HEAD -- && echo 0 || echo 1)
+    # set prompt_char ''
 
-    if string match -q -- "*nothing to commit*" $git_status
-      set_color --bold blue; printf "$segments[-1]"
-    else if string match -q -- "*Changes to be committed*" $git_status
-      set_color --bold green; printf "$segments[-1]"
+    if test $vcs_status -eq 0
+      set prompt_status_color 'green'
     else
-      set_color --bold yellow; printf "$segments[-1]"
+      set prompt_status_color 'yellow'
     end
-  else
-    set_color --bold white; printf "$segments[-1]"
   end
+
+  if test $last_status -ne 0
+    set prompt_status_color 'red'
+  end
+
+  set_color --bold "$prompt_status_color"; printf "$prompt_char "
 
   set_color normal; printf " "
 end
