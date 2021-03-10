@@ -8,4 +8,4 @@
 " nnoremap <silent> <leader>gwq :Gwrite<CR>:qa<CR>
 " nnoremap <silent> <leader>ge  :Gedit<CR>
 
-command! GreadDevelop Gread! show develop:%
+command! GreadDevelop %Git! show develop:%

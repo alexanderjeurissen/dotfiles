@@ -51,7 +51,10 @@ scriptencoding utf-8
     autocmd  BufNewFile  *  :lua require('general').EnsureDirExists()
 
     " let terminal resize scale the internal windows
-    autocmd VimResized * :wincmd =
+    " autocmd VimResized * :wincmd =
+
+    " autocmd TermOpen,TermEnter * :call terminal#Init()
+    " autocmd TermLeave * :call terminal#Cleanup()
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk

@@ -1,11 +1,15 @@
--- INSTALL packer {{{
-  local execute = vim.api.nvim_command
+-- Vim API shortcuts {{{
+  local vim = vim or {}
+  local api = vim.api
   local fn = vim.fn
+  local cmd = api.nvim_command
+-- }}}
 
+-- INSTALL packer {{{
   local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
 
   if fn.empty(fn.glob(install_path)) > 0 then
-    execute('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
+    cmd('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
   end
 -- }}}
 
@@ -18,6 +22,7 @@ return require('packer').startup(function()
 
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
+    use { 'npxbr/gruvbox.nvim', requires = {{'rktjmp/lush.nvim'}}, config = function() require 'plugins/npxbr-gruvbox-nvim' end}
   -- }}}
 
   -- PLUGINS: Core {{{
@@ -26,7 +31,11 @@ return require('packer').startup(function()
     use 'vim-scripts/searchfold.vim'
 
     -- NOTE: run tasks in a tmux split to not block vim
-    use { 'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'} }
+    use {
+      'tpope/vim-dispatch',
+      opt = true,
+      cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
+    }
 
     -- NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -36,11 +45,11 @@ return require('packer').startup(function()
     use 'tpope/vim-scriptease'
 
     -- NOTE: Common configurations for Neovim Language Servers
-    use {
+    --[[ use {
       'neoclide/coc.nvim',
       branch = 'release',
       config = function() require 'plugins/neoclide-coc' end
-    }
+    } ]]
     -- merged = 0
 
     -- NOTE: Tmux navigation keybindings
@@ -48,7 +57,10 @@ return require('packer').startup(function()
       'christoomey/vim-tmux-navigator',
       config = function() require 'plugins/christoomey-vim-tmux-navigator' end
     }
+
+    -- use { 'hkupty/nvimux', config = function() require 'plugins/nvimux' end }
   -- }}}
+
 
   -- PLUGINS: Editing {{{
     -- NOTE: better search and replace
@@ -80,7 +92,7 @@ return require('packer').startup(function()
     use 'machakann/vim-highlightedyank'
 
     -- NOTE: Enables editing quickfix buffer
-    use 'stefandtw/quickfix-reflector.vim'
+    use '~/Development/open-source/qedit.nvim'
   -- }}}
 
   -- PLUGINS: Frontend/Javascript {{{
@@ -112,21 +124,22 @@ return require('packer').startup(function()
 
     -- NOTE: Fuzzy finder / selector
     use { 'junegunn/fzf', run = './install --all' }
-
+    -- use { 'vijaymarupudi/nvim-fzf', config=function() require 'plugins/fzf' end}
+    use { '~/Development/open-source/nvim-fzf', config=function() require 'plugins/fzf' end}
     -- NOTE: Fuzzy finder / selector
-    use {
+    --[[ use {
       'nvim-telescope/telescope.nvim',
       requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
       config = function() require 'plugins/telescope' end,
-      disabled = true
-    }
+    } ]]
 
-    use { 'nvim-telescope/telescope-fzy-native.nvim', disabled = true }
+    -- use { 'nvim-telescope/telescope-fzy-native.nvim' }
 
-    use {
-      'shoumodip/ido.nvim',
-      config = function() require 'plugins/ido' end
-    }
+    -- NOTE: Ido packages and runtime
+    use '~/Development/open-source/ido-nvim/files'
+    use '~/Development/open-source/ido-nvim/git'
+    use { '~/Development/open-source/ido-nvim/core', config = function() require 'plugins/ido' end }
+
 
     -- NOTE: add nice buffer deleting
     use {

@@ -91,62 +91,24 @@ function! general#MarkMargin(on, ...)
   endif
 endfunction
 
-" NOTE: Create a floating window using either a new buffer
-" or by putting the supplied buffer in the floating window.
-function! general#FloatingWindow(...) abort
-  " NOTE: instantiate buffer
-  let s:buf = nvim_create_buf(v:false, v:true)
+" Source: https://github.com/neovim/neovim/issues/9718#issuecomment-546603628
+function! general#create_relative_centered_window()
+  let win = winnr()
+  let win_width = winwidth(win)
+  let win_height = winheight(win)
+  let win_pos = win_screenpos(win)
 
-  " NOTE: Create a floating window depending on arguments:
-  " | 'split' => center window based on source split size
-  " | 'global' => center window based on terminal size
-  " default to 'split'
-  let scope = get(a:, 1, 'split')
+  let height = 19
+  let width = float2nr(l:win_width - (l:win_width * 2 / 10))
+  let top = float2nr(win_pos[0] + (height / 10))
+  let left = float2nr(win_pos[1] + (width / 8))
 
-  if scope ==# 'global'
-    " NOTE: position floating window: center of screen
-    let height = float2nr(&lines - (&lines * 2 / 10))
-    let width = float2nr(&columns - (&columns * 2 / 10))
-    let row = float2nr((&lines - height) / 2)
-    let col = float2nr((&columns - width) / 2)
-  else
-    " NOTE: position floating window: center of split
-    let win = winnr()
-    let win_width = winwidth(win)
-    let win_height = winheight(win)
-    let win_pos = win_screenpos(win)
+  let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
 
-    let height = float2nr(l:win_height - (l:win_height * 2 / 10))
-    let width = float2nr(l:win_width - (l:win_width * 2 / 10))
-    let row = float2nr(win_pos[0] + (height / 10))
-    let col = float2nr(win_pos[1] + (width / 6))
-  end
-
-  " NOTE: disable some function to ensure correct behaviour:
-  " 1. No sign column
-  " 2. No mode
-  " 3. No line numbers
-  " 4. No relative line numbers
-  " 5. No ruler
-  call setbufvar(s:buf, '&signcolumn', 'no')
-  call setbufvar(s:buf, '&showmode', 0)
-  call setbufvar(s:buf, '&number', 0)
-  call setbufvar(s:buf, '&relativenumber', 0)
-  call setbufvar(s:buf, '&ruler', 0)
-
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': row,
-        \ 'col': col,
-        \ 'width': width,
-        \ 'height': height
-        \ }
-
-  let win = nvim_open_win(s:buf, v:true, opts)
-
-  return s:buf
+  let l:buf = nvim_create_buf(v:false, v:true)
+  call nvim_open_win(l:buf, v:true, opts)
+  return l:buf
 endfunction
-
 
 " NOTE: open help queries in floating window
 function! general#FloatingWindowHelp(query) abort

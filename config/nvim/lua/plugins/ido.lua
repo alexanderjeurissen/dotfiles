@@ -1,29 +1,62 @@
-require "ido"
-local cmd = vim.api.nvim_command
+local ido = require("ido")
+local main = require("ido.core.main")
+local advice = require("ido.core.advice")
 
--- NOTE: horizontal mode {{{
-  ido_decorations['separator']   = ' | '
-  ido_decorations['matchstart']  = '{ '
-  ido_decorations['matchend']    = ' }'
-  ido_decorations['marker']      = ' > '
-  ido_decorations['moreitems']   = '...'
-  ido_limit_lines                = true
-  -- ido_minimal_mode               = true
-  ido_overlap_statusline         = true
+-- Vim imports {{{
+local api = vim.api
+local fn = vim.fn
+local cmd = api.nvim_command
+local set_keymap = api.nvim_set_keymap
 -- }}}
 
--- NOTE: vertical mode {{{
-  --[[ ido_decorations['separator']   = '\n    '
-  ido_decorations['matchstart']  = '\n'
-  ido_decorations['matchend']  = '\n'
-  ido_decorations['marker']      = ' > '
-  ido_decorations['moreitems']   = ''
-  ido_limit_lines                = false ]]
+-- Ido PKG import statements {{
+require("ido-pkg/files")
+require("ido-pkg/browse")
+require("ido-pkg/cd")
+-- }}
+
+-- Ido layouts {{{
+ido.layouts.setup("minimal", {
+   results_start = " { ",
+   results_end = " }",
+   results_separator = " | ",
+   height = 1,
+})
+
+ido.layouts.setup("vertical", {
+   results_start = "\n ❯ ",
+   results_end = "",
+
+   results_separator = "\n    ",
+
+   height = 10,
+})
 -- }}}
 
-cmd('hi! IdoCursor         ctermfg=8 ctermbg=12')
-cmd('hi! IdoSelectedMatch  ctermfg=3')
-cmd('hi! IdoPrefix         ctermfg=3')
-cmd('hi! IdoSeparator      ctermfg=7')
-cmd('hi! IdoPrompt         ctermfg=4')
-cmd('hi! IdoWindow         ctermbg=0')
+ido.opts.setup({
+   layout = ido.layouts.minimal
+})
+
+ido.pkg.setup('find_files', {
+  pkg_opts = {
+    command = 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+  }
+})
+
+-- NOTE: bindings {{{
+  --[[ set_keymap('n',
+    '<leader>pf',
+    "<cmd>lua require('ido').pkg.run('find_files')<CR>",
+    { noremap = true, silent = true }) ]]
+
+  --[[ set_keymap('n',
+    '<leader>ff',
+    "<cmd>lua require('ido').pkg.run('find_files')<CR>",
+    { noremap = true, silent = true }) ]]
+
+  set_keymap('n',
+    '<leader>.',
+    "<cmd>lua require('ido').pkg.run('browse')<CR>",
+    { noremap = true, silent = true })
+-- }}}
+-- vim: foldmethod=marker:sw=2:foldlevel=10

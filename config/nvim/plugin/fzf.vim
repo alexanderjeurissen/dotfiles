@@ -10,28 +10,19 @@ let g:fzf_action = {
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_default_options = '--inline-info --multi --sort --layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all'
-" let g:fzf_files_options = ' --preview "bat --theme=\"Solarized (light)\" --style=changes --color always {} | head -'.&lines.'"'
-let g:fzf_files_options =''
-" let g:fzf_files_options = '--preview "bat --theme="OneHalfLight" --style=numbers,changes --color always {} | head -100"'
+let g:fzf_default_options = '--no-inline-info --multi --sort --layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all --color=bw,border:8,bg:8,info:2,prompt:12,fg:10,bg+:0,fg+:10,gutter:0 --border=sharp --prompt=" "'
 
 " NOTE: Replace current buffer with search window
-" let g:fzf_layout = { 'window': 'enew' }
-" let g:fzf_layout = { 'window': 'tabnew' }
-let g:fzf_layout = { 'window': 'call general#FloatingWindow()' }
+let g:fzf_layout = { 'window': 'call general#create_relative_centered_window()' }
 
 " Keybindings & commands {{{
-command! Files call s:fzf_Files()
 command! RG call s:fzf_Grep()
 command! NeighbouringFiles call s:fzf_NeighbouringFiles()
-command! GitFiles call s:fzf_GitFiles()
 command! GitBranchFiles call s:fzf_GitBranchFiles()
 command! Buffers call s:fzf_Buffers()
 
 nnoremap <silent> <leader>fn :<C-u>NeighbouringFiles<CR>
-nnoremap <silent> <leader>pf :<C-u>Files<CR>
 nnoremap <silent> <leader>bb :<C-u>Buffers<CR>
-nnoremap <silent> <leader>gf :<C-u>GitFiles<CR>
 nnoremap <silent> <leader>gF :<C-u>GitBranchFiles<CR>
 
 nnoremap <silent> <leader>rh :<C-u>FZF app<CR>
@@ -53,14 +44,8 @@ function! s:fzf_insert_file_path()
   call fzf#run(fzf#wrap({
         \ 'source':  command,
         \ 'sink':    function('general#AppendToLine'),
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors(),
+        \ 'options': g:fzf_default_options,
         \ }))
-endfunction
-
-" NOTE: Fuzzy find files
-function! s:fzf_Files()
-  let g:fzf_current_mode = 'FILES'
-  call fzf#run(fzf#wrap({ 'options': g:fzf_default_options. g:fzf_files_options . fzf#get_fzf_colors() }))
 endfunction
 
 " NOTE: Grep using RG
@@ -93,7 +78,7 @@ function! s:fzf_Grep()
   call fzf#run(fzf#wrap({
         \ 'source':  printf(command,  escape('^(?=.)', '"\')),
         \ 'sink*':   function('s:rg_handler'),
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors().'--delimiter : --nth 4..'
+        \ 'options': g:fzf_default_options.'--delimiter : --nth 4..'
         \ }))
 endfunction
 
@@ -115,7 +100,7 @@ function! s:fzf_Buffers()
   call fzf#run(fzf#wrap({
         \ 'source':  reverse(<sid>buflist()),
         \ 'sink':    function('s:bufopen'),
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
+        \ 'options': g:fzf_default_options
         \ }))
 endfunction
 
@@ -130,19 +115,7 @@ function! s:fzf_NeighbouringFiles()
   call fzf#run(fzf#wrap({
         \ 'source': command,
         \ 'dir': cwd,
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
-        \ }))
-endfunction
-
-
-"NOTE: Files that are tracked by Git in $PWD that are dirty
-function! s:fzf_GitFiles()
-  let g:fzf_current_mode = 'GIT_FILES'
-  let command = 'git diff --name-only'
-
-  call fzf#run(fzf#wrap({
-        \ 'source': command,
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
+        \ 'options': g:fzf_default_options
         \ }))
 endfunction
 
@@ -154,38 +127,7 @@ function! s:fzf_GitBranchFiles()
 
   call fzf#run(fzf#wrap({
         \ 'source': command,
-        \ 'options': g:fzf_default_options.fzf#get_fzf_colors()
+        \ 'options': g:fzf_default_options
         \ }))
-endfunction
-
-
-" NOTE: generate color settings string based on colorscheme, to be put in .zprofile
-function! fzf#get_fzf_colors()
-  return ''
-  let rules =
-  \ { 'fg':      [['NormalFloat',       'fg#']],
-    \ 'bg':      [['NormalFloat',       'bg#']],
-    \ 'hl':      [['MatchParen',      'fg#']],
-    \ 'fg+':     [['MatchParen', 'fg#'], ['Normal', 'fg#']],
-    \ 'bg+':     [['PMenuSBar', 'bg#']],
-    \ 'hl+':     [['MatchParen',    'fg#']],
-    \ 'info':    [['MatchParen',      'fg#']],
-    \ 'prompt':  [['MatchParen',  'fg#']],
-    \ 'pointer': [['MatchParen',    'fg#']],
-    \ 'marker':  [['MatchParen',      'fg#']],
-    \ 'spinner': [['MatchParen',        'fg#']],
-    \ 'header':  [['Comment',      'fg#']] }
-  let cols = []
-  for [name, pairs] in items(rules)
-    for pair in pairs
-      let code = synIDattr(synIDtrans(hlID(pair[0])), pair[1])
-      if !empty(name) && !empty(code)
-        call add(cols, name.':'.code)
-        break
-      endif
-    endfor
-  endfor
-  " echom ' --color='.join(cols, ',')
-  return ' --color='.join(cols, ',').' '
 endfunction
 " }}}

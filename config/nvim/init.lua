@@ -7,7 +7,7 @@ require 'plugins'
   local fn = vim.fn
 -- }}}
 
-local home = os.getenv("HOME")
+local home = os.getenv("HOME") local home = os.getenv("HOME")
 local pwd = os.getenv("PWD")
 
 function _G.dump(...)
@@ -48,7 +48,9 @@ end
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
   o.laststatus = 2                                                                      -- Disable/enable bottom statusline
+  -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
+  o.termguicolors = false
 
   if fn.executable('rg') == 1 then
     o.grepprg = "rg -H --vimgrep --no-heading"                                          -- Set RipGrep as the default grep program (if it exists)
@@ -106,7 +108,6 @@ end
 
 -- SETUP: source config still written in vimscript {{{
   vim.cmd('source ' .. home .. '/.config/nvim/vim/misc.vim')
-  -- vim.cmd('source ' .. home .. '/.config/nvim/vim/dein.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/keybindings.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/augroups.vim')
 -- }}}
