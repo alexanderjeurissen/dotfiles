@@ -1,4 +1,3 @@
 function fkill
-set -l pid (ps -ef | sed 1d | fzf -m | awk '{print $2}') || return
-kill -9 $pid
+  ps ax -o pid,time,command | fzf -m | awk '{print $1}' | xargs kill -9
 end

@@ -1,1 +1,1 @@
-/Users/alexanderjeurissen/.config/nvim/dein/repos/github.com/junegunn/fzf/shell/key-bindings.fish
+/Users/alexanderjeurissen/.local/share/nvim/site/pack/packer/start/fzf/shell/key-bindings.fish
