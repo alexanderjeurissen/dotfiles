@@ -18,8 +18,3 @@ nmap <buffer> o <C-]>
 
 " Jump back with H
 nmap <buffer> H <C-T>
-
-" Maximize help buffer to a separate tab
-" execute "normal \<C-W>T"
-" setlocal hidden
-" set hidden

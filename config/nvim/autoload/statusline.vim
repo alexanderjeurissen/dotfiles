@@ -6,7 +6,6 @@ function! statusline#Init()
   let l:statusline_items .= '%t'
   let l:statusline_items .= '%='
   let l:statusline_items .= '%{statusline#PasteFlag()}'
-  "let statusline_items .= '%{statusline#SyntaxFlag()}'
   let l:statusline_items .= '%{statusline#SpellFlag()}'
   let l:statusline_items .= '%{statusline#HardTimeFlag()}'
   let l:statusline_items .= '%{statusline#BranchFlag()}'

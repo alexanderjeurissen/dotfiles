@@ -40,17 +40,6 @@ function! general#Preserve(command)
   call cursor(l:l, l:c)
 endfunction
 
-" save session
-function! general#WriteSession()
-  let l:cwd = fnamemodify('.', ':p:h:t')
-  " let dateStamp = strftime("%d-%m-%Y_%H:%M")
-  let l:extension = '.session'
-  " let fname = cwd . "_" . dateStamp . extension
-  let l:fname = l:cwd . l:extension
-  silent execute ':Obsession ' . l:fname
-  echo 'Wrote ' . l:fname
-endfun
-
 function! general#ExecVisualSelection()
   let l:selection = s:get_visual_selection()
   call jobstart("open -a '/Applications/Google Chrome.app' --args '" . l:selection . "'")
@@ -89,36 +78,4 @@ function! general#MarkMargin(on, ...)
   if a:on
       let b:MarkMargin = matchadd('ColorColumn', '\%>80v\s*\S', s:text_length)
   endif
-endfunction
-
-" Source: https://github.com/neovim/neovim/issues/9718#issuecomment-546603628
-function! general#create_relative_centered_window()
-  let win = winnr()
-  let win_width = winwidth(win)
-  let win_height = winheight(win)
-  let win_pos = win_screenpos(win)
-
-  let height = 19
-  let width = float2nr(l:win_width - (l:win_width * 2 / 10))
-  let top = float2nr(win_pos[0] + (height / 10))
-  let left = float2nr(win_pos[1] + (width / 8))
-
-  let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
-
-  let l:buf = nvim_create_buf(v:false, v:true)
-  call nvim_open_win(l:buf, v:true, opts)
-  return l:buf
-endfunction
-
-" NOTE: open help queries in floating window
-function! general#FloatingWindowHelp(query) abort
-  let l:buf = general#FloatingWindow('global')
-  call nvim_set_current_buf(l:buf)
-  setlocal filetype=help
-  setlocal buftype=help
-  execute 'help ' . a:query
-endfunction
-
-function! general#AppendToLine(str)
-  execute ":normal i" . a:str
 endfunction

@@ -1,1 +1,0 @@
-set ft=journal

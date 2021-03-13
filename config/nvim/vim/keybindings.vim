@@ -16,9 +16,6 @@ scriptencoding utf-8
   inoreabbr <buffer> reprot report
   inoreabbr <buffer> Reprot Report
 
-  " session mappings
-  noremap <leader>m :call general#WriteSession()<CR>
-
   " Open highlighted text with default program
   vnoremap o :call general#ExecVisualSelection()<cr>
 
