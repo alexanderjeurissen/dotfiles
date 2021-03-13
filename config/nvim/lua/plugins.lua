@@ -22,6 +22,7 @@ return require('packer').startup(function()
 
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
+    use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
     use { 'npxbr/gruvbox.nvim', requires = {{'rktjmp/lush.nvim'}}, config = function() require 'plugins/npxbr-gruvbox-nvim' end}
   -- }}}
 
@@ -128,7 +129,6 @@ return require('packer').startup(function()
 
     -- NOTE: Ido packages and runtime
     use '~/Development/open-source/ido-nvim/files'
-    -- use '~/Development/open-source/ido-nvim/git'
     use { '~/Development/open-source/ido-nvim/core', config = function() require 'plugins/ido' end }
 
 

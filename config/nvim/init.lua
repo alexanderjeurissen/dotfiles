@@ -106,8 +106,7 @@ end
 -- }}}
 
 -- SETUP: configure ex_commands {{{
-  vim.cmd('syntax enable')
-  vim.cmd('colorscheme flattened_dark')
+  -- vim.cmd('syntax enable')
 -- }}}
 
 -- SETUP: source config still written in vimscript {{{
