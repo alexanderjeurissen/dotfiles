@@ -52,7 +52,7 @@ eval (luarocks path)
 # }}}
 
 # LS colors settings {{{
-eval (gdircolors -c ~/.dircolors/dircolors.256dark)
+eval (gdircolors -c ~/.dircolors/dircolors.ansi-dark)
 # }}}
 # The following two are required to make yarn install binaries and
 # packages in nodenv's location. Without they will go into

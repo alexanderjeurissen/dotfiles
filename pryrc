@@ -79,5 +79,5 @@ _prompts = [
 if defined?(Pry::Prompt.new)
   Pry.config.prompt = Pry::Prompt.new( :snappy, 'a cleaner pry prompt', _prompts)
 else
-  Pry.config.prompt = prompts
+  Pry.config.prompt = _prompts
 end
