@@ -70,8 +70,6 @@ scriptencoding utf-8
 " }}}
 
 " KEYBINDINGS: Navigation/search {{{
-  nnoremap gb :Buffers<CR>
-
   " Go to previous and next item in quickfix list
   noremap <leader>cw :cwindow<CR><C-w>J
   noremap <leader>cq <C-w><C-p>:cclose<CR>

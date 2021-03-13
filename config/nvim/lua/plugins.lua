@@ -124,20 +124,11 @@ return require('packer').startup(function()
 
     -- NOTE: Fuzzy finder / selector
     use { 'junegunn/fzf', run = './install --all' }
-    -- use { 'vijaymarupudi/nvim-fzf', config=function() require 'plugins/fzf' end}
-    use { '~/Development/open-source/nvim-fzf', config=function() require 'plugins/fzf' end}
-    -- NOTE: Fuzzy finder / selector
-    --[[ use {
-      'nvim-telescope/telescope.nvim',
-      requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
-      config = function() require 'plugins/telescope' end,
-    } ]]
-
-    -- use { 'nvim-telescope/telescope-fzy-native.nvim' }
+    use { 'vijaymarupudi/nvim-fzf', config=function() require 'plugins/fzf' end}
 
     -- NOTE: Ido packages and runtime
     use '~/Development/open-source/ido-nvim/files'
-    use '~/Development/open-source/ido-nvim/git'
+    -- use '~/Development/open-source/ido-nvim/git'
     use { '~/Development/open-source/ido-nvim/core', config = function() require 'plugins/ido' end }
 
 

@@ -10,3 +10,5 @@ hi! IdoPrefix         cterm=standout ctermfg=3 guifg=#b58900
 hi! IdoUXElements     cterm=bold ctermfg=7 guifg=#eee8d5
 hi! IdoPrompt         ctermfg=4 guifg=#268bd2
 hi! IdoWindow         ctermbg=0 guibg=#073642
+
+hi! netrwSymLink  ctermfg=5 guifg=#d33682

@@ -15,6 +15,10 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
+function _G.errorMsg(str)
+  vim.api.nvim_command('echohl ErrorMsg | echo "' .. str .. '" | echohl None')
+end
+
 -- OPTIONS: Editor {{{
   o.path = pwd .. ',' .. pwd .. '/**'                                                   -- Make :find more usable by default
   o.wildmenu = true                                                                     -- Show all matches when tab completing
@@ -25,7 +29,7 @@ end
   o.synmaxcol = 200                                                                     -- Only syntax highlight 200 chars (performance)
   o.autowrite = true                                                                    -- Write before running commands.
   o.shortmess = 'aAIsTF'                                                                -- Reduce |hit-enter| prompts.
-  o.cmdheight = 1                                                                       -- Number of screen lines for the command-line.
+  o.cmdheight = 2                                                                       -- Number of screen lines for the command-line.
   o.smartcase = true                                                                    -- Search case incensitive.
   -- o.textwidth = 100                                                                     -- Set maximum number of characters per line
   o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,resize,globals"  -- Changes the effect of the |:mksession| cmd.
@@ -53,7 +57,7 @@ end
   o.termguicolors = false
 
   if fn.executable('rg') == 1 then
-    o.grepprg = "rg -H --vimgrep --no-heading"                                          -- Set RipGrep as the default grep program (if it exists)
+    o.grepprg = "rg --vimgrep -H --no-heading --column --smart-case -P"                                          -- Set RipGrep as the default grep program (if it exists)
     o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
   end
 -- }}}
