@@ -45,13 +45,7 @@ return require('packer').startup(function()
     -- NOTE: A vim plugin for making vim plugins
     use 'tpope/vim-scriptease'
 
-    -- NOTE: Common configurations for Neovim Language Servers
-    --[[ use {
-      'neoclide/coc.nvim',
-      branch = 'release',
-      config = function() require 'plugins/neoclide-coc' end
-    } ]]
-    -- merged = 0
+    use { 'tjdevries/express_line.nvim', requires= {{ 'nvim-lua/plenary.nvim' }}, config = function() require 'plugins/tjdevries-express-line-nvim' end }
 
     -- NOTE: Tmux navigation keybindings
     use {
@@ -61,7 +55,6 @@ return require('packer').startup(function()
 
     -- use { 'hkupty/nvimux', config = function() require 'plugins/nvimux' end }
   -- }}}
-
 
   -- PLUGINS: Editing {{{
     -- NOTE: better search and replace

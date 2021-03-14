@@ -51,6 +51,7 @@ end
   o.scrolloff = 2                                                                       -- Keep at least 2 lines above/below
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
+  -- o.statusline='%!statusline#Init()'
   o.laststatus = 2                                                                      -- Disable/enable bottom statusline
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
@@ -110,7 +111,6 @@ end
 -- }}}
 
 -- SETUP: source config still written in vimscript {{{
-  vim.cmd('source ' .. home .. '/.config/nvim/vim/misc.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/keybindings.vim')
   vim.cmd('source ' .. home .. '/.config/nvim/vim/augroups.vim')
 -- }}}
