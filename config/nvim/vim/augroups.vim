@@ -30,10 +30,6 @@ scriptencoding utf-8
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile Appraisals setlocal filetype=ruby
 
-    " Add html highlighting when editing rails views
-    autocmd BufRead,BufNewFile *.html setlocal filetype=html.javascript
-    autocmd BufRead,BufNewFile *.erb setlocal filetype=eruby.html
-
     " Add sh highlighthing when editing fish files
     autocmd BufRead,BufNewfile *.fish setlocal filetype=sh
 
@@ -49,13 +45,6 @@ scriptencoding utf-8
 
     " NOTE: Ensure directory structure exists when opening a new file
     autocmd  BufNewFile  *  :lua require('general').EnsureDirExists()
-  augroup END " }}}
-
-  " NOTE: reload init.vim when saving it to disk
-  augroup ALEXANDER_VIMRC_RELOAD " {{{
-    autocmd!
-    autocmd BufWritePost init.vim source %
-    autocmd BufWritePost init.lua luafile %
   augroup END " }}}
 
   " NOTE: open quickfix window after vim grep
