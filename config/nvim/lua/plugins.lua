@@ -45,8 +45,6 @@ return require('packer').startup(function()
     -- NOTE: A vim plugin for making vim plugins
     use 'tpope/vim-scriptease'
 
-    use { 'tjdevries/express_line.nvim', requires= {{ 'nvim-lua/plenary.nvim' }}, config = function() require 'plugins/tjdevries-express-line-nvim' end }
-
     -- NOTE: Tmux navigation keybindings
     use {
       'christoomey/vim-tmux-navigator',

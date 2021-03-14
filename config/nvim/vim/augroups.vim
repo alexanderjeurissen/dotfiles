@@ -49,12 +49,6 @@ scriptencoding utf-8
 
     " NOTE: Ensure directory structure exists when opening a new file
     autocmd  BufNewFile  *  :lua require('general').EnsureDirExists()
-
-    " let terminal resize scale the internal windows
-    " autocmd VimResized * :wincmd =
-
-    " autocmd TermOpen,TermEnter * :call terminal#Init()
-    " autocmd TermLeave * :call terminal#Cleanup()
   augroup END " }}}
 
   " NOTE: reload init.vim when saving it to disk

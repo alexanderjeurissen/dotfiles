@@ -28,5 +28,4 @@ function General.EnsureDirExists()
   end
 end
 
-
 return General
