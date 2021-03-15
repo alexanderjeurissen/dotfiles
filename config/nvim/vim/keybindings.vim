@@ -170,7 +170,7 @@ scriptencoding utf-8
   nnoremap <leader>feR  :luafile $MYVIMRC<CR>
 
   " Rename current file with <leader>fr
-  noremap <leader>fr :call general#RenameFile()<CR>
+  noremap <leader>fr :lua require('general').rename_file()<CR>
 
   " Get a vimdiff of all approvals
   map <leader>v :!approvals verify -d vimdiff -a<cr>

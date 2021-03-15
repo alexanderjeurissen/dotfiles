@@ -27,6 +27,8 @@ function Util.getPath(str)
   return s:match("(.*[/\\])")
 end
 
+function Util.noop() --[[ do nothing ]] end
+
 -- Slice table as this is not included in lua 5.1
 function Util.tbl_slice(tbl, start_idx, end_idx)
   local slice = {}
@@ -37,6 +39,28 @@ function Util.tbl_slice(tbl, start_idx, end_idx)
   end
 
   return slice
+end
+
+-- Show confirm dialog before executing predicate
+function Util.confirm(options, msg)
+  msg = msg or 'Are you sure ?'
+
+  local option_tbl = {}
+  local callback_tbl = {}
+
+  for option, callback in pairs(options) do
+    table.insert(option_tbl, '&'..option)
+    table.insert(callback_tbl, callback)
+  end
+
+  local option_str = table.concat(option_tbl, '\n')
+
+  local choice = vim.fn.confirm(msg, option_str)
+  local choice_func = callback_tbl[choice]
+
+  if choice and choice_func and type(choice_func) == 'function' then
+    choice_func()
+  end
 end
 
 -- Check if the current directory is a git repo

@@ -1,15 +1,3 @@
-" FIXME: this is current bugged due to conflicting tpope plugin
-" rename current file, via Gary Bernhardt
-function! general#RenameFile()
-  let l:old_name = expand('%')
-  let l:new_name = input('New file name: ', expand('%'))
-  if l:new_name !=# '' && l:new_name != l:old_name
-    execute ':Rename ' . l:new_name
-    redraw!
-  endif
-endfunction
-
-
 " NOTE: copied from Damian Conway's vimrc
 " SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
 function! general#HLNext(blinktime)

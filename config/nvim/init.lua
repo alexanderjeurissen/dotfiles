@@ -52,15 +52,15 @@ end
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
 
-  o.statusline=" "
-  o.statusline= o.statusline .. "%{&modified?'  ':''}"
-  o.statusline= o.statusline .. "%{&readonly?'  ':''}"
-  o.statusline= o.statusline .. " "
-  o.statusline= o.statusline .. "%t"
-  o.statusline= o.statusline .. "%="
-  o.statusline= o.statusline .. "%{&paste?'  ':''}"
-  o.statusline= o.statusline .. "%{&spell?' ¶ ':''}"
-  o.statusline= o.statusline .. "%P "
+  o.statusline = " "
+  o.statusline = o.statusline .. "%{&modified?'  ':''}"
+  o.statusline = o.statusline .. "%{&readonly?'  ':''}"
+  o.statusline = o.statusline .. " "
+  o.statusline = o.statusline .. "%t"
+  o.statusline = o.statusline .. "%="
+  o.statusline = o.statusline .. "%{&paste?'  ':''}"
+  o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
+  o.statusline = o.statusline .. "%P "
   o.laststatus = 2                                                                      -- Disable/enable bottom statusline
 
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
