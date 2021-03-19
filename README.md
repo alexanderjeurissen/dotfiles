@@ -12,4 +12,4 @@ In summary my work environment consists of:
 | shell | Fish |
 | terminal application | Alacritty |
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/main/_assets/screenshots/solarized8_fish.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/main/_assets/screenshots/flattened_fish.png)
