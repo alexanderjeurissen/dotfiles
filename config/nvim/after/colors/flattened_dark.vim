@@ -12,3 +12,9 @@ hi! IdoPrompt         ctermfg=4 guifg=#268bd2
 hi! IdoWindow         ctermbg=0 guibg=#073642
 
 hi! netrwSymLink  ctermfg=5 guifg=#d33682
+hi! StatusLine cterm=reverse ctermfg=8 ctermbg=12
+hi! StatusLineNC cterm=reverse ctermfg=8 ctermbg=10
+hi! VertSplit ctermfg=8 ctermbg=8
+
+" hi! User1 cterm=bold ctermbg=8 ctermfg=0
+" hi! User2 cterm=bold ctermbg=8 ctermfg=0

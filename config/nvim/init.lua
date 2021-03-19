@@ -53,10 +53,10 @@ end
   o.smartindent = true
 
   o.statusline = " "
-  o.statusline = o.statusline .. "%{&modified?'  ':''}"
-  o.statusline = o.statusline .. "%{&readonly?'  ':''}"
-  o.statusline = o.statusline .. " "
-  o.statusline = o.statusline .. "%t"
+  o.statusline = o.statusline .. "%{&modified?' ':''}"
+  o.statusline = o.statusline .. "%{&readonly?' ':''}"
+  o.statusline = o.statusline .. "%t "
+  -- o.statusline = o.statusline .. "%#User1#%##"
   o.statusline = o.statusline .. "%="
   o.statusline = o.statusline .. "%{&paste?'  ':''}"
   o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
