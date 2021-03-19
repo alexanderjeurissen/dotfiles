@@ -44,7 +44,7 @@ eval (luarocks path)
 # }}}
 
 # FZF settings {{{
- set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,bg:0,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  "'
+ set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,bg:8,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  "'
  # set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
