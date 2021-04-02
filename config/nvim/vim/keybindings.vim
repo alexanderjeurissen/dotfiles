@@ -17,7 +17,7 @@ scriptencoding utf-8
   inoreabbr <buffer> Reprot Report
 
   " Open highlighted text with default program
-  vnoremap o :call general#ExecVisualSelection()<cr>
+  " vnoremap o :call general#ExecVisualSelection()<cr>
 
   " NOTE: show the highlight group under the cursor  ighl
   nnoremap <leader>toh :echom "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -29,41 +29,6 @@ scriptencoding utf-8
   " Macro related mappings
   command! Bufmacro bufdo execute "normal @a" | write
   command! Cmacro cdo execute "normal@a" | write
-  xnoremap @ :<C-u>call general#ExecuteMacroOverVisualRange()<CR>
-
-  " Move visual block
-  vnoremap J :m '>+1<CR>gv=gv
-  vnoremap K :m '<-2<CR>gv=gv
-
-  " custom comma motion mapping
-  nnoremap di, f,dT,
-  nnoremap ci, f,cT,
-  "delete argument
-  nnoremap da, f,ld2F,i,<ESC>l
-  "delete arg and insert
-  nnoremap ca, f,ld7F,i,<ESC>a
-
-  "FIXME: Replace mappings
-  nnoremap <leader>rp {ma}mb:'a,'bs/
-
-  " (upper|lower)case word under cursor
-  nnoremap g^ gUiW
-  nnoremap gv guiW
-
-  " Create newline before/after current row
-  nnoremap go o<ESC>k
-  nnoremap gO O<ESC>j
-
-  " Paste and keep pasting same thing, don't take what was removed
-  vnoremap <Leader>p "_dP
-
-  " Make Y behave like other capital commands.
-  " Hat-tip http://vimbits.com/bits/11
-  nnoremap Y y$
-
-  " keep selection after indent
-  vnoremap < <gv
-  vnoremap > >gv
 " }}}
 
 " KEYBINDINGS: Navigation/search {{{

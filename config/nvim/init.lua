@@ -1,4 +1,5 @@
 require 'plugins'
+require 'keybindings'
 
 -- Meta accessors for vim options {{{
   local o = vim.o

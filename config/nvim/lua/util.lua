@@ -69,34 +69,45 @@ function Util.ensure_git()
  end
 end
 
-function Util.nmap(key, action, options)
-  api.nvim_set_keymap('n', key, action, options or {})
-end
-
-
-function Util.nnoremap(key, action, options)
+local function map(mode, key, action, options)
   options = options or {}
 
-  local opts = vim.tbl_extend('force', { noremap = true, silent = true  } , options)
-  api.nvim_set_keymap('n', key, action, opts)
+  local default_opts = { noremap = true, silent = true  }
+  local opts = vim.tbl_extend('force', default_opts, options)
+
+  api.nvim_set_keymap(mode, key, action, opts)
+end
+
+function Util.nmap(key, action, options)
+  options = options or {}
+  local opts = vim.tbl_extend('force', options, { noremap = false })
+  map('n', key, action, opts)
+end
+
+function Util.nnoremap(key, action, options)
+  map('n', key, action, options)
 end
 
 function Util.tnoremap(key, action, options)
-  options = options or {}
-
-  local opts = vim.tbl_extend('force', { noremap = true, silent = true  } , options)
-  api.nvim_set_keymap('t', key, action, opts)
+  map('t', key, action, options)
 end
 
 function Util.imap(key, action, options)
-  api.nvim_set_keymap('i', key, action, options or {})
+  options = options or {}
+  local opts = vim.tbl_extend('force', options, { noremap = false })
+  map('i', key, action, opts)
 end
 
 function Util.inoremap(key, action, options)
-  options = options or {}
+  map('i', key, action, options)
+end
 
-  local opts = vim.tbl_extend('force', { noremap = true, silent = true  } , options)
-  api.nvim_set_keymap('i', key, action, options or {})
+function Util.xnoremap(key, action, options)
+  map('x', key, action, options)
+end
+
+function Util.vnoremap(key, action, options)
+  map('v', key, action, options)
 end
 
 return Util
