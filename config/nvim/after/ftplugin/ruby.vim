@@ -18,4 +18,4 @@ inoreabbr <buffer> frozen frozen_string_literal: true
 call general#MarkMargin(1, 80)
 
 " NOTE: make rspec the default DISPATCH command
-let b:dispatch = 'bin/rspec %'
+let b:dispatch = 'bundle exec rspec %'

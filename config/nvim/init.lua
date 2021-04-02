@@ -52,16 +52,30 @@ end
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
 
-  o.statusline = " "
+  o.statusline = "    "
+  o.statusline = o.statusline .. "%{winnr() > 9?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 1?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 2?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 3?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 4?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 5?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 6?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 7?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 8?' ':''}"
+  o.statusline = o.statusline .. "%{winnr() == 9?' ':''}"
+  o.statusline = o.statusline .. "%t "
   o.statusline = o.statusline .. "%{&modified?' ':''}"
   o.statusline = o.statusline .. "%{&readonly?' ':''}"
-  o.statusline = o.statusline .. "%t "
   -- o.statusline = o.statusline .. "%#User1#%##"
   o.statusline = o.statusline .. "%="
   o.statusline = o.statusline .. "%{&paste?'  ':''}"
   o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
   o.statusline = o.statusline .. "%P "
   o.laststatus = 2                                                                      -- Disable/enable bottom statusline
+
+  --[[ 
+  
+            ]]
 
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish

@@ -82,6 +82,13 @@ function Util.nnoremap(key, action, options)
   api.nvim_set_keymap('n', key, action, opts)
 end
 
+function Util.tnoremap(key, action, options)
+  options = options or {}
+
+  local opts = vim.tbl_extend('force', { noremap = true, silent = true  } , options)
+  api.nvim_set_keymap('t', key, action, opts)
+end
+
 function Util.imap(key, action, options)
   api.nvim_set_keymap('i', key, action, options or {})
 end

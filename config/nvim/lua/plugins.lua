@@ -31,6 +31,12 @@ return require('packer').startup(function()
 
     use 'vim-scripts/searchfold.vim'
 
+    -- NOTE: LSP support
+    use {
+      'neovim/nvim-lspconfig',
+      config = function() require 'plugins/neovim-nvim-lspconfig' end
+    }
+
     -- NOTE: run tasks in a tmux split to not block vim
     use {
       'tpope/vim-dispatch',

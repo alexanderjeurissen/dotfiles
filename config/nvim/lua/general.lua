@@ -34,8 +34,8 @@ function General.rename_file()
     util.confirm({
       Yes = function()
         vim.fn.rename(fname, new_name)
-        vim.cmd('bw!')
         vim.cmd('edit ' .. new_name)
+        vim.cmd('w! ' .. new_name)
         vim.cmd('redraw!')
       end,
       No = ''
