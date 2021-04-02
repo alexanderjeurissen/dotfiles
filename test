@@ -133,12 +133,12 @@ schemes:
   solarized_light: &light
     # Default colors
     primary:
-      background: '#eee8d5' # base2
+      background: '#fdf6e3' # base3
       foreground: '#657b83' # base00
 
     # Cursor colors
     cursor:
-      text:   '#eee8d5' # base2
+      text:   '#fdf6e3' # base3
       cursor: '#657b83' # base00
 
     # Normal colors
@@ -195,7 +195,7 @@ schemes:
       cyan:    '#93a1a1' # base1
       white:   '#fdf6e3' # base3
 
-colors: *dark
+colors: *light
 
 # Specifying a `duration` of `0` will disable the visual bell.
 bell:
