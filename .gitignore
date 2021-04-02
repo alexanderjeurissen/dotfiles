@@ -79,6 +79,7 @@ pids
 public_
 public
 bin/pretty
+*.bak
 
 # dotenv environment variable files
 .env*
