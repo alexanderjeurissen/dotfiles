@@ -20,7 +20,7 @@ local CLI_OPTS = table.concat({
 
 local WINDOW_OPTS = { height = 20, top=1 }
 
-local FILES_CMD = 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+local FILES_CMD = 'rg --files'
 
 -- generate prompt by shortening provided path
 local function prompt(path)

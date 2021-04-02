@@ -39,7 +39,7 @@ ido.opts.setup({
 
 ido.pkg.setup('find_files', {
   pkg_opts = {
-    command = 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+    command = 'rg --files'
   }
 })
 

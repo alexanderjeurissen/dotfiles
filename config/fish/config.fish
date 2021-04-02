@@ -28,6 +28,10 @@ set -gx NERD_IDX_OUTLINE '' '' '' '' '' '' '' '' '' '
   set -gx PULL_LOCK 1
 # }}}
 
+# NOTE: set ripgrep rc file
+set -gx RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
+
+# NOTE: set path {{{
 set PATH "/home/linuxbrew/.linuxbrew/bin" $PATH # NOTE: linux brew
 set PATH "$HOME/.bin" $PATH # TODO: evaluate env var
 set PATH "$HOME/bin" $PATH # NOTE: linux usr bin
@@ -37,8 +41,8 @@ set PATH "$HOME/.scripts" $PATH # include my own scripts
 
 set PATH "$HOME/.yarn/bin" $PATH
 set PATH "$HOME/.cargo/bin" $PATH
-
 eval (luarocks path)
+# }}}
 
 
 # set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
@@ -53,8 +57,8 @@ eval (luarocks path)
  set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  "'
  # set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
- set -gx FZF_DEFAULT_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
- set -gx FZF_CTRL_T_COMMAND 'rg --files --ignore --smart-case --hidden --follow --no-messages --ignore-file ~/.gitignore'
+ set -gx FZF_DEFAULT_COMMAND 'rg --files'
+ set -gx FZF_CTRL_T_COMMAND 'rg --files'
 # }}}
 
 # LS colors settings {{{
