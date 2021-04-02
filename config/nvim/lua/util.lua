@@ -15,11 +15,8 @@ end
 
 -- create directory if it doesn't exist yet
 function Util.mkdir(path)
-  if not Util.exists(path) then
-    return os.execute('mkdir ' .. path) and true or false
-  end
-
-  return false
+  if Util.exists(path) then return false end
+  return os.execute('mkdir ' .. path) and true or false
 end
 
 function Util.getPath(str)
@@ -43,7 +40,9 @@ end
 
 -- Show confirm dialog before executing predicate
 function Util.confirm(options, msg)
+  local defaults = { Yes = Util.noop, No = Util.noop }
   msg = msg or 'Are you sure ?'
+  options = options or defaults
 
   local option_tbl = {}
   local callback_tbl = {}

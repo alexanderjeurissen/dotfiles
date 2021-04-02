@@ -1,15 +1,3 @@
-" NOTE: copied from Damian Conway's vimrc
-" SOURCE: https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup/blob/master/.vimrc
-function! general#HLNext(blinktime)
-  let l:target_pat = '\c\%#'.@/
-  let l:ring = matchadd('CurrentSearchMatch', l:target_pat, 101)
-  redraw
-  exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-  call matchdelete(l:ring)
-  redraw
-endfunction
-
-
 function! general#Preserve(command)
   " Preparation: save last search, and cursor position.
   let l:s = @/

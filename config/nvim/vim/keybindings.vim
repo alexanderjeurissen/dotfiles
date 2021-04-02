@@ -149,16 +149,10 @@ scriptencoding utf-8
 
   " auto-center on specific movement keys, and blink current search match
   nnoremap G Gzz
-  nnoremap n nzz:call general#HLNext(0.1)<cr>
-  nnoremap N Nzz:call general#HLNext(0.1)<cr>
+  nnoremap <silent>n nzz:lua require('general').hl_next(100)<cr>
+  nnoremap <silent>N Nzz:lua require('general').hl_next(100)<cr>
   nnoremap } }zz
   nnoremap { {zz
-
-  " NOTE: overload :help and :h to open in a floating window
-  " command! -complete=help -nargs=? Help call general#FloatingWindowHelp(<q-args>)
-  " cnoremap help Help
-  " cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'Help' : 'h'
-  " cnoremap h Help
 " }}}
 
 " KEYBINDINGS: File manipulation {{{
