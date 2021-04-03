@@ -106,8 +106,18 @@ function Util.xnoremap(key, action, options)
   map('x', key, action, options)
 end
 
+function Util.vmap(key, action, options)
+  options = options or {}
+  local opts = vim.tbl_extend('force', options, { noremap = false })
+  map('v', key, action, opts)
+end
+
 function Util.vnoremap(key, action, options)
   map('v', key, action, options)
+end
+
+function Util.noremap(key, action, options)
+  map('', key, action, options)
 end
 
 return Util
