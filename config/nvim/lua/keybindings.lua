@@ -48,17 +48,17 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
 
 -- KEYBINDINGS: Navigation / Search {{{
   -- Go to previous and next item in quickfix list
-  noremap('<leader>cw', [[:cwindow<CR><C-w>J]])
-  noremap('<leader>cq', [[<C-w><C-p>:cclose<CR>]])
-  noremap('<leader>cn', [[:cnext<CR>]])
-  noremap('<leader>cN', [[:cnfile<CR>]])
-  noremap('<leader>cp', [[:cprev<CR>]])
-  noremap('<leader>cP', [[:cpfile<CR>]])
+  noremap(' cw', [[:cwindow<CR><C-w>J]])
+  noremap(' cq', [[<C-w><C-p>:cclose<CR>]])
+  noremap(' cn', [[:cnext<CR>]])
+  noremap(' cN', [[:cnfile<CR>]])
+  noremap(' cp', [[:cprev<CR>]])
+  noremap(' cP', [[:cpfile<CR>]])
 
-  noremap('<leader>ln', [[:lnext<CR>]])
-  noremap('<leader>lN', [[:lnfile<CR>]])
-  noremap('<leader>lp', [[:lprev<CR>]])
-  noremap('<leader>lP', [[:lpfile<CR>]])
+  noremap(' ln', [[:lnext<CR>]])
+  noremap(' lN', [[:lnfile<CR>]])
+  noremap(' lp', [[:lprev<CR>]])
+  noremap(' lP', [[:lpfile<CR>]])
 
   -- Split creation
   noremap(' wv', [[<C-w>v]])

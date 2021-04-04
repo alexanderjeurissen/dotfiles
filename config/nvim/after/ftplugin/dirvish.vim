@@ -1,1 +1,0 @@
-call fugitive#detect(@%)

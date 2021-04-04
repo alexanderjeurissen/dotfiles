@@ -69,55 +69,60 @@ function Util.ensure_git()
  end
 end
 
-local function map(mode, key, action, options)
+local function map(mode, key, action, options, buffer)
   options = options or {}
+  buffer = buffer or false
 
   local default_opts = { noremap = true, silent = true  }
   local opts = vim.tbl_extend('force', default_opts, options)
 
-  api.nvim_set_keymap(mode, key, action, opts)
+  if buffer then
+    api.nvim_buf_set_keymap(0, mode, key, action, opts)
+  else
+    api.nvim_set_keymap(mode, key, action, opts)
+  end
 end
 
-function Util.nmap(key, action, options)
+function Util.nmap(key, action, options, buffer)
   options = options or {}
   local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('n', key, action, opts)
+  map('n', key, action, opts, buffer)
 end
 
-function Util.nnoremap(key, action, options)
-  map('n', key, action, options)
+function Util.nnoremap(key, action, options, buffer)
+  map('n', key, action, options, buffer)
 end
 
-function Util.tnoremap(key, action, options)
-  map('t', key, action, options)
+function Util.tnoremap(key, action, options, buffer)
+  map('t', key, action, options, buffer)
 end
 
-function Util.imap(key, action, options)
+function Util.imap(key, action, options, buffer)
   options = options or {}
   local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('i', key, action, opts)
+  map('i', key, action, opts, buffer)
 end
 
-function Util.inoremap(key, action, options)
-  map('i', key, action, options)
+function Util.inoremap(key, action, options, buffer)
+  map('i', key, action, options, buffer)
 end
 
-function Util.xnoremap(key, action, options)
-  map('x', key, action, options)
+function Util.xnoremap(key, action, options, buffer)
+  map('x', key, action, options, buffer)
 end
 
-function Util.vmap(key, action, options)
+function Util.vmap(key, action, options, buffer)
   options = options or {}
   local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('v', key, action, opts)
+  map('v', key, action, opts, buffer)
 end
 
-function Util.vnoremap(key, action, options)
-  map('v', key, action, options)
+function Util.vnoremap(key, action, options, buffer)
+  map('v', key, action, options, buffer)
 end
 
-function Util.noremap(key, action, options)
-  map('', key, action, options)
+function Util.noremap(key, action, options, buffer)
+  map('', key, action, options, buffer)
 end
 
 return Util

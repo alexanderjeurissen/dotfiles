@@ -1,1 +1,0 @@
-setlocal filetype=eruby.html
