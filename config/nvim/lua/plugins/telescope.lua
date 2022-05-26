@@ -1,5 +1,3 @@
-local set_keymap = vim.api.nvim_set_keymap
-
 require('telescope').setup{
   defaults = {
     layout_strategy = 'flex',

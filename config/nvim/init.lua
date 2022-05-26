@@ -1,5 +1,6 @@
 require 'plugins'
 require 'keybindings'
+require 'autocmd'
 
 -- Meta accessors for vim options {{{
   local o = vim.o
@@ -67,11 +68,11 @@ end
   o.statusline = o.statusline .. "%t "
   o.statusline = o.statusline .. "%{&modified?' ':''}"
   o.statusline = o.statusline .. "%{&readonly?' ':''}"
-  -- o.statusline = o.statusline .. "%#User1#%##"
   o.statusline = o.statusline .. "%="
   o.statusline = o.statusline .. "%{&paste?'  ':''}"
   o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
   o.statusline = o.statusline .. "%P "
+
   o.laststatus = 2                                                                      -- Disable/enable bottom statusline
 
   --[[ 
@@ -137,14 +138,13 @@ end
 
 -- SETUP: source config still written in vimscript {{{
   vim.cmd('source ' .. home .. '/.config/nvim/vim/keybindings.vim')
-  vim.cmd('source ' .. home .. '/.config/nvim/vim/augroups.vim')
 -- }}}
 
 -- PLUGIN: b3nj5m1n / kommentary {{{
   vim.g.kommentary_create_default_mappings = false
-  vim.api.nvim_set_keymap("n", "gcc", "<Plug>kommentary_line_default", {})
-  vim.api.nvim_set_keymap("n", "gc", "<Plug>kommentary_motion_default", {})
-  vim.api.nvim_set_keymap("v", "gc", "<Plug>kommentary_visual_default<C-c>", {})
+  vim.keymap.set("n", "gcc", "<Plug>kommentary_line_default")
+  vim.keymap.set("n", "gc", "<Plug>kommentary_motion_default")
+  vim.keymap.set("v", "gc", "<Plug>kommentary_visual_default<C-c>")
 -- }}}
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10

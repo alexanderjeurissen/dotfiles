@@ -28,9 +28,7 @@ return require('packer').startup(function()
 
   -- PLUGINS: Core {{{
     use 'Konfekt/FastFold'
-
     use 'vim-scripts/searchfold.vim'
-    use 'tjdevries/astronauta.nvim'
 
     -- NOTE: LSP support
     use {

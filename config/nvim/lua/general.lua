@@ -57,4 +57,29 @@ function General.hl_next(blinktime)
   vim.cmd('redraw')
 end
 
+function General.Preserve(callback)
+  -- Preparation: save last search, and cursor position.
+  local search = vim.fn.getreg('/')
+  local line = vim.fn.line('.')
+  local col = vim.fn.col('.')
+
+  -- Do the business unless filetype is blacklisted
+  local blacklist = {'sql'}
+
+  local in_blacklist = false
+  for _, value in pairs(blacklist) do
+    if value == vim.bo.filetype then
+      in_blacklist = true
+    end
+  end
+
+  if in_blacklist == false then
+    callback()
+  end
+
+  -- Clean up: restore previous search history, and cursor position
+  vim.fn.setreg('/', search)
+  vim.fn.cursor(line, col)
+end
+
 return General

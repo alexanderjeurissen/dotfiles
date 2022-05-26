@@ -108,12 +108,10 @@ end
 function M.insert_file_path()
   coroutine.wrap(function()
     local win = vim.api.nvim_get_current_win()
-
     local opts = CLI_OPTS ..  ' --no-multi'
     local results = fzf.fzf_relative(FILES_CMD, opts, WINDOW_OPTS)
 
     vim.api.nvim_set_current_win(win)
-
     if results then vim.cmd('normal i' .. results[2]) end
   end)()
 end
@@ -165,7 +163,7 @@ end
 nnoremap('<leader>pf', "<cmd>lua require('plugins/fzf').project_files()<CR>")
 nnoremap('<leader>p/', "<cmd>lua require('plugins/fzf').live_grep()<CR>")
 nnoremap('<leader>ff', "<cmd>lua require('plugins/fzf').find_files()<CR>")
-inoremap('<C-F>', "<C-O>:lua require('plugins/fzf').insert_file_path()<CR>")
+vim.keymap.set('i', '<C-F>', [[<C-O>:lua require('plugins/fzf').insert_file_path()<CR>]])
 -- }}}
 
 nnoremap('<leader>bb', "<cmd>lua require('plugins/fzf').buffers()<CR>")

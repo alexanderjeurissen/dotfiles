@@ -1,6 +1,6 @@
-local set_keymap = vim.api.nvim_set_keymap
+local map = vim.keymap.set
 
 vim.g.maximizer_set_default_mapping = 0
 vim.g.maximizer_restore_on_winleave = 1
 
-set_keymap('n', '<leader>wz', ':MaximizerToggle<CR>', { silent = true })
+map('n', '<leader>wz', ':MaximizerToggle<CR>', { silent = true })

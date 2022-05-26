@@ -1,6 +1,9 @@
 local vim = vim or {}
 local lspconfig = require('lspconfig')
+local protocol = require('vim.lsp.protocol')
 local nnoremap = require("util").nnoremap
+
+local capabilities = protocol.make_client_capabilities()
 
 -- Diagnostics {{{
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -11,25 +14,26 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-vim.cmd [[autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()]]
-vim.cmd [[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help()]]
+-- vim.cmd [[autocmd CursorHold * lua vim.diagnostics.open_float()]]
+-- vim.cmd [[autocmd CursorHoldI * silent! lua vim.diagnostics.open_float()]]
 -- }}}
 
 
 -- Signs {{{
--- vim.cmd [[sign define LspDiagnosticsSignError text=]]
--- vim.cmd [[sign define LspDiagnosticsSignWarning text=]]
--- vim.cmd [[sign define LspDiagnosticsSignInformation text=]]
--- vim.cmd [[sign define LspDiagnosticsSignHint text=]]
+vim.cmd [[sign define LspDiagnosticsSignError text=]]
+vim.cmd [[sign define LspDiagnosticsSignWarning text=]]
+vim.cmd [[sign define LspDiagnosticsSignInformation text=]]
+vim.cmd [[sign define LspDiagnosticsSignHint text=]]
 
-vim.cmd [[sign define LspDiagnosticsSignError text=⏽]]
-vim.cmd [[sign define LspDiagnosticsSignWarning text=⏽]]
-vim.cmd [[sign define LspDiagnosticsSignInformation text=⏽]]
-vim.cmd [[sign define LspDiagnosticsSignHint text=⏽]]
+-- vim.cmd [[sign define LspDiagnosticsSignError text=⏽]]
+-- vim.cmd [[sign define LspDiagnosticsSignWarning text=⏽]]
+-- vim.cmd [[sign define LspDiagnosticsSignInformation text=⏽]]
+-- vim.cmd [[sign define LspDiagnosticsSignHint text=⏽]]
 -- }}}
 
 
 lspconfig.solargraph.setup {
+  capabilities = capabilities,
   settings = {
     solargraph = {
       diagnostics = true,
@@ -43,17 +47,22 @@ lspconfig.solargraph.setup {
   }
 }
 
-lspconfig.cssls.setup{}
+lspconfig.cssls.setup{ capabilities = capabilities }
 
-lspconfig.denols.setup{}
+lspconfig.denols.setup{ capabilities = capabilities }
 
--- lspconfig.tsserver.setup {
-  --[[ on_attach = function(client, bufnr)
-    -- This makes sure tsserver is not used for formatting
-    client.resolved_capabilities.document_formatting = false
-  end, ]]
-  -- settings = { documentFormatting = false }
--- }
+lspconfig.gopls.setup{
+  capabilities = capabilities,
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+	unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
 
 nnoremap('gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
 nnoremap('gd', '<cmd>lua vim.lsp.buf.definition()<CR>')

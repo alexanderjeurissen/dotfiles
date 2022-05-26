@@ -1,21 +1,3 @@
-function! general#Preserve(command)
-  " Preparation: save last search, and cursor position.
-  let l:s = @/
-  let l:l = line('.')
-  let l:c = col('.')
-
-  " Do the business unless filetype is blacklisted
-  let l:blacklist = ['sql']
-
-  if index(l:blacklist, &filetype) < 0
-    execute a:command
-  endif
-
-  " Clean up: restore previous search history, and cursor position
-  let @/ = l:s
-  call cursor(l:l, l:c)
-endfunction
-
 function! general#ExecVisualSelection()
   let l:selection = s:get_visual_selection()
   call jobstart("open -a '/Applications/Google Chrome.app' --args '" . l:selection . "'")

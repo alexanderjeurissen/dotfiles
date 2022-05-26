@@ -44,6 +44,8 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   -- keep selection after indent
   vnoremap('<', [[<gv]])
   vnoremap('>', [[>gv]])
+
+  -- imap('<c-h>', [[X]])
 -- }}}
 
 -- KEYBINDINGS: Navigation / Search {{{
@@ -71,11 +73,11 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   nmap('<right>', [[<C-w>5>]])
 
   -- Split navigation
-  noremap('<c-h>', [[<C-w><left>]])
-  noremap('<c-j>', [[<C-w><down>]])
-  noremap('<c-k>', [[<C-w><up>]])
-  noremap('<c-l>', [[<C-w><right>]])
-  noremap([[<c-\>]], [[<C-w><w>]])
+  nnoremap('<c-h>', [[<C-w><left>]])
+  nnoremap('<c-j>', [[<C-w><down>]])
+  nnoremap('<c-k>', [[<C-w><up>]])
+  nnoremap('<c-l>', [[<C-w><right>]])
+  nnoremap([[<c-\>]], [[<C-w><w>]])
 
   -- Disable arrows and BS in insert mode
   imap('<left>', [[<nop>]])
@@ -84,6 +86,7 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   imap('<right>', [[<nop>]])
   imap('<BS>', [[<nop>]])
   imap('<DEL>', [[<nop>]])
+
 
   -- Wrapped lines goes down/up to next row, rather than next line in file.
   noremap('j', [[gj]])
