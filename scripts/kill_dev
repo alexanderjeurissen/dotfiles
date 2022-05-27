@@ -3,5 +3,7 @@ PIDS_TO_MURDER=`2>/dev/null  ps aux | grep -E "(sidekiq|unicorn|puma|spring|post
 echo "killing following pids: ${PIDS_TO_MURDER}"
 kill -9 ${PIDS_TO_MURDER}
 
-rm tmp/postgres_data/pgdata/postmaster.pid
-rm tmp/pids/*
+# Deletes all assets
+# bin/rails assets:clobber
+
+rm tmp/postgres_data/pgdata/postmaster.pid || rm tmp/pids/*
