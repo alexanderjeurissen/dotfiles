@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# NOTE: Copied from Tpope's blogpost which can be found at
-# https://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
-
-.git/hooks/ctags >/dev/null 2>&1 &
