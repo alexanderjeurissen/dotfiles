@@ -18,7 +18,7 @@ local CLI_OPTS = table.concat({
   '--no-height'
 }, ' ')
 
-local WINDOW_OPTS = { height = 20, top=1 }
+local WINDOW_OPTS = { height = 20, top=1, border=false }
 
 local FILES_CMD = 'rg --files'
 

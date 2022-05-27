@@ -3,6 +3,7 @@ local Util = require('util')
 local nmap = Util.nmap
 local vmap = Util.vmap
 local imap = Util.imap
+local map = vim.keymap.set
 
 local noremap = Util.noremap
 local nnoremap = Util.nnoremap
@@ -127,6 +128,8 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   nnoremap('N',  [[Nzz:lua require('general').hl_next(100)<cr>]])
   nnoremap('}', [[}zz]])
   nnoremap('{', [[{zz]])
+
+  map('n', '<C-c>', '<C-c>', { silent = true, noremap = true})
 -- }}}
 
 

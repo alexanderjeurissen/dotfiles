@@ -54,26 +54,26 @@ end
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
 
-  o.statusline = "    "
-  o.statusline = o.statusline .. "%{winnr() > 9?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 1?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 2?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 3?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 4?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 5?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 6?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 7?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 8?' ':''}"
-  o.statusline = o.statusline .. "%{winnr() == 9?' ':''}"
-  o.statusline = o.statusline .. "%t "
-  o.statusline = o.statusline .. "%{&modified?' ':''}"
-  o.statusline = o.statusline .. "%{&readonly?' ':''}"
-  o.statusline = o.statusline .. "%="
-  o.statusline = o.statusline .. "%{&paste?'  ':''}"
-  o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
-  o.statusline = o.statusline .. "%P "
+  o.winbar = " "
+  o.winbar = o.winbar .. "%{winnr() > 9?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 1?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 2?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 3?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 4?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 5?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 6?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 7?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 8?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 9?' ':''}"
+  o.winbar = o.winbar .. " %{expand('%:~:.')} "
+  o.winbar = o.winbar .. "%="
+  o.winbar = o.winbar .. "%{&modified?' ':''}"
+  o.winbar = o.winbar .. "%{&readonly?' ':''}"
+  o.winbar = o.winbar .. "%{&paste?'  ':''}"
+  o.winbar = o.winbar .. "%{&spell?' ¶ ':''}"
+  -- o.winbar = o.winbar .. "%P "
 
-  o.laststatus = 2                                                                      -- Disable/enable bottom statusline
+  o.laststatus = 3                                                                      -- Disable/enable bottom statusline
 
   --[[ 
   
@@ -130,10 +130,6 @@ end
    vim.g.netrw_keepdir = 0
 
    vim.g.mapleader = "<Space>" -- Set mapleader to <space>
--- }}}
-
--- SETUP: configure ex_commands {{{
-  -- vim.cmd('syntax enable')
 -- }}}
 
 -- SETUP: source config still written in vimscript {{{

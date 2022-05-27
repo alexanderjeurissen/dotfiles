@@ -23,18 +23,15 @@ return require('packer').startup(function()
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
     use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
-    use { 'npxbr/gruvbox.nvim', requires = {{'rktjmp/lush.nvim'}}, config = function() require 'plugins/npxbr-gruvbox-nvim' end}
   -- }}}
 
   -- PLUGINS: Core {{{
     use 'Konfekt/FastFold'
     use 'vim-scripts/searchfold.vim'
+    use { 'dstein64/nvim-scrollview' }
 
     -- NOTE: LSP support
-    use {
-      'neovim/nvim-lspconfig',
-      config = function() require 'plugins/neovim-nvim-lspconfig' end
-    }
+    use { 'neovim/nvim-lspconfig', config = function() require 'plugins/neovim-nvim-lspconfig' end }
 
     -- NOTE: run tasks in a tmux split to not block vim
     use {
@@ -45,18 +42,11 @@ return require('packer').startup(function()
 
     -- NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-    -- merged = 0
-
-    -- NOTE: A vim plugin for making vim plugins
-    use 'tpope/vim-scriptease'
 
     -- NOTE: Tmux navigation keybindings
-    use {
-      'christoomey/vim-tmux-navigator',
+    use { 'christoomey/vim-tmux-navigator',
       config = function() require 'plugins/christoomey-vim-tmux-navigator' end
     }
-
-    -- use { 'hkupty/nvimux', config = function() require 'plugins/nvimux' end }
   -- }}}
 
   -- PLUGINS: Editing {{{
@@ -67,7 +57,6 @@ return require('packer').startup(function()
     use 'tpope/vim-endwise'
 
     -- NOTE: Easy commenting using vim motions
-    -- use { 'tpope/vim-commentary', disabled=true }
     use 'b3nj5m1n/kommentary'
 
     -- NOTE: allow opening files with line number e.g. file.txt:30
@@ -93,11 +82,8 @@ return require('packer').startup(function()
   -- }}}
 
   -- PLUGINS: Frontend/Javascript {{{
-    -- NOTE: yank visual selections
+    -- NOTE: ...
     use { 'ap/vim-css-color', ft = {'css', 'scss', 'conf', 'javascript'} }
-
-    -- NOTE: semantic highlighting for javascript
-    -- use { 'billyvg/tigris.nvim', ft = {'javascript', 'html.javascript'} }
   -- }}}
 
   -- PLUGINS: Ruby {{{
@@ -108,11 +94,7 @@ return require('packer').startup(function()
     use { 'tpope/vim-cucumber', ft = {'cucumber'} }
 
     -- NOTE: cucumber folding pattern
-    use 'greggroth/vim-cucumber-folding'
-    on_ft = 'cucumber'
-
-    -- NOTE: rails specific config and highlight
-    -- use { 'tpope/vim-rails', opt = true, ft = {'ruby', 'cucumber'} }
+    use { 'greggroth/vim-cucumber-folding', ft={'cucumber'} }
   -- }}}
 
   -- PLUGINS: Navigation {{{
@@ -123,34 +105,16 @@ return require('packer').startup(function()
     use { 'junegunn/fzf', run = './install --all' }
     use { 'vijaymarupudi/nvim-fzf', config=function() require 'plugins/fzf' end}
 
-    -- NOTE: Ido packages and runtime
-    use '~/Development/open-source/ido-nvim/files'
-    use { '~/Development/open-source/ido-nvim/core', config = function() require 'plugins/ido' end }
-
-
     -- NOTE: add nice buffer deleting
-    use {
-      'moll/vim-bbye',
-      config = function() require 'plugins/moll-vim-bbye' end
-    }
+    use { 'moll/vim-bbye', config = function() require 'plugins/moll-vim-bbye' end }
 
-    -- NOTE: rails specific config and highlight
     use 'arithran/vim-delete-hidden-buffers'
 
     -- NOTE: File browser
     use 'tpope/vim-vinegar'
 
-    -- NOTE: ...
-    use 'tpope/vim-eunuch'
-
-    -- NOTE: Tab rename utilities
-    -- use 'gcmt/taboo.vim'
-
     -- NOTE: change vim root to vcs root when editing a file
-    use {
-      'airblade/vim-rooter',
-      config = function() require 'plugins/airblade-vim-rooter' end
-    }
+    use { 'airblade/vim-rooter', config = function() require 'plugins/airblade-vim-rooter' end }
 
     -- NOTE: pairs of handy bracket mappings like [f and ]f for file switching
     use 'tpope/vim-unimpaired'
@@ -172,10 +136,7 @@ return require('packer').startup(function()
 
   -- PLUGINS: Window Management {{{
     -- NOTE: allows to zoom into splits
-    use {
-      'szw/vim-maximizer',
-      config = function() require 'plugins/szw-vim-maximizer' end
-    }
+    use { 'szw/vim-maximizer', config = function() require 'plugins/szw-vim-maximizer' end }
   -- }}}
 end)
 
