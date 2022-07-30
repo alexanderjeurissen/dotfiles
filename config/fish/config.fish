@@ -13,9 +13,16 @@ set fish_greeting
 set -gx ENABLE_SPRING 0
 set -gx DEFAULT_USER $USER
 
+set -gx EDITOR 'nvim'
+set -gx HSANDBOX_EDITOR 'nvim'
+
 # NOTE: util variables (used by Tmux etc) {{{
 set -gx NERD_IDX_FILL '' '' '' '' '' '' '' '' '' ''
 set -gx NERD_IDX_OUTLINE '' '' '' '' '' '' '' '' '' ''
+# }}}
+
+# NOTE: misc env variables {{{
+set -gx TZ_LIST 'Europe/Amsterdam,America/New_York,America/Los_Angeles'
 # }}}
 
 # TODO: figure out why we had this
@@ -26,6 +33,11 @@ set -gx NERD_IDX_OUTLINE '' '' '' '' '' '' '' '' '' '
   set -gx SKIP_WAIT 1
   set -gx LINT_STAGED 1
   set -gx PULL_LOCK 1
+  set -gx USING_ASDF true
+  set -gx POSTGRES_USERNAME 'alexanderjeurissenlocal'
+  set -gx POSTGRES_PASSWORD 'hunter3'
+  export NODE_OPTIONS=--max_old_space_size=4096
+  set -gx TAILWIND_MODE watch
 # }}}
 
 # NOTE: set ripgrep rc file
@@ -41,9 +53,14 @@ set PATH "$HOME/.scripts" $PATH # include my own scripts
 
 set PATH "$HOME/.yarn/bin" $PATH
 set PATH "$HOME/.cargo/bin" $PATH
+
 eval (luarocks path)
 # }}}
 
+# NOTE: Go path settings {{{
+  set -gx GOPATH "$HOME/Development/go"
+  set PATH "$GOPATH/bin" $PATH
+# }}}
 
 # set -g XML_CATALOG_FILES "/usr/local/etc/xml/catalog" # TODO: evaluate env var
 
@@ -75,9 +92,9 @@ eval (gdircolors -c ~/.dircolors/dircolors.ansi-dark)
 # yarn config set global-folder `nodenv prefix`
 
 # GPG settings {{{
-  # gpgconf --launch gpg-agent
-  set -gx GPG_TTY (tty)
-  set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  set -x GPG_TTY (tty)
+  set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  gpgconf --launch gpg-agent
   # fish_ssh_agent
   # set -gx SSH_AUTH_SOCK "/Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
 # }}}
