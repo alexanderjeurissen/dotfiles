@@ -18,6 +18,10 @@ hi! StatusLineNC ctermfg=0 ctermbg=0
 hi! winbar cterm=none ctermbg=8 ctermfg=10
 hi! VertSplit ctermfg=8 ctermbg=0
 
+hi! cursorline ctermbg=8
+hi! cursorcolumn ctermbg=8
+hi! cursor cterm=reverse gui=reverse guibg=NONE guifg=NONE ctermbg=NONE ctermfg=NONE
+
 " Set Alacritty theme accordingly
 call system("sed -i.bak 's/\*light/*dark/g' ~/.dotfiles/config/alacritty/alacritty.yml")
 

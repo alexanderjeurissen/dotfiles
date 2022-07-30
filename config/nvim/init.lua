@@ -71,7 +71,7 @@ end
   o.winbar = o.winbar .. "%{&readonly?' ':''}"
   o.winbar = o.winbar .. "%{&paste?'  ':''}"
   o.winbar = o.winbar .. "%{&spell?' ¶ ':''}"
-  -- o.winbar = o.winbar .. "%P "
+  o.winbar = o.winbar .. "%P "
 
   o.laststatus = 3                                                                      -- Disable/enable bottom statusline
 

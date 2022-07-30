@@ -23,6 +23,8 @@ return require('packer').startup(function()
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
     use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
+    -- use { 'liuchengxu/space-vim-theme', config = function() require 'plugins/liuchengxu-space-vim-theme' end}
+    -- use({ "catppuccin/nvim", as = "catppuccin", config = function() end})
   -- }}}
 
   -- PLUGINS: Core {{{

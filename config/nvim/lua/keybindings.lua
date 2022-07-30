@@ -46,7 +46,7 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   vnoremap('<', [[<gv]])
   vnoremap('>', [[>gv]])
 
-  imap('<c-h>', [[X]])
+  imap('<c-h>', [[<c-o>x]])
 -- }}}
 
 -- KEYBINDINGS: Navigation / Search {{{
