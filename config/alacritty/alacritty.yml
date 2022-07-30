@@ -17,7 +17,8 @@ shell:
  args:
    - --login
    - -C
-   - 'tmux attach-session || exec tmux new-session'
+   # - 'fish ~/.scripts/tmux_wrapper.fish'
+   - 'if tmux has-session &> /dev/null; exec tmux attach-session; else; exec tmux new-session; end'
 
 window:
   # Window dimensions (changes require restart)
@@ -170,8 +171,10 @@ schemes:
 
     # Cursor colors
     cursor:
-      text:   '#002b36' # base03
-      cursor: '#839496' # base0
+      # text:   '#002b36' # base03
+      # cursor: '#839496' # base0
+       text: CellBackground
+       cursor: CellForeground
 
     # Normal colors
     normal:
