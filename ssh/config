@@ -13,7 +13,7 @@ Host *
 Host gitlab.inverselink.com
   HostName git.pdx1.inverselink.com
   ProxyCommand duoconnect -host=%h:%p -relay=https://engineering-ssh.inverselink.com
-  # IdentityFile ~/.ssh/id_h1
+  IdentityFile ~/.ssh/id_h1
 
 Host github
   HostName github.com
