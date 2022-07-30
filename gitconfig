@@ -53,8 +53,8 @@
   templatedir = ~/.git_template
   defaultBranch = main
 
-[interactive]
-  diffFilter = delta --color-only
+; [interactive]
+;   diffFilter = delta --color-only
 
 [merge "merge-structure-sql"]
 	name = Rails structure.sql merge driver
@@ -78,10 +78,15 @@
 
 [push]
   default = current
+	autoSetupRemote = true
 
 [user]
   name = Alexander Jeurissen
   email = alexander@jeurissen.email
   signingkey = 0xEAAA67C4CA6E219A
-[commit]
-  gpgsign = true
+; [commit]
+;   gpgsign = true
+
+# ref: https://golang.org/doc/faq#git_https
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
