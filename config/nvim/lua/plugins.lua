@@ -22,7 +22,10 @@ return require('packer').startup(function()
 
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
-    use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
+    -- use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
+    use { "ellisonleao/gruvbox.nvim", config = function() require 'plugins/ellisonleao-gruvbox' end }
+    -- use { 'rose-pine/neovim', as = 'rose-pine', config = function() require 'plugins/rose-pine-neovim' end }
+    -- use ({ 'projekt0n/github-nvim-theme' })
     -- use { 'liuchengxu/space-vim-theme', config = function() require 'plugins/liuchengxu-space-vim-theme' end}
     -- use({ "catppuccin/nvim", as = "catppuccin", config = function() end})
   -- }}}
@@ -30,7 +33,7 @@ return require('packer').startup(function()
   -- PLUGINS: Core {{{
     use 'Konfekt/FastFold'
     use 'vim-scripts/searchfold.vim'
-    use { 'dstein64/nvim-scrollview' }
+    use 'dstein64/nvim-scrollview'
 
     -- NOTE: LSP support
     use { 'neovim/nvim-lspconfig', config = function() require 'plugins/neovim-nvim-lspconfig' end }
@@ -80,7 +83,7 @@ return require('packer').startup(function()
     use 'machakann/vim-highlightedyank'
 
     -- NOTE: Enables editing quickfix buffer
-    use '~/Development/open-source/qedit.nvim'
+    -- use '~/Development/open-source/qedit.nvim'
   -- }}}
 
   -- PLUGINS: Frontend/Javascript {{{

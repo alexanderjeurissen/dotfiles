@@ -32,7 +32,7 @@ vim.cmd [[sign define LspDiagnosticsSignHint text=]]
 -- }}}
 
 
-lspconfig.solargraph.setup {
+--[[ lspconfig.solargraph.setup {
   capabilities = capabilities,
   settings = {
     solargraph = {
@@ -45,7 +45,7 @@ lspconfig.solargraph.setup {
       references = true
     }
   }
-}
+} ]]
 
 lspconfig.cssls.setup{ capabilities = capabilities }
 

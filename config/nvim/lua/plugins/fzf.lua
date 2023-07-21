@@ -4,18 +4,19 @@ local nnoremap = require("util").nnoremap
 local inoremap = require("util").nnoremap
 local tbl_slice = require("util").tbl_slice
 
+-- '--color=bw,border:8,bg:8,info:2,prompt:12,fg:10,bg+:0,fg+:10,gutter:0', -- Solarized
 local CLI_OPTS = table.concat({
   '--no-inline-info',
-  '--color=bw,border:8,bg:8,info:2,prompt:12,fg:10,bg+:0,fg+:10,gutter:0',
+  '--color=bw,border:0,info:2,prompt:12,fg:10,bg+:0,fg+:10,gutter:0',
   '--multi',
   '--sort',
   '--layout=reverse',
   '--bind=ctrl-a:select-all,ctrl-d:deselect-all',
   '--expect=ctrl-o,ctrl-t,ctrl-s,ctrl-v',
-  '--border=sharp',
-  '--no-padding',
+  '--border=none',
+  '--padding=1',
   '--no-margin',
-  '--no-height'
+  '--no-height',
 }, ' ')
 
 local WINDOW_OPTS = { height = 20, top=1, border=false }
@@ -85,6 +86,7 @@ function M.project_files()
     local win = vim.api.nvim_get_current_win()
     local opts = CLI_OPTS ..  ' --prompt=' .. prompt(vim.loop.cwd())
     local results = fzf.fzf_relative(FILES_CMD, opts, WINDOW_OPTS)
+
     process_results(results, nil, win)
   end)()
 end
@@ -160,6 +162,7 @@ function M.buffers()
 end
 
 -- Files bindings {{{
+nnoremap('<leader>Pf', "<cmd>FZF<CR>")
 nnoremap('<leader>pf', "<cmd>lua require('plugins/fzf').project_files()<CR>")
 nnoremap('<leader>p/', "<cmd>lua require('plugins/fzf').live_grep()<CR>")
 nnoremap('<leader>ff', "<cmd>lua require('plugins/fzf').find_files()<CR>")

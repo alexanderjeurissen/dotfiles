@@ -3,6 +3,7 @@ scriptencoding utf-8
 " KEYBINDINGS: General {{{
   " Use <space> as leader
   let mapleader="\<Space>"
+
   " Fix annoying typo's of WQ, QA and Q, and report
   cnoreabbrev qw wq
   cnoreabbrev Wq wq
@@ -50,7 +51,7 @@ scriptencoding utf-8
 
   " This copies current file path + line number to system clipboard
   " source: https://stackoverflow.com/questions/17498144/yank-file-path-with-line-no-from-vim-to-system-clipboard
-  nnoremap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
+  nmap <leader>fC :let @+=expand("%") . ':' . line(".")<CR>
 
   " cd to the directory of the current buffer
   map <Leader>cd :lcd %:p:h<CR>:pwd<CR>

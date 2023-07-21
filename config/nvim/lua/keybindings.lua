@@ -94,7 +94,7 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   noremap('k', [[gk]])
 
   -- Find merge conflict markers
-  noremap(' gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
+  noremap('gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
 
   -- default to very magic
   noremap('/', [[/\v]], { silent = false })
