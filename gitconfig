@@ -1,6 +1,6 @@
 [alias]
   ctags = !.git/hooks/ctags
-	up = pull --rebase --autostash
+  up = pull --rebase --autostash
 
 [color]
   ui = auto
@@ -83,7 +83,7 @@
 [user]
   name = Alexander Jeurissen
   email = alexander@jeurissen.email
-  signingkey = 0xEAAA67C4CA6E219A
+;  signingkey = 0xEAAA67C4CA6E219A
 ; [commit]
 ;   gpgsign = true
 
