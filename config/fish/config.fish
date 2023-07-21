@@ -1,6 +1,3 @@
-# NOTE: init starship prompt
-# starship init fish | source
-
 # NOTE: init zoxide (improved cd)
 zoxide init fish | source
 
@@ -36,8 +33,9 @@ set -gx TZ_LIST 'Europe/Amsterdam,America/New_York,America/Los_Angeles'
   set -gx USING_ASDF true
   set -gx POSTGRES_USERNAME 'alexanderjeurissenlocal'
   set -gx POSTGRES_PASSWORD 'hunter3'
-  export NODE_OPTIONS=--max_old_space_size=4096
   set -gx TAILWIND_MODE watch
+  set -gx HACKERONE_ON_DOCKER true
+  export NODE_OPTIONS=--max_old_space_size=4096
 # }}}
 
 # NOTE: set ripgrep rc file
@@ -71,8 +69,10 @@ eval (luarocks path)
 # }}}
 
 # FZF settings {{{
- set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  "'
- # set -gx FZF_DEFAULT_OPTS '--color=bg+:#073642,bg:#eee8d5,spinner:#859900,hl:#586e75,fg:#073642,pointer:#859900,info:#cb4b16,fg+:#fdf6e3,marker:#859900,header:#586e75,prompt:#859900,hl+:#859900'
+ # set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  " --no-separator --no-scrollbar' # Solarized
+ # Gruvbox
+ set -gx FZF_DEFAULT_OPTS '--color=bw,border:8,bg:#ebdbb2,info:2,prompt:12,fg:10,bg+:#f2e5bc,fg+:10,gutter:#f2e5bc --height 40% --reverse --prompt="  " --border=none --no-separator --no-scrollbar'
+
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files'
  set -gx FZF_CTRL_T_COMMAND 'rg --files'
@@ -92,13 +92,14 @@ eval (gdircolors -c ~/.dircolors/dircolors.ansi-dark)
 # yarn config set global-folder `nodenv prefix`
 
 # GPG settings {{{
-  set -x GPG_TTY (tty)
-  set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-  gpgconf --launch gpg-agent
+  # set -x GPG_TTY (tty)
+  # set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+  # gpgconf --launch gpg-agent
   # fish_ssh_agent
   # set -gx SSH_AUTH_SOCK "/Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
 # }}}
 
+alias g git
 source ~/.gitaliases
 
 # vim: foldmethod=marker:sw=2:foldlevel=10
