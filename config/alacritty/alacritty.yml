@@ -273,7 +273,73 @@ schemes:
       cyan:    '#8ec07c'
       white:   '#ebdbb2'
 
-colors: *gruvbox_dark
+  space_dark: &space_dark
+    # Default colors
+    primary:
+      background: '#292b2e'
+      foreground: '#b2b2b2'
+
+    # Cursor colors
+    cursor:
+       text: CellBackground
+       cursor: CellForeground
+
+   # Normal colors
+    normal:
+      black:   '#504259'
+      red:     '#d26487'
+      green:   '#35a8a5'
+      yellow:  '#b89f33'
+      blue:    '#6981c5'
+      magenta: '#a15ea7'
+      cyan:    '#288668'
+      white:   '#fbf8ef'
+
+    # Bright colors
+    bright:
+      black:   '#655370'
+      red:     '#f2241f'
+      green:   '#67b11d'
+      yellow:  '#b1951d'
+      blue:    '#3a81c3'
+      magenta: '#6c3163'
+      cyan:    '#24775c'
+      white:   '#a8a4ae'
+
+  space_dark: &space_light
+    # Default colors
+    primary:
+      background: '#fbf8ef'
+      foreground: '#655370'
+
+    # Cursor colors
+    cursor:
+       text: CellBackground
+       cursor: CellForeground
+
+   # Normal colors
+    normal:
+      black:   '#504259'
+      red:     '#d26487'
+      green:   '#35a8a5'
+      yellow:  '#b89f33'
+      blue:    '#6981c5'
+      magenta: '#a15ea7'
+      cyan:    '#288668'
+      white:   '#fbf8ef'
+
+    # Bright colors
+    bright:
+      black:   '#655370'
+      red:     '#f2241f'
+      green:   '#67b11d'
+      yellow:  '#b1951d'
+      blue:    '#3a81c3'
+      magenta: '#6c3163'
+      cyan:    '#24775c'
+      white:   '#a8a4ae'
+
+colors: *space_light
 
 # Specifying a `duration` of `0` will disable the visual bell.
 bell:
