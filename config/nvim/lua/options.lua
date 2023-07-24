@@ -77,7 +77,7 @@ end
 
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
-  o.termguicolors = false
+  o.termguicolors = true
 
   if fn.executable('rg') == 1 then
     o.grepprg = "rg --vimgrep -H --no-heading --column --smart-case -P"                                          -- Set RipGrep as the default grep program (if it exists)
