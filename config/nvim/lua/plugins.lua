@@ -23,11 +23,10 @@ return require('packer').startup(function()
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
     -- use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
-    use { "ellisonleao/gruvbox.nvim", config = function() require 'plugins/ellisonleao-gruvbox' end }
+    -- use { "ellisonleao/gruvbox.nvim", config = function() require 'plugins/ellisonleao-gruvbox' end }
     -- use { 'rose-pine/neovim', as = 'rose-pine', config = function() require 'plugins/rose-pine-neovim' end }
-    -- use ({ 'projekt0n/github-nvim-theme' })
-    -- use { 'liuchengxu/space-vim-theme', config = function() require 'plugins/liuchengxu-space-vim-theme' end}
-    -- use({ "catppuccin/nvim", as = "catppuccin", config = function() end})
+    use { 'liuchengxu/space-vim-theme', config = function() require 'plugins/liuchengxu-space-vim-theme' end}
+    -- use({ "catppuccin/nvim", as = "catppuccin", config = function() require 'plugins/catppuccin-nvim' end})
   -- }}}
 
   -- PLUGINS: Core {{{
