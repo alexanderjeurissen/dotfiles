@@ -96,7 +96,7 @@ eval (gdircolors -c ~/.dircolors/dircolors.ansi-dark)
   # set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
   # gpgconf --launch gpg-agent
   # fish_ssh_agent
-  # set -gx SSH_AUTH_SOCK "/Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+  set -x SSH_AUTH_SOCK /Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 # }}}
 
 alias g git

@@ -13,8 +13,8 @@ env:
   TERM: xterm-256color-italic
 
 shell:
- program: /opt/homebrew/bin/fish
-#program: /usr/local/bin/fish
+# program: /opt/homebrew/bin/fish
+ program: /usr/local/bin/fish
  args:
    - --login
    - -C
@@ -129,7 +129,7 @@ font:
   #
   # This is a global setting and will require a log out or restart to take
   # effect.
-  use_thin_strokes: true
+  # use_thin_strokes: true
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
