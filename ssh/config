@@ -17,4 +17,4 @@ Host gitlab.inverselink.com
 
 Host github
   HostName github.com
-  IdentityAgent /Users/alexander/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  IdentityAgent /Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
