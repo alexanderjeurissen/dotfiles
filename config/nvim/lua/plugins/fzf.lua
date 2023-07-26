@@ -4,10 +4,9 @@ local nnoremap = require("util").nnoremap
 local inoremap = require("util").nnoremap
 local tbl_slice = require("util").tbl_slice
 
--- '--color=bw,border:8,bg:8,info:2,prompt:12,fg:10,bg+:0,fg+:10,gutter:0', -- Solarized
 local CLI_OPTS = table.concat({
   '--no-inline-info',
-  '--color=bw,border:0,info:2,prompt:12,fg:1,bg+:0,fg+:1,gutter:0',
+  '--color=bw,border:0,info:2,prompt:12,fg:,bg+:#c4b6af,fg+:,gutter:#b2a39b',
   '--multi',
   '--sort',
   '--layout=reverse',

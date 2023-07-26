@@ -69,9 +69,7 @@ eval (luarocks path)
 # }}}
 
 # FZF settings {{{
- # set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:10 --height 40% --reverse --prompt="  " --no-separator --no-scrollbar' # Solarized
- # Gruvbox
- set -gx FZF_DEFAULT_OPTS '--color=bw,border:8,bg:#ebdbb2,info:2,prompt:12,fg:10,bg+:#f2e5bc,fg+:10,gutter:#f2e5bc --height 40% --reverse --prompt="  " --border=none --no-separator --no-scrollbar'
+ set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:1,bg+:0,fg+:1,gutter:0 --height 40% --reverse --prompt="  " --border=none --no-separator --no-scrollbar'
 
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files'

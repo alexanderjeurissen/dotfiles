@@ -51,16 +51,16 @@ end
   o.smartindent = true
 
   o.winbar = " "
-  o.winbar = o.winbar .. "%{winnr() > 9?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 1?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 2?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 3?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 4?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 5?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 6?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 7?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 8?' ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 9?' ':''}"
+  o.winbar = o.winbar .. "%{winnr() > 9?'󰏁 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 1?'󰎦 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 2?'󰎩 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 3?'󰎬 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 4?'󰎮 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 5?'󰎰 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 6?'󰎵 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 7?'󰎸 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 8?'󰎻 ':''}"
+  o.winbar = o.winbar .. "%{winnr() == 9?'󰎾 ':''}"
   o.winbar = o.winbar .. " %{expand('%:~:.')} "
   o.winbar = o.winbar .. "%="
   o.winbar = o.winbar .. "%{&modified?' ':''}"
@@ -77,7 +77,7 @@ end
 
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
-  o.termguicolors = true
+  o.termguicolors = false
 
   if fn.executable('rg') == 1 then
     o.grepprg = "rg --vimgrep -H --no-heading --column --smart-case -P"                                          -- Set RipGrep as the default grep program (if it exists)

@@ -306,7 +306,7 @@ schemes:
       cyan:    '#24775c'
       white:   '#a8a4ae'
 
-  space_dark: &space_light
+  space_light: &space_light
     # Default colors
     primary:
       background: '#fbf8ef'
@@ -339,7 +339,60 @@ schemes:
       cyan:    '#24775c'
       white:   '#a8a4ae'
 
-colors: *space_light
+  zen_bones_light: &zen_bones_light
+    primary:
+      foreground: '#2C363C'
+      background: '#F0EDEC'
+    cursor:
+      cursor: '#2C363C'
+      text: '#F0EDEC'
+    normal:
+      black:   '#F0EDEC'
+      red:     '#A8334C'
+      green:   '#4F6C31'
+      yellow:  '#944927'
+      blue:    '#286486'
+      magenta: '#88507D'
+      cyan:    '#3B8992'
+      white:   '#2C363C'
+    bright:
+      black:   '#CFC1BA'
+      red:     '#94253E'
+      green:   '#3F5A22'
+      yellow:  '#803D1C'
+      blue:    '#1D5573'
+      magenta: '#7B3B70'
+      cyan:    '#2B747C'
+      white:   '#4F5E68'
+
+  zen_bones_dark: &zen_bones_dark
+    primary:
+      foreground: '#B4BDC3'
+      background: '#1C1917'
+    cursor:
+      cursor: '#C4CACF'
+      text: '#1C1917'
+    normal:
+      black:   '#1C1917'
+      red:     '#DE6E7C'
+      green:   '#819B69'
+      yellow:  '#B77E64'
+      blue:    '#6099C0'
+      magenta: '#B279A7'
+      cyan:    '#66A5AD'
+      white:   '#B4BDC3'
+    bright:
+      black:   '#403833'
+      red:     '#E8838F'
+      green:   '#8BAE68'
+      yellow:  '#D68C67'
+      blue:    '#61ABDA'
+      magenta: '#CF86C1'
+      cyan:    '#65B8C1'
+      white:   '#888F94'
+
+
+colors: *zen_bones_light
 
 # Specifying a `duration` of `0` will disable the visual bell.
 bell:
