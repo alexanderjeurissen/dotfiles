@@ -6,7 +6,7 @@ local tbl_slice = require("util").tbl_slice
 
 local CLI_OPTS = table.concat({
   '--no-inline-info',
-  '--color=bw,border:0,info:2,prompt:12,fg:,bg+:#c4b6af,fg+:,gutter:#b2a39b',
+  '--color=bw,border:0,info:2,prompt:12,fg:,bg+:0,fg+:,gutter:0',
   '--multi',
   '--sort',
   '--layout=reverse',

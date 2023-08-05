@@ -14,25 +14,33 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
--- vim.cmd [[autocmd CursorHold * lua vim.diagnostics.open_float()]]
--- vim.cmd [[autocmd CursorHoldI * silent! lua vim.diagnostics.open_float()]]
+vim.diagnostic.config({
+  virtual_text = {
+    source = "if_many",  -- Or "if_many"
+    severity = vim.diagnostic.severity.ERROR,
+    prefix = '⏽', -- Could be '■', '▎', 'x'
+  },
+  severity_sort = true,
+  float = {
+    source = "if_many",  -- Or "if_many"
+  },
+})
+
+vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float()]]
+vim.cmd [[autocmd CursorHoldI * silent! lua vim.diagnostic.open_float()]]
 -- }}}
 
 
 -- Signs {{{
-vim.cmd [[sign define LspDiagnosticsSignError text=]]
-vim.cmd [[sign define LspDiagnosticsSignWarning text=]]
-vim.cmd [[sign define LspDiagnosticsSignInformation text=]]
-vim.cmd [[sign define LspDiagnosticsSignHint text=]]
-
--- vim.cmd [[sign define LspDiagnosticsSignError text=⏽]]
--- vim.cmd [[sign define LspDiagnosticsSignWarning text=⏽]]
--- vim.cmd [[sign define LspDiagnosticsSignInformation text=⏽]]
--- vim.cmd [[sign define LspDiagnosticsSignHint text=⏽]]
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+-- local signs = { Error = "⏽ ", Warn = "⏽", Hint = "⏽", Info = "⏽" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 -- }}}
 
-
---[[ lspconfig.solargraph.setup {
+lspconfig.solargraph.setup {
   capabilities = capabilities,
   settings = {
     solargraph = {
@@ -45,11 +53,27 @@ vim.cmd [[sign define LspDiagnosticsSignHint text=]]
       references = true
     }
   }
+}
+
+lspconfig.rubocop.setup{}
+
+lspconfig.cssls.setup{
+  capabilities = capabilities,
+}
+
+--[[ lspconfig.denols.setup{
+  capabilities = capabilities,
 } ]]
 
-lspconfig.cssls.setup{ capabilities = capabilities }
+lspconfig.tsserver.setup{ capabilities = capabilities }
 
-lspconfig.denols.setup{ capabilities = capabilities }
+lspconfig.lua_ls.setup{
+  capabilities = capabilities,
+}
+
+--[[ lspconfig.vim_ls.setup{
+  capabilities = capabilities,
+} ]]
 
 lspconfig.gopls.setup{
   capabilities = capabilities,

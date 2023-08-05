@@ -49,25 +49,13 @@ end
   o.scrolloff = 2                                                                       -- Keep at least 2 lines above/below
   o.sidescrolloff = 5                                                                   -- Keep at least 5 lines left/right
   o.smartindent = true
+  o.updatetime = 1000                                                                   -- if idle for updatetime write swap and trigger CursorHold
 
-  o.winbar = " "
-  o.winbar = o.winbar .. "%{winnr() > 9?'󰏁 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 1?'󰎦 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 2?'󰎩 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 3?'󰎬 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 4?'󰎮 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 5?'󰎰 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 6?'󰎵 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 7?'󰎸 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 8?'󰎻 ':''}"
-  o.winbar = o.winbar .. "%{winnr() == 9?'󰎾 ':''}"
-  o.winbar = o.winbar .. " %{expand('%:~:.')} "
-  o.winbar = o.winbar .. "%="
-  o.winbar = o.winbar .. "%{&modified?' ':''}"
-  o.winbar = o.winbar .. "%{&readonly?' ':''}"
-  o.winbar = o.winbar .. "%{&paste?'  ':''}"
-  o.winbar = o.winbar .. "%{&spell?' ¶ ':''}"
-  o.winbar = o.winbar .. "%P "
+  o.statusline = " "
+  o.statusline = o.statusline .. "%{%v:lua.require'nvim-navic'.get_location()%}"
+  o.statusline = o.statusline .. "%="
+  o.statusline = o.statusline .. "%{&paste?'  ':''}"
+  o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
 
   o.laststatus = 3                                                                      -- Disable/enable bottom statusline
 
@@ -77,7 +65,8 @@ end
 
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
-  o.termguicolors = false
+  o.termguicolors = true
+  o.background = 'dark'
 
   if fn.executable('rg') == 1 then
     o.grepprg = "rg --vimgrep -H --no-heading --column --smart-case -P"                                          -- Set RipGrep as the default grep program (if it exists)

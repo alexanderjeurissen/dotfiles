@@ -23,29 +23,26 @@ return require('packer').startup(function()
   -- PLUGINS: Colorschemes {{{
     use 'tsiemens/vim-aftercolors'
     -- use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
-    -- use { "ellisonleao/gruvbox.nvim", config = function() require 'plugins/ellisonleao-gruvbox' end }
-    -- use { 'rose-pine/neovim', as = 'rose-pine', config = function() require 'plugins/rose-pine-neovim' end }
-    -- use { 'liuchengxu/space-vim-theme', config = function() require 'plugins/liuchengxu-space-vim-theme' end}
-    use { "mcchrish/zenbones.nvim", requires = "rktjmp/lush.nvim", config = function() require 'plugins/mcchrish-zenbones-nvim' end }
+    use { 'ishan9299/nvim-solarized-lua', config = function() require 'plugins/ishan9299-nvim-solarized-lua' end }
+
+    -- use { "mcchrish/zenbones.nvim", requires = "rktjmp/lush.nvim", config = function() require 'plugins/mcchrish-zenbones-nvim' end }
   -- }}}
 
   -- PLUGINS: Core {{{
     use 'Konfekt/FastFold'
     use 'vim-scripts/searchfold.vim'
-    use 'dstein64/nvim-scrollview'
 
-    -- NOTE: LSP support
+    -- NOTE: LSP & TreeSitter {{{
     use { 'neovim/nvim-lspconfig', config = function() require 'plugins/neovim-nvim-lspconfig' end }
+    use { "SmiteshP/nvim-navic", config = function() require 'plugins/SmiteshP-nvim-navic' end }
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+    -- }}}
+
+    -- NOTE: not working atm
+    -- use { 'https://codeberg.org/esensar/nvim-dev-container',config = function() require("devcontainer").setup{} end }
 
     -- NOTE: run tasks in a tmux split to not block vim
-    use {
-      'tpope/vim-dispatch',
-      opt = true,
-      cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
-    }
-
-    -- NOTE: Treesitter configurations and abstraction layer for Neovim (highlights).
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+    use { 'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'} }
 
     -- NOTE: Tmux navigation keybindings
     use { 'christoomey/vim-tmux-navigator',
@@ -91,9 +88,6 @@ return require('packer').startup(function()
   -- }}}
 
   -- PLUGINS: Ruby {{{
-    -- NOTE: run bundler commands in Vim
-    use 'tpope/vim-bundler'
-
     -- NOTE: fancy cucumber highlighting
     use { 'tpope/vim-cucumber', ft = {'cucumber'} }
 
@@ -141,6 +135,14 @@ return require('packer').startup(function()
   -- PLUGINS: Window Management {{{
     -- NOTE: allows to zoom into splits
     use { 'szw/vim-maximizer', config = function() require 'plugins/szw-vim-maximizer' end }
+
+    -- NOTE: tab/bufline support with file icons
+    use {
+      'akinsho/bufferline.nvim',
+      tag = "*",
+      requires = 'nvim-tree/nvim-web-devicons',
+      config = function() require 'plugins/akinsho-bufferline-nvim' end
+    }
   -- }}}
 end)
 
