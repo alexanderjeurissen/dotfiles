@@ -69,7 +69,7 @@ eval (luarocks path)
 # }}}
 
 # FZF settings {{{
- set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:1,bg+:0,fg+:1,gutter:0 --height 40% --reverse --prompt="  " --border=none --no-separator --no-scrollbar'
+ set -gx FZF_DEFAULT_OPTS '--color=bw,border:0,info:2,prompt:12,fg:,bg+:0,fg+:,gutter:0 --height 40% --reverse --prompt="  " --border=none --no-separator --no-scrollbar'
 
  set -gx _ZO_FZF_OPTS "--height 40% --reverse $FZF_DEFAULT_OPTS"
  set -gx FZF_DEFAULT_COMMAND 'rg --files'
@@ -90,11 +90,7 @@ eval (gdircolors -c ~/.dircolors/dircolors.ansi-dark)
 # yarn config set global-folder `nodenv prefix`
 
 # GPG settings {{{
-  # set -x GPG_TTY (tty)
-  # set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-  # gpgconf --launch gpg-agent
-  # fish_ssh_agent
-  set -x SSH_AUTH_SOCK /Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  # set -x SSH_AUTH_SOCK /Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 # }}}
 
 alias g git

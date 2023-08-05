@@ -3,4 +3,4 @@ fishpkg/fish-humanize-duration
 laughedelic/brew-completions
 halostatue/fish-brew
 rstacruz/fish-asdf
-danhper/fish-ssh-agent
+jorgebucaran/fisher
