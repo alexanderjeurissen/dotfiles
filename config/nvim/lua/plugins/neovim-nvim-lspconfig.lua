@@ -84,6 +84,7 @@ lspconfig.gopls.setup{
 	unusedparams = true,
       },
       staticcheck = true,
+      gofumpt = true
     },
   },
 }
@@ -94,7 +95,7 @@ nnoremap('gh ', '<cmd>lua vim.lsp.buf.hover()<CR>')
 nnoremap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
 nnoremap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 
-nnoremap('<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+nnoremap('<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>')
 
 nnoremap('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
 nnoremap(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
