@@ -8,13 +8,14 @@ Host *
   ForwardAgent no
   ForwardX11 no
   ForwardX11Trusted no
+  Host *
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 
 Host gitlab.inverselink.com
   HostName git.pdx1.inverselink.com
   ProxyCommand duoconnect -host=%h:%p -relay=https://engineering-ssh.inverselink.com
-  IdentityFile ~/.ssh/id_h1
 
 Host github
   HostName github.com
-  IdentityAgent /Users/alexanderjeurissen/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  ControlMaster no
