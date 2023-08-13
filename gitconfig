@@ -6,8 +6,8 @@
   ui = auto
 
 [color "status"]
-  branch = bold white
-  localBranch = bold white
+  branch = bold default
+  localBranch = bold default
   remoteBranch = bold yellow
 
 [core]
