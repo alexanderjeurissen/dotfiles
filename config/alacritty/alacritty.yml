@@ -100,7 +100,7 @@ font:
     style: Bold Italic
 
   # Point size of the font
-  size: 14.0
+  size: 18.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -392,7 +392,7 @@ schemes:
       white:   '#888F94'
 
 
-colors: *solarized_light
+colors: *solarized_dark
 
 # Specifying a `duration` of `0` will disable the visual bell.
 bell:
