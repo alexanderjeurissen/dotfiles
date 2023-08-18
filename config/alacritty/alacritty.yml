@@ -392,7 +392,7 @@ schemes:
       white:   '#888F94'
 
 
-colors: *zen_bones_light
+colors: *solarized_dark
 
 # Specifying a `duration` of `0` will disable the visual bell.
 bell:
