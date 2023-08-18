@@ -32,7 +32,7 @@ end
   -- o.textwidth = 100                                                                     -- Set maximum number of characters per line
   o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,resize,globals"  -- Changes the effect of the |:mksession| cmd.
   o.spellfile = home .. '/.config/nvim/spell/en.utf-8.add'
-  o.listchars = "trail:-,extends:»,precedes:«,space:·,nbsp:·,eol:¬"                     -- Strings in 'list' mode.
+  o.listchars = "tab:▸ ,trail:-,extends:»,precedes:«,space:·,nbsp:·,eol:¬"                     -- Strings in 'list' mode.
   o.hidden = true                                                                       -- Allow for more then one unsaved buffer.
   o.lazyredraw = true                                                                   -- Don't unnecessarily redraw screen.
   o.undofile = true                                                                     -- Save undo's after file closes.

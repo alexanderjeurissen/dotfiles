@@ -16,7 +16,7 @@
 -- NOTE: Load Packer (only applicable if packer is in opt/ path)
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function()
+return require('packer').startup(function(use)
   -- Packer can manage itself as an optional plugin
   use {'wbthomason/packer.nvim', opt = true}
 
@@ -38,6 +38,8 @@ return require('packer').startup(function()
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = function() require 'plugins/nvim-treesitter-nvim-treesitter' end }
     -- }}}
 
+    -- NOTE: Autocompletion
+    use { 'ms-jpq/coq_nvim', branch = "coq", config = function() require 'plugins/ms-jpq-coq_nvim' end }
     -- NOTE: not working atm
     -- use { 'https://codeberg.org/esensar/nvim-dev-container',config = function() require("devcontainer").setup{} end }
 
