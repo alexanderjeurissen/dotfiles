@@ -48,11 +48,11 @@ autocmd('syntax', {
 })
 
 -- Add sh highlighthing when editing fish files
-autocmd({'BufRead', 'BufNewFile'}, {
+--[[ autocmd({'BufRead', 'BufNewFile'}, {
   pattern = '*.fish',
   callback = function() vim.bo.filetype = 'sh' end,
   group = general
-})
+}) ]]
 
 -- Set syntax highlighting for Apraisals
 autocmd({'BufRead', 'BufNewFile'}, {

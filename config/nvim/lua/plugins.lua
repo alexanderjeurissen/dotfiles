@@ -35,7 +35,7 @@ return require('packer').startup(function()
     -- NOTE: LSP & TreeSitter {{{
     use { 'neovim/nvim-lspconfig', config = function() require 'plugins/neovim-nvim-lspconfig' end }
     use { "SmiteshP/nvim-navic", config = function() require 'plugins/SmiteshP-nvim-navic' end }
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = function() require 'plugins/nvim-treesitter-nvim-treesitter' end }
     -- }}}
 
     -- NOTE: not working atm
