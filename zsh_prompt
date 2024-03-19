@@ -1,0 +1,113 @@
++vi-git-status() {
+  local action="${hook_com[action]}"
+
+  if [[ -n $action ]]; then
+    if [[ "$action" == "rebase" ]] || ; then
+      hook_com[misc]=""
+    elif [[ "$action" == "rebase-i" ]]; then
+      hook_com[misc]=""
+    elif [[ "$action" == "merge" ]]; then
+      hook_com[misc]=""
+    fi
+  else
+    hook_com[misc]=""
+  fi
+}
+
+_prompt_segment() {
+  local bg=$1 fg=$2 text=$3 indent=$4
+  local segment_separator=""
+
+  if [[ -n $indent ]]; then
+    local segment="%K{$bg}%F{#001a1d}$segment_separator%f%F{$fg} $text %f%k%F{$bg}$segment_separator%f"
+  else
+    local segment="%K{$bg}%F{$fg} $text %f%k%F{$bg}$segment_separator%f"
+  fi
+
+  echo -ne $segment
+}
+
+_generate_prompt() {
+  local prompt_content="${prompt_newline}"
+  local working_tree="${vcs_info_msg_1_}"
+  local segment_separator=""
+
+  if [[ -n "$SSH_CONNECTION" ]]; then
+    prompt_content+="%K{blue}%F{black}  %m%f %k%F{blue}${segment_separator}%f"
+  fi
+
+  # VCS info
+  if [[ -n $working_tree ]]; then
+    if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
+      prompt_content+=$( _prompt_segment 'green' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+    else
+      prompt_content+=$( _prompt_segment 'yellow' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+    fi
+  fi
+
+  # prompt_content+="%(?.  .  )"
+  # Add last exit code indicator
+
+  # Add current directory indicator
+  prompt_content+=$(_prompt_segment 'black' 'brightblack' '  %(3~|%2~|%~)' $working_tree)
+
+  PROMPT="${(j..)prompt_content} "
+}
+
+_prompt_buffer_empty() {
+  if [ -z "$BUFFER" ]; then
+    if [ -n "${vcs_info_msg_1_}" ]; then
+       echo -ne "\033[1m git status\033[0m \n"
+       git -c color.status=always status --ignore-submodules=all | less -XFR
+       # git -c color.status=always lg -3 | less -XFR
+    else
+      echo -ne "\033[1m--- FILES:\033[0m \n"
+      CLICOLOR_FORCE=1 ls -C -G | less -XFR
+      echo -n "\n"
+    fi
+
+    zle redisplay
+  else
+    zle accept-line
+  fi
+}
+
+
+prompt_setup() {
+  # prevent percentage showing up
+  # if output doesn't end with a newline
+  export PROMPT_EOL_MARK=''
+  setopt prompt_subst
+
+  # Borrowwed from sindresorhus/pure
+  if [[ -z $prompt_newline ]]; then
+    # This variable needs to be set, usually set by promptinit.
+    typeset -g prompt_newline=$'\n%{\r%}'
+  fi
+
+  zmodload zsh/datetime
+  zmodload zsh/zle
+
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
+
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' use-simple true
+  zstyle ':vcs_info:*' max-exports 3
+  zstyle ':vcs_info:git*' formats '%m %0.20b%f%u%%s' '%R'
+  zstyle ':vcs_info:git*' actionformats '%m %0.20b %f%u%%s' '%0.20b|%a' '%R'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-status
+
+  add-zsh-hook precmd vcs_info
+  add-zsh-hook precmd _generate_prompt # generate left side prompt
+
+  # zle -N zle-line-init _ombre_line_init
+  # zle -N zle-keymap-select _prompt_keymap_select
+  zle -N buffer-empty _prompt_buffer_empty
+
+  bindkey -M main  "^M" buffer-empty
+  bindkey -M vicmd "^M" buffer-empty
+  bindkey -M viins  "^M" buffer-empty
+}
+
+prompt_setup "$@"
