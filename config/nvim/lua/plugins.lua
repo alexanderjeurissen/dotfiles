@@ -24,8 +24,9 @@ return require('packer').startup(function(use)
     use 'tsiemens/vim-aftercolors'
     -- use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
     use { 'ishan9299/nvim-solarized-lua', config = function() require 'plugins/ishan9299-nvim-solarized-lua' end }
-
-    -- use { "mcchrish/zenbones.nvim", requires = "rktjmp/lush.nvim", config = function() require 'plugins/mcchrish-zenbones-nvim' end }
+    -- use { 'ronisbr/nano-theme.nvim', config = function() require 'plugins/ronisbr-nano-theme' end }
+    -- use { 'Mofiqul/vscode.nvim', config = function() require 'plugins/Mofiqul-vscode' end }
+    -- use { 'p00f/alabaster.nvim', config = function() require 'plugins/p00f-alabaster-nvim' end }
   -- }}}
 
   -- PLUGINS: Core {{{
@@ -50,6 +51,9 @@ return require('packer').startup(function(use)
     use { 'christoomey/vim-tmux-navigator',
       config = function() require 'plugins/christoomey-vim-tmux-navigator' end
     }
+
+    -- NOTE: Github Copilot
+    use { 'github/copilot.vim' , config = function() require 'plugins/github-copilot-vim' end }
   -- }}}
 
   -- PLUGINS: Editing {{{
@@ -86,7 +90,7 @@ return require('packer').startup(function(use)
 
   -- PLUGINS: Frontend/Javascript {{{
     -- NOTE: ...
-    use { 'ap/vim-css-color', ft = {'css', 'scss', 'conf', 'javascript'} }
+    use { 'norcalli/nvim-colorizer.lua', ft = {'css', 'scss', 'conf', 'javascript', 'lua'} }
   -- }}}
 
   -- PLUGINS: Ruby {{{

@@ -3,5 +3,11 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = ''
   }
+  --[[ completion = {
+    source = {
+      copilot = { enabled: v:true }
+    }
+  } ]]
 }
+
 -- vim.cmd([[COQnow -s]])
