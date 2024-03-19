@@ -1,0 +1,465 @@
+live_config_reload = true
+
+import = [
+    "~/.config/alacritty/themes/themes/solarized_osaka.toml"
+]
+
+[bell]
+animation = "EaseOutExpo"
+color = "0xffffff"
+duration = 0
+
+# [colors]
+# draw_bold_text_with_bright_colors = false
+
+# [colors.bright]
+# black = "#002b36"
+# blue = "#839496"
+# cyan = "#93a1a1"
+# green = "#586e75"
+# magenta = "#6c71c4"
+# red = "#cb4b16"
+# white = "#fdf6e3"
+# yellow = "#657b83"
+
+# [colors.cursor]
+# cursor = "#657b83"
+# text = "#eee8d5"
+
+# [colors.normal]
+# black = "#073642"
+# blue = "#268bd2"
+# cyan = "#2aa198"
+# green = "#859900"
+# magenta = "#d33682"
+# red = "#dc322f"
+# white = "#eee8d5"
+# yellow = "#b58900"
+
+# [colors.primary]
+# background = "#eee8d5"
+# foreground = "#657b83"
+
+[cursor]
+style = "Block"
+unfocused_hollow = true
+
+[env]
+TERM = "xterm-256color-italic"
+
+[font]
+size = 12.0
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 1
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "Paste"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "Copy"
+
+[[keyboard.bindings]]
+action = "Hide"
+key = "H"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Quit"
+key = "Q"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Quit"
+key = "W"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = """
+
+"""
+key = "NumpadEnter"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;2A"
+key = "Up"
+mods = "Shift"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5A"
+key = "Up"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;3A"
+key = "Up"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001B[A"
+key = "Up"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOA"
+key = "Up"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;2B"
+key = "Down"
+mods = "Shift"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5B"
+key = "Down"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;3B"
+key = "Down"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001B[B"
+key = "Down"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOB"
+key = "Down"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;2D"
+key = "Left"
+mods = "Shift"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5D"
+key = "Left"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;3D"
+key = "Left"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001B[D"
+key = "Left"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOD"
+key = "Left"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;2C"
+key = "Right"
+mods = "Shift"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5C"
+key = "Right"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;3C"
+key = "Right"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001B[C"
+key = "Right"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOC"
+key = "Right"
+mode = "AppCursor"
+
+[mouse]
+hide_when_typing = false
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+# NOTE: need to move these over to alacritty-themes
+# see: https://github.com/alacritty/alacritty-theme
+# [schemes.gruvbox_dark.bright]
+# black = "#928374"
+# blue = "#83a598"
+# cyan = "#8ec07c"
+# green = "#b8bb26"
+# magenta = "#d3869b"
+# red = "#fb4934"
+# white = "#ebdbb2"
+# yellow = "#fabd2f"
+
+# [schemes.gruvbox_dark.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+# [schemes.gruvbox_dark.normal]
+# black = "#282828"
+# blue = "#458588"
+# cyan = "#689d6a"
+# green = "#98971a"
+# magenta = "#b16286"
+# red = "#cc241d"
+# white = "#a89984"
+# yellow = "#d79921"
+
+# [schemes.gruvbox_dark.primary]
+# background = "#282828"
+# foreground = "#ebdbb2"
+
+# [schemes.gruvbox_light.bright]
+# black = "#928374"
+# blue = "#076678"
+# cyan = "#427b58"
+# green = "#79740e"
+# magenta = "#8f3f71"
+# red = "#9d0006"
+# white = "#3c3836"
+# yellow = "#b57614"
+
+# [schemes.gruvbox_light.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+# [schemes.gruvbox_light.normal]
+# black = "#fbf1c7"
+# blue = "#458588"
+# cyan = "#689d6a"
+# green = "#98971a"
+# magenta = "#b16286"
+# red = "#cc241d"
+# white = "#7c6f64"
+# yellow = "#d79921"
+
+# [schemes.gruvbox_light.primary]
+# background = "#f2e5bc"
+# foreground = "#3c3836"
+
+# [schemes.solarized_dark.bright]
+# black = "#002b36"
+# blue = "#839496"
+# cyan = "#93a1a1"
+# green = "#586e75"
+# magenta = "#6c71c4"
+# red = "#cb4b16"
+# white = "#fdf6e3"
+# yellow = "#657b83"
+
+# [schemes.solarized_dark.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+# [schemes.solarized_dark.normal]
+# black = "#073642"
+# blue = "#268bd2"
+# cyan = "#2aa198"
+# green = "#859900"
+# magenta = "#d33682"
+# red = "#dc322f"
+# white = "#eee8d5"
+# yellow = "#b58900"
+
+# [schemes.solarized_dark.primary]
+# background = "#002b36"
+# foreground = "#839496"
+
+# [schemes.solarized_light.bright]
+# black = "#002b36"
+# blue = "#839496"
+# cyan = "#93a1a1"
+# green = "#586e75"
+# magenta = "#6c71c4"
+# red = "#cb4b16"
+# white = "#fdf6e3"
+# yellow = "#657b83"
+
+# [schemes.solarized_light.cursor]
+# cursor = "#657b83"
+# text = "#eee8d5"
+
+# [schemes.solarized_light.normal]
+# black = "#073642"
+# blue = "#268bd2"
+# cyan = "#2aa198"
+# green = "#859900"
+# magenta = "#d33682"
+# red = "#dc322f"
+# white = "#eee8d5"
+# yellow = "#b58900"
+
+# [schemes.solarized_light.primary]
+# background = "#eee8d5"
+# foreground = "#657b83"
+
+# [schemes.space_dark.bright]
+# black = "#655370"
+# blue = "#3a81c3"
+# cyan = "#24775c"
+# green = "#67b11d"
+# magenta = "#6c3163"
+# red = "#f2241f"
+# white = "#a8a4ae"
+# yellow = "#b1951d"
+
+# [schemes.space_dark.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+# [schemes.space_dark.normal]
+# black = "#504259"
+# blue = "#6981c5"
+# cyan = "#288668"
+# green = "#35a8a5"
+# magenta = "#a15ea7"
+# red = "#d26487"
+# white = "#fbf8ef"
+# yellow = "#b89f33"
+
+# [schemes.space_dark.primary]
+# background = "#292b2e"
+# foreground = "#b2b2b2"
+
+# [schemes.space_light.bright]
+# black = "#655370"
+# blue = "#3a81c3"
+# cyan = "#24775c"
+# green = "#67b11d"
+# magenta = "#6c3163"
+# red = "#f2241f"
+# white = "#a8a4ae"
+# yellow = "#b1951d"
+
+# [schemes.space_light.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+# [schemes.space_light.normal]
+# black = "#504259"
+# blue = "#6981c5"
+# cyan = "#288668"
+# green = "#35a8a5"
+# magenta = "#a15ea7"
+# red = "#d26487"
+# white = "#fbf8ef"
+# yellow = "#b89f33"
+
+# [schemes.space_light.primary]
+# background = "#fbf8ef"
+# foreground = "#655370"
+
+# [schemes.zen_bones_dark.bright]
+# black = "#403833"
+# blue = "#61ABDA"
+# cyan = "#65B8C1"
+# green = "#8BAE68"
+# magenta = "#CF86C1"
+# red = "#E8838F"
+# white = "#888F94"
+# yellow = "#D68C67"
+
+# [schemes.zen_bones_dark.cursor]
+# cursor = "#C4CACF"
+# text = "#1C1917"
+
+# [schemes.zen_bones_dark.normal]
+# black = "#1C1917"
+# blue = "#6099C0"
+# cyan = "#66A5AD"
+# green = "#819B69"
+# magenta = "#B279A7"
+# red = "#DE6E7C"
+# white = "#B4BDC3"
+# yellow = "#B77E64"
+
+# [schemes.zen_bones_dark.primary]
+# background = "#1C1917"
+# foreground = "#B4BDC3"
+
+# [schemes.zen_bones_light.bright]
+# black = "#CFC1BA"
+# blue = "#1D5573"
+# cyan = "#2B747C"
+# green = "#3F5A22"
+# magenta = "#7B3B70"
+# red = "#94253E"
+# white = "#4F5E68"
+# yellow = "#803D1C"
+
+# [schemes.zen_bones_light.cursor]
+# cursor = "#2C363C"
+# text = "#F0EDEC"
+
+# [schemes.zen_bones_light.normal]
+# black = "#F0EDEC"
+# blue = "#286486"
+# cyan = "#3B8992"
+# green = "#4F6C31"
+# magenta = "#88507D"
+# red = "#A8334C"
+# white = "#2C363C"
+# yellow = "#944927"
+
+# [schemes.zen_bones_light.primary]
+# background = "#F0EDEC"
+# foreground = "#2C363C"
+
+[scrolling]
+history = 0
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[shell]
+args = ["-l", "-c", "[[ $(tmux has-session 2>/dev/null) ]] && exec tmux attach-session || exec tmux new-session"]
+program = "/opt/homebrew/bin/zsh"
+
+[window]
+decorations = "full"
+opacity = 1.0
+startup_mode = "Maximized"
+
+[window.dimensions]
+columns = 0
+lines = 0
+
