@@ -38,7 +38,7 @@ _generate_prompt() {
 
   # VCS info
   if [[ -n $working_tree ]]; then
-    if ( test -z "$(command git status --porcelain --ignore-submodules -unormal)" ); then
+    if ( test -z "$(command git status --porcelain --untracked-files=no --ignore-submodules -unormal)" ); then
       prompt_content+=$( _prompt_segment 'green' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
     else
       prompt_content+=$( _prompt_segment 'yellow' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
