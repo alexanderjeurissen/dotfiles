@@ -75,8 +75,6 @@ export PATH="$HOME/.luarocks/bin:$PATH"
 # export PATH="$MAVENPATH/bin:$PATH"
 
 # FZF settings {{{
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 bindkey -r "^T"
 bindkey -M emacs '^F' fzf-file-widget
 bindkey -M vicmd '^F' fzf-file-widget
@@ -157,7 +155,7 @@ source ~/.zsh_keybindings
 
 # Initialize zoxide (improved cd)
 eval "$(zoxide init zsh)"
-
+eval "$(fzf --zsh)"
 # NOTE: profile zsh config
 # zprof
 

@@ -14,7 +14,7 @@
   fi
 }
 
-_prompt_segment() {
+_powerline_segment() {
   local bg=$1 fg=$2 text=$3 indent=$4
   local segment_separator=""
 
@@ -27,13 +27,36 @@ _prompt_segment() {
   echo -ne $segment
 }
 
+_prompt_segment() {
+  local bg="#001a1d" fg=$1 text=$3 indent=$4
+
+  if [[ -n $indent ]]; then
+    local segment="%F{#001a1d} %f%K{$bg}%F{$fg}$text %f%k"
+  else
+    local segment="%K{$bg}%F{$fg}$text %f%k"
+  fi
+
+  echo -ne $segment
+}
+
+
 _generate_prompt() {
   local prompt_content="${prompt_newline}"
   local working_tree="${vcs_info_msg_1_}"
-  local segment_separator=""
 
+  # •
+  # ∼
+  # ✓
+  # ✕
+  # 
+  # 
+  # 
+  # 
+  # 
   if [[ -n "$SSH_CONNECTION" ]]; then
-    prompt_content+="%K{blue}%F{black}  %m%f %k%F{blue}${segment_separator}%f"
+    prompt_content+=$( _prompt_segment 'red' 'black' " %m" 0)
+  else
+    # prompt_content+=$( _prompt_segment 'blue' 'black' " " 0)
   fi
 
   # VCS info
@@ -49,7 +72,7 @@ _generate_prompt() {
   # Add last exit code indicator
 
   # Add current directory indicator
-  prompt_content+=$(_prompt_segment 'black' 'brightblack' '  %(3~|%2~|%~)' $working_tree)
+  prompt_content+=$(_prompt_segment 'brightblack' 'brightblack' '%(3~|%2~|%~)' $working_tree)
 
   PROMPT="${(j..)prompt_content} "
 }
