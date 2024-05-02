@@ -125,4 +125,26 @@ function Util.noremap(key, action, options, buffer)
   map('', key, action, options, buffer)
 end
 
+-- Define a function to get the highlighting group under the cursor
+function get_highlight_group()
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local row, col = cursor_pos[1], cursor_pos[2]
+
+    local synID = vim.fn.synID(row, col, 1)
+    local name = vim.fn.synIDattr(synID, "name")
+    local fg = vim.fn.synIDattr(synID, "fg")
+    local fgGui = vim.fn.synIDattr(synID, "fg#")
+    local bg = vim.fn.synIDattr(synID, "bg")
+    local bgGui = vim.fn.synIDattr(synID, "bg#")
+
+    print(vim.inspect(name))
+    print(vim.inspect(fg))
+    print(vim.inspect(bg))
+    print(vim.inspect(fgGui))
+    print(vim.inspect(bgGui))
+end
+
+-- Bind this function to a command or keymap if desired
+vim.cmd("command! HighlightGroup lua get_highlight_group()")
+
 return Util

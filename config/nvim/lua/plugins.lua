@@ -20,23 +20,22 @@ return require('packer').startup(function(use)
   -- Packer can manage itself as an optional plugin
   use {'wbthomason/packer.nvim', opt = true}
 
-  -- PLUGINS: Colorschemes {{{
-    use 'tsiemens/vim-aftercolors'
-    -- use { 'romainl/flattened', config = function() require 'plugins/romainl-flattened' end}
-    use { 'ishan9299/nvim-solarized-lua', config = function() require 'plugins/ishan9299-nvim-solarized-lua' end }
-    -- use { 'ronisbr/nano-theme.nvim', config = function() require 'plugins/ronisbr-nano-theme' end }
-    -- use { 'Mofiqul/vscode.nvim', config = function() require 'plugins/Mofiqul-vscode' end }
-    -- use { 'p00f/alabaster.nvim', config = function() require 'plugins/p00f-alabaster-nvim' end }
-  -- }}}
-
   -- PLUGINS: Core {{{
     use 'Konfekt/FastFold'
     use 'vim-scripts/searchfold.vim'
 
     -- NOTE: LSP & TreeSitter {{{
     use { 'neovim/nvim-lspconfig', config = function() require 'plugins/neovim-nvim-lspconfig' end }
-    use { "SmiteshP/nvim-navic", config = function() require 'plugins/SmiteshP-nvim-navic' end }
+    use { 'SmiteshP/nvim-navic', config = function() require 'plugins/SmiteshP-nvim-navic' end }
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = function() require 'plugins/nvim-treesitter-nvim-treesitter' end }
+    use { 'nvim-telescope/telescope.nvim',
+          requires = 'nvim-lua/plenary.nvim',
+          config = function() require 'plugins/telescope' end }
+    -- fzy native sorter for Telescope
+    use {
+      'nvim-telescope/telescope-fzy-native.nvim',
+      run = 'make'  -- This compiles the native fzy module
+    }
     -- }}}
 
     -- NOTE: Autocompletion
@@ -54,6 +53,14 @@ return require('packer').startup(function(use)
 
     -- NOTE: Github Copilot
     use { 'github/copilot.vim' , config = function() require 'plugins/github-copilot-vim' end }
+  -- }}}
+
+  -- PLUGINS: Colorschemes {{{
+    use 'tsiemens/vim-aftercolors'
+    -- use { 'ishan9299/nvim-solarized-lua', config = function() require 'plugins/ishan9299-nvim-solarized-lua' end }
+    -- use { "miikanissi/modus-themes.nvim", config = function() require 'plugins/miikanissi-modus-themes' end }
+    use { 'craftzdog/solarized-osaka.nvim', config = function() require 'plugins/craftzdog-solarized-osaka' end }
+    -- use { 'rose-pine/neovim', config = function() require 'plugins/rose-pine-neovim' end }
   -- }}}
 
   -- PLUGINS: Editing {{{
@@ -104,10 +111,6 @@ return require('packer').startup(function(use)
   -- PLUGINS: Navigation {{{
     -- NOTE: ...
     use 'octref/RootIgnore'
-
-    -- NOTE: Fuzzy finder / selector
-    use { 'junegunn/fzf', run = './install --all' }
-    use { 'vijaymarupudi/nvim-fzf', config=function() require 'plugins/fzf' end}
 
     -- NOTE: add nice buffer deleting
     use { 'moll/vim-bbye', config = function() require 'plugins/moll-vim-bbye' end }

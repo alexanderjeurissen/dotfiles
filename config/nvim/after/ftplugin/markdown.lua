@@ -7,7 +7,7 @@ vim.wo.spell = true
 -- setlocal omnifunc=htmlcomplete#CompleteTags
 vim.bo.complete = vim.bo.complete .. ',kspell'
 
-imap('<c-l>' [[<Esc>[s1z=`]a]], {}, true)
+-- imap('<c-l>' [[<Esc>[s1z=`]a]], {}, true)
 
 -- Disable marking of margin (colorcolumn)
 vim.call('general#MarkMargin', 0)
