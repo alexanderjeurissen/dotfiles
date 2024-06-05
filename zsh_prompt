@@ -28,12 +28,14 @@ _powerline_segment() {
 }
 
 _prompt_segment() {
-  local bg="#001a1d" fg=$1 text=$3 indent=$4
+  local bg=$1 fg=$2 text=$3 indent=$4
+  local segment_left="%F{$bg}%K{default}%f%k"
+  local segment_right="%F{$bg}%K{default}%f%k"
 
   if [[ -n $indent ]]; then
-    local segment="%F{#001a1d} %f%K{$bg}%F{$fg}$text %f%k"
+    local segment="%F{#001a1d} $segment_left%f%K{$bg}%F{$fg}$text%f%k$segment_right"
   else
-    local segment="%K{$bg}%F{$fg}$text %f%k"
+    local segment="$segment_left%K{$bg}%F{$fg}$text%f%k$segment_right"
   fi
 
   echo -ne $segment
@@ -54,7 +56,7 @@ _generate_prompt() {
   # 
   # 
   if [[ -n "$SSH_CONNECTION" ]]; then
-    prompt_content+=$( _prompt_segment 'red' 'black' " %m" 0)
+    prompt_content+=$( _prompt_segment '#FF3C31' '#FFFFFF' " %m" 0)
   else
     # prompt_content+=$( _prompt_segment 'blue' 'black' " " 0)
   fi
@@ -62,9 +64,9 @@ _generate_prompt() {
   # VCS info
   if [[ -n $working_tree ]]; then
     if ( test -z "$(command git status --porcelain --untracked-files=no --ignore-submodules -unormal)" ); then
-      prompt_content+=$( _prompt_segment 'green' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+      prompt_content+=$( _prompt_segment '#13C759' '#000000' "${vcs_info_msg_0_}" $SSH_CONNECTION)
     else
-      prompt_content+=$( _prompt_segment 'yellow' 'black' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+      prompt_content+=$( _prompt_segment '#FFCC02' '#000000' "${vcs_info_msg_0_}" $SSH_CONNECTION)
     fi
   fi
 
@@ -72,7 +74,7 @@ _generate_prompt() {
   # Add last exit code indicator
 
   # Add current directory indicator
-  prompt_content+=$(_prompt_segment 'brightblack' 'brightblack' '%(3~|%2~|%~)' $working_tree)
+  prompt_content+=$(_prompt_segment '#007BFF' '#FFFFFF' '%(3~|%2~|%~)' $working_tree)
 
   PROMPT="${(j..)prompt_content} "
 }

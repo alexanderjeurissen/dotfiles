@@ -1,7 +1,8 @@
 live_config_reload = true
 
 import = [
-    "~/.config/alacritty/themes/themes/solarized_osaka.toml"
+    # "~/.config/alacritty/themes/themes/solarized_osaka.toml"
+    "~/.config/alacritty/aqua.toml"
 ]
 
 [bell]
@@ -17,27 +18,31 @@ unfocused_hollow = true
 TERM = "xterm-256color-italic"
 
 [font]
-size = 12.0
+size = 14.0
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
+family = "Liga SFMono Nerd Font"
+# family = "JetBrainsMono Nerd Font Mono"
 style = "Bold"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "Liga SFMono Nerd Font"
+# family = "JetBrainsMono Nerd Font Mono"
 style = "Bold Italic"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
+family = "Liga SFMono Nerd Font"
+# family = "JetBrainsMono Nerd Font Mono"
 style = "Italic"
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "Liga SFMono Nerd Font"
+# family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [font.offset]
 x = 0
-y = 1
+y = 0
 
 [[keyboard.bindings]]
 action = "Paste"
