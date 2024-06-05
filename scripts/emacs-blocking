@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+socket_file=$(lsof -c Emacs | grep server | tr -s " " | cut -d' ' -f8)
+echo 'press any key to confirm your done editing'
+if [[ $socket_file == "" ]]; then        
+    # Just run Emacs (with any arguments passed to the script)
+    # It would be a good idea to parse the arguments and clean/remove
+    # anything emacsclient specific. 
+    # (ie. -e should be --eval for emacs)
+    # note that emacsclient doesn't fix these args for you either
+    # when using -a / --alternate-editor
+
+    # emacs $@ &
+
+    # or on OSX
+  read $(/usr/local/Cellar/emacs-plus/24.5/Emacs.app/Contents/MacOS/Emacs $@ &)
+else
+  read $(emacsclient $@ -n -s $socket_file)
+fi
