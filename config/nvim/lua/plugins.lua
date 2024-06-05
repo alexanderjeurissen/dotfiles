@@ -38,7 +38,7 @@ return require('lazy').setup({
         org_default_notes_file = '/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org',
         mappings = {
           global = {
-            org_agenda = gA,
+            org_agenda = 'gA',
             org_capture = 'gC'
           },
         }
