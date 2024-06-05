@@ -1,6 +1,11 @@
 # vim: foldmethod=marker:sw=2:foldlevel=10:ft=ruby
 
-require 'pastel'
+begin
+  require 'pastel'
+rescue LoadError
+  # Handle the case where the gem is not found
+  puts "Gem 'my_gem' not found!"
+end
 
 # NOTE: Add awesome print as a wrapper for all print operations {{{
 begin
