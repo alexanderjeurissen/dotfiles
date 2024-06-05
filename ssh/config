@@ -8,7 +8,6 @@ Host *
   ForwardAgent no
   ForwardX11 no
   ForwardX11Trusted no
-  Host *
   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 

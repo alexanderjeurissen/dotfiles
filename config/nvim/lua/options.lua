@@ -85,7 +85,8 @@ end
   wo.numberwidth = 4                                                                    -- Set width of number column
 
   wo.foldenable = true                                                                  -- collapse all folds.
-  wo.foldmethod = 'syntax'                                                              -- Fold on the syntax
+  wo.foldmethod = 'expr'                                                                -- Fold using treesitter
+  wo.foldexpr="nvim_treesitter#foldexpr()"
   wo.foldcolumn = '0'                                                                   -- Don't indicate fold open/closed
   wo.foldlevel = 1                                                                      -- Autofold nothing by default
   wo.foldnestmax = 3                                                                    -- Only fold outer functions
