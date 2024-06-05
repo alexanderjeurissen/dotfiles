@@ -85,7 +85,7 @@ vnoremap('o', [[:call general#ExecVisualSelection()<cr>]])
   imap('<up>', [[<nop>]])
   imap('<down>', [[<nop>]])
   imap('<right>', [[<nop>]])
-  imap('<BS>', [[<nop>]])
+  -- imap('<BS>', [[<nop>]])
   imap('<DEL>', [[<nop>]])
 
 

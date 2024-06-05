@@ -19,7 +19,6 @@ require("solarized-osaka").setup({
     local border = "#001a1d"
     local background = "none"
 
-
     -- Unlink highlight groups so we can higlhight them individually
     vim.api.nvim_set_hl(0, 'TelescopBorder', {})
     vim.api.nvim_set_hl(0, 'TelescopeResultsBorder', {})
@@ -76,7 +75,8 @@ require("solarized-osaka").setup({
     }
 
     hl.TelescopeResultsTitle = {
-      bg = c.blue,
+      bg = background,
+      -- bg = c.blue,
       fg = border,
     }
 

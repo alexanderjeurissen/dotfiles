@@ -66,7 +66,7 @@ end
   -- o.shell = "/usr/local/bin/fish"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.shell = "/bin/sh"                                                                   -- Set shell to bin/sh to improve performance in zsh/fish
   o.termguicolors = true
-  -- o.background = 'dark'
+  o.background = 'light'
 
   if fn.executable('rg') == 1 then
     o.grepprg = "rg --vimgrep -H --no-heading --column --smart-case -P"                                          -- Set RipGrep as the default grep program (if it exists)
@@ -128,5 +128,5 @@ end
   vim.keymap.set("v", "gc", "<Plug>kommentary_visual_default<C-c>")
 -- }}}
 --
-vim.cmd.colorscheme "solarized-osaka"
+vim.cmd.colorscheme "modus"
 

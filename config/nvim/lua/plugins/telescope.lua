@@ -5,7 +5,28 @@ local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
 
 require('telescope').setup{
+  pickers = {
+    git_files = {
+      theme = 'ivy',
+      layout_config = { height = 10 }
+    },
+    find_files = {
+      theme = 'ivy',
+      layout_config = { height = 10 }
+    },
+    buffers = {
+      theme = 'ivy',
+      layout_config = { height = 10 }
+    },
+    live_grep = {
+      theme = 'ivy',
+      preview = { hide_on_startup = false }
+    }
+  },
   defaults = {
+    preview = {
+      hide_on_startup = true -- hide previewer when picker starts
+    },
     mappings = {
       i = {
         -- close in insert mode
