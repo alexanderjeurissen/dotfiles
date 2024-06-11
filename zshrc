@@ -36,6 +36,12 @@ export TAILWIND_MODE='watch'
 export HACKERONE_ON_DOCKER=true
 # export IN_HACKERONE_ON_DOCKER=true
 
+# Emacs / GCC related env variables
+export BEORG_PATH="$HOME/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents"
+
+# export LIBRARY_PATH="/opt/homebrew/opt/gcc/lib/gcc/$(gcc -dumpversion)/"
+# export LD_LIBRARY_PATH="/opt/homebrew/opt/gcc/lib/gcc/$(gcc -dumpversion)/"
+
 # Set ripgrep rc file
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
