@@ -1,7 +1,59 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Alexander Jeurissen
-#+EMAIL: alexander@jeurissen.email
+#+EMAIL: frailty.tithing.0n@icloud.com
 
+* Refile
+ These are action items that are captured using quick captured and subsequently refiled here.
+ They encompase various enhancements based on annoyances I run into when coding
+ Addressing them will ensure my emacs configuration will adjust better to my daily workflow
+** TODO  Add visual indentation config similar to my vim config
+In my vim config I added custom bindings to ensure the region selection in visual mode remains
+so I can do subsequent visual indents with >
+
+In emacs + evil this is not working out of the box either and as such need to be configured.
+:LOGBOOK:
+CLOCK: [2024-06-12 Wed 17:47]--[2024-06-12 Wed 17:49] =>  0:02
+:END:
+[2024-06-12 Wed 17:47]
+** TODO Add support for gcc / gc comment motions
+in my vim configuration I have the ability to comment out using the gc motion, or gcc for the current line.
+I need to look if this can be configured with some simple elisp or if evil has some configuration for this.
+:LOGBOOK:
+CLOCK: [2024-06-12 Wed 17:51]--[2024-06-12 Wed 17:52] =>  0:01
+:END:
+[2024-06-12 Wed 17:51]
+** DONE add SPC-bd keybinding for deleting buffers (:bd)
+[2024-06-10 Mon 14:04]
+** TODO % in evil does not work with do..end blocks in ruby
+:LOGBOOK:
+CLOCK: [2024-06-12 Wed 17:57]--[2024-06-12 Wed 17:57] =>  0:00
+:END:
+[2024-06-12 Wed 17:57]
+** DONE `*` in visual mode does not does perform incsearch for region
+In vim I added custom configuration to make sure `*` in visual mode performs an inc search of the selected region.
+I need to add this to my emacs configuration as well.
+:LOGBOOK:
+CLOCK: [2024-06-12 Wed 18:09]--[2024-06-12 Wed 18:10] =>  0:01
+:END:
+[2024-06-12 Wed 18:09]
+** TODO yank ring copies directly to system clipboard
+    In vim the system clipboard was under *" register.
+    the separation between system clipboard and the yank ring was quite powerful.
+    It allowed me to copy things to the *" register and still be able to make edits that would normally overwrite the yank register.
+
+    Either I have to mimic this behavior or look into a actual yank history and see if Vertico etc. can search through it.
+** TODO add grep support to Vertico
+Figure out how we can perform greps in the most performant way and see matching results in Vertico
+:LOGBOOK:
+CLOCK: [2024-06-13 Thu 11:31]--[2024-06-13 Thu 11:31] =>  0:00
+:END:
+[2024-06-13 Thu 11:31]
+** TODO Read up on web browsing and following links in emacs
+https://www.howardism.org/Technical/Emacs/browsing-in-emacs.html
+:LOGBOOK:
+CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
+:END:
+[2024-06-13 Thu 12:42]
 * I. Core Configuration
 ** Package Management
 #+BEGIN_SRC emacs-lisp
@@ -113,7 +165,7 @@
 
 ** Custom Themes
 #+BEGIN_SRC emacs-lisp
-(customize-set-variable 'custom-safe-themes t)
+;;(customize-set-variable 'custom-safe-themes t)
 #+END_SRC
 ** General.el leader  Configuration
     #+BEGIN_SRC emacs-lisp
@@ -195,24 +247,35 @@
   "Enable golden-ratio mode."
   (golden-ratio-mode 1))
 
-(add-hook 'zoom-window-mode-hook #'aj/disable-golden-ratio)
-(add-hook 'zoom-window-leave-hook #'aj/enable-golden-ratio)
+;;(add-hook 'zoom-window-mode-hook #'aj/disable-golden-ratio)
+;;(add-hook 'zoom-window-leave-hook #'aj/enable-golden-ratio)
 #+END_SRC
 ** Dired configuration
  We aim to make Dired behave more like Netrw & Vinegar vim plugin by tpope.
 *** Dired configuration
 #+BEGIN_SRC emacs-lisp
-;; Dired configuration to reduce clutter
-(use-package dired
-  :ensure nil
-  :config
-  (setq dired-listing-switches "-alh")
-  (setq dired-dwim-target t)
-  (put 'dired-find-alternate-file 'disabled nil) ; Enable 'a' command
-  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
-  (add-hook 'dired-mode-hook (lambda ()
-                               (dired-omit-mode 1)))
-  (define-key dired-mode-map (kbd "-") 'dired-up-directory))
+  ;; Dired configuration to reduce clutter
+  (use-package dired
+    :ensure nil
+    :config
+    (setq dired-listing-switches "-alh")
+    (setq dired-dwim-target t)
+    (put 'dired-find-alternate-file 'disabled nil) ; Enable 'a' command
+    (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+    (add-hook 'dired-mode-hook (lambda ()
+                                 (dired-omit-mode 1)))
+    (define-key dired-mode-map (kbd "-") 'dired-up-directory))
+
+  (defun aj/open-dired-in-current-directory ()
+    "Open `dired` in the directory of the current file."
+    (interactive)
+        (dired (file-name-directory (or (buffer-file-name) default-directory))))
+
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal 'global (kbd "-") 'aj/open-dired-in-current-directory))
+
+  ; (evil-collection-define-key 'normal 'dired-mode-map
+  ;   "%" 'dired-create-empty-file)
 #+END_SRC
 *** Diminish minor modes
 
@@ -319,6 +382,17 @@ reducing the amount of leftover dired buffers
     (interactive)
     (find-file "~/.emacs.d/config.org"))
 
+  (defun aj/visual-star-search ()
+    "Perform an incremental search with the text in the selected region without altering the yank buffer."
+    (interactive)
+    (when (use-region-p)
+      (let ((search-text (buffer-substring-no-properties (region-beginning) (region-end))))
+        (deactivate-mark)
+        (evil-ex-search-activate-highlight search-text)
+        (setq evil-ex-search-pattern (evil-ex-make-search-pattern search-text))
+        (evil-ex-search-next)
+        (evil-ex-search-update-pattern evil-ex-search-pattern))))
+
   (defun hrs/kill-current-buffer ()
     "Kill the current buffer without prompting."
     (interactive)
@@ -342,7 +416,7 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 (setq evil-want-keybinding nil)
 #+END_SRC
 
-** Evil mode
+** Evil Mode
 #+BEGIN_SRC emacs-lisp
   (use-package evil
       :config
@@ -354,6 +428,12 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 
   ;; Use C-r for redo in evil mode
   (evil-set-undo-system 'undo-redo)
+
+  ;; Ensure shift-width is set to 2
+  (setq-default evil-shift-width 2)
+
+  ;; Make * perform IncSearch for text in region
+  (define-key evil-visual-state-map (kbd "*") 'aj/visual-star-search)
 #+END_SRC
 
 ** Evil Collection Configuration
@@ -362,7 +442,7 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 (use-package evil-collection
   :ensure t
   :config
-  (evil-collection-init '(magit dired)))
+  (evil-collection-init '(magit dired eshell)))
 #+END_SRC
 
 ** Evil Leader Configuration
@@ -384,19 +464,26 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
     :group 'evil-rails)
   (evil-ex-define-cmd "A" 'projectile-toggle-between-implementation-and-test))
 #+END_SRC
-
+** Evil Commentary
+This package provides Vim’s gc and gcc comment motion, making it very similar to vim-commentary.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-commentary
+    :ensure t
+    :config
+    (evil-commentary-mode))
+#+END_SRC
 * IV. Language-Specific Configurations
 ** Ruby Development
 
 *** Ruby Mode Hook
 #+BEGIN_SRC emacs-lisp
-;; (add-hook 'ruby-mode-hook
-          ;; (lambda ()
-            ;; (setq ruby-insert-encoding-magic-comment nil)
-            ;; (yas-minor-mode)
-            ;; (flycheck-mode)
-            ;; (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-            ;; (projectile-rails-mode)))
+ ;;(add-hook 'ruby-mode-hook
+           ;;(lambda ()
+             ;;(setq ruby-insert-encoding-magic-comment t)
+             ;;(yas-minor-mode)
+             ;;(flycheck-mode)
+             ;;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+             ;;(projectile-rails-mode)))
 #+END_SRC
 
 *** Enable Ruby Mode for Additional File Patterns
@@ -457,21 +544,23 @@ We need to review if we still need pry-remote functionality.
 ** LSP settings
 *** Packages
    #+BEGIN_SRC emacs-lisp
-         (use-package lsp-mode
-           :hook ((
-                   js-mode         ; ts-ls (tsserver wrapper)
-                   js-jsx-mode     ; ts-ls (tsserver wrapper)
-                   typescript-mode ; ts-ls (tsserver wrapper)
-                   web-mode        ; ts-ls/HTML/CSS
-                   ruby-mode ;; solargraph-language-server
-                   ) . lsp)
-           :commands lsp)
+     (use-package lsp-mode
+       :hook ((
+               js-mode         ; ts-ls (tsserver wrapper)
+               js-jsx-mode     ; ts-ls (tsserver wrapper)
+               typescript-mode ; ts-ls (tsserver wrapper)
+               web-mode        ; ts-ls/HTML/CSS
+               ruby-mode ;; solargraph-language-server
+               ) . lsp)
+       :commands lsp
+       :config
+        (setq lsp-clients-ruby-server-command 'solargraph))
 
-;;             (use-package lsp-solargraph
-;;               :after lsp-mode)
+        (my-leader-def 'normal
+          "="  '(lsp-format-buffer :which-key "LSP format buffer"))
 
-           (use-package lsp-ui
-             :commands lsp-ui-mode)
+       (use-package lsp-ui
+         :commands lsp-ui-mode)
    #+END_SRC
 
 *** lsp-mode settings
@@ -674,34 +763,27 @@ We need to review if we still need pry-remote functionality.
 #+END_SRC
 
 ** ORG Mode
-*** ORG bullets for pretty bullets
-#+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :ensure t
-    :hook (org-mode . org-bullets-mode))
-#+END_SRC
-
 *** ORG Mode settings
  Set various Org mode settings to enhance usability and appearance.
 
 #+BEGIN_SRC emacs-lisp
+  ;;(require 'org)
   ;; Basic Org settings
-  (custom-set-faces
-    '(org-level-1 ((t (:inherit outline-1  :height 1.4 ))))
-    '(org-level-2 ((t (:inherit outline-2  :height 1.3 ))))
-    '(org-level-3 ((t (:inherit outline-3  :height 1.2 ))))
-    '(org-level-4 ((t (:inherit outline-4  :height 1.1 ))))
-    '(org-level-5 ((t (:inherit outline-5  :height 1.0 ))))
-    '(org-level-6 ((t (:inherit outline-6  :height 1.0 ))))
-    '(org-level-7 ((t (:inherit outline-7  :height 1.0 ))))
-    '(org-level-8 ((t (:inherit outline-8  :height 1.0 )))))
+  (set-face-attribute 'org-level-1 nil :inherit 'outline-1 :height 1.4)
+  (set-face-attribute 'org-level-2 nil :inherit 'outline-2 :height 1.3)
+  (set-face-attribute 'org-level-3 nil :inherit 'outline-3 :height 1.2)
+  (set-face-attribute 'org-level-4 nil :inherit 'outline-4 :height 1.1)
+  (set-face-attribute 'org-level-5 nil :inherit 'outline-5 :height 1.0)
+  (set-face-attribute 'org-level-6 nil :inherit 'outline-6 :height 1.0)
+  (set-face-attribute 'org-level-7 nil :inherit 'outline-7 :height 1.0)
+  (set-face-attribute 'org-level-8 nil :inherit 'outline-8 :height 1.0)
 
   (setq org-hide-leading-stars t
      org-ellipsis "⤵"
      org-src-fontify-natively t
      org-src-window-setup 'current-window
      org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))
+               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))
      org-todo-keyword-faces '(("TODO" :foreground "red" :weight bold)
                   ("NEXT" :foreground "blue" :weight bold)
                   ("DONE" :foreground "forest green" :weight bold)
@@ -714,8 +796,13 @@ We need to review if we still need pry-remote functionality.
                      ("TODO" ("WAITING") ("HOLD"))
                      ("NEXT" ("WAITING") ("HOLD"))
                      ("DONE" ("WAITING") ("HOLD"))))
+#+END_SRC
 
-
+*** ORG bullets for pretty bullets
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode))
 #+END_SRC
 
 *** Org Capture Templates / Agenda
@@ -724,52 +811,75 @@ We need to review if we still need pry-remote functionality.
   org files for the agenda.
 
  #+BEGIN_SRC emacs-lisp
-    ;; define the org path
-    (setq aj/org-path "/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+   ;; define the org path
+   (setq aj/org-path "/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
 
-    ;; set the org-agenda files to the org path
-    (setq org-agenda-files (directory-files-recursively aj/org-path "\\.org$"))
+   ;; set the org-agenda files to the org path
+   (setq org-agenda-files (directory-files-recursively aj/org-path "\\.org$"))
 
-   ;; Set additional refile targets
-   ;;(setq org-refile-targets '((nil :maxlevel . 3) ; Current file
-                           ;;(org-agenda-files :maxlevel . 3))) ; All agenda files
+   ;; Add emacs.d/config.org to the agenda files
+   (setq org-agenda-files (append org-agenda-files (list "~/.emacs.d/config.org")))
 
-    ;; Define the path to your inbox.org file
+   ;; Add emacs.d/config.org to the refile targets
+   (setq org-refile-targets (append org-refile-targets '(("~/.emacs.d/config.org" :maxlevel . 3))))
+
+   ;; Add org-agenda files to refile targets
+   (setq org-refile-targets (append org-refile-targets '((org-agenda-files :maxlevel . 3))))
+
+   ;; Define the path to your inbox.org file
    (setq inbox-file (concat aj/org-path "/inbox.org"))
+   (setq journal-file (concat aj/org-path "/inbox.org"))
 
-    ;; Org capture templates
-    (setq org-capture-templates
-          `(("t" "todo" entry (file ,inbox-file)
-             "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-            ("r" "respond" entry (file ,inbox-file)
-             "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-            ("n" "note" entry (file ,inbox-file)
-             "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-            ("j" "Journal" entry (file+datetree ,inbox-file)
-             "* %?\n%U\n" :clock-in t :clock-resume t)
-            ("w" "org-protocol" entry (file ,inbox-file)
-             "* TODO Review %c\n%U\n" :immediate-finish t)
-            ("m" "Meeting" entry (file ,inbox-file)
-             "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)))
+   ;; Org capture templates
+   (setq org-capture-templates
+         `(("t" "todo" entry (file ,inbox-file)
+           "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+           ("r" "respond" entry (file ,inbox-file)
+           "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+           ("n" "note" entry (file ,inbox-file)
+           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+           ("j" "Journal" entry (file+datetree ,journal-file)
+           "* %?\n%U\n" :clock-in t :clock-resume t)
+           ("w" "org-protocol" entry (file ,inbox-file)
+           "* TODO Review %c\n%U\n" :immediate-finish t)
+           ("m" "Meeting" entry (file ,inbox-file)
+           "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)))
  #+END_SRC
 
 *** Refile Configuration
- Configure refile targets and related settings.
+  Configure refile targets and related settings.
 
 #+BEGIN_SRC emacs-lisp
- ;; Refile configuration
- (setq org-refile-targets '((nil :maxlevel . 9)
-               (org-agenda-files :maxlevel . 9))
-    org-refile-use-outline-path t
-    org-outline-path-complete-in-steps nil
-    org-refile-allow-creating-parent-nodes 'confirm
-    org-completion-use-ido t
-    ido-everywhere t
-    ido-max-directory-size 100000
-    ido-default-file-method 'selected-window
-    ido-default-buffer-method 'selected-window
-    org-indirect-buffer-display 'current-window)
- ;;(ido-mode t)
+   ;;(eval-after-load 'org
+    ;; Refile configuration
+    ;; (setq org-refile-targets '((nil :maxlevel . 9)
+    ;;   (org-agenda-files :maxlevel . 9))
+    ;;     org-refile-use-outline-path t
+    ;;     org-outline-path-complete-in-steps nil
+    ;;     org-refile-allow-creating-parent-nodes 'confirm
+    ;;     org-completion-use-ido t
+    ;;     ido-everywhere t
+    ;;     ido-max-directory-size 100000
+    ;;     ido-default-file-method 'selected-window
+    ;;     ido-default-buffer-method 'selected-window
+    ;;     org-indirect-buffer-display 'current-window))
+
+    ;; Define the custom function to save buffers after refiling
+  (defun aj/org-refile-save-buffers (&rest _)
+    "Save both the current buffer and the target buffer after refiling."
+    ;; Save the current buffer
+    (when (buffer-file-name)
+      (save-buffer))
+    ;; Save the target buffer
+    (let* ((org-refile-target-table (org-refile-get-targets))
+           (target-file (nth 1 (assoc org-refile-last-stored org-refile-target-table))))
+      (when target-file
+        (with-current-buffer (find-buffer-visiting target-file)
+          (when (buffer-file-name)
+            (save-buffer))))))
+
+  ;; Advise org-refile to save buffers after the operation
+  (advice-add 'org-refile :after 'aj/org-refile-save-buffers)
 #+END_SRC
 
 *** Exclude DONE State Tasks from Refile Targets
@@ -793,7 +903,6 @@ We need to review if we still need pry-remote functionality.
 
 * VII. Shell and Terminal Integration
 ** Shell Mode Configuration
-
 *** Share Shell History
 #+BEGIN_SRC emacs-lisp
 (defun my-shell-mode-hook ()
@@ -809,7 +918,6 @@ We need to review if we still need pry-remote functionality.
 #+END_SRC
 
 ** ANSI Term Configuration
-
 *** Kill Buffer When ANSI Term Exits
 #+BEGIN_SRC emacs-lisp
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
@@ -840,7 +948,6 @@ We need to review if we still need pry-remote functionality.
 #+END_SRC
 
 ** Exec-Path-From-Shell Configuration
-
 *** Initialize on all systems
 #+BEGIN_SRC emacs-lisp
 (use-package exec-path-from-shell
@@ -875,6 +982,20 @@ We need to review if we still need pry-remote functionality.
         rg-reuse-window t))
 #+END_SRC
 
+** Eshell Configuration
+
+#+BEGIN_SRC emacs-lisp
+  (defun aj/eshell-send-c-c ()
+    "Send C-c to the current process in Eshell."
+    (interactive)
+    (let ((proc (get-buffer-process (current-buffer))))
+      (if proc
+          (interrupt-process proc)
+        (message "No process in current buffer"))))
+
+  (with-eval-after-load 'eshell
+    (define-key eshell-mode-map (kbd "C-c") 'aj/eshell-send-c-c))
+#+END_SRC
 * VIII. System Configuration
 ** Locale Configuration
 #+BEGIN_SRC emacs-lisp
@@ -920,13 +1041,14 @@ Vertico provides a vertical completion UI for Emacs, replacing Selectrum.
 Orderless provides a flexible completion style that works well with Vertico.
 
 #+BEGIN_SRC emacs-lisp
-;; Orderless setup
-(use-package orderless
-  :ensure t
-  :custom
-  (completion-styles '(orderless))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+  ;; Orderless setup
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion))))
+    (orderless-matching-styles '(orderless-literal orderless-regexp)))
 #+END_SRC
 
 ** Marginalia
@@ -959,7 +1081,7 @@ Consult provides various enhanced search and navigation commands.
        (car (project-roots project))))))
 #+END_SRC
 
-** Embark
+** TODO Embark
 Embark provides context-sensitive actions for minibuffer completions.
 
 #+BEGIN_SRC emacs-lisp
@@ -1009,7 +1131,6 @@ Additional optional configurations for appearance and behavior.
 ;; Optional: Configure the appearance and behavior of the packages
 (custom-set-variables
  '(vertico-cycle t))  ;; Enable cycling for `vertico-next' and `vertico-previous'
-;;; init-smoce.el ends here
 #+END_SRC
 
 
