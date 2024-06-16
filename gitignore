@@ -90,3 +90,6 @@ Procfile.local
 *.patch
 
 .stylelintrc
+
+# emacs auto generated config from org
+emacs.d/config.el

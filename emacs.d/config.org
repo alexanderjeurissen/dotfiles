@@ -177,8 +177,7 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
             ;; Set space as the leader key in normal and visual states
             (general-create-definer my-leader-def
                 :keymaps '(normal visual emacs)
-                :prefix "SPC"
-                :global-prefix "C-SPC")
+                :prefix "SPC")
 
             (my-leader-def '(normal emacs)
                 "f"  '(:ignore t :which-key "files")
@@ -187,7 +186,7 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
                 "ff" '(find-file :which-key "find file")
                 "fs" '(save-buffer :which-key "save file")
                 "b"  '(:ignore t :which-key "buffers")
-                "bb" '(switch-to-buffer :which-key "switch buffer")
+                "bb" '(consult-buffer :which-key "switch buffer")
                 "bd" '(kill-this-buffer :which-key "kill buffer")
                 "w"  '(:ignore t :which-key "windows")))
 
@@ -258,12 +257,23 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
   (use-package dired
     :ensure nil
     :config
+    ;; This line sets the variable dired-listing-switches to "-alh". This is a string of command-line options passed to the ls command (which dired uses to list directory contents). The options mean:
+
+    ;; •	-a: Include all files, even those starting with a dot (hidden files).
+    ;; •	-l: Use a long listing format.
+    ;; •	-h: Human-readable sizes (e.g., 1K, 2M).
     (setq dired-listing-switches "-alh")
+
+    ;; This enables “Do What I Mean” (DWIM) target functionality. When enabled, if you have two dired buffers open in split windows, dired will assume the other buffer as the target for file operations (e.g., copying or moving files).
     (setq dired-dwim-target t)
+
+    ;; This enables the dired-find-alternate-file command. By default, this command is disabled. When enabled, you can use the a key in dired to open files and directories in the same buffer, replacing the current buffer’s contents, rather than opening a new buffer.
     (put 'dired-find-alternate-file 'disabled nil) ; Enable 'a' command
-    (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+
+    ;; This line adds a hook to dired-mode, which runs a lambda function whenever dired-mode is activated. The lambda function enables dired-omit-mode, which hides files that are typically considered uninteresting (like backup files and temporary files).
     (add-hook 'dired-mode-hook (lambda ()
                                  (dired-omit-mode 1)))
+    ;; This line defines a key binding in dired-mode. It binds the - key to the dired-up-directory command, which allows you to navigate to the parent directory.
     (define-key dired-mode-map (kbd "-") 'dired-up-directory))
 
   (defun aj/open-dired-in-current-directory ()
@@ -273,9 +283,6 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
 
   (with-eval-after-load 'evil
     (evil-define-key 'normal 'global (kbd "-") 'aj/open-dired-in-current-directory))
-
-  ; (evil-collection-define-key 'normal 'dired-mode-map
-  ;   "%" 'dired-create-empty-file)
 #+END_SRC
 *** Diminish minor modes
 
@@ -323,18 +330,61 @@ reducing the amount of leftover dired buffers
 
 (add-hook 'dired-mode-hook 'my-dired-mode-hook)
 #+END_SRC
-** Company Mode Configuration
+
+** Corfu.el Configuration
+Corfu enhances in-buffer completion with a small completion popup.
+Corfu is the minimalistic in-buffer completion counterpart of the *Vertico* minibuffer UI.
+
 #+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :defer t
-  :init
-  (global-company-mode)
-  :config
-  (setq company-selection-wrap-around t)
-  (define-key company-active-map [tab] 'company-complete)
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+  (use-package corfu
+    :ensure t
+    :init
+    (global-corfu-mode)
+    :config
+      (setq
+        corfu-auto t                ;; Enable auto completion
+        corfu-cycle nil             ;; Disable cycling for completions
+        corfu-preselect-first t     ;; Preselect the first completion candidate
+        corfu-auto-prefix 1         ;; Minimum prefix length for auto completion
+        corfu-auto-delay 0.1        ;; Delay for auto completion
+        corfu-quit-at-boundary t    ;; Keep the Corfu popup open at the boundary
+        corfu-quit-no-match t     ;; Keep the Corfu popup open if there are no matches
+        corfu-preview-current t)  ;; Disable previewing the current candidate
+
+      ;; Key bindings
+      (define-key corfu-map (kbd "TAB") 'corfu-complete)
+      (define-key corfu-map (kbd "C-n") 'corfu-next)
+      (define-key corfu-map (kbd "C-k") 'corfu-previous)
+
+      ;; Ensure completion is managable in eshell
+      (add-hook 'eshell-mode-hook
+                (lambda ()
+                  (setq-local corfu-auto nil)
+                  (corfu-mode))))
+
+  (use-package emacs
+    :init
+      ;; Enable indentation+completion using the TAB key.
+      ;; `completion-at-point' is often bound to M-TAB.
+      (setq tab-always-indent 'complete)
+
+      ;; Emacs 30 and newer: Disable Ispell completion function. As an alternative,
+      ;; try `cape-dict'.
+      (setq text-mode-ispell-word-completion nil)
+
+      ;; Emacs 28 and newer: Hide commands in M-x which do not apply to the current
+      ;; mode.  Corfu commands are hidden, since they are not used via M-x. This
+      ;; setting is useful beyond Corfu.
+      (setq read-extended-command-predicate #'command-completion-default-include-p))
+
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    ;:custom
+    ; (kind-icon-blend-background t)
+    ; (kind-icon-default-face 'corfu-default) ; only needed with blend-background
+    :config
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+END_SRC
 
 ** Yasnippet Configuration
@@ -342,7 +392,6 @@ reducing the amount of leftover dired buffers
 (use-package yasnippet
   :ensure t)
 #+END_SRC
-
 
 ** Diff-hl Configuration
 #+BEGIN_SRC emacs-lisp
@@ -442,7 +491,7 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 (use-package evil-collection
   :ensure t
   :config
-  (evil-collection-init '(magit dired eshell)))
+  (evil-collection-init '(magit dired eshell corfu vertico)))
 #+END_SRC
 
 ** Evil Leader Configuration
@@ -455,14 +504,13 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 
 ** Evil Rails Configuration
 #+BEGIN_SRC emacs-lisp
-(use-package evil-rails
-  :ensure t
-  :config
-  (defgroup evil-rails nil
-    "Evil Rails customizations."
-    :prefix "evil-rails-"
-    :group 'evil-rails)
-  (evil-ex-define-cmd "A" 'projectile-toggle-between-implementation-and-test))
+  ;; (use-package evil-rails
+  ;;   :ensure t
+  ;;   :config
+  ;;   (defgroup evil-rails nil
+  ;;     "Evil Rails customizations."
+  ;;     :prefix "evil-rails-"
+  ;;     :group 'evil-rails))
 #+END_SRC
 ** Evil Commentary
 This package provides Vim’s gc and gcc comment motion, making it very similar to vim-commentary.
@@ -700,30 +748,56 @@ We need to review if we still need pry-remote functionality.
     #+END_SRC
 
 * V. Project Management and Tools
-** Projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-      :ensure t
-      :init
-          (projectile-mode +1)
-      :bind-keymap
-          ("C-c p" . projectile-command-map)
-      :custom
-          (projectile-completion-system 'auto)
-          (projectile-project-search-path '("~/Development/"))  ;; Set your project directory here
-      :config
-          (setq projectile-switch-project-action #'projectile-dired)
-          (my-leader-def 'normal
-          "p"  '(:ignore t :which-key "projectile")
-          "pf" '(projectile-find-file :which-key "find file in project")
-          "pp" '(projectile-switch-project :which-key "switch project")))
+** Project.el configuration
 
-      ;; Consult-Projectile integration
-      (use-package consult-projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package project
       :ensure t
-      :after (consult projectile))
+      :config
+          (my-leader-def 'normal
+            "p"  '(:ignore t :which-key "project")
+            "pf"  '(project-find-file :which-key "find file")
+            "pb"  '(consult-project-buffer :which-key "switch to buffer")
+            "p/"  '(consult-ripgrep :which-key "grep")
+            "pp"  '(project-switch-project :which-key "switch project")))
 #+END_SRC
 
+
+** TODO Devcontainer configuration
+Most of my work occurs in devcontainers. Therefore it's important that I'm able to quickly:
+1. start the dev container from emacs
+2. ensure that projectile switches the root to the remote workspace folder
+
+#+BEGIN_SRC emacs-lisp
+  (require 'tramp)
+  (require 'subr-x)  ;; For string manipulation functions
+
+(defun aj/run-devcontainer ()
+  "Run 'devcontainer up --workspace-folder .' in the current projectile project,
+  parse the output, connect to the container, and open the remote workspace folder in dired.
+  Also set the projectile root to the remote workspace folder."
+    (interactive)
+    (let* ((default-directory (projectile-project-root))
+          (output (shell-command-to-string "devcontainer up --workspace-folder ."))
+          (container-id (if (string-match "\"containerId\":\"\\([^\"]+\\)\"" output)
+                            (match-string 1 output)))
+          (workspace-folder (if (string-match "\"remoteWorkspaceFolder\":\"\\([^\"]+\\)\"" output)
+                                (match-string 1 output)))
+          (tramp-path (concat "/docker:" container-id ":" workspace-folder)))
+      (unless (and container-id workspace-folder)
+        (error "Failed to parse devcontainer output"))
+      (dired tramp-path)
+      (setq projectile-project-root tramp-path)
+      (projectile-add-known-project tramp-path)
+      (projectile-invalidate-cache nil)
+      (projectile-cache-current-file)
+      (message "Connected to container %s and set projectile root to %s" container-id tramp-path)))
+
+
+  (my-leader-def 'normal
+    "p"  '(:ignore t :which-key "projectile")
+    "pd" '(aj/run-devcontainer :which-key "run devcontainer in project"))
+#+END_SRC
 * VI. Writing and Text Editing
 ** Writeroom Mode Configuration
 
@@ -767,35 +841,37 @@ We need to review if we still need pry-remote functionality.
  Set various Org mode settings to enhance usability and appearance.
 
 #+BEGIN_SRC emacs-lisp
-  ;;(require 'org)
-  ;; Basic Org settings
-  (set-face-attribute 'org-level-1 nil :inherit 'outline-1 :height 1.4)
-  (set-face-attribute 'org-level-2 nil :inherit 'outline-2 :height 1.3)
-  (set-face-attribute 'org-level-3 nil :inherit 'outline-3 :height 1.2)
-  (set-face-attribute 'org-level-4 nil :inherit 'outline-4 :height 1.1)
-  (set-face-attribute 'org-level-5 nil :inherit 'outline-5 :height 1.0)
-  (set-face-attribute 'org-level-6 nil :inherit 'outline-6 :height 1.0)
-  (set-face-attribute 'org-level-7 nil :inherit 'outline-7 :height 1.0)
-  (set-face-attribute 'org-level-8 nil :inherit 'outline-8 :height 1.0)
+  (use-package org
+    :ensure t
+    :config
+      ;; Basic Org settings
+      (set-face-attribute 'org-level-1 nil :inherit 'outline-1 :height 1.4)
+      (set-face-attribute 'org-level-2 nil :inherit 'outline-2 :height 1.3)
+      (set-face-attribute 'org-level-3 nil :inherit 'outline-3 :height 1.2)
+      (set-face-attribute 'org-level-4 nil :inherit 'outline-4 :height 1.1)
+      (set-face-attribute 'org-level-5 nil :inherit 'outline-5 :height 1.0)
+      (set-face-attribute 'org-level-6 nil :inherit 'outline-6 :height 1.0)
+      (set-face-attribute 'org-level-7 nil :inherit 'outline-7 :height 1.0)
+      (set-face-attribute 'org-level-8 nil :inherit 'outline-8 :height 1.0)
 
-  (setq org-hide-leading-stars t
-     org-ellipsis "⤵"
-     org-src-fontify-natively t
-     org-src-window-setup 'current-window
-     org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))
-     org-todo-keyword-faces '(("TODO" :foreground "red" :weight bold)
-                  ("NEXT" :foreground "blue" :weight bold)
-                  ("DONE" :foreground "forest green" :weight bold)
-                  ("WAITING" :foreground "orange" :weight bold)
-                  ("HOLD" :foreground "magenta" :weight bold))
-     org-todo-state-tags-triggers '(
-                     ("WAITING" ("WAITING" . t))
-                     ("HOLD" ("WAITING") ("HOLD" . t))
-                     (done ("WAITING") ("HOLD"))
-                     ("TODO" ("WAITING") ("HOLD"))
-                     ("NEXT" ("WAITING") ("HOLD"))
-                     ("DONE" ("WAITING") ("HOLD"))))
+      (setq org-hide-leading-stars t
+        org-ellipsis "⤵"
+        org-src-fontify-natively t
+        org-src-window-setup 'current-window
+        org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))
+        org-todo-keyword-faces '(("TODO" :foreground "red" :weight bold)
+                      ("NEXT" :foreground "blue" :weight bold)
+                      ("DONE" :foreground "forest green" :weight bold)
+                      ("WAITING" :foreground "orange" :weight bold)
+                      ("HOLD" :foreground "magenta" :weight bold))
+        org-todo-state-tags-triggers '(
+                        ("WAITING" ("WAITING" . t))
+                        ("HOLD" ("WAITING") ("HOLD" . t))
+                        (done ("WAITING") ("HOLD"))
+                        ("TODO" ("WAITING") ("HOLD"))
+                        ("NEXT" ("WAITING") ("HOLD"))
+                        ("DONE" ("WAITING") ("HOLD")))))
 #+END_SRC
 
 *** ORG bullets for pretty bullets
@@ -821,10 +897,10 @@ We need to review if we still need pry-remote functionality.
    (setq org-agenda-files (append org-agenda-files (list "~/.emacs.d/config.org")))
 
    ;; Add emacs.d/config.org to the refile targets
-   (setq org-refile-targets (append org-refile-targets '(("~/.emacs.d/config.org" :maxlevel . 3))))
+   ;;(setq org-refile-targets (append org-refile-targets '(("~/.emacs.d/config.org" :maxlevel . 3))))
 
    ;; Add org-agenda files to refile targets
-   (setq org-refile-targets (append org-refile-targets '((org-agenda-files :maxlevel . 3))))
+   ;;(setq org-refile-targets (append org-refile-targets '((org-agenda-files :maxlevel . 3))))
 
    ;; Define the path to your inbox.org file
    (setq inbox-file (concat aj/org-path "/inbox.org"))
@@ -850,36 +926,13 @@ We need to review if we still need pry-remote functionality.
   Configure refile targets and related settings.
 
 #+BEGIN_SRC emacs-lisp
-   ;;(eval-after-load 'org
-    ;; Refile configuration
-    ;; (setq org-refile-targets '((nil :maxlevel . 9)
-    ;;   (org-agenda-files :maxlevel . 9))
-    ;;     org-refile-use-outline-path t
-    ;;     org-outline-path-complete-in-steps nil
-    ;;     org-refile-allow-creating-parent-nodes 'confirm
-    ;;     org-completion-use-ido t
-    ;;     ido-everywhere t
-    ;;     ido-max-directory-size 100000
-    ;;     ido-default-file-method 'selected-window
-    ;;     ido-default-buffer-method 'selected-window
-    ;;     org-indirect-buffer-display 'current-window))
-
-    ;; Define the custom function to save buffers after refiling
-  (defun aj/org-refile-save-buffers (&rest _)
-    "Save both the current buffer and the target buffer after refiling."
-    ;; Save the current buffer
-    (when (buffer-file-name)
-      (save-buffer))
-    ;; Save the target buffer
-    (let* ((org-refile-target-table (org-refile-get-targets))
-           (target-file (nth 1 (assoc org-refile-last-stored org-refile-target-table))))
-      (when target-file
-        (with-current-buffer (find-buffer-visiting target-file)
-          (when (buffer-file-name)
-            (save-buffer))))))
-
-  ;; Advise org-refile to save buffers after the operation
-  (advice-add 'org-refile :after 'aj/org-refile-save-buffers)
+  (with-eval-after-load 'org
+    (setq
+      org-refile-targets '((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9))
+        org-refile-use-outline-path t
+        org-outline-path-complete-in-steps nil
+        org-refile-allow-creating-parent-nodes 'confirm
+        org-indirect-buffer-display 'current-window))
 #+END_SRC
 
 *** Exclude DONE State Tasks from Refile Targets
@@ -899,6 +952,7 @@ We need to review if we still need pry-remote functionality.
 #+BEGIN_SRC emacs-lisp
  ;; Global keybinding for org-capture
  (global-set-key (kbd "C-c c") 'org-capture)
+ (global-set-key (kbd "C-c a") 'org-agenda)
 #+END_SRC
 
 * VII. Shell and Terminal Integration
@@ -1045,10 +1099,10 @@ Orderless provides a flexible completion style that works well with Vertico.
   (use-package orderless
     :ensure t
     :custom
-    (completion-styles '(orderless))
-    (completion-category-defaults nil)
-    (completion-category-overrides '((file (styles partial-completion))))
-    (orderless-matching-styles '(orderless-literal orderless-regexp)))
+      (completion-styles '(orderless))
+      (completion-category-defaults nil)
+      (completion-category-overrides '((file (styles partial-completion))))
+      (orderless-matching-styles '(orderless-literal orderless-regexp)))
 #+END_SRC
 
 ** Marginalia
@@ -1062,23 +1116,32 @@ Marginalia adds annotations to the minibuffer completions, enhancing the complet
   (marginalia-mode))
 #+END_SRC
 
+** Nerd icons
+#+BEGIN_SRC emacs-lisp
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+#+END_SRC
 ** Consult
 Consult provides various enhanced search and navigation commands.
 
 #+BEGIN_SRC emacs-lisp
-;; Consult setup
-(use-package consult
-  :ensure t
-  :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
-         ("M-y" . consult-yank-pop)
-         ;; Other bindings for consult functions can go here
-         )
-  :custom
-  (consult-project-root-function
-   (lambda ()
-     (when-let (project (project-current))
-       (car (project-roots project))))))
+  ;; Consult setup
+  (use-package consult
+    :ensure t
+    :bind (("C-s" . consult-line)
+           ("C-x b" . consult-buffer)
+           ("C-x /" . consult-ripgrep)
+           ("M-y" . consult-yank-pop)
+           ;; Other bindings for consult functions can go here
+           )
+    :custom
+    (consult-project-root-function
+     (lambda ()
+       (when-let (project (project-current))
+         (car (project-roots project))))))
 #+END_SRC
 
 ** TODO Embark
