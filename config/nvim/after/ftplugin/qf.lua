@@ -26,8 +26,3 @@ nnoremap('o', [[<CR><C-w>p]], { silent = false }, true)
   execute 'vert resize '.(winwidth / 2)
   wincmd p
 endfunction ]]
-
-vim.call('general#MarkMargin', 0)
-
--- TODO: evaluate if this is needed
--- autocmd BufEnter qf :call general#MarkMargin(0)

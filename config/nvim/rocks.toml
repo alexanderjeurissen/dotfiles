@@ -1,0 +1,121 @@
+# ROCKS: List of non-Neovim rocks.
+# This includes things like `toml` or other lua packages.
+[rocks] # {{{
+# }}}
+
+# PLUGINS: List of Neovim plugins to install alongside their versions.
+# If the plugin name contains a dot then you must add quotes to the key name!
+[plugins] # {{{
+"rocks.nvim" = "2.36.1"
+"rocks-config.nvim" = "2.2.0"
+"rocks-git.nvim" = "2.0.1"
+"rocks-lazy.nvim" = "scm"
+"rocks-treesitter.nvim" = "1.0.3"
+
+"plenary.nvim" = "scm"
+"telescope-zf-native.nvim" = "1.0.0"
+"telescope.nvim" = "scm"
+neorg-telescope = "1.2.2"
+
+nvim-lspconfig = "0.1.8"
+
+"oil.nvim" = "2.11.0"
+"unimpaired.nvim" = "0.2.0"
+"guess-indent.nvim" = "scm"
+nvim-web-devicons = "0.100"
+"nvim-colorizer.lua" = "scm"
+nvim-surround = "2.1.5"
+promise-async = "scm"
+nvim-ufo = "1.4.0"
+
+"diffview.nvim" = "scm"
+neogit = "1.0.0"
+neotest = "5.4.0"
+neotest-jest = "scm"
+neotest-rspec = "scm"
+cmp-nvim-lsp = "scm"
+cmp-cmdline = "scm"
+nvim-cmp = "scm"
+cmp-path = "scm"
+cmp-buffer = "scm"
+neorg = "9.1.1"
+copilot-cmp = "scm"
+"copilot.lua" = { git = "zbirenbaum/copilot.lua" }
+nvim-treesitter-legacy-api = "0.9.2"
+tree-sitter-toml = "0.0.2"
+tree-sitter-lua = "0.0.2"
+tree-sitter-ruby = "0.0.2"
+tree-sitter-tsx = "0.0.3"
+
+[plugins."fileline.nvim" ]
+git = "lewis6991/fileline.nvim"
+rev = "c116aa8dd7aa7e1db6938f872285e598dc9ee00b"
+
+[plugins."modus-themes.nvim" ]
+git = "miikanissi/modus-themes.nvim"
+rev = "v1.3.2"
+
+[plugins."vim-bbye" ]
+git = "moll/vim-bbye"
+rev = "v1.0.1"
+
+[plugins."vim-visualstar" ]
+git = "thinca/vim-visualstar"
+rev = "v0.5.0"
+
+[plugins."kommentary" ]
+git = "b3nj5m1n/kommentary"
+rev = "v1.0^{}"
+
+[plugins."vim-exchange" ]
+git = "tommcdo/vim-exchange"
+rev = "d6c1e9790bcb8df27c483a37167459bbebe0112e"
+
+[plugins."todo-comments.nvim" ]
+git = "folke/todo-comments.nvim"
+rev = "v1.3.0"
+
+# BUNDLES: bundles allow for a single plugins/x.lua file per bundle instead of per plugin
+# {{{
+[bundles.neorg]
+items = [
+  "neorg",
+  # "neorg-contexts"
+]
+
+[bundles.telescope]
+items = [
+  "neorg-telescope",
+  "telescope-zf-native.nvim",
+  "telescope.nvim"
+]
+
+[bundles.testing]
+items = [
+  "neotest",
+  "neotest-jest",
+  "neotest-rspec"
+]
+[bundles.autocomplete]
+items = [
+  "nvim-cmp",
+  "cmp-path",
+  "cmp-buffer",
+  "cmp-cmdline",
+  "cmp-nvim-lsp",
+  "copilot-cmp",
+  "copilot.lua"
+]
+# }}}
+
+[config] # {{{
+plugins_dir = "plugins/"
+auto_setup = true
+# }}}
+
+[treesitter] # {{{
+auto_highlight = "all"
+auto_install = "prompt" # true | false
+# }}}
+
+# vim: foldmethod=marker:sw=2:foldlevel=10

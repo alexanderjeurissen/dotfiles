@@ -14,33 +14,12 @@
   fi
 }
 
-_powerline_segment() {
+_segment() {
   local bg=$1 fg=$2 text=$3 indent=$4
-  local segment_separator=""
-
-  if [[ -n $indent ]]; then
-    local segment="%K{$bg}%F{#001a1d}$segment_separator%f%F{$fg} $text %f%k%F{$bg}$segment_separator%f"
-  else
-    local segment="%K{$bg}%F{$fg} $text %f%k%F{$bg}$segment_separator%f"
-  fi
+  local segment="%K{$bg}%F{$fg}%B $text %b%f%k"
 
   echo -ne $segment
 }
-
-_prompt_segment() {
-  local bg=$1 fg=$2 text=$3 indent=$4
-  local segment_left="%F{$bg}%K{default}%f%k"
-  local segment_right="%F{$bg}%K{default}%f%k"
-
-  if [[ -n $indent ]]; then
-    local segment="%F{#001a1d} $segment_left%f%K{$bg}%F{$fg}$text%f%k$segment_right"
-  else
-    local segment="$segment_left%K{$bg}%F{$fg}$text%f%k$segment_right"
-  fi
-
-  echo -ne $segment
-}
-
 
 _generate_prompt() {
   local prompt_content="${prompt_newline}"
@@ -56,17 +35,15 @@ _generate_prompt() {
   # 
   # 
   if [[ -n "$SSH_CONNECTION" ]]; then
-    prompt_content+=$( _prompt_segment '#FF3C31' '#FFFFFF' " %m" 0)
-  else
-    # prompt_content+=$( _prompt_segment 'blue' 'black' " " 0)
+    prompt_content+=$( _segment 'default' 'red' " %m" 0)
   fi
 
   # VCS info
   if [[ -n $working_tree ]]; then
     if ( test -z "$(command git status --porcelain --untracked-files=no --ignore-submodules -unormal)" ); then
-      prompt_content+=$( _prompt_segment '#13C759' '#000000' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+      prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}" $SSH_CONNECTION)
     else
-      prompt_content+=$( _prompt_segment '#FFCC02' '#000000' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+      prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}*" $SSH_CONNECTION)
     fi
   fi
 
@@ -74,9 +51,9 @@ _generate_prompt() {
   # Add last exit code indicator
 
   # Add current directory indicator
-  prompt_content+=$(_prompt_segment '#007BFF' '#FFFFFF' '%(3~|%2~|%~)' $working_tree)
+  prompt_content+=$(_segment 'default' 'blue' '%(3~|%2~|%~)' $working_tree)
 
-  PROMPT="${(j..)prompt_content} "
+  PROMPT="${(j..)prompt_content} %B$%b "
 }
 
 _prompt_buffer_empty() {

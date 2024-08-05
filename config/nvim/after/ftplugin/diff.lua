@@ -14,10 +14,6 @@ wo.cursorline = false
 wo.conceallevel = 0
 wo.colorcolumn = '0'
 
-vim.call('general#MarkMargin', 0)
-
-vim.g.solarized_diffmode = 'high'
-
 -- NOTE: Ensures that :q and :x work with neovim-remote
 -- https://github.com/mhinz/neovim-remote#typical-use-cases
 vim.bo.bufhidden = 'delete'

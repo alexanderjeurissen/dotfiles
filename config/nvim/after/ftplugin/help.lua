@@ -1,6 +1,4 @@
 local vim = vim or {}
-local bo = vim.bo
-local wo = vim.wo
 local Util = require('util')
 local nmap = Util.nmap
 
@@ -16,8 +14,6 @@ vim.bo.iskeyword = vim.bo.iskeyword .. ",:,#,-"
 
 vim.wo.cursorline = false
 vim.wo.colorcolumn = '0'
-
-vim.call('general#MarkMargin', 0)
 
 -- Jump to links with o and L
 nmap('o', [[<C-]>]], {}, true)

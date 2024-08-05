@@ -7,6 +7,8 @@ rescue LoadError
   puts "Gem 'my_gem' not found!"
 end
 
+Pry.config.correct_indent = false if ENV['INSIDE_EMACS']
+
 # NOTE: Add awesome print as a wrapper for all print operations {{{
 begin
   require 'awesome_print'
@@ -27,6 +29,7 @@ Pry.commands.alias_command 'e', 'exit'
 # }}}
 
 # NOTE: better colors {{{
+Pry.color = true
 Pry.config.color = true
 Pry.config.theme = "solarized"
 Pry.config.ls.separator = "\n" # new lines between methods

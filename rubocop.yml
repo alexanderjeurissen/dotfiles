@@ -90,24 +90,3 @@ Metrics/ParameterLists:
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false
-
-RSpec/DescribeClass:
-  Enabled: false
-
-RSpec/DescribedClass:
-  Enabled: false
-
-RSpec/ExampleLength:
-  Enabled: false
-
-RSpec/MultipleExpectations:
-  Enabled: false
-
-RSpec/NestedGroups:
-  Enabled: false
-
-RSpec/NamedSubject:
-  Enabled: false
-
-RSpec/Focus:
-  Enabled: true

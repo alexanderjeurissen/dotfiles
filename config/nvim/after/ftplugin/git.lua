@@ -6,5 +6,3 @@ wo.cursorcolumn = false
 wo.cursorline = false
 wo.conceallevel = 0
 wo.colorcolumn = '0'
-
-vim.call('general#MarkMargin', 0)

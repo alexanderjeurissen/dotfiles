@@ -4,7 +4,7 @@
 
 * Refile
  These are action items that are captured using quick captured and subsequently refiled here.
- They encompase various enhancements based on annoyances I run into when coding
+gThey encompase various enhancements based on annoyances I run into when coding
  Addressing them will ensure my emacs configuration will adjust better to my daily workflow
 ** TODO  Add visual indentation config similar to my vim config
 In my vim config I added custom bindings to ensure the region selection in visual mode remains
@@ -15,7 +15,7 @@ In emacs + evil this is not working out of the box either and as such need to be
 CLOCK: [2024-06-12 Wed 17:47]--[2024-06-12 Wed 17:49] =>  0:02
 :END:
 [2024-06-12 Wed 17:47]
-** TODO Add support for gcc / gc comment motions
+** DONE Add support for gcc / gc comment motions
 in my vim configuration I have the ability to comment out using the gc motion, or gcc for the current line.
 I need to look if this can be configured with some simple elisp or if evil has some configuration for this.
 :LOGBOOK:
@@ -24,7 +24,7 @@ CLOCK: [2024-06-12 Wed 17:51]--[2024-06-12 Wed 17:52] =>  0:01
 [2024-06-12 Wed 17:51]
 ** DONE add SPC-bd keybinding for deleting buffers (:bd)
 [2024-06-10 Mon 14:04]
-** TODO % in evil does not work with do..end blocks in ruby
+** DONE % in evil does not work with do..end blocks in ruby
 :LOGBOOK:
 CLOCK: [2024-06-12 Wed 17:57]--[2024-06-12 Wed 17:57] =>  0:00
 :END:
@@ -42,7 +42,7 @@ CLOCK: [2024-06-12 Wed 18:09]--[2024-06-12 Wed 18:10] =>  0:01
     It allowed me to copy things to the *" register and still be able to make edits that would normally overwrite the yank register.
 
     Either I have to mimic this behavior or look into a actual yank history and see if Vertico etc. can search through it.
-** TODO add grep support to Vertico
+** DONE add grep support to Vertico
 Figure out how we can perform greps in the most performant way and see matching results in Vertico
 :LOGBOOK:
 CLOCK: [2024-06-13 Thu 11:31]--[2024-06-13 Thu 11:31] =>  0:00
@@ -54,28 +54,61 @@ https://www.howardism.org/Technical/Emacs/browsing-in-emacs.html
 CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
 :END:
 [2024-06-13 Thu 12:42]
+** TODO hide minor modes
+*** Evil Commentary mode
+*** UnImpaired mode
+*** Golden Ratio mode
+*** Which key mode
+** TODO Consult bookmark
+** TODO `*` in visual mode does not does perform incsearch for region
+In vim I added custom configuration to make sure `*` in visual mode performs an inc search of the selected region.
+I need to add this to my emacs configuration as well.
+:LOGBOOK:
+CLOCK: [2024-06-12 Wed 18:09]--[2024-06-12 Wed 18:10] =>  0:01
+:END:
+[2024-06-12 Wed 18:09]
+** [[https://www.reddit.com/r/emacs/s/9Abd0anSif][From the emacs community on Reddit: Small blog post on how I use Rails console remotely within Doom Emacs]]
+** [[https://www.reddit.com/r/emacs/s/XaTdede79O][From the emacs community on Reddit: Emacs: modern minibuffer packages (Vertico, Consult, etc.)]]
+<2024-06-16 Sun>
+** [[https://www.reddit.com/r/emacs/s/GFDeSBVaex][From the emacs community on Reddit]]
+<2024-06-16 Sun>
+** [[http://doc.norang.ca/org-mode.html][Org Mode - Organize Your Life In Plain Text!]]
+** DONE Add support for Fiscal Quarters to org mode
+It would be nice to have support for fiscal quarters so I can at least
+in org calendar go by quarter.
+
+:LOGBOOK:
+CLOCK: [2024-06-13 Thu 14:37]--[2024-06-13 Thu 14:40] =>  0:03
+:END:
+[2024-06-13 Thu 14:37]
+** TODO Read up on web browsing and following links in emacs
+https://www.howardism.org/Technical/Emacs/browsing-in-emacs.html
+:LOGBOOK:
+CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
+:END:
+[2024-06-13 Thu 12:42]
 * I. Core Configuration
 ** Package Management
 #+BEGIN_SRC emacs-lisp
-;; Initialize package sources
-(require 'package)
-(setq package-archives '(("org" . "https://orgmode.org/elpa/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("gnu" . "https://elpa.gnu.org/packages/")))
-(setq package-enable-at-startup nil)
-(package-initialize)
+  ;; Initialize package sources
+  (require 'package)
+  (setq package-archives '(("org" . "https://orgmode.org/elpa/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")
+                           ;; ("melpa" . "https://melpa.org/packages/")
+                           ("gnu" . "https://elpa.gnu.org/packages/")))
+  (setq package-enable-at-startup nil)
+  (package-initialize)
 
-;; Refresh package contents
-(unless package-archive-contents
-  (package-refresh-contents))
+  ;; Refresh package contents
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-;; Use-package bootstrapping
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-(setq use-package-always-ensure t)
+  ;; Use-package bootstrapping
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 #+END_SRC
 
 ** Emacs Server Configuration
@@ -145,55 +178,103 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
 #+END_SRC
 
 ** Font Settings
-#+BEGIN_SRC emacs-lisp
-;; Function to set the font and size if available, with a fallback option
-(defun set-nerd-font-if-available ()
-  (let ((preferred-font "Liga SFMono Nerd Font")
-        (fallback-font "SFMono") ; Specify your fallback font here
-        (font-size 14)) ; Specify the desired font size here
-    (if (member preferred-font (font-family-list))
-        (progn
-          (set-face-attribute 'default nil :font (format "%s-%d" preferred-font font-size))
-          (set-fontset-font t 'unicode preferred-font nil 'prepend))
-      (message "Preferred font not found, using fallback font")
-      (set-face-attribute 'default nil :font (format "%s-%d" fallback-font font-size))
-      (set-fontset-font t 'unicode fallback-font nil 'prepend))))
+*** Default Font for Monospaced Text
+   This sets the default font for Emacs to use the monospaced variation of `BlexMonoNerdFont`.
 
-;; Call the function to set the font and size
-(set-nerd-font-if-available)
+   #+BEGIN_SRC emacs-lisp
+   (set-face-attribute 'default nil
+                       :family "BlexMono Nerd Font Mono"
+                       :height 140) ;; Adjust height as needed
+   #+END_SRC
+
+*** Variable-Pitch Font for Regular Text
+   This sets the font for `variable-pitch` mode to use the non-monospaced variation of `BlexMonoNerdFont`.
+
+   #+BEGIN_SRC emacs-lisp
+     (set-face-attribute 'variable-pitch nil
+                         :family "BlexMono Nerd Font Propo"
+                         :height 140) ;; Adjust height as needed
+   #+END_SRC
+
+*** Fixed-Pitch Font for Monospaced Text
+This sets the font for fixed-pitch to ensure consistent monospaced text in areas where it is needed.
+
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'fixed-pitch nil
+                    :family "BlexMono Nerd Font Mono"
+                    :height 140) ;; Adjust height as needed
 #+END_SRC
+*** Enable Variable-Pitch Mode in Org-Mode
+   This ensures that `org-mode` uses `variable-pitch-mode` for regular text.
 
-** Custom Themes
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook 'variable-pitch-mode)
+   #+END_SRC
+
+*** Set fallback for unicode characters
 #+BEGIN_SRC emacs-lisp
-;;(customize-set-variable 'custom-safe-themes t)
+  ;; Set fallback font for Unicode characters
+  (set-fontset-font t 'unicode "BlexMono Nerd Font Mono" nil 'prepend)
+#+END_SRC
+** Themes
+Various colorschemes / themes.
+I select them based using the following guiding principles:
+- *Accessibility First*: Designed with a strong emphasis on accessibility, ensuring readability and usability
+- *high contrast*: sufficient contrast and color differentiation preferably _WCAG_ compliant.
+- *Color harmony*: Uses carefully selected color palettes to maintain visual harmony and reduce cognitive load.
+- *Consistent Look and Feel*: Should provide a consistent visual experience across various modes and interfaces in Emacs.
+- *light theme*: The theme should provide a light background option.
+
+#+BEGIN_SRC emacs-lisp
+  ;;(customize-set-variable 'custom-safe-themes t)
+
+  (use-package modus-themes
+    :ensure t
+    :config
+      ;; Load Modus Light theme
+      (setq modus-themes-italic-constructs t
+            modus-themes-bold-constructs t
+            modus-themes-mixed-fonts t
+            modus-themes-variable-pitch-ui nil
+            modus-themes-custom-auto-reload t
+            modus-themes-disable-other-themes t
+            modus-themes-mixed-fonts t)
+    (load-theme 'modus-operandi t))
+    ;; (load-theme 'modus-vivendi t))
+
+  ;; (use-package spacemacs-theme
+  ;;   :ensure t
+  ;;   :config
+  ;;     (load-theme 'spacemacs-light t))
 #+END_SRC
 ** General.el leader  Configuration
     #+BEGIN_SRC emacs-lisp
-      (use-package general
-          :ensure t
-          :init
-            (general-evil-setup t)
-          :config
-            ;; Set space as the leader key in normal and visual states
-            (general-create-definer my-leader-def
-                :keymaps '(normal visual emacs)
-                :prefix "SPC")
+            (use-package general
+                :ensure t
+                :init
+                  (general-evil-setup t)
+                :config
+                  ;; Set space as the leader key in normal and visual states
+                  (general-create-definer my-leader-def
+                      :keymaps '(normal visual emacs)
+                      :prefix "SPC"
+                      :global-prefix "C-SPC")
 
-            (my-leader-def '(normal emacs)
-                "f"  '(:ignore t :which-key "files")
-                "fe" '(:ignore t :which-key "emacs config")
-                "fed" '(aj/open-config-org :which-key "edit config.org")
-                "ff" '(find-file :which-key "find file")
-                "fs" '(save-buffer :which-key "save file")
-                "b"  '(:ignore t :which-key "buffers")
-                "bb" '(consult-buffer :which-key "switch buffer")
-                "bd" '(kill-this-buffer :which-key "kill buffer")
-                "w"  '(:ignore t :which-key "windows")))
+                  (my-leader-def '(normal emacs)
+                      "f"  '(:ignore t :which-key "files")
+                      "fe" '(:ignore t :which-key "emacs config")
+                      "fed" '(aj/open-config-org :which-key "edit config.org")
+                      "ff" '(find-file :which-key "find file")
+                      "fs" '(save-buffer :which-key "save file")
+                      "b"  '(:ignore t :which-key "buffers")
+                      "bb" '(consult-buffer :which-key "switch buffer")
+                      "bd" '(kill-this-buffer :which-key "kill buffer")
+                      "w"  '(:ignore t :which-key "windows")))
 
-        (use-package which-key
-            :ensure t
-            :config
-                (which-key-mode))
+              (use-package which-key
+                  :ensure t
+                  :config
+                      (which-key-mode))
     #+END_SRC
 ** Window / Split Configuration
 *** Golden ratio
@@ -201,20 +282,22 @@ CLOCK: [2024-06-13 Thu 12:42]--[2024-06-13 Thu 12:42] =>  0:00
   ensuring that the focused window is larger while other windows are smaller, but still visible.
 
   #+BEGIN_SRC emacs-lisp
-    (use-package golden-ratio
-        :ensure t
-        :init
-            (golden-ratio-mode 1)
-        :config
-            (setq golden-ratio-auto-scale t)
-            (setq golden-ratio-extra-commands
-                    (append golden-ratio-extra-commands
-                            '(evil-window-left
-                            evil-window-right
-                            evil-window-up
-                            evil-window-down
-                            evil-window-split
-                            evil-window-vsplit))))
+(use-package golden-ratio
+    :ensure t
+    :init
+        (golden-ratio-mode 1)
+    :config
+        (setq golden-ratio-auto-scale t)
+        (setq golden-ratio-extra-commands
+                (append golden-ratio-extra-commands
+                        '(evil-window-left
+                        evil-window-right
+                        evil-window-up
+                        evil-window-down
+                        evil-window-split
+                        evil-window-vsplit)))
+        (setq golden-ratio-exclude-modes '("dired-mode"
+                                          "ediff-mode")))
   #+END_SRC
 *** Zoom window
     zoom-window provides window zoom like tmux zoom and unzoom.
@@ -331,6 +414,21 @@ reducing the amount of leftover dired buffers
 (add-hook 'dired-mode-hook 'my-dired-mode-hook)
 #+END_SRC
 
+*** Copy file under cursor
+I often find myself wanting to copy the path to a file under cursor when in *Dired* mode.
+The CWD is shown at the top of the buffer but copying it is tedious.
+So let's define a binding that uses built-in dired functions to copy the path.
+
+#+BEGIN_SRC emacs-lisp
+(define-key dired-mode-map (kbd "C-c C-p") 'aj/dired-copy-full-path)
+
+(defun aj/dired-copy-full-path ()
+  "Copy the current file path to the clipboard."
+  (interactive)
+  (let ((file-path (dired-get-file-for-visit)))
+    (kill-new file-path)
+    (message "Copied: %s" file-path)))
+#+END_SRC
 ** Corfu.el Configuration
 Corfu enhances in-buffer completion with a small completion popup.
 Corfu is the minimalistic in-buffer completion counterpart of the *Vertico* minibuffer UI.
@@ -400,7 +498,19 @@ Corfu is the minimalistic in-buffer completion counterpart of the *Vertico* mini
   :hook ((prog-mode . turn-on-diff-hl-mode)
          (vc-dir-mode . turn-on-diff-hl-mode)))
 #+END_SRC
-
+** hl-todo Configuration
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :ensure t
+    :hook (prog-mode . hl-todo-mode)
+    :config
+      ;; Set the colors based on the modus theme
+    (setq hl-todo-keyword-faces
+        `(("TODO" . "#ff9580")
+          ("HACK" . "#ff9580")
+          ("FIXME" . "#ff9580")
+          ("NOTE" . "#82b0ec"))))
+#+END_SRC
 ** Utility Functions
 #+BEGIN_SRC emacs-lisp
   (defun hrs/comment-or-uncomment-region-or-line ()
@@ -456,7 +566,6 @@ Corfu is the minimalistic in-buffer completion counterpart of the *Vertico* mini
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+END_SRC
 
-
 * III. Evil Mode and Extensions
 ** Evil want-keybinding
 Set evil-want-keybinding to nil before loading evil or evil-collection
@@ -491,7 +600,7 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
 (use-package evil-collection
   :ensure t
   :config
-  (evil-collection-init '(magit dired eshell corfu vertico)))
+  (evil-collection-init '(magit dired eshell corfu vertico docker ediff)))
 #+END_SRC
 
 ** Evil Leader Configuration
@@ -500,6 +609,14 @@ Set evil-want-keybinding to nil before loading evil or evil-collection
   :ensure t
   :config
   (global-evil-leader-mode))
+#+END_SRC
+
+** Evil Surround Configuration
+#+BEGIN_SRC emacs-lisp
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 #+END_SRC
 
 ** Evil Rails Configuration
@@ -520,29 +637,54 @@ This package provides Vim’s gc and gcc comment motion, making it very similar 
     :config
     (evil-commentary-mode))
 #+END_SRC
+** Evil Matchit Configuration
+#+BEGIN_SRC emacs-lisp
+(use-package evil-matchit
+  :ensure t
+  :config
+  (global-evil-matchit-mode 1))
+#+END_SRC
 * IV. Language-Specific Configurations
+** Treesitter
+#+BEGIN_SRC emacs-lisp
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    )
+#+END_SRC
+*** Treesitter auto
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package treesit-auto
+  ;;   :custom
+  ;;   (treesit-auto-install 'prompt)
+  ;;   :config
+  ;;     (treesit-auto-add-to-auto-mode-alist 'all)
+  ;;     (delete 'awk treesit-auto-langs)
+  ;;     (global-treesit-auto-mode)
+  ;; )
+#+END_SRC
 ** Ruby Development
 
 *** Ruby Mode Hook
 #+BEGIN_SRC emacs-lisp
- ;;(add-hook 'ruby-mode-hook
-           ;;(lambda ()
-             ;;(setq ruby-insert-encoding-magic-comment t)
-             ;;(yas-minor-mode)
-             ;;(flycheck-mode)
-             ;;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-             ;;(projectile-rails-mode)))
+  (add-hook 'ruby-mode-hook
+            (lambda ()
+              (setq ruby-insert-encoding-magic-comment t)
+              (yas-minor-mode)
+              (flycheck-mode)))
+              ;;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
 #+END_SRC
 
 *** Enable Ruby Mode for Additional File Patterns
 #+BEGIN_SRC emacs-lisp
-(hrs/add-auto-mode
-  'ruby-mode
-  "\\Gemfile$"
-  "\\.rake$"
-  "\\.gemspec$"
-  "\\Guardfile$"
-  "\\Rakefile$")
+  ;; (hrs/add-auto-mode
+  ;;   'ruby-mode
+  ;;   "\\Gemfile$"
+  ;;   "\\.rake$"
+  ;;   "\\.gemspec$"
+  ;;   "\\Guardfile$"
+  ;;   "\\Rakefile$")
 #+END_SRC
 
 *** REVIEW Add Pry-Remote Functionality
@@ -561,20 +703,37 @@ We need to review if we still need pry-remote functionality.
 
 *** Inf Ruby Configuration
 #+BEGIN_SRC emacs-lisp
-(use-package inf-ruby
-  :ensure t
-  :config
-  (add-hook 'after-init-hook 'inf-ruby-switch-setup))
+    (use-package inf-ruby
+      :ensure t
+      :config
+      (add-hook 'after-init-hook 'inf-ruby-switch-setup)
+      (setq inf-ruby-default-implementation "pry")
+
+      (add-hook 'inf-ruby-mode-hook
+        (function
+          (lambda ()
+            (setq show-trailing-whitespace nil)
+            (setq-local corfu-auto nil)
+            (corfu-mode)))))
 #+END_SRC
 
 ** Web Development
+*** Javascript mode
+#+BEGIN_SRC emacs-lisp
 
+#+END_SRC
 *** Web Mode Configuration
 #+BEGIN_SRC emacs-lisp
+(defun aj/web-mode-setup ()
+  "Custom configurations for web-mode."
+  (when (string-match-p "\\.html\\.erb\\'" buffer-file-name)
+    (ruby-ts-mode)))
+
 (use-package web-mode
   :ensure t
   :hook ((web-mode . rainbow-mode)
          (web-mode . rspec-mode)
+         (web-mode . aj/web-mode-setup)
          (web-mode . (lambda ()
                        (setq web-mode-markup-indent-offset 2))))
   :mode ("\\.erb\\'"
@@ -589,6 +748,14 @@ We need to review if we still need pry-remote functionality.
   :ensure t)
 #+END_SRC
 
+** Go Development
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :mode "\\.go\\'")
+#+END_SRC
+
+
 ** LSP settings
 *** Packages
    #+BEGIN_SRC emacs-lisp
@@ -599,6 +766,8 @@ We need to review if we still need pry-remote functionality.
                typescript-mode ; ts-ls (tsserver wrapper)
                web-mode        ; ts-ls/HTML/CSS
                ruby-mode ;; solargraph-language-server
+               go-mode
+               go-ts-mode
                ) . lsp)
        :commands lsp
        :config
@@ -609,6 +778,9 @@ We need to review if we still need pry-remote functionality.
 
        (use-package lsp-ui
          :commands lsp-ui-mode)
+
+     (with-eval-after-load 'lsp-mode
+       (add-to-list 'lsp-language-id-configuration '(web-mode . "html.erb")))
    #+END_SRC
 
 *** lsp-mode settings
@@ -751,17 +923,31 @@ We need to review if we still need pry-remote functionality.
 ** Project.el configuration
 
 #+BEGIN_SRC emacs-lisp
-  (use-package project
-      :ensure t
-      :config
-          (my-leader-def 'normal
-            "p"  '(:ignore t :which-key "project")
-            "pf"  '(project-find-file :which-key "find file")
-            "pb"  '(consult-project-buffer :which-key "switch to buffer")
-            "p/"  '(consult-ripgrep :which-key "grep")
-            "pp"  '(project-switch-project :which-key "switch project")))
+(use-package project
+    :ensure t
+    :config
+        (my-leader-def 'normal
+          "p"  '(:ignore t :which-key "project")
+          "pf"  '(consult-find :which-key "find file")
+          "pb"  '(consult-project-buffer :which-key "switch to buffer")
+          "p/"  '(consult-ripgrep :which-key "grep")
+          "pp"  '(project-switch-project :which-key "switch project"))
+
+        (setq project-switch-commands
+                '((?f "Find file" consult-find)
+                  (?g "Find regexp" consult-ripgrep)
+                  (?d "Find directory" project-dired)
+                  (?m "Magit" magit-project-status)
+                  (?e "Eshell" project-eshell)
+                  (?b "Switch to buffer" project-switch-to-buffer))))
 #+END_SRC
 
+** Docker Configuration
+#+BEGIN_SRC emacs-lisp
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+#+END_SRC
 
 ** TODO Devcontainer configuration
 Most of my work occurs in devcontainers. Therefore it's important that I'm able to quickly:
@@ -837,8 +1023,16 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
 #+END_SRC
 
 ** ORG Mode
+*** ORG path
+Define the org path and store it in a variable for easier referencing
+
+#+BEGIN_SRC emacs-lisp
+;; define the org path
+(setq aj/org-path "/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+#+END_SRC
+
 *** ORG Mode settings
- Set various Org mode settings to enhance usability and appearance.
+Set various Org mode settings to enhance usability and appearance.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -858,8 +1052,9 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
         org-ellipsis "⤵"
         org-src-fontify-natively t
         org-src-window-setup 'current-window
-        org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))
+        org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "MEETING(m)" "IDEA(i)")
+                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
+
         org-todo-keyword-faces '(("TODO" :foreground "red" :weight bold)
                       ("NEXT" :foreground "blue" :weight bold)
                       ("DONE" :foreground "forest green" :weight bold)
@@ -874,6 +1069,44 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
                         ("DONE" ("WAITING") ("HOLD")))))
 #+END_SRC
 
+*** Org Roam
+Org-roam is a plain-text *knowledge management system*. It brings some of *Roam's* more powerful features into the Org-mode ecosystem.
+Org-roam borrows principles from the *Zettelkasten* method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
+
+**** TODO Switch to straight.el to add support for org-roam
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package org-roam
+  ;;   :ensure t
+  ;;   :custom
+  ;;     (org-roam-directory (concat aj/org-path "/roam"))
+  ;;   :bind (("C-c n l" . org-roam-buffer-toggle)
+  ;;          ("C-c n f" . org-roam-node-find)
+  ;;          ("C-c n g" . org-roam-graph)
+  ;;          ("C-c n i" . org-roam-node-insert)
+  ;;          ("C-c n c" . org-roam-capture)
+  ;;          ;; Dailies
+  ;;          ("C-c n j" . org-roam-dailies-capture-today))
+  ;;   :config
+  ;;     (org-roam-db-autosync-mode))
+
+  ;; (use-package org-roam-ui
+  ;;   :ensure t
+  ;;   :custom
+  ;;     (org-roam-ui-sync-theme t)
+  ;;     (org-roam-ui-follow t)
+  ;;     (org-roam-ui-update-on-save t)
+  ;;     (org-roam-ui-open-on-start t))
+#+END_SRC
+*** ORG Babel
+#+BEGIN_SRC emacs-lisp
+   (setq org-plantuml-jar-path "~/plantuml.1.2023.7.jar")
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((plantuml . t))) ; this line activates plantuml
+
+  (use-package ob-go
+    :ensure t)
+#+END_SRC
 *** ORG bullets for pretty bullets
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -881,58 +1114,169 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
     :hook (org-mode . org-bullets-mode))
 #+END_SRC
 
+*** ORG Super Agenda
+This package lets you “supercharge” your Org daily/weekly agenda. The idea is to group items into sections, rather than having them all in one big list.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-super-agenda
+    :ensure t
+    :after org
+    :config
+      ;; Enable org-super-agenda globally
+      ;;(org-super-agenda-mode)
+
+      ;; Define custom super-agenda groups
+      (setq org-super-agenda-groups '((:name "Schedule"
+                                            :time-grid t
+                                            :scheduled today)
+                                      (:name "Due"
+                                            :deadline today)
+                                      (:name "Due Soon"
+                                            :deadline future)
+                                      (:name "Overdue"
+                                            :deadline past)
+                                      (:name "Important"
+                                            :priority "A")
+                                      (:name "Waiting"
+                                            :tag "Waiting")))
+
+      ;; Activate org-super-agenda when org-agenda is opened
+      (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode))
+
+#+END_SRC
+*** Org Github flavored markdown export
+This package adds an Org mode export backend for GitHub Flavored Markdown.
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-gfm
+    :ensure t
+    :after org
+    :config
+    ;; Add any additional configuration if needed
+    )
+#+END_SRC
 *** Org Capture Templates / Agenda
   Define capture templates for various types of entries.
   Also set the agenda path for org mode so it knows where to retrieve
   org files for the agenda.
 
  #+BEGIN_SRC emacs-lisp
-   ;; define the org path
-   (setq aj/org-path "/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+   ;; set the org-agenda files to the org path and add emacs.d/config.org to the agenda files
+   (setq org-agenda-files
+     (append
+      (directory-files-recursively aj/org-path "\\.org$")
+      (list "~/.emacs.d/config.org")))
 
-   ;; set the org-agenda files to the org path
-   (setq org-agenda-files (directory-files-recursively aj/org-path "\\.org$"))
-
-   ;; Add emacs.d/config.org to the agenda files
-   (setq org-agenda-files (append org-agenda-files (list "~/.emacs.d/config.org")))
-
-   ;; Add emacs.d/config.org to the refile targets
-   ;;(setq org-refile-targets (append org-refile-targets '(("~/.emacs.d/config.org" :maxlevel . 3))))
-
-   ;; Add org-agenda files to refile targets
-   ;;(setq org-refile-targets (append org-refile-targets '((org-agenda-files :maxlevel . 3))))
-
-   ;; Define the path to your inbox.org file
-   (setq inbox-file (concat aj/org-path "/inbox.org"))
-   (setq journal-file (concat aj/org-path "/inbox.org"))
+   ;; Define the path to your journal.org file
+   (setq journal-file (concat aj/org-path "/journal.org"))
 
    ;; Org capture templates
    (setq org-capture-templates
-         `(("t" "todo" entry (file ,inbox-file)
+         `(("t" "todo" entry (file+datetree ,journal-file)
            "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-           ("r" "respond" entry (file ,inbox-file)
-           "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-           ("n" "note" entry (file ,inbox-file)
-           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-           ("j" "Journal" entry (file+datetree ,journal-file)
-           "* %?\n%U\n" :clock-in t :clock-resume t)
-           ("w" "org-protocol" entry (file ,inbox-file)
+           ;; ("r" "respond" entry (file+datetree ,journal-file)
+           ;; "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+           ("n" "note" entry (file+datetree ,journal-file)
+           "* NOTE %? :NOTE:\n%U\n%a\n" :immediate-finish t)
+           ("i" "idea" entry (file+datetree ,journal-file)
+           "* IDEA %? :IDEA:\n%U\n%a\n" :immediate-finish t)
+           ("w" "org-protocol" entry (file+datetree ,journal-file)
            "* TODO Review %c\n%U\n" :immediate-finish t)
-           ("m" "Meeting" entry (file ,inbox-file)
+           ("m" "Meeting" entry (file+datetree ,journal-file)
            "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)))
  #+END_SRC
+
+*** ORG Fiscal Quarter support
+At work we use fiscal quarters during the planning cycle:
+| Quarter | start      | end        |
+|---------+------------+------------|
+| FQ1     | February 1 | April 30   |
+| FQ2     | May 1      | July 31    |
+| FQ3     | August 1   | October 31 |
+| FQ4     | November 1 | January 31 |
+
+#+BEGIN_SRC emacs-lisp
+        (defvar my-org-fiscal-year-start-month 2
+          "The starting month of the fiscal year. Default is February (2).")
+
+        (defun my-org-agenda-fiscal-quarter-view ()
+          "Display the agenda for the remainder of the current fiscal quarter with a custom heading.
+        The fiscal year start month is defined by `my-org-fiscal-year-start-month`."
+          (interactive)
+          (let* ((current-date (decode-time (current-time)))
+                 (month (nth 4 current-date))
+                 (year (nth 5 current-date))
+                 (day (nth 3 current-date))
+                 (fiscal-year (if (< month my-org-fiscal-year-start-month) (1- year) year))
+                 (quarter (cond
+                           ((and (>= month my-org-fiscal-year-start-month)
+                                 (< month (+ my-org-fiscal-year-start-month 3))) 1)
+                           ((and (>= month (+ my-org-fiscal-year-start-month 3))
+                                 (< month (+ my-org-fiscal-year-start-month 6))) 2)
+                           ((and (>= month (+ my-org-fiscal-year-start-month 6))
+                                 (< month (+ my-org-fiscal-year-start-month 9))) 3)
+                           (t 4)))
+                 (quarter-start (cond
+                                 ((eq quarter 1) (format "%d-%02d-01" fiscal-year my-org-fiscal-year-start-month))
+                                 ((eq quarter 2) (format "%d-%02d-01" fiscal-year (+ my-org-fiscal-year-start-month 3)))
+                                 ((eq quarter 3) (format "%d-%02d-01" fiscal-year (+ my-org-fiscal-year-start-month 6)))
+                                 (t (format "%d-%02d-01" fiscal-year (+ my-org-fiscal-year-start-month 9)))))
+                 (quarter-end (cond
+                               ((eq quarter 1) (format "%d-%02d-%02d" fiscal-year (+ my-org-fiscal-year-start-month 3 -1)
+                                                       (calendar-last-day-of-month (+ my-org-fiscal-year-start-month 3 -1) fiscal-year)))
+                               ((eq quarter 2) (format "%d-%02d-%02d" fiscal-year (+ my-org-fiscal-year-start-month 6 -1)
+                                                       (calendar-last-day-of-month (+ my-org-fiscal-year-start-month 6 -1) fiscal-year)))
+                               ((eq quarter 3) (format "%d-%02d-%02d" fiscal-year (+ my-org-fiscal-year-start-month 9 -1)
+                                                       (calendar-last-day-of-month (+ my-org-fiscal-year-start-month 9 -1) fiscal-year)))
+                               (t (format "%d-%02d-%02d" (1+ fiscal-year) (- my-org-fiscal-year-start-month 1)
+                                          (calendar-last-day-of-month (- my-org-fiscal-year-start-month 1) (1+ fiscal-year))))))
+                 (days-in-quarter (time-to-days (date-to-time quarter-end)))
+                 (days-from-now (time-to-days (current-time)))
+                 (days-remaining (- days-in-quarter days-from-now))
+                 ;; (custom-heading (format "Current Fiscal Quarter %d" quarter))
+  (custom-heading (propertize (format "Current Fiscal Quarter %d" quarter)
+                                       'face '(:weight bold :height 1.0 :foreground "blue")))
+    )
+            (setq org-agenda-custom-commands
+                  `(("Q" ,custom-heading
+                     agenda ""
+                     ((org-agenda-span ,days-remaining)
+                      (org-agenda-start-day ,(format-time-string "%Y-%m-%d"))
+                      (org-agenda-use-time-grid nil) ;; Disable the time grid
+                      (org-super-agenda-groups nil) ;; Disable org-super-agenda for this command
+                      (org-agenda-prefix-format '((agenda . "  %?-12t% s")))
+                      (org-agenda-overriding-header ,custom-heading)
+                      (org-agenda-skip-function
+                       '(lambda ()
+                        (let ((category (org-get-category)))
+                          (if (string= category "Work")
+                              nil
+                            (save-excursion (or (outline-next-heading) (point-max))))))))))) ;; Only show TODO items
+            (org-agenda nil "Q")))
+
+            (global-set-key (kbd "C-c q") 'my-org-agenda-fiscal-quarter-view)
+#+END_SRC
 
 *** Refile Configuration
   Configure refile targets and related settings.
 
 #+BEGIN_SRC emacs-lisp
   (with-eval-after-load 'org
+    (setq mk/org-path "/Users/alexander/Library/Mobile Documents/com~apple~CloudDocs/Malak/Beorg/malak.org")
+
     (setq
-      org-refile-targets '((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9))
+      org-refile-targets '(
+        (nil :maxlevel . 9)
+        (org-agenda-files :maxlevel . 9)
+        ("~/.emacs.d/config.org" :maxlevel . 3)
+        (mk/org-path :maxlevel . 3))
         org-refile-use-outline-path t
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm
-        org-indirect-buffer-display 'current-window))
+        org-indirect-buffer-display 'current-window)
+
+    (advice-add 'org-refile :after #'org-save-all-org-buffers)
+    (advice-add 'org-agenda-refile :after #'org-save-all-org-buffers)
+  )
 #+END_SRC
 
 *** Exclude DONE State Tasks from Refile Targets
@@ -1058,7 +1402,7 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
 #+END_SRC
 
 * IX. Version Control
-** Magit and Evil-Collection configuration
+** Magit configuration
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
@@ -1071,8 +1415,31 @@ Most of my work occurs in devcontainers. Therefore it's important that I'm able 
       "gs" '(magit-status :which-key "status")
       "gb" '(magit-branch :which-key "branch")
       "gc" '(magit-commit :which-key "commit")))
+
+  (use-package magit-todos
+    :after magit
+    :config (magit-todos-mode 1))
+
+;; Use single frame for ediff
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function 'split-window-horizontally) ;; Horizontal split
+#+END_SRC
+** Magit Forge
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package forge
+  ;;   :after magit
+  ;;   :ensure t
+  ;;   :config)
+
+  ;; (use-package auth-source
+  ;;   :config
+  ;;   (setq auth-sources '("~/.authinfo")))
 #+END_SRC
 
+this configuration will show 100 open topics and never show any closed topics, for both issues and pull requests.
+#+BEGIN_SRC emacs-lisp
+  (setq  forge-topic-list-limit '(100 . 0))
+#+END_SRC
 * X. Fuzzy Searching and File Exploration
 ** ido-occasional configuration
 #+BEGIN_SRC emacs-lisp

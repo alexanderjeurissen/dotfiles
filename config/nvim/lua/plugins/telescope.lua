@@ -1,26 +1,27 @@
 -- Telescope requires
-
+local vim = vim or {}
 local builtin = require('telescope.builtin')
 local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
 
 require('telescope').setup{
   pickers = {
+    -- FIXME: This picker is somehow not recognized so we hardcoded it in the keybinding which is suboptimal
+    projects = {
+      layout_config = { height = 30, width = 100 },
+    },
     git_files = {
-      theme = 'ivy',
-      layout_config = { height = 10 }
+      layout_config = { height = 30, width = 100 },
     },
     find_files = {
-      theme = 'ivy',
-      layout_config = { height = 10 }
+      layout_config = { height = 30, width = 100 },
     },
     buffers = {
-      theme = 'ivy',
-      layout_config = { height = 10 }
+      layout_config = { height = 30, width = 100 },
     },
     live_grep = {
-      theme = 'ivy',
-      preview = { hide_on_startup = false }
+      layout_config = { height = 30, width = 200 },
+      preview = { hide_on_startup = false },
     }
   },
   defaults = {
@@ -52,19 +53,50 @@ require('telescope').setup{
     sorting_strategy = 'descending',
   },
   extensions = {
-    fzy_native = {
-      override_generic_sorter = true,
-      override_file_sorter = true,
-    }
+    ["zf-native"] = {
+          -- options for sorting file-like items
+          file = {
+              -- override default telescope file sorter
+              enable = true,
+
+              -- highlight matching text in results
+              highlight_results = true,
+
+              -- enable zf filename match priority
+              match_filename = true,
+
+              -- optional function to define a sort order when the query is empty
+              initial_sort = nil,
+
+              -- set to false to enable case sensitive matching
+              smart_case = true,
+          },
+
+          -- options for sorting all other items
+          generic = {
+              -- override default telescope generic item sorter
+              enable = true,
+
+              -- highlight matching text in results
+              highlight_results = true,
+
+              -- disable zf filename match priority
+              match_filename = false,
+
+              -- optional function to define a sort order when the query is empty
+              initial_sort = nil,
+
+              -- set to false to enable case sensitive matching
+              smart_case = true,
+          },
+      }
   }
 }
-
--- Load the fzy native extension
-require('telescope').load_extension('fzy_native')
 
 -- Files bindings {{{
 -- Open general Telescope picker
 vim.api.nvim_set_keymap('n', '<leader>tl', "<cmd>Telescope<CR>", { noremap = true, silent = true })
+
 -- Find files in the current project (similar to FZF's project_files)
 vim.api.nvim_set_keymap('n', '<leader>pf', "<cmd>lua require('telescope.builtin').git_files()<CR>", { noremap = true, silent = true })
 
@@ -88,3 +120,6 @@ vim.api.nvim_set_keymap('n', '<leader>gF', "<cmd>lua require('telescope.builtin'
 -- List git diffs for current file
 vim.api.nvim_set_keymap('n', '<leader>gf', "<cmd>lua require('telescope.builtin').git_status()<CR>", { noremap = true, silent = true })
 -- }}}
+
+-- Load Telescope extensions
+require('telescope').load_extension('zf-native')

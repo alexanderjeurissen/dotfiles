@@ -83,10 +83,6 @@
 [user]
   name = Alexander Jeurissen
   email = alexander@jeurissen.email
-;  signingkey = 0xEAAA67C4CA6E219A
-; [commit]
-;   gpgsign = true
 
-# ref: https://golang.org/doc/faq#git_https
-; [url "ssh://git@github.com/"]
-; 	insteadOf = https://github.com/
+[gitlab]
+	user = alexander@hackerone.com

@@ -1,5 +1,0 @@
-# NOTE: replace the contents of this file by executing the following:
-# 1. Removing the symlink
-#    rm -f ~/.mutt/certificates/gmail.crt
-# 2. write the certificate to the file
-#    openssl s_client -connect imap.gmail.com:993 -showcerts 2>&1 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sed -ne '1,/-END CERTIFICATE-/p' > ~/.mutt/certificates/gmail.crt

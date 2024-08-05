@@ -9,9 +9,6 @@ vim.bo.complete = vim.bo.complete .. ',kspell'
 
 -- imap('<c-l>' [[<Esc>[s1z=`]a]], {}, true)
 
--- Disable marking of margin (colorcolumn)
-vim.call('general#MarkMargin', 0)
-
 -- Allow for folding markdown headings
 vim.g.markdown_folding = 1
 

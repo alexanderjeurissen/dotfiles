@@ -21,23 +21,19 @@ TERM = "xterm-256color-italic"
 size = 14.0
 
 [font.bold]
-family = "Liga SFMono Nerd Font"
-# family = "JetBrainsMono Nerd Font Mono"
+family = "BlexMono Nerd Font Mono"
 style = "Bold"
 
 [font.bold_italic]
-family = "Liga SFMono Nerd Font"
-# family = "JetBrainsMono Nerd Font Mono"
+family = "BlexMono Nerd Font Mono"
 style = "Bold Italic"
 
 [font.italic]
-family = "Liga SFMono Nerd Font"
-# family = "JetBrainsMono Nerd Font Mono"
+family = "BlexMono Nerd Font Mono"
 style = "Italic"
 
 [font.normal]
-family = "Liga SFMono Nerd Font"
-# family = "JetBrainsMono Nerd Font Mono"
+family = "BlexMono Nerd Font Mono"
 style = "Regular"
 
 [font.offset]
