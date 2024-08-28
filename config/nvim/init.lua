@@ -42,7 +42,6 @@ o.sessionoptions =
 o.spellfile = home .. '/.config/nvim/spell/en.utf-8.add'
 o.listchars = "tab:▸ ,trail:-,extends:»,precedes:«,space:·,nbsp:·,eol:¬" -- Strings in 'list' mode.
 o.hidden = true                              -- Allow for more then one unsaved buffer.
-o.lazyredraw = true                          -- Don't unnecessarily redraw screen.
 o.undofile = true                            -- Save undo's after file closes.
 o.undolevels = 1000                          -- Number of changes to be saved.
 o.tabstop = 2                                -- Number of spaces a <Tab> char is rendered as.
@@ -59,12 +58,12 @@ o.sidescrolloff = 5                          -- Keep at least 5 lines left/right
 o.smartindent = true
 o.updatetime = 1000                          -- if idle for updatetime write swap and trigger CursorHold
 
-o.statusline = " "
+--[[ o.statusline = " "
 o.statusline = o.statusline .. "%="
 o.statusline = o.statusline .. "%{&paste?'  ':''}"
-o.statusline = o.statusline .. "%{&spell?' ¶ ':''}"
+o.statusline = o.statusline .. "%{&spell?' ¶ ':''}" ]]
 
-o.laststatus = 3                             -- Disable/enable bottom statusline
+o.laststatus = 2                             -- Disable/enable bottom statusline
 -- Turn off syntax highlighting
 o.syntax = 'off'
 
@@ -99,7 +98,9 @@ if wo.diff == true then  -- Set diff mode specific window options
   wo.colorcolumn = '0'
 end
 
+-- vim.cmd.colorscheme "modus_vivendi"
 vim.cmd.colorscheme "modus_operandi"
+
 -- }}}
 -- Abbreviations {{{
 -- Fix annoying typos
@@ -230,9 +231,11 @@ noremap('k', [[gk]])
 -- Find merge conflict markers
 noremap('gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
 
+-- TODO: figure out if we need this
+-- Commented out on 28/08/2024
 -- default to very magic
-noremap('/', [[/\v]], { silent = false })
-noremap('?', [[?\v]], { silent = false })
+-- noremap('/', [[/\v]], { silent = false })
+-- noremap('?', [[?\v]], { silent = false })
 
 -- TODO: Do we want to keep this ?
 -- commenting this out to see if s and S default behavior are more beneficial

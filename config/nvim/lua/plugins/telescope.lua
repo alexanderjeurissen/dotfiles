@@ -7,6 +7,9 @@ local action_state = require('telescope.actions.state')
 require('telescope').setup{
   pickers = {
     -- FIXME: This picker is somehow not recognized so we hardcoded it in the keybinding which is suboptimal
+    marks = {
+      layout_config = { height = 30, width = 100 },
+    },
     projects = {
       layout_config = { height = 30, width = 100 },
     },
@@ -94,6 +97,9 @@ require('telescope').setup{
 }
 
 -- Files bindings {{{
+-- Open general Telescope picker
+vim.api.nvim_set_keymap('n', '<leader>m', "<cmd>lua require('telescope.builtin').marks()<CR>", { noremap = true, silent = true })
+
 -- Open general Telescope picker
 vim.api.nvim_set_keymap('n', '<leader>tl', "<cmd>Telescope<CR>", { noremap = true, silent = true })
 
