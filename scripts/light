@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Resolve symlinks to their target files
+NVIM_CONFIG=$(readlink -f ~/.config/nvim/init.lua)
+WEZTERM_CONFIG=$(readlink -f ~/.config/wezterm/wezterm.lua)
+
+# Temporary files
+TEMP_NVIM=$(mktemp)
+TEMP_WEZTERM=$(mktemp)
+
+# Change background to light in Neovim config
+sed 's/o.background = dark/o.background = light/' "$NVIM_CONFIG" > "$TEMP_NVIM" && mv "$TEMP_NVIM" "$NVIM_CONFIG"
+
+# Change colorscheme to modus_operandi in Neovim config
+sed 's/vim.cmd.colorscheme "modus_vivendi"/vim.cmd.colorscheme "modus_operandi"/' "$NVIM_CONFIG" > "$TEMP_NVIM" && mv "$TEMP_NVIM" "$NVIM_CONFIG"
+
+# Change color scheme to Modus Operandi in WezTerm config
+sed 's/color_scheme = "Modus Vivendi"/color_scheme = "Modus Operandi"/' "$WEZTERM_CONFIG" > "$TEMP_WEZTERM" && mv "$TEMP_WEZTERM" "$WEZTERM_CONFIG"
+
+# Clean up temporary files
+rm -f "$TEMP_NVIM" "$TEMP_WEZTERM"
