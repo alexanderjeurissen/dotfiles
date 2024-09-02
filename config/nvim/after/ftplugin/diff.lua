@@ -26,3 +26,4 @@ nnoremap('zP', [[:normal zC<CR>?^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt
 
 nnoremap('zn', [[:normal zc<CR>/^@@<CR>:nohl<CR>:normal zv<CR>:normal zt<CR>]], {}, true)
 nnoremap('zp', [[:normal zc<CR>?^@@<CR>:nohl<CR>:normal zv<CR>:normal zb<CR>]], {}, true)
+nnoremap('q', [[<CMD>DiffviewClose<CR]], {}, true)

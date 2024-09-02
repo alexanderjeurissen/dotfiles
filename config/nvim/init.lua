@@ -50,6 +50,8 @@ o.softtabstop = 2                            -- Number of spaces of <Tab> while 
 o.expandtab = true                           -- Use spaces instead of <Tab> for indentation.
 o.splitbelow = true                          -- Open new split panes at bottommost position
 o.splitright = true                          -- Open new split panes at rightmost position
+-- NOTE: commented out as this can conflict with Noice
+-- o.lazyredraw = true                          -- Don't redraw while executing macros.
 o.inccommand = 'nosplit'                          -- Show visual indication when using substitute.
 o.modeline = true                            -- load vim settings from magic file comment
 o.confirm = true                             -- Makes operations like qa ask for confirmation
@@ -71,7 +73,7 @@ o.syntax = 'off'
 o.shell =
 "/bin/sh" -- Set shell to bin/sh to improve performance in zsh/fish
 o.termguicolors = true
-o.background = 'light'
+o.background = 'dark'
 
 -- OPTIONS: Window
 wo.wrap = false -- Don't wrap lines as it makes j/k unintuitive.
@@ -98,8 +100,8 @@ if wo.diff == true then  -- Set diff mode specific window options
   wo.colorcolumn = '0'
 end
 
--- vim.cmd.colorscheme "modus_vivendi"
-vim.cmd.colorscheme "modus_operandi"
+vim.cmd.colorscheme "modus_vivendi"
+-- vim.cmd.colorscheme "modus_operandi"
 
 -- }}}
 -- Abbreviations {{{

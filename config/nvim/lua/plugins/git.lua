@@ -9,7 +9,7 @@ diffview.setup()
 neogit.setup()
 
 nmap('<leader>gs', [[:lua require('neogit').open()<CR>]])
-nmap('q', [[:DiffviewClose<CR>]])
+nmap('<leader>dc', [[:DiffviewClose<CR>]])
 nmap('<leader>gd', [[:DiffviewOpen<CR>]])
 nmap('<leader>gD', [[:DiffviewOpen develop<CR>]])
 nmap('<leader>fh', [[:DiffviewFileHistory %<CR>]])
