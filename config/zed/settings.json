@@ -1,0 +1,69 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette
+{
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
+  "terminal": {
+    "dock": "bottom",
+    "font_family": "BlexMono Nerd Font Mono"
+  },
+  "vim_mode": true,
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  "tabs": { "file_icons": true },
+
+  //TODO: Added the ability to copy surrounding code blocks in the assistant panel into the clipboard, or inserting them directly into the editor, without manually selecting. Place cursor anywhere in a code block (marked by triple backticks) and use the assistant::CopyCode action (cmd-k c / ctrl-k c) to copy to the clipboard, or the assistant::InsertIntoEditor action (cmd-< / ctrl-<) to insert into editor (#17853; thanks thataboy).
+
+  "languages": {
+    "Ruby": {
+      // We enable rubocop because pull-based diagnostics within ruby-lsp are not supported yet in zed
+      "language_servers": ["ruby-lsp", "!solargraph", "rubocop"],
+      "formatter": "auto"
+    }
+  },
+  "lsp": {
+    "ruby-lsp": {
+      "initialization_options": {
+        "enabledFeatures": {
+          "codeActions": true,
+          "codeLens": true,
+          "completion": true,
+          "definition": true,
+          "diagnostics": false, // pull based Diagnostics not supported yet in Zed
+          "documentHighlights": true,
+          "documentLink": true,
+          "documentSymbols": true,
+          "foldingRanges": true,
+          "formatting": true,
+          "hover": true,
+          "inlayHint": true,
+          "onTypeFormatting": true,
+          "selectionRanges": true,
+          "semanticHighlighting": true,
+          "signatureHelp": true,
+          "typeHierarchy": true,
+          "workspaceSymbol": true
+        },
+        "formatter": "auto",
+        "linters": ["rubocop", "standard"]
+      }
+    }
+  }
+}

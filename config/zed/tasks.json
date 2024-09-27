@@ -1,0 +1,47 @@
+[
+  {
+    "label": "Open lazygit",
+    "command": "lazygit",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success"
+  },
+  {
+    "label": "Open lazydocker",
+    "command": "lazydocker",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success"
+  },
+  {
+    "label": "Open Ranger",
+    "command": "ranger",
+    "args": ["$ZED_ACTIVE_PROJECT"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success"
+  },
+  {
+    "label": "Run bin/start",
+    "command": "bin/start",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "never",
+    "hide": "always"
+  },
+  {
+    "label": "test $ZED_RELATIVE_FILE:$ZED_ROW",
+    "command": "docker",
+    "args": [
+      "exec",
+      "core-core-specs-1",
+      "bin/rspec",
+      "\"$ZED_RELATIVE_FILE:$ZED_ROW\""
+    ],
+    "tags": ["ruby-test"],
+    "hide": "on_success"
+  }
+]
