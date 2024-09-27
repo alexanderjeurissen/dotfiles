@@ -10,7 +10,7 @@ bindkey -e
 bindkey "^E" forward-char
 
 # History settings {{{
-  SAVEHIST=1000000000
+  SAVEHIST=1000000000000000
   HISTFILE=~/.zsh_history
 # }}}
 
@@ -18,8 +18,10 @@ bindkey "^E" forward-char
 unsetopt correct_all
 
 export DEFAULT_USER=$USER
-export EDITOR='nvim'
-export HSANDBOX_EDITOR='nvim'
+export EDITOR='zed'
+# export EDITOR='nvim'
+# export HSANDBOX_EDITOR='nvim'
+export HSANDBOX_EDITOR='zed'
 
 export HOMEBREW_PREFIX="/opt/homebrew" # lookup using (brew --prefix)
 
@@ -62,16 +64,16 @@ export PATH="$GOPATH/bin:$PATH"
 
 # Ruby settings {{{
 export ENABLE_SPRING=0
-export LDFLAGS="-L$HOMEBREW_PREFIX/opt/ruby@3.1/lib"
-export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/ruby@3.1/include"
-export PATH="$HOMEBREW_PREFIX/opt/ruby@3.1/bin:$PATH"
-export PATH="$HOMEBREW_PREFIX/lib/ruby/gems/3.1.0/bin:$PATH"
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/ruby@3.2/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/ruby@3.2/include"
+export PATH="$HOMEBREW_PREFIX/opt/ruby@3.2/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/lib/ruby/gems/3.2.5/bin:$PATH"
 # }}}
 
 # Lua settings (derived from $ luarocks path)
 export LUA_PATH='/opt/homebrew/Cellar/luarocks/3.11.1/share/lua/5.4/?.lua;/opt/homebrew/Cellar/luarocks/3.9.1/share/lua/5.4/?.lua;/opt/homebrew/share/lua/5.4/?.lua;/opt/homebrew/share/lua/5.4/?/init.lua;/opt/homebrew/lib/lua/5.4/?.lua;/opt/homebrew/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua;/Users/alexander/.luarocks/share/lua/5.4/?.lua;/Users/alexander/.luarocks/share/lua/5.4/?/init.lua'
 export LUA_CPATH='/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/loadall.so;./?.so;/Users/alexander/.luarocks/lib/lua/5.4/?.so'
-export PATH='/Users/alexander/.luarocks/bin:/opt/homebrew/lib/ruby/gems/3.1.0/bin:/opt/homebrew/opt/ruby@3.1/bin:/Users/alexander/Development/go/bin:/Users/alexander/.cargo/bin:/Users/alexander/.yarn/bin:/Users/alexander/.scripts:/Users/alexander/.local/opt:/Users/alexander/.local/bin:/Users/alexander/bin:/Users/alexander/.bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/munki:/Users/alexander/.orbstack/bin'
+export PATH='/Users/alexander/.luarocks/bin:/opt/homebrew/lib/ruby/gems/3.2.0/bin:/opt/homebrew/opt/ruby@3.2/bin:/Users/alexander/Development/go/bin:/Users/alexander/.cargo/bin:/Users/alexander/.yarn/bin:/Users/alexander/.scripts:/Users/alexander/.local/opt:/Users/alexander/.local/bin:/Users/alexander/bin:/Users/alexander/.bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/munki:/Users/alexander/.orbstack/bin'
 
 # Java settings
 # export JAVA_HOME="/usr/libexec/java_home"

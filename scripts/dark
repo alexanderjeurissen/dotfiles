@@ -15,7 +15,7 @@ sed 's/o.background = light/o.background = dark/' "$NVIM_CONFIG" > "$TEMP_NVIM" 
 sed 's/vim.cmd.colorscheme "modus_operandi"/vim.cmd.colorscheme "modus_vivendi"/' "$NVIM_CONFIG" > "$TEMP_NVIM" && mv "$TEMP_NVIM" "$NVIM_CONFIG"
 
 # Change color scheme to Modus Vivendi in WezTerm config
-sed 's/color_scheme = "Modus Operandi"/color_scheme = "Modus Vivendi"/' "$WEZTERM_CONFIG" > "$TEMP_WEZTERM" && mv "$TEMP_WEZTERM" "$WEZTERM_CONFIG"
+sed 's/config.color_scheme = "Modus Operandi"/config.color_scheme = "Modus Vivendi"/' "$WEZTERM_CONFIG" > "$TEMP_WEZTERM" && mv "$TEMP_WEZTERM" "$WEZTERM_CONFIG"
 
 # Clean up temporary files
 rm -f "$TEMP_NVIM" "$TEMP_WEZTERM"

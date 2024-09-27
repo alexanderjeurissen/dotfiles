@@ -11,8 +11,9 @@
   remoteBranch = bold yellow
 
 [core]
-  excludesfile = /Users/alexanderjeurissen/.gitignore
-  editor = nvim
+  excludesfile = ~/.gitignore
+  editor = zed --wait
+  ; editor = nvim
   ; editor = nvr -cc tabnew --remote-wait-silent
   pager = delta
   attributesfile = ~/.gitattributes

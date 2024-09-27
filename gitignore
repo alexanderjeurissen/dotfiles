@@ -93,3 +93,7 @@ Procfile.local
 
 # emacs auto generated config from org
 emacs.d/config.el
+
+# Zed localised settings
+.zed/
+.zed/*
