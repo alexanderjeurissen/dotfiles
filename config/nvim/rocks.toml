@@ -68,6 +68,10 @@ tree-sitter-python = "scm"
 "CopilotChat.nvim" = { git="CopilotC-Nvim/CopilotChat.nvim", rev="v2.13.1" }
 tree-sitter-css = "scm"
 tree-sitter-bash = "scm"
+tree-sitter-gitcommit = "scm"
+tree-sitter-xml = "scm"
+tree-sitter-regex = "scm"
+tree-sitter-markdown_inline = "scm"
 
 
 [plugins."org-bullets.nvim" ]

@@ -6,7 +6,9 @@ local diffview = require("diffview")
 local neogit = require('neogit')
 
 diffview.setup()
-neogit.setup()
+neogit.setup({
+  auto_show_console = false
+})
 
 nmap('<leader>gs', [[:lua require('neogit').open()<CR>]])
 nmap('<leader>dc', [[:DiffviewClose<CR>]])

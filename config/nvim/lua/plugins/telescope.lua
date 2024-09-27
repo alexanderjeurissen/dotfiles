@@ -25,6 +25,7 @@ require('telescope').setup{
     live_grep = {
       layout_config = { height = 30, width = 200 },
       preview = { hide_on_startup = false },
+      debounce = 100
     }
   },
   defaults = {

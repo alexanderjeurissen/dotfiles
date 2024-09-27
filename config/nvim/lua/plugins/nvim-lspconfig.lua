@@ -1,9 +1,10 @@
 local vim = vim or {}
 local lspconfig = require('lspconfig')
-local protocol = require('vim.lsp.protocol')
+local configs = require("lspconfig.configs")
+local util = require("lspconfig.util")
+
 local nnoremap = require("util").nnoremap
 
--- local capabilities = protocol.make_client_capabilities()
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Diagnostics {{{
@@ -41,7 +42,7 @@ for type, icon in pairs(signs) do
 end
 -- }}}
 
-lspconfig.solargraph.setup {
+--[[ lspconfig.solargraph.setup {
   capabilities = capabilities,
   settings = {
     solargraph = {
@@ -54,17 +55,45 @@ lspconfig.solargraph.setup {
       references = true
     }
   }
-}
+} ]]
 
-lspconfig.rubocop.setup{}
+lspconfig.ruby_lsp.setup {
+  capabilities = capabilities,  -- This is for enabling features like completion, etc.
+  init_options = {
+    enabledFeatures = {
+      codeActions = true,
+      codeLens = true,
+      completion = true,
+      definition = true,
+      diagnostics = true,
+      documentHighlights = true,
+      documentLink = true,
+      documentSymbols = true,
+      foldingRanges = true,
+      formatting = true,
+      hover = true,
+      inlayHint = true,
+      onTypeFormatting = true,
+      selectionRanges = true,
+      semanticHighlighting = true,
+      signatureHelp = true,
+      typeHierarchy = true,
+      workspaceSymbol = true
+    },
+ --[[ "featuresConfiguration": {
+      "inlayHint": {
+        "implicitHashValue": true,
+        "implicitRescue": true
+      }
+    }, ]]
+    formatter = 'auto',
+    linters = { 'standard', 'rubocop' },
+  },
+}
 
 lspconfig.cssls.setup{
   capabilities = capabilities,
 }
-
---[[ lspconfig.denols.setup{
-  capabilities = capabilities,
-} ]]
 
 lspconfig.tsserver.setup{ capabilities = capabilities }
 
@@ -72,9 +101,9 @@ lspconfig.lua_ls.setup{
   capabilities = capabilities,
 }
 
---[[ lspconfig.vim_ls.setup{
+lspconfig.jsonls.setup{
   capabilities = capabilities,
-} ]]
+}
 
 lspconfig.gopls.setup{
   capabilities = capabilities,

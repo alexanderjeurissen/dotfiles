@@ -20,7 +20,6 @@ local wo = vim.wo
 local fn = vim.fn
 local k = vim.keycode
 
-
 local home = os.getenv("HOME")
 local pwd = os.getenv("PWD")
 
@@ -100,7 +99,7 @@ if wo.diff == true then  -- Set diff mode specific window options
   wo.colorcolumn = '0'
 end
 
-vim.cmd.colorscheme "modus_vivendi"
+vim.cmd.colorscheme "modus_operandi"
 -- vim.cmd.colorscheme "modus_operandi"
 
 -- }}}
@@ -388,5 +387,25 @@ package.cpath = package.cpath .. ";" .. table.concat(luarocks_cpath, ";")
 
 vim.opt.runtimepath:append(vim.fs.joinpath(rocks_config.rocks_path, "lib", "luarocks", "rocks-5.1", "rocks.nvim", "*"))
 -- }}}
+
+if vim.g.neovide then
+  -- Set the font for Neovide
+  vim.o.guifont = 'BlexMono Nerd Font Mono:h14'
+
+  -- Disable cursor animation length
+  vim.g.neovide_cursor_animation_length = 0
+
+  -- Disable cursor trail length
+  vim.g.neovide_cursor_trail_length = 0
+
+  -- Prevent Neovide from idling
+  vim.g.neovide_no_idle = true
+
+  -- Set the refresh rate to 60 frames per second
+  vim.g.neovide_refresh_rate = 60
+
+  -- Set the idle refresh rate to 5 frames per second
+  vim.g.neovide_refresh_rate_idle = 5
+end
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10
