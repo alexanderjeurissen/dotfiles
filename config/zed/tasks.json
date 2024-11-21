@@ -1,24 +1,8 @@
 [
   {
-    "label": "Open lazygit",
-    "command": "lazygit",
-    "use_new_terminal": true,
-    "allow_concurrent_runs": false,
-    "reveal": "always",
-    "hide": "on_success"
-  },
-  {
-    "label": "Open lazydocker",
-    "command": "lazydocker",
-    "use_new_terminal": true,
-    "allow_concurrent_runs": false,
-    "reveal": "always",
-    "hide": "on_success"
-  },
-  {
-    "label": "Open Ranger",
-    "command": "ranger",
-    "args": ["$ZED_ACTIVE_PROJECT"],
+    "label": "Run bin/restart core-frontend",
+    "command": "bin/restart",
+    "args": ["core-frontend"],
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",
@@ -30,18 +14,32 @@
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "never",
-    "hide": "always"
+    "hide": "always",
+    "pin": true
   },
   {
-    "label": "test $ZED_RELATIVE_FILE:$ZED_ROW",
+    "label": "rspec $ZED_RELATIVE_FILE:$ZED_ROW",
     "command": "docker",
     "args": [
+      "compose",
       "exec",
-      "core-core-specs-1",
+      "core-specs",
       "bin/rspec",
       "\"$ZED_RELATIVE_FILE:$ZED_ROW\""
     ],
-    "tags": ["ruby-test"],
-    "hide": "on_success"
+    "tags": ["ruby-test"]
+  },
+  {
+    "label": "vitest $ZED_RELATIVE_FILE",
+    "command": "docker",
+    "args": [
+      "compose",
+      "exec",
+      "core-frontend",
+      "yarn",
+      "test",
+      "\"$(echo $ZED_RELATIVE_FILE | sed 's|^frontend/||')\""
+    ],
+    "tags": ["js-test", "ts-test", "tsx-test", "jsx-test"]
   }
 ]

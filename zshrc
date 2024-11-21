@@ -87,7 +87,7 @@ bindkey -M vicmd '^F' fzf-file-widget
 bindkey -M viins '^F' fzf-file-widget
 
 __fsel_branch() {
-  local branches=$(git branch -vv)
+  local branches=$(git branch --list)
   setopt localoptions pipefail no_aliases 2> /dev/null
   local branch_name
   echo "$branches" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --ansi --tac --query=${LBUFFER} ${FZF_DEFAULT_OPTS-} ${FZF_BRANCH_OPTS-}" $(__fzfcmd) | awk '{print $1}' | while read -r branch_name; do

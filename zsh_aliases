@@ -3,6 +3,7 @@
 
   # Branch (b)
   alias gbx='git branch -d'
+  alias gbl='git branch --list'
   alias gbX='git branch -D'
   alias gbm='git branch -m'
   alias gbM='git branch -M'
@@ -12,11 +13,11 @@
   # Commit (c)
   alias gc='git commit --verbose'
   alias gca='git commit --verbose --all'
-  alias gcm='git commit --message'
+  alias gcm='git commit --message "Commit on: $(date "+%Y-%m-%d %H:%M:%S")"'
+  alias gcma='git add -A && gcm'
   alias gco='git checkout'
   alias gcO='git checkout --patch'
-  alias gcf='git commit --amend --reuse-message HEAD'
-  alias gcF='git commit --verbose --amend'
+  alias gcA='git commit --verbose --amend'
   alias gcp='git cherry-pick --ff'
   alias gcP='git cherry-pick --no-commit'
   alias gcr='git revert'
@@ -148,7 +149,7 @@
 
 alias l="exa -lah --time-style='long-iso' --group-directories-first"
 alias ls="exa --group-directories-first"
-alias v="nvim"
-alias v!="sudo nvim"
-alias v!!="nvim -u NONE"
-
+alias v="zed"
+# alias v="nvim"
+# alias v!="sudo nvim"
+# alias v!!="nvim -u NONE"

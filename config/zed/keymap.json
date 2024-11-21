@@ -9,49 +9,34 @@
   {
     "context": "Workspace",
     "bindings": {
-      "cmd k": "command_palette::Toggle",
+      "cmd-k": "command_palette::Toggle",
       "ctrl-w z": "workspace::ToggleZoom",
       "ctrl-w w": "workspace::ActivatePreviousPane",
 
-      "space s g": ["task::Spawn", { "task_name": "Open lazygit" }],
-      "space s d": ["task::Spawn", { "task_name": "Open lazydocker" }],
-      "space s r": ["task::Spawn", { "task_name": "Open Ranger" }],
-      "space s s": ["task::Spawn", { "task_name": "Run bin/start" }],
-
-      "space t b": "workspace::ToggleBottomDock",
-      "space t r": "workspace::ToggleRightDock",
-      "space t l": "workspace::ToggleLeftDock",
-
-      "space p /": "workspace::NewSearch",
-
-      "space b d": "pane::CloseActiveItem",
-      "space b o": "workspace::CloseInactiveTabsAndPanes",
-      "space b n": "pane::ActivateNextItem",
-      "space b p": "pane::ActivatePrevItem"
+      "cmd-b": "workspace::ToggleBottomDock",
+      "cmd-r": "workspace::ToggleRightDock",
+      "cmd-l": "workspace::ToggleLeftDock"
     }
   },
   {
     "context": "Terminal",
     "bindings": {
       "ctrl-w z": "workspace::ToggleZoom",
-      "ctrl-w k": "terminal_panel::ToggleFocus"
+      "ctrl-w k": "terminal_panel::ToggleFocus",
+      "cmd-t": "workspace::NewTerminal"
     }
   },
   {
-    // The context here specifies that these key bindings are active
-    // when the editor is in Vim mode (VimControl), but not waiting
-    // for a command (not VimWaiting), and no menu is open.
-    "context": "Editor && VimControl && !VimWaiting && !menu",
+    // Only applies when using Vim keybindings, and while you're in Vim control mode (not insert mode or waiting for input)
+    "context": "Editor && VimControl && !VimWaiting && !VimInsert && !menu",
     "bindings": {
-      "space w s": "workspace::Save",
-      "space g b": "editor::ToggleGitBlame",
-      "space p f": "file_finder::Toggle",
+      "H": "pane::ActivateNextItem",
+      "L": "pane::ActivatePrevItem",
 
-      "space b b": "tab_switcher::Toggle",
+      "g b": "tab_switcher::Toggle",
 
-      "space f C": "editor::CopyRelativePath",
-      "space w z": "workspace::ToggleZoom",
-      "ctrl-c a": "assistant::InlineAssist",
+      // Necessary to prevent the default binding from being triggered
+      "cmd-l": "workspace::ToggleLeftDock",
       "space =": "editor::Format"
     }
   }

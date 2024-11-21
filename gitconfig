@@ -8,35 +8,33 @@
 [color "status"]
   branch = bold default
   localBranch = bold default
-  remoteBranch = bold yellow
+  remoteBranch = bold blue
 
 [core]
   excludesfile = ~/.gitignore
   editor = zed --wait
-  ; editor = nvim
-  ; editor = nvr -cc tabnew --remote-wait-silent
-  pager = delta
+  pager = cat
   attributesfile = ~/.gitattributes
 
+[pager]
+   difftool = false
+   diff = false
+   branch = false
+   commit = false
+
 [credential]
-	helper = osxkeychain
+   helper = osxkeychain
 
 [delta]
   line-numbers = true
   line-numbers-minus-style = "red"
   line-numbers-plus-style = "green"
-  line-numbers-zero-style = "brightyellow"
-  file-style = "bold white"
+  line-numbers-zero-style = "brightred"
+  file-style = "bold blue"
   syntax-theme = "Solarized (dark)"
 
-[diff]
-  tool = nvim
-
-[difftool "nvim"]
-  cmd= nvim -d $REMOTE $LOCAL
-
-[difftool "nvr"]
-  cmd = nvr -s -d $LOCAL $REMOTE
+[difftool "zed"]
+  cmd = zed --wait $LOCAL $REMOTE
 
 [difftool]
   prompt = 1
@@ -54,8 +52,8 @@
   templatedir = ~/.git_template
   defaultBranch = main
 
-; [interactive]
-;   diffFilter = delta --color-only
+;[interactive]
+;  diffFilter = delta --color-only
 
 [merge "merge-structure-sql"]
 	name = Rails structure.sql merge driver
@@ -87,3 +85,17 @@
 
 [gitlab]
 	user = alexander@hackerone.com
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = bold blue
+	frag = magenta bold
+	func = 146 bold
+	;commit = blue bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse

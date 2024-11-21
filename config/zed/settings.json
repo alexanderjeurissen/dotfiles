@@ -9,10 +9,15 @@
 {
   "assistant": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-latest"
     },
-    "version": "2"
+    "version": "2",
+    "enable_experimental_live_diffs": true
+  },
+  "tab_bar": {
+    "show_icons": false,
+    "show": true
   },
   "terminal": {
     "dock": "bottom",
@@ -21,23 +26,50 @@
   "vim_mode": true,
   "ui_font_size": 16,
   "buffer_font_size": 16,
-
   "theme": {
     "mode": "system",
     "light": "One Light",
     "dark": "One Dark"
   },
-  "tabs": { "file_icons": true },
-
-  //TODO: Added the ability to copy surrounding code blocks in the assistant panel into the clipboard, or inserting them directly into the editor, without manually selecting. Place cursor anywhere in a code block (marked by triple backticks) and use the assistant::CopyCode action (cmd-k c / ctrl-k c) to copy to the clipboard, or the assistant::InsertIntoEditor action (cmd-< / ctrl-<) to insert into editor (#17853; thanks thataboy).
-
+  "double_click_in_multibuffer": "open",
+  "use_autoclose": false,
+  "tabs": { "file_icons": false },
+  "calls": {
+    // Join calls with the microphone live by default
+    "mute_on_join": false,
+    // Share your project when you are the first to join a channel
+    "share_on_join": false
+  },
   "languages": {
     "Ruby": {
       // We enable rubocop because pull-based diagnostics within ruby-lsp are not supported yet in zed
       "language_servers": ["ruby-lsp", "!solargraph", "rubocop"],
       "formatter": "auto"
+    },
+    "TSX": {
+      "code_actions_on_format": {
+        "source.organizeImports": true
+      }
+    },
+    "JavaScript": {
+      "code_actions_on_format": {
+        "source.organizeImports": true
+      }
     }
   },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    "**/mimic/reports.json",
+    "**/build/static",
+    "**/node_modules"
+  ],
   "lsp": {
     "ruby-lsp": {
       "initialization_options": {
