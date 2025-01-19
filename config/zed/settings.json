@@ -9,8 +9,8 @@
 {
   "assistant": {
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-5-sonnet-latest"
+      "provider": "copilot_chat",
+      "model": "claude-3-5-sonnet"
     },
     "version": "2",
     "enable_experimental_live_diffs": true
@@ -28,7 +28,7 @@
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
-    "light": "One Light",
+    "light": "One Dark",
     "dark": "One Dark"
   },
   "double_click_in_multibuffer": "open",
@@ -39,6 +39,10 @@
     "mute_on_join": false,
     // Share your project when you are the first to join a channel
     "share_on_join": false
+  },
+  "active_pane_modifiers": {
+    "inactive_opacity": 0.6,
+    "magnification": 1.5
   },
   "languages": {
     "Ruby": {

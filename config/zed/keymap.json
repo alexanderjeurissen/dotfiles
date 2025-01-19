@@ -32,7 +32,9 @@
     "bindings": {
       "H": "pane::ActivateNextItem",
       "L": "pane::ActivatePrevItem",
-
+      // Add a keybinding for this
+      // This allows spawning the nearest task, like running a spec using a keybinding
+      "s t": ["editor::SpawnNearestTask", { "reveal": "no_focus" }],
       "g b": "tab_switcher::Toggle",
 
       // Necessary to prevent the default binding from being triggered
