@@ -99,3 +99,5 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[rerere]
+	autoupdate = true
