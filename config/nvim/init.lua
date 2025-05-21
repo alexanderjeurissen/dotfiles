@@ -34,7 +34,7 @@ o.synmaxcol = 200                            -- Only syntax highlight 200 chars 
 o.autowrite = true                           -- Write before running commands.
 o.shortmess = 'aAIsTF'                       -- Reduce |hit-enter| prompts.
 o.cmdheight = 1                              -- Number of screen lines for the command-line.
-o.smartcase = true                           -- Search case incensitive.
+o.smartcase = true                           -- Search case insensitive.
 -- o.textwidth = 100                         -- Set maximum number of characters per line
 o.sessionoptions =
 "blank,buffers,curdir,folds,help,tabpages,winsize,resize,globals"        -- Changes the effect of the |:mksession| cmd.
