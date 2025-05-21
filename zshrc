@@ -154,7 +154,7 @@ export FZF_CTRL_T_COMMAND='rg --files'
 # }}
 
 source ~/.zsh_aliases
-'builtin' 'source' ~/.zsh_prompt
+builtin source ~/.zsh_prompt
 source ~/.zsh_keybindings
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #
