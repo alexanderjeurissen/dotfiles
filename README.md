@@ -13,3 +13,7 @@ In summary my work environment consists of:
 | terminal application | Alacritty |
 
 ![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/main/_assets/screenshots/flattened_fish.png)
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
