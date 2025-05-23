@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -e
+
+usage() {
+  echo "Usage: $0 [light|dark]" >&2
+  exit 1
+}
+
+if [ "$#" -ne 1 ]; then
+  usage
+fi
+
+THEME="$1"
+
+case "$THEME" in
+  light)
+    FROM_BG="dark"
+    TO_BG="light"
+    FROM_SCHEME="modus_vivendi"
+    TO_SCHEME="modus_operandi"
+    WEZ_FROM="Modus Vivendi"
+    WEZ_TO="Modus Operandi"
+    ;;
+  dark)
+    FROM_BG="light"
+    TO_BG="dark"
+    FROM_SCHEME="modus_operandi"
+    TO_SCHEME="modus_vivendi"
+    WEZ_FROM="Modus Operandi"
+    WEZ_TO="Modus Vivendi"
+    ;;
+  *)
+    usage
+    ;;
+esac
+
+NVIM_CONFIG=$(readlink -f ~/.config/nvim/init.lua)
+WEZTERM_CONFIG=$(readlink -f ~/.config/wezterm/wezterm.lua)
+
+TEMP_NVIM=$(mktemp)
+TEMP_WEZTERM=$(mktemp)
+
+# Update Neovim background
+sed "s/o.background = ${FROM_BG}/o.background = ${TO_BG}/" "$NVIM_CONFIG" > "$TEMP_NVIM" && mv "$TEMP_NVIM" "$NVIM_CONFIG"
+
+# Update Neovim colorscheme
+sed "s/vim.cmd.colorscheme \"${FROM_SCHEME}\"/vim.cmd.colorscheme \"${TO_SCHEME}\"/" "$NVIM_CONFIG" > "$TEMP_NVIM" && mv "$TEMP_NVIM" "$NVIM_CONFIG"
+
+# Update WezTerm color scheme
+sed "s/config.color_scheme = \"${WEZ_FROM}\"/config.color_scheme = \"${WEZ_TO}\"/" "$WEZTERM_CONFIG" > "$TEMP_WEZTERM" && mv "$TEMP_WEZTERM" "$WEZTERM_CONFIG"
+
+rm -f "$TEMP_NVIM" "$TEMP_WEZTERM"
