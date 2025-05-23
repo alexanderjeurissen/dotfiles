@@ -2,7 +2,7 @@
 
 # Removes the original file of a symbolic link
 rmlink() {
-  rm "$(greadlink -f $1)"
+  rm "$(greadlink -f "$1")"
   unlink "$1"
 }
 
