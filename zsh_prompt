@@ -1,8 +1,8 @@
-+vi-git-status() {
+vi-git-status() {
   local action="${hook_com[action]}"
 
   if [[ -n $action ]]; then
-    if [[ "$action" == "rebase" ]] || ; then
+    if [[ "$action" == "rebase" ]]; then
       hook_com[misc]=""
     elif [[ "$action" == "rebase-i" ]]; then
       hook_com[misc]=""
