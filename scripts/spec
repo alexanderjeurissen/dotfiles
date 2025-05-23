@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-file_path="$(echo $1 | cut -d':' -f1)"
+file_path="$(cut -d ':' -f1 <<< "$1")"
 spec="$1"
 
-if ! [ -f $file_path ]; then
+if [[ ! -f "$file_path" ]]; then
   echo "File does not exist"
   exit 1
 fi
