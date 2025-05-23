@@ -2,9 +2,9 @@
 
 begin
   require 'pastel'
-rescue LoadError
+rescue LoadError => err
   # Handle the case where the gem is not found
-  puts "Gem 'my_gem' not found!"
+  puts "Gem 'pastel' not found! #{err}"
 end
 
 Pry.config.correct_indent = false if ENV['INSIDE_EMACS']
