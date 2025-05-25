@@ -69,59 +69,6 @@ function Util.ensure_git()
  end
 end
 
-local function map(mode, key, action, options, buffer)
-  options = options or {}
-  local default_opts = { noremap = true, silent = true }
-  local opts = vim.tbl_extend('force', default_opts, options)
-
-  if buffer then
-    if buffer ~= true then opts.buffer = buffer else opts.buffer = 0 end
-  end
-
-  vim.keymap.set(mode, key, action, opts)
-end
-
-function Util.nmap(key, action, options, buffer)
-  options = options or {}
-  local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('n', key, action, opts, buffer)
-end
-
-function Util.nnoremap(key, action, options, buffer)
-  map('n', key, action, options, buffer)
-end
-
-function Util.tnoremap(key, action, options, buffer)
-  map('t', key, action, options, buffer)
-end
-
-function Util.imap(key, action, options, buffer)
-  options = options or {}
-  local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('i', key, action, opts, buffer)
-end
-
-function Util.inoremap(key, action, options, buffer)
-  map('i', key, action, options, buffer)
-end
-
-function Util.xnoremap(key, action, options, buffer)
-  map('x', key, action, options, buffer)
-end
-
-function Util.vmap(key, action, options, buffer)
-  options = options or {}
-  local opts = vim.tbl_extend('force', options, { noremap = false })
-  map('v', key, action, opts, buffer)
-end
-
-function Util.vnoremap(key, action, options, buffer)
-  map('v', key, action, options, buffer)
-end
-
-function Util.noremap(key, action, options, buffer)
-  map('', key, action, options, buffer)
-end
 
 -- Define a function to get the highlighting group under the cursor
 function get_highlight_group()

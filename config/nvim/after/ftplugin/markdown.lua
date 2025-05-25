@@ -1,6 +1,4 @@
 local vim = vim or {}
-local Util = require('util')
-local imap = Util.imap
 
 vim.opt_local.spell = true
 

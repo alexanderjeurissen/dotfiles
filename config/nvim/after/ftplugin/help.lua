@@ -1,6 +1,5 @@
 local vim = vim or {}
-local Util = require('util')
-local nmap = Util.nmap
+local map = vim.keymap.set
 
 -- Snippets from vim-help
 -- Credits:
@@ -16,8 +15,8 @@ vim.opt_local.cursorline = false
 vim.opt_local.colorcolumn = '0'
 
 -- Jump to links with o and L
-nmap('o', [[<C-]>]], {}, true)
-nmap('L', [[<C-]>]], {}, true)
+map('n', 'o', '<C-]>', { remap = true, silent = true, buffer = true })
+map('n', 'L', '<C-]>', { remap = true, silent = true, buffer = true })
 
 -- Jump back with H
-nmap('H', [[<C-T>]], {}, true)
+map('n', 'H', '<C-T>', { remap = true, silent = true, buffer = true })

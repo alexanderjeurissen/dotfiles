@@ -1,17 +1,8 @@
 local vim = vim or {}
 vim.loader.enable()
-local Util = require('util')
 local General = require('general')
 
-local nmap = Util.nmap
-local vmap = Util.vmap
-local imap = Util.imap
 local map = vim.keymap.set
-
-local noremap = Util.noremap
-local nnoremap = Util.nnoremap
-local vnoremap = Util.vnoremap
-local xnoremap = Util.xnoremap
 
 -- Options {{{
 -- Meta accessors for vim options
@@ -130,8 +121,8 @@ vim.g.mapleader = k'<Space>' -- Set mapleader to <space>
 
 
 -- Keybindings {{{
-nnoremap('n', [[nzz:lua require('general').hl_next(100)<cr>]])
-nnoremap('N', [[Nzz:lua require('general').hl_next(100)<cr>]])
+map('n', 'n', [[nzz:lua require('general').hl_next(100)<cr>]], { silent = true })
+map('n', 'N', [[Nzz:lua require('general').hl_next(100)<cr>]], { silent = true })
 
 -- KEYBINDINGS: Editing {{{
 -- Define the function to execute a macro over a visual selection
@@ -154,84 +145,84 @@ vim.api.nvim_create_user_command('Cmacro', function()
 end, {})
 
 -- Move visual block
-vnoremap('J', [[:m '>+1<CR>gv=gv]])
-vnoremap('K', [[:m '<-2<CR>gv=gv]])
+map('v', 'J', [[:m '>+1<CR>gv=gv]], { silent = true })
+map('v', 'K', [[:m '<-2<CR>gv=gv]], { silent = true })
 
 -- custom comma motion mapping
-nnoremap('di,', [[f,dT,]])
-nnoremap('ci,', [[f,cT,]])
+map('n', 'di,', [[f,dT,]], { silent = true })
+map('n', 'ci,', [[f,cT,]], { silent = true })
 
 -- (upper|lower)case word under cursor
-nnoremap('g^', [[gUiW]])
-nnoremap('gv', [[guiW]])
+map('n', 'g^', [[gUiW]], { silent = true })
+map('n', 'gv', [[guiW]], { silent = true })
 
 -- Create newline before/after current row
-nnoremap('go', [[o<ESC>k]])
-nnoremap('gO', [[O<ESC>j]])
+map('n', 'go', [[o<ESC>k]], { silent = true })
+map('n', 'gO', [[O<ESC>j]], { silent = true })
 
 -- Paste and keep pasting same thing, don't take what was removed
-vnoremap('<leader>p', [["_dP]])
+map('v', '<leader>p', [["_dP]], { silent = true })
 
 -- Make Y behave like other capital commands.
 -- Hat-tip http://vimbits.com/bits/11
-nnoremap('Y', [[y$]])
+map('n', 'Y', [[y$]], { silent = true })
 
 -- keep selection after indent
-vnoremap('<', [[<gv]])
-vnoremap('>', [[>gv]])
+map('v', '<', [[<gv]], { silent = true })
+map('v', '>', [[>gv]], { silent = true })
 
-imap('<c-h>', [[<c-o>x]])
+map('i', '<c-h>', [[<c-o>x]], { silent = true })
 
 -- }}}
 
 -- KEYBINDINGS: Navigation / Search {{{
 -- Go to previous and next item in quickfix list
-noremap(' cw', [[:cwindow<CR><C-w>J]])
-noremap(' cq', [[<C-w><C-p>:cclose<CR>]])
-noremap(' cn', [[:cnext<CR>]])
-noremap(' cN', [[:cnfile<CR>]])
-noremap(' cp', [[:cprev<CR>]])
-noremap(' cP', [[:cpfile<CR>]])
+map('n', ' cw', [[:cwindow<CR><C-w>J]], { silent = true })
+map('n', ' cq', [[<C-w><C-p>:cclose<CR>]], { silent = true })
+map('n', ' cn', [[:cnext<CR>]], { silent = true })
+map('n', ' cN', [[:cnfile<CR>]], { silent = true })
+map('n', ' cp', [[:cprev<CR>]], { silent = true })
+map('n', ' cP', [[:cpfile<CR>]], { silent = true })
 
-noremap(' ln', [[:lnext<CR>]])
-noremap(' lN', [[:lnfile<CR>]])
-noremap(' lp', [[:lprev<CR>]])
-noremap(' lP', [[:lpfile<CR>]])
+map('n', ' ln', [[:lnext<CR>]], { silent = true })
+map('n', ' lN', [[:lnfile<CR>]], { silent = true })
+map('n', ' lp', [[:lprev<CR>]], { silent = true })
+map('n', ' lP', [[:lpfile<CR>]], { silent = true })
 
 -- Split creation
-noremap(' wv', [[<C-w>v]])
-noremap(' ws', [[<C-w>s]])
+map('n', ' wv', [[<C-w>v]], { silent = true })
+map('n', ' ws', [[<C-w>s]], { silent = true })
 
 -- TODO: likely not necessary if we choose to adopt
 -- Hydra.nvim
 -- Split resizing
-nmap('<left>', [[<C-w>5<]])
-nmap('<up>', [[<C-w>5+]])
-nmap('<down>', [[<C-w>5-]])
-nmap('<right>', [[<C-w>5>]])
+map('n', '<left>', [[<C-w>5<]], { remap = true, silent = true })
+map('n', '<up>', [[<C-w>5+]], { remap = true, silent = true })
+map('n', '<down>', [[<C-w>5-]], { remap = true, silent = true })
+map('n', '<right>', [[<C-w>5>]], { remap = true, silent = true })
 
 -- Split navigation
-nnoremap('<c-h>', [[<C-w><left>]])
-nnoremap('<c-j>', [[<C-w><down>]])
-nnoremap('<c-k>', [[<C-w><up>]])
-nnoremap('<c-l>', [[<C-w><right>]])
-nnoremap([[<c-\>]], [[<C-w><w>]])
+map('n', '<c-h>', [[<C-w><left>]], { silent = true })
+map('n', '<c-j>', [[<C-w><down>]], { silent = true })
+map('n', '<c-k>', [[<C-w><up>]], { silent = true })
+map('n', '<c-l>', [[<C-w><right>]], { silent = true })
+map('n', [[<c-\>]], [[<C-w><w>]], { silent = true })
 
 -- KEYBINDINGS: General {{{
 -- Disable arrows and BS in insert mode
-imap('<left>', [[<nop>]])
-imap('<up>', [[<nop>]])
-imap('<down>', [[<nop>]])
-imap('<right>', [[<nop>]])
+map('i', '<left>', [[<nop>]], { silent = true })
+map('i', '<up>', [[<nop>]], { silent = true })
+map('i', '<down>', [[<nop>]], { silent = true })
+map('i', '<right>', [[<nop>]], { silent = true })
 -- imap('<BS>', [[<nop>]])
-imap('<DEL>', [[<nop>]])
+map('i', '<DEL>', [[<nop>]], { silent = true })
 
 -- Wrapped lines goes down/up to next row, rather than next line in file.
-noremap('j', [[gj]])
-noremap('k', [[gk]])
+map('n', 'j', [[gj]], { silent = true })
+map('n', 'k', [[gk]], { silent = true })
 
 -- Find merge conflict markers
-noremap('gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
+map('n', 'gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
 
 -- TODO: figure out if we need this
 -- Commented out on 28/08/2024
@@ -246,34 +237,34 @@ noremap('gm', [[/\v^[<\|=>]{7}( .*\|$)<CR>]], { silent = false })
 -- vmap('s', [[:Blockwise s//g<LEFT><LEFT>]], { silent = false })
 
 -- Rebind the old H and L keyt to zh, zl
-nnoremap('zh', [[H]])
-nnoremap('zm', [[M]])
-nnoremap('zl', [[L]])
+map('n', 'zh', [[H]], { silent = true })
+map('n', 'zm', [[M]], { silent = true })
+map('n', 'zl', [[L]], { silent = true })
 
 -- Repurpose the H and L keys to quickly switch buffers
-nnoremap('H', [[:bp<CR>]])
-nnoremap('L', [[:bn<CR>]])
+map('n', 'H', [[:bp<CR>]], { silent = true })
+map('n', 'L', [[:bn<CR>]], { silent = true })
 
-nnoremap('zgg', [[:normal 100000000zk<CR>]])
-nnoremap('zG', [[:normal  100000000zj<CR>]])
+map('n', 'zgg', [[:normal 100000000zk<CR>]], { silent = true })
+map('n', 'zG', [[:normal  100000000zj<CR>]], { silent = true })
 
 -- auto-center on specific movement keys, and blink current search match
-nnoremap('G', [[Gzz]])
-nnoremap('n', [[nzz:lua require('general').hl_next(100)<cr>]])
-nnoremap('N', [[Nzz:lua require('general').hl_next(100)<cr>]])
-nnoremap('}', [[}zz]])
-nnoremap('{', [[{zz]])
+map('n', 'G', [[Gzz]], { silent = true })
+map('n', 'n', [[nzz:lua require('general').hl_next(100)<cr>]], { silent = true })
+map('n', 'N', [[Nzz:lua require('general').hl_next(100)<cr>]], { silent = true })
+map('n', '}', [[}zz]], { silent = true })
+map('n', '{', [[{zz]], { silent = true })
 
 map('n', '<C-c>', '<C-c>', { silent = true, noremap = true })
 
 -- Save the current buffer
-nnoremap('<leader>fs', ':w<CR>')
+map('n', '<leader>fs', ':w<CR>', { silent = true })
 
 -- Open vimrc with <leader>fed
-nnoremap('<leader>fed', ':e $MYVIMRC<CR>')
+map('n', '<leader>fed', ':e $MYVIMRC<CR>', { silent = true })
 
 -- Reload vimrc with <leader>feR
-nnoremap('<leader>feR', ':luafile $MYVIMRC<CR>')
+map('n', '<leader>feR', ':luafile $MYVIMRC<CR>', { silent = true })
 
 -- Save file with sudo
 vim.keymap.set('c', 'w!!', 'w !sudo tee % > /dev/null', {
@@ -283,7 +274,7 @@ vim.keymap.set('c', 'w!!', 'w !sudo tee % > /dev/null', {
 })
 
 -- Copy current file path + line number to system clipboard
-nnoremap('<leader>fC', [[:let @+=expand("%") . ":" . line(".")<CR>]])
+map('n', '<leader>fC', [[:let @+=expand("%") . ":" . line(".")<CR>]], { silent = true })
 -- }}}
 
 -- Auto commands {{{

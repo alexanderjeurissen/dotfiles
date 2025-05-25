@@ -1,5 +1,4 @@
-local Util = require('util')
-local nmap = Util.nmap
+local map = vim.keymap.set
 
 local diffview = require("diffview")
 local neogit = require('neogit')
@@ -9,8 +8,8 @@ neogit.setup({
   auto_show_console = false
 })
 
-nmap('<leader>gs', [[:lua require('neogit').open()<CR>]])
-nmap('<leader>dc', [[:DiffviewClose<CR>]])
-nmap('<leader>gd', [[:DiffviewOpen<CR>]])
-nmap('<leader>gD', [[:DiffviewOpen develop<CR>]])
-nmap('<leader>fh', [[:DiffviewFileHistory %<CR>]])
+map('n', '<leader>gs', [[:lua require('neogit').open()<CR>]], { silent = true })
+map('n', '<leader>dc', [[:DiffviewClose<CR>]], { silent = true })
+map('n', '<leader>gd', [[:DiffviewOpen<CR>]], { silent = true })
+map('n', '<leader>gD', [[:DiffviewOpen develop<CR>]], { silent = true })
+map('n', '<leader>fh', [[:DiffviewFileHistory %<CR>]], { silent = true })

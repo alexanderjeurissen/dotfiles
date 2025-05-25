@@ -2,7 +2,7 @@ local lspconfig = require('lspconfig')
 local configs = require("lspconfig.configs")
 local util = require("lspconfig.util")
 
-local nnoremap = require("util").nnoremap
+local map = vim.keymap.set
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -117,15 +117,15 @@ lspconfig.gopls.setup{
   },
 }
 
-nnoremap('gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
-nnoremap('gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-nnoremap('gh ', '<cmd>lua vim.lsp.buf.hover()<CR>')
-nnoremap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-nnoremap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { silent = true })
+map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { silent = true })
+map('n', 'gh ', '<cmd>lua vim.lsp.buf.hover()<CR>', { silent = true })
+map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', { silent = true })
+map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', { silent = true })
 
-nnoremap('<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>')
+map('n', '<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>', { silent = true })
 
-nnoremap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-nnoremap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { silent = true })
+map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', { silent = true })
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10
