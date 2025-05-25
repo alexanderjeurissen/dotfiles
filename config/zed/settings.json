@@ -7,53 +7,172 @@
 // custom settings, run `zed: open default settings` from the
 // command palette
 {
+  "features": {
+    "edit_prediction_provider": "copilot"
+  },
+  "language_models": {
+    "bedrock": {
+      "profile": "default",
+      "authentication_method": "sso",
+      "endpoint_url": "https://d-926766230a.awsapps.com/start#",
+      "region": "us-west-2"
+    }
+  },
   "assistant": {
+    "default_profile": "write",
+    "always_allow_tool_actions": true,
+    "profiles": {
+      "h-1": {
+        "name": "h1",
+        "tools": {},
+        "enable_all_context_servers": false,
+        "context_servers": {}
+      },
+      "write": {
+        "name": "Write",
+        "tools": {
+          "contents": true,
+          "rename": true,
+          "code_actions": true,
+          "create_directory": true,
+          "terminal": true,
+          "batch_tool": true,
+          "code_symbols": true,
+          "copy_path": true,
+          "create_file": true,
+          "delete_path": true,
+          "diagnostics": true,
+          "edit_file": true,
+          "fetch": true,
+          "list_directory": true,
+          "move_path": true,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "grep": true,
+          "symbol_info": true,
+          "thinking": true,
+          "open": true
+        },
+        "enable_all_context_servers": true,
+        "context_servers": {
+          "mcp-atlassian": {
+            "tools": {
+              "jira_add_comment": false,
+              "jira_add_worklog": false,
+              "jira_batch_create_issues": false,
+              "jira_create_issue": false,
+              "jira_create_issue_link": false,
+              "jira_delete_issue": false,
+              "jira_download_attachments": false,
+              "jira_get_agile_boards": false,
+              "jira_get_board_issues": false,
+              "jira_get_epic_issues": false,
+              "jira_get_issue": false,
+              "jira_get_project_issues": false,
+              "jira_get_sprint_issues": false,
+              "jira_get_sprints_from_board": false,
+              "jira_get_transitions": false,
+              "jira_get_worklog": false,
+              "jira_link_to_epic": false,
+              "jira_search": false,
+              "jira_remove_issue_link": false,
+              "jira_search_fields": false,
+              "jira_transition_issue": false,
+              "jira_update_issue": false,
+              "jira_update_sprint": false,
+              "confluence_update_page": true,
+              "confluence_search": true,
+              "confluence_get_page_children": true,
+              "confluence_get_page_ancestors": true,
+              "confluence_get_page": true,
+              "confluence_get_comments": true,
+              "confluence_delete_page": false,
+              "confluence_create_page": true
+            }
+          },
+          "mcp-server-sequential-thinking": {
+            "tools": {
+              "sequentialthinking": true
+            }
+          },
+          "postgres-context-server": {
+            "tools": {
+              "query": true,
+              "pg-schema": true
+            }
+          },
+          "hackerone-dev-context-server": {
+            "tools": {
+              "issue": false,
+              "merge-request": false
+            }
+          },
+          "mcp-server-git": {
+            "tools": {
+              "git_show": true,
+              "git_diff_unstaged": true,
+              "git_diff_staged": true,
+              "git_create_branch": true,
+              "git_status": true,
+              "git_diff": true,
+              "git_commit": true,
+              "git_checkout": true,
+              "git_add": true
+            }
+          }
+        }
+      }
+    },
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "version": "2",
     "enable_experimental_live_diffs": true
   },
   "tab_bar": {
     "show_icons": false,
-    "show": true
+    "show_tab_bar_buttons": false,
+    "show": true,
+    "show_nav_history_buttons": false,
+    "beta": true
   },
   "terminal": {
     "dock": "bottom",
     "font_family": "BlexMono Nerd Font Mono"
   },
   "vim_mode": true,
-  "ui_font_size": 16,
-  "buffer_font_size": 16,
+  "ui_font_size": 14,
+  "buffer_font_size": 14.0,
   "theme": {
     "mode": "system",
-    "light": "One Dark",
+    "light": "One Light",
     "dark": "One Dark"
   },
   "double_click_in_multibuffer": "open",
   "use_autoclose": false,
-  "tabs": { "file_icons": false },
+  "tabs": { "file_icons": true },
   "calls": {
     // Join calls with the microphone live by default
-    "mute_on_join": false,
+    "mute_on_join": true,
     // Share your project when you are the first to join a channel
     "share_on_join": false
   },
   "active_pane_modifiers": {
-    "inactive_opacity": 0.6,
-    "magnification": 1.5
+    // "inactive_opacity": 0.6,
+    // "active_opacity": 1.0
+    // "magnification": 1.5
   },
   "languages": {
     "Ruby": {
       // We enable rubocop because pull-based diagnostics within ruby-lsp are not supported yet in zed
+      // "language_servers": ["ruby-lsp", "!solargraph", "rubocop"],
       "language_servers": ["ruby-lsp", "!solargraph", "rubocop"],
       "formatter": "auto"
     },
     "TSX": {
-      "code_actions_on_format": {
-        "source.organizeImports": true
-      }
+      "code_actions_on_format": {}
     },
     "JavaScript": {
       "code_actions_on_format": {
@@ -82,6 +201,7 @@
           "codeLens": true,
           "completion": true,
           "definition": true,
+          // "diagnostics": true, // pull based Diagnostics not supported yet in Zed
           "diagnostics": false, // pull based Diagnostics not supported yet in Zed
           "documentHighlights": true,
           "documentLink": true,

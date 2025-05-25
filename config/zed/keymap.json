@@ -10,9 +10,6 @@
     "context": "Workspace",
     "bindings": {
       "cmd-k": "command_palette::Toggle",
-      "ctrl-w z": "workspace::ToggleZoom",
-      "ctrl-w w": "workspace::ActivatePreviousPane",
-
       "cmd-b": "workspace::ToggleBottomDock",
       "cmd-r": "workspace::ToggleRightDock",
       "cmd-l": "workspace::ToggleLeftDock"
@@ -31,7 +28,7 @@
     "context": "Editor && VimControl && !VimWaiting && !VimInsert && !menu",
     "bindings": {
       "H": "pane::ActivateNextItem",
-      "L": "pane::ActivatePrevItem",
+      "L": "pane::ActivatePreviousItem",
       // Add a keybinding for this
       // This allows spawning the nearest task, like running a spec using a keybinding
       "s t": ["editor::SpawnNearestTask", { "reveal": "no_focus" }],
@@ -39,7 +36,13 @@
 
       // Necessary to prevent the default binding from being triggered
       "cmd-l": "workspace::ToggleLeftDock",
-      "space =": "editor::Format"
+      "space =": "editor::Format",
+
+      "ctrl-w z": "workspace::ToggleZoom",
+      "ctrl-w w": "workspace::ActivatePreviousPane",
+      "ctrl-w c": "pane::JoinIntoNext",
+      "ctrl-w o": "pane::JoinAll",
+      "ctrl-w O": "workspace::CloseInactiveTabsAndPanes"
     }
   }
 ]

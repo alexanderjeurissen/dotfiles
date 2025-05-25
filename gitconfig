@@ -22,8 +22,8 @@
    branch = false
    commit = false
 
-[credential]
-   helper = osxkeychain
+; [credential]
+;    helper = osxkeychain
 
 [delta]
   line-numbers = true
@@ -48,16 +48,12 @@
 [github]
   user = alexanderjeurissen
 
-[init]
-  templatedir = ~/.git_template
-  defaultBranch = main
-
 ;[interactive]
 ;  diffFilter = delta --color-only
 
-[merge "merge-structure-sql"]
-	name = Rails structure.sql merge driver
-	driver = git-merge-structure-sql %A %O %B
+;[merge "merge-structure-sql"]
+;	name = Rails structure.sql merge driver
+;	driver = git-merge-structure-sql %A %O %B
 
 [merge]
   tool = nvim
@@ -101,3 +97,7 @@
 	whitespace = red reverse
 [rerere]
 	autoupdate = true
+[http]
+	sslVerify = false
+[init]
+	defaultBranch = main

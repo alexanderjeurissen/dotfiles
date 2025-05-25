@@ -1,16 +1,22 @@
 {
-  "theme": null,
+  "theme": {
+    "name": "Bonofix Theme",
+    "url": "assets:///Users/alexander/.logseq/plugins/logseq-bonofix-theme/custom.css",
+    "description": "A clean theme",
+    "pid": "logseq-bonofix-theme"
+  },
   "themes": {
     "mode": "dark",
     "light": null,
     "dark": {
-      "name": "Default Dark Theme",
-      "url": null,
-      "description": "Logseq default dark theme.",
-      "mode": "dark",
-      "selected": true,
+      "name": "Bonofix Theme",
+      "url": "assets:///Users/alexander/.logseq/plugins/logseq-bonofix-theme/custom.css",
+      "description": "A clean theme",
+      "pid": "logseq-bonofix-theme",
       "group-first": true,
-      "group-desc": "dark themes"
+      "group-desc": "light & dark themes",
+      "mode": "dark",
+      "selected": true
     }
   },
   "externals": []

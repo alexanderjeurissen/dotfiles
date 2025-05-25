@@ -9,6 +9,29 @@
     "hide": "on_success"
   },
   {
+    "label": "Open All Staged Files",
+    "command": "git",
+    "args": ["diff --cached --name-only | xargs -n 1 zed"],
+    "reveal": "never",
+    "hide": "always"
+  },
+  {
+    "label": "Open all feature branch files",
+    "command": "git",
+    "args": [
+      "diff $(git merge-base HEAD origin/develop) HEAD --name-only| xargs -n 1 zed"
+    ],
+    "reveal": "never",
+    "hide": "always"
+  },
+  {
+    "label": "Open all files with merge conflicts",
+    "command": "git",
+    "args": ["diff --name-only --diff-filter=U | xargs -n 1 zed"],
+    "reveal": "never",
+    "hide": "always"
+  },
+  {
     "label": "Run bin/start",
     "command": "bin/start",
     "use_new_terminal": true,

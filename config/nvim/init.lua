@@ -50,8 +50,8 @@ o.expandtab = true                           -- Use spaces instead of <Tab> for 
 o.splitbelow = true                          -- Open new split panes at bottommost position
 o.splitright = true                          -- Open new split panes at rightmost position
 -- NOTE: commented out as this can conflict with Noice
--- o.lazyredraw = true                          -- Don't redraw while executing macros.
-o.inccommand = 'nosplit'                          -- Show visual indication when using substitute.
+o.lazyredraw = true                       -- Don't redraw while executing macros.
+o.inccommand = 'nosplit'                     -- Show visual indication when using substitute.
 o.modeline = true                            -- load vim settings from magic file comment
 o.confirm = true                             -- Makes operations like qa ask for confirmation
 o.scrolloff = 2                              -- Keep at least 2 lines above/below
@@ -59,8 +59,7 @@ o.sidescrolloff = 5                          -- Keep at least 5 lines left/right
 o.smartindent = true
 o.updatetime = 1000                          -- if idle for updatetime write swap and trigger CursorHold
 
---[[ o.statusline = " "
-o.statusline = o.statusline .. "%="
+--[[ o.statusline = o.statusline .. "%="
 o.statusline = o.statusline .. "%{&paste?'  ':''}"
 o.statusline = o.statusline .. "%{&spell?' ¶ ':''}" ]]
 
@@ -68,9 +67,7 @@ o.laststatus = 2                             -- Disable/enable bottom statusline
 -- Turn off syntax highlighting
 o.syntax = 'off'
 
--- o.shell = "/usr/local/bin/zsh"              -- Set shell to bin/sh to improve performance in zsh/fish
-o.shell =
-"/bin/sh" -- Set shell to bin/sh to improve performance in zsh/fish
+o.shell = "/bin/sh" -- Set shell to bin/sh to improve performance in zsh/fish
 o.termguicolors = true
 o.background = 'dark'
 
@@ -355,57 +352,40 @@ autocmd('QuickFixCmdPost', {
   command = 'lwindow',
   group = qf_group
 })
-
 -- }}}
 
--- PLUGINS {{{
-local rocks_config = {
-  rocks_path = vim.env.HOME .. "/.local/share/nvim/rocks",
-  luarocks_config = {
-    arch = "macosx-aarch64", -- or arch = "macosx-x86_64" , depending on your architecture
-  },
-}
+if vim.g.vscode then
+    -- VSCode extension
+else
+  -- PLUGINS {{{
+  local rocks_config = {
+    rocks_path = vim.env.HOME .. "/.local/share/nvim/rocks",
+    luarocks_config = {
+      arch = "macosx-aarch64", -- or arch = "macosx-x86_64" , depending on your architecture
+    },
+  }
 
-vim.g.rocks_nvim = rocks_config
+  vim.g.rocks_nvim = rocks_config
 
-local luarocks_path = {
-  vim.fs.joinpath(rocks_config.rocks_path, "share", "lua", "5.1", "?.lua"),
-  vim.fs.joinpath(rocks_config.rocks_path, "share", "lua", "5.1", "?", "init.lua"),
-}
-package.path = package.path .. ";" .. table.concat(luarocks_path, ";")
+  local luarocks_path = {
+    vim.fs.joinpath(rocks_config.rocks_path, "share", "lua", "5.1", "?.lua"),
+    vim.fs.joinpath(rocks_config.rocks_path, "share", "lua", "5.1", "?", "init.lua"),
+  }
+  package.path = package.path .. ";" .. table.concat(luarocks_path, ";")
 
-local luarocks_cpath = {
-  vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.so"),
-  vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.so"),
-  -- Remove the dylib and dll paths if you do not need macos or windows support
-  vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.dylib"),
-  vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.dylib"),
-  vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.dll"),
-  vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.dll"),
-}
-package.cpath = package.cpath .. ";" .. table.concat(luarocks_cpath, ";")
+  local luarocks_cpath = {
+    vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.so"),
+    vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.so"),
+    -- Remove the dylib and dll paths if you do not need macos or windows support
+    vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.dylib"),
+    vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.dylib"),
+    vim.fs.joinpath(rocks_config.rocks_path, "lib", "lua", "5.1", "?.dll"),
+    vim.fs.joinpath(rocks_config.rocks_path, "lib64", "lua", "5.1", "?.dll"),
+  }
+  package.cpath = package.cpath .. ";" .. table.concat(luarocks_cpath, ";")
 
-vim.opt.runtimepath:append(vim.fs.joinpath(rocks_config.rocks_path, "lib", "luarocks", "rocks-5.1", "rocks.nvim", "*"))
--- }}}
-
-if vim.g.neovide then
-  -- Set the font for Neovide
-  vim.o.guifont = 'BlexMono Nerd Font Mono:h14'
-
-  -- Disable cursor animation length
-  vim.g.neovide_cursor_animation_length = 0
-
-  -- Disable cursor trail length
-  vim.g.neovide_cursor_trail_length = 0
-
-  -- Prevent Neovide from idling
-  vim.g.neovide_no_idle = true
-
-  -- Set the refresh rate to 60 frames per second
-  vim.g.neovide_refresh_rate = 60
-
-  -- Set the idle refresh rate to 5 frames per second
-  vim.g.neovide_refresh_rate_idle = 5
+  vim.opt.runtimepath:append(vim.fs.joinpath(rocks_config.rocks_path, "lib", "luarocks", "rocks-5.1", "rocks.nvim", "*"))
+  -- }}}
 end
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10

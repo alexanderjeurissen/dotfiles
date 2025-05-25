@@ -6,31 +6,31 @@
 # PLUGINS: List of Neovim plugins to install alongside their versions.
 # If the plugin name contains a dot then you must add quotes to the key name!
 [plugins] # {{{
-"rocks.nvim" = "2.38.2"
-"rocks-config.nvim" = "2.2.0"
-"rocks-git.nvim" = "2.0.1"
+"rocks.nvim" = "2.44.0"
+"rocks-config.nvim" = "3.1.0"
+"rocks-git.nvim" = "2.5.3"
 "rocks-lazy.nvim" = "scm"
-"rocks-treesitter.nvim" = "1.1.0"
+"rocks-treesitter.nvim" = "1.3.0"
 
 "plenary.nvim" = "scm"
 "telescope-zf-native.nvim" = "1.0.0"
 "telescope.nvim" = "scm"
 neorg-telescope = "1.2.2"
 
-nvim-lspconfig = "0.1.8"
+nvim-lspconfig = "2.1.0"
 
-"oil.nvim" = "2.12.1"
-"unimpaired.nvim" = "0.2.0"
+"oil.nvim" = "2.15.0"
+"unimpaired.nvim" = "0.4.0"
 "guess-indent.nvim" = "scm"
 nvim-web-devicons = "0.100"
 "nvim-colorizer.lua" = "scm"
-nvim-surround = "2.1.5"
+nvim-surround = "3.1.1"
 promise-async = "scm"
-nvim-ufo = "1.4.0"
+nvim-ufo = "1.5.0"
 
 "diffview.nvim" = "scm"
-neogit = "1.0.0"
-neotest = "5.4.1"
+neogit = "2.0.0"
+neotest = "5.8.0"
 neotest-jest = "scm"
 neotest-rspec = "scm"
 cmp-nvim-lsp = "scm"
@@ -38,9 +38,7 @@ cmp-cmdline = "scm"
 nvim-cmp = "scm"
 cmp-path = "scm"
 cmp-buffer = "scm"
-neorg = "9.1.1"
-copilot-cmp = "scm"
-"copilot.lua" = "scm"
+neorg = "9.3.0"
 tree-sitter-toml = "scm"
 tree-sitter-lua = "scm"
 tree-sitter-ruby = "scm"
@@ -58,29 +56,26 @@ tree-sitter-vim = "scm"
 tree-sitter-graphql = "scm"
 tree-sitter-scss = "scm"
 tree-sitter-embedded_template = "scm"
-tree-sitter-norg = "0.2.4"
+tree-sitter-norg = "0.2.6"
 tree-sitter-sql = "scm"
-orgmode = "0.3.5"
-tree-sitter-orgmode = "1.3.2"
 "headlines.nvim" = "scm"
 tree-sitter-python = "scm"
-"noice.nvim" = "4.5.0"
-"CopilotChat.nvim" = { git="CopilotC-Nvim/CopilotChat.nvim", rev="v2.13.1" }
 tree-sitter-css = "scm"
 tree-sitter-bash = "scm"
 tree-sitter-gitcommit = "scm"
 tree-sitter-xml = "scm"
 tree-sitter-regex = "scm"
 tree-sitter-markdown_inline = "scm"
+tree-sitter-swift = "0.0.53"
 
+[plugins."CopilotChat.nvim" ]
+git = "CopilotC-Nvim/CopilotChat.nvim"
+rev = "v3.11.1"
 
-[plugins."org-bullets.nvim" ]
-git = "akinsho/org-bullets.nvim"
-rev = "ab8e1d860d61239c4fe187ead15f73bb2561acd1"
 
 [plugins."tailwind-tools.nvim" ]
 git = "luckasRanarison/tailwind-tools.nvim"
-rev = "v0.3.0"
+rev = "v0.3.2"
 
 [plugins."lspkind.nvim" ]
 git = "onsails/lspkind.nvim"
@@ -96,7 +91,7 @@ rev = "c116aa8dd7aa7e1db6938f872285e598dc9ee00b"
 
 [plugins."modus-themes.nvim" ]
 git = "miikanissi/modus-themes.nvim"
-rev = "v1.3.2"
+rev = "v1.4.0"
 
 [plugins."vim-bbye" ]
 git = "moll/vim-bbye"
@@ -108,7 +103,7 @@ rev = "v0.5.0"
 
 [plugins."kommentary" ]
 git = "b3nj5m1n/kommentary"
-rev = "v1.0^{}"
+rev = "v1.0"
 
 [plugins."vim-exchange" ]
 git = "tommcdo/vim-exchange"
@@ -116,16 +111,14 @@ rev = "d6c1e9790bcb8df27c483a37167459bbebe0112e"
 
 [plugins."todo-comments.nvim" ]
 git = "folke/todo-comments.nvim"
-rev = "v1.3.0"
+rev = "v1.4.0"
+
+[plugins."claude-code.nvim" ]
+git = "greggh/claude-code.nvim"
+rev = "v0.4.3"
 
 # BUNDLES: bundles allow for a single plugins/x.lua file per bundle instead of per plugin
 # {{{
-[bundles.orgmode]
-items=[
-  "orgmode",
-  "org-bullets.nvim",
-  "tree-sitter-orgmode"
-]
 
 [bundles.neorg]
 items = [
@@ -152,6 +145,7 @@ items = [
   "neotest-jest",
   "neotest-rspec"
 ]
+
 [bundles.autocomplete]
 items = [
   "nvim-cmp",
@@ -159,8 +153,6 @@ items = [
   "cmp-buffer",
   "cmp-cmdline",
   "cmp-nvim-lsp",
-  "copilot-cmp",
-  "copilot.lua",
   "lspkind.nvim"
 ]
 # }}}
