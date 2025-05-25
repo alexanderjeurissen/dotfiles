@@ -137,7 +137,7 @@ nnoremap('N', [[Nzz:lua require('general').hl_next(100)<cr>]])
 -- Define the function to execute a macro over a visual selection
 
 -- Map '@' in visual mode to the function
-vim.api.nvim_set_keymap('x', '@', [[:<C-u>lua require('general').ExecuteMacroOverVisualRange()<CR>]], { noremap = true, silent = true })
+vim.keymap.set('x', '@', [[:<C-u>lua require('general').ExecuteMacroOverVisualRange()<CR>]], { noremap = true, silent = true })
 
 -- Define the Bufmacro command
 vim.api.nvim_create_user_command('Bufmacro', function()
@@ -272,7 +272,7 @@ nnoremap('<leader>fed', ':e $MYVIMRC<CR>')
 nnoremap('<leader>feR', ':luafile $MYVIMRC<CR>')
 
 -- Save file with sudo
-vim.api.nvim_set_keymap('c', 'w!!', 'w !sudo tee % > /dev/null', { noremap = true, silent = false })
+vim.keymap.set('c', 'w!!', 'w !sudo tee % > /dev/null', { noremap = true, silent = false })
 
 -- Copy current file path + line number to system clipboard
 nnoremap('<leader>fC', [[:let @+=expand("%") . ":" . line(".")<CR>]])
