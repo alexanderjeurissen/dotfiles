@@ -301,12 +301,8 @@ autocmd('BufReadPost', {
   group = general
 })
 
--- Set syntax highlighting for Apraisals
-autocmd({ 'BufRead', 'BufNewFile' }, {
-  pattern = 'Appraisals',
-  callback = function() vim.bo.filetype = 'ruby' end,
-  group = general
-})
+-- Set syntax highlighting for Appraisals
+vim.filetype.add({ filename = { Appraisals = 'ruby' } })
 
 -- Function to delete hidden buffers
 autocmd('BufLeave', {
