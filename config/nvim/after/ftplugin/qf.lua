@@ -29,5 +29,4 @@ _G.quickfix_preview = preview_file
 map('n', 'p', '<Cmd>lua quickfix_preview()<CR>', { silent = true, buffer = true })
 map('n', 'q', ':pclose!<CR>:quit<CR>', { silent = true, buffer = true })
 map('n', 'o', '<CR><C-w>p', { silent = false, buffer = true })
-map('n', 'o', '<CR><C-w>p', { silent = false, buffer = true })
 
