@@ -65,8 +65,7 @@ o.statusline = o.statusline .. "%{&paste?'  ':''}"
 o.statusline = o.statusline .. "%{&spell?' ¶ ':''}" ]]
 
 o.laststatus = 2                             -- Disable/enable bottom statusline
--- Turn off syntax highlighting
-o.syntax = 'off'
+o.syntax = 'on'
 
 -- o.shell = "/usr/local/bin/zsh"              -- Set shell to bin/sh to improve performance in zsh/fish
 o.shell =
