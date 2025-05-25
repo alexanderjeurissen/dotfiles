@@ -50,6 +50,18 @@ ln -s "$PWD/tmux.conf" ~/.tmux.conf
   Alacritty, Karabiner, Ranger, etc.). Link them with `rcup` or create
   manual symlinks.
 
+### Terminfo entries
+
+Custom terminfo definitions live in the `terminfo/` directory. Compile and
+install them using:
+
+```sh
+scripts/install-terminfo.sh
+```
+
+This installs the entries into `~/.terminfo` so that tools like tmux can use
+them.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
