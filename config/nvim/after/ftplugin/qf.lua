@@ -2,8 +2,7 @@
 -- Credits: https://github.com/romainl/vim-qf
 
 local vim = vim or {}
-local Util = require('util')
-local nnoremap = Util.nnoremap
+local map = vim.keymap.set
 
 -- Preview the file under the cursor in a vertical preview window
 local function preview_file()
@@ -27,8 +26,7 @@ end
 _G.quickfix_preview = preview_file
 
 -- Map keys for quickfix buffers
-nnoremap('p', [[<Cmd>lua quickfix_preview()<CR>]], {}, true)
-nnoremap('q', [[:pclose!<CR>:quit<CR>]], {}, true)
-nnoremap('o', [[<CR><C-w>p]], { silent = false }, true)
-nnoremap('o', [[<CR><C-w>p]], { silent = false }, true)
+map('n', 'p', '<Cmd>lua quickfix_preview()<CR>', { silent = true, buffer = true })
+map('n', 'q', ':pclose!<CR>:quit<CR>', { silent = true, buffer = true })
+map('n', 'o', '<CR><C-w>p', { silent = false, buffer = true })
 

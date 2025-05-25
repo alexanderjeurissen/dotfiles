@@ -1,6 +1,5 @@
 local vim = vim or {}
-local Util = require('util')
-local nnoremap = Util.nnoremap
+local map = vim.keymap.set
 
 vim.opt_local.foldenable = true
 vim.opt_local.foldlevel = 0
@@ -20,9 +19,9 @@ vim.opt_local.bufhidden = 'delete'
 vim.cmd(':normal zv')
 
 -- Create some additional fold movements
-nnoremap('zN', [[:normal zC<CR>/^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>]], {}, true)
-nnoremap('zP', [[:normal zC<CR>?^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>]], {}, true)
+map('n', 'zN', [[:normal zC<CR>/^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>]], { silent = true, buffer = true })
+map('n', 'zP', [[:normal zC<CR>?^diff --git<CR>:nohl<CR>:normal zA<CR>:normal zt<CR>]], { silent = true, buffer = true })
 
-nnoremap('zn', [[:normal zc<CR>/^@@<CR>:nohl<CR>:normal zv<CR>:normal zt<CR>]], {}, true)
-nnoremap('zp', [[:normal zc<CR>?^@@<CR>:nohl<CR>:normal zv<CR>:normal zb<CR>]], {}, true)
-nnoremap('q', [[<CMD>DiffviewClose<CR]], {}, true)
+map('n', 'zn', [[:normal zc<CR>/^@@<CR>:nohl<CR>:normal zv<CR>:normal zt<CR>]], { silent = true, buffer = true })
+map('n', 'zp', [[:normal zc<CR>?^@@<CR>:nohl<CR>:normal zv<CR>:normal zb<CR>]], { silent = true, buffer = true })
+map('n', 'q', '<CMD>DiffviewClose<CR>', { silent = true, buffer = true })
