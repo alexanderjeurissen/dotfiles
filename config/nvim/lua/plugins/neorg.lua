@@ -1,3 +1,5 @@
+local home = vim.env.HOME
+
 require("neorg").setup {
   load = {
     ["core.defaults"] = {},
@@ -5,7 +7,7 @@ require("neorg").setup {
     ["core.dirman"] = {
       config = {
         workspaces = {
-          notes = "/Users/alexander/Documents/Notes",
+          notes = home .. "/Documents/Notes",
         },
         default_workspace = "notes",
       },

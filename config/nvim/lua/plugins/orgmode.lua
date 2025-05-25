@@ -1,9 +1,10 @@
 local vim = vim or {}
+local home = vim.env.HOME
 
 require('orgmode').setup({
-  org_agenda_files = '/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/**/*',
+  org_agenda_files = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/**/*',
   org_default_notes_file =
-  '/Users/alexander/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+    home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
   -- TODO keywords with sequences
   org_todo_keywords = {
     'TODO(t)', 'NEXT(n)', '|', 'DONE(d)',
@@ -25,31 +26,31 @@ require('orgmode').setup({
     t = {
       description = 'Todo',
       template = '* TODO %?\n  %U\n  %a',
-      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+      target = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
       datetree = true, -- Use datetree to organize by date
     },
     n = {
       description = 'Note',
       template = '* NOTE %? :NOTE:\n  %U\n  %a',
-      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+      target = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
       datetree = true, -- Use datetree to organize by date
     },
     i = {
       description = 'Idea',
       template = '* IDEA %? :IDEA:\n  %U\n  %a',
-      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+      target = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
       datetree = true, -- Use datetree to organize by date
     },
     w = {
       description = 'Org-protocol',
       template = '* TODO Review %c\n  %U',
-      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+      target = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
       datetree = true, -- Use datetree to organize by date
     },
     m = {
       description = 'Meeting',
       template = '* MEETING with %? :MEETING:\n  %U',
-      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
+      target = home .. '/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/journal.org',
       datetree = true, -- Use datetree to organize by date
     },
   },
