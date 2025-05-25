@@ -1,4 +1,5 @@
 local vim = vim or {}
+vim.loader.enable()
 local Util = require('util')
 local General = require('general')
 
