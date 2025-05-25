@@ -1,16 +1,15 @@
 local vim = vim or {}
-local wo = vim.wo
 
-wo.foldenable = true
+vim.opt_local.foldenable = true
 
 -- Autofold nothing by default
-wo.foldlevel = 0
+vim.opt_local.foldlevel = 0
 
 -- Only fold outer functions
-wo.foldnestmax = 0
+vim.opt_local.foldnestmax = 0
 
-wo.list = false
-wo.cursorcolumn = false
-wo.cursorline = false
-wo.conceallevel = 0
-wo.colorcolumn = '0'
+vim.opt_local.list = false
+vim.opt_local.cursorcolumn = false
+vim.opt_local.cursorline = false
+vim.opt_local.conceallevel = 0
+vim.opt_local.colorcolumn = '0'
