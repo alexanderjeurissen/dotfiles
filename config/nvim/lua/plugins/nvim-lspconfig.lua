@@ -1,4 +1,3 @@
-local vim = vim or {}
 local lspconfig = require('lspconfig')
 local configs = require("lspconfig.configs")
 local util = require("lspconfig.util")
