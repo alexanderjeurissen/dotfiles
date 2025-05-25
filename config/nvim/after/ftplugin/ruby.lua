@@ -1,7 +1,7 @@
 local vim = vim or {}
 
-vim.wo.number = true
-vim.wo.relativenumber = true
+vim.opt_local.number = true
+vim.opt_local.relativenumber = true
 
 -- TODO: evaluate if these abbreviations are still used
 --[[ " NOTE: poor man's snippets

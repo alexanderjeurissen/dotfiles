@@ -2,10 +2,10 @@ local vim = vim or {}
 local Util = require('util')
 local imap = Util.imap
 
-vim.wo.spell = true
+vim.opt_local.spell = true
 
 -- setlocal omnifunc=htmlcomplete#CompleteTags
-vim.bo.complete = vim.bo.complete .. ',kspell'
+vim.opt_local.complete = vim.bo.complete .. ',kspell'
 
 -- imap('<c-l>' [[<Esc>[s1z=`]a]], {}, true)
 

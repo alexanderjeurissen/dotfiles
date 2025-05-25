@@ -1,22 +1,21 @@
 local vim = vim or {}
-local wo = vim.wo
 local Util = require('util')
 local nnoremap = Util.nnoremap
 
-wo.foldenable = true
-wo.foldlevel = 0
-wo.foldnestmax = 0
+vim.opt_local.foldenable = true
+vim.opt_local.foldlevel = 0
+vim.opt_local.foldnestmax = 0
 
-wo.list = false
+vim.opt_local.list = false
 
-wo.cursorcolumn = false
-wo.cursorline = false
-wo.conceallevel = 0
-wo.colorcolumn = '0'
+vim.opt_local.cursorcolumn = false
+vim.opt_local.cursorline = false
+vim.opt_local.conceallevel = 0
+vim.opt_local.colorcolumn = '0'
 
 -- NOTE: Ensures that :q and :x work with neovim-remote
 -- https://github.com/mhinz/neovim-remote#typical-use-cases
-vim.bo.bufhidden = 'delete'
+vim.opt_local.bufhidden = 'delete'
 
 vim.cmd(':normal zv')
 

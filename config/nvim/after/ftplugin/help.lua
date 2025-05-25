@@ -7,13 +7,13 @@ local nmap = Util.nmap
 -- * https://github.com/dahu/vim-help
 -- * https://github.com/rafi/vim-config/blob/master/ftplugin/help.vim
 
-vim.wo.spell = false
+vim.opt_local.spell = false
 
-vim.bo.bufhidden = ''
-vim.bo.iskeyword = vim.bo.iskeyword .. ",:,#,-"
+vim.opt_local.bufhidden = ''
+vim.opt_local.iskeyword = vim.bo.iskeyword .. ",:,#,-"
 
-vim.wo.cursorline = false
-vim.wo.colorcolumn = '0'
+vim.opt_local.cursorline = false
+vim.opt_local.colorcolumn = '0'
 
 -- Jump to links with o and L
 nmap('o', [[<C-]>]], {}, true)

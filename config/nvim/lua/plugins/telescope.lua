@@ -98,33 +98,69 @@ require('telescope').setup{
 
 -- Files bindings {{{
 -- Open general Telescope picker
-vim.keymap.set('n', '<leader>m', "<cmd>lua require('telescope.builtin').marks()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>m', "<cmd>lua require('telescope.builtin').marks()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'List marks'
+})
 
 -- Open general Telescope picker
-vim.keymap.set('n', '<leader>tl', "<cmd>Telescope<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>tl', "<cmd>Telescope<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Open Telescope'
+})
 
 -- Find files in the current project (similar to FZF's project_files)
-vim.keymap.set('n', '<leader>pf', "<cmd>lua require('telescope.builtin').git_files()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>pf', "<cmd>lua require('telescope.builtin').git_files()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Project files'
+})
 
 -- Live grep in the project
-vim.keymap.set('n', '<leader>p/', "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>p/', "<cmd>lua require('telescope.builtin').live_grep()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Grep project'
+})
 
 -- Find files using the file browser
-vim.keymap.set('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Find files'
+})
 -- }}}
 
 -- Buffer bindings {{{
 -- List open buffers
-vim.keymap.set('n', '<leader>bb', "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = true, silent = true })
-vim.keymap.set('n', 'gb', "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bb', "<cmd>lua require('telescope.builtin').buffers()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'List buffers'
+})
+vim.keymap.set('n', 'gb', "<cmd>lua require('telescope.builtin').buffers()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'List buffers'
+})
 -- }}}
 
 -- Git bindings {{{
 -- List files changed in current branch
-vim.keymap.set('n', '<leader>gF', "<cmd>lua require('telescope.builtin').git_files()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>gF', "<cmd>lua require('telescope.builtin').git_files()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Git files'
+})
 
 -- List git diffs for current file
-vim.keymap.set('n', '<leader>gf', "<cmd>lua require('telescope.builtin').git_status()<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>gf', "<cmd>lua require('telescope.builtin').git_status()<CR>", {
+  noremap = true,
+  silent = true,
+  desc = 'Git status'
+})
 -- }}}
 
 -- Load Telescope extensions
