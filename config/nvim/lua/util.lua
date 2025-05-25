@@ -71,16 +71,14 @@ end
 
 local function map(mode, key, action, options, buffer)
   options = options or {}
-  buffer = buffer or false
-
-  local default_opts = { noremap = true, silent = true  }
+  local default_opts = { noremap = true, silent = true }
   local opts = vim.tbl_extend('force', default_opts, options)
 
   if buffer then
-    api.nvim_buf_set_keymap(0, mode, key, action, opts)
-  else
-    api.nvim_set_keymap(mode, key, action, opts)
+    if buffer ~= true then opts.buffer = buffer else opts.buffer = 0 end
   end
+
+  vim.keymap.set(mode, key, action, opts)
 end
 
 function Util.nmap(key, action, options, buffer)
