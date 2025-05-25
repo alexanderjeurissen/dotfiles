@@ -12,7 +12,7 @@
 
 [core]
   excludesfile = ~/.gitignore
-  editor = zed --wait
+  editor = nvim
   pager = cat
   attributesfile = ~/.gitattributes
 
@@ -47,13 +47,6 @@
 
 [github]
   user = alexanderjeurissen
-
-;[interactive]
-;  diffFilter = delta --color-only
-
-;[merge "merge-structure-sql"]
-;	name = Rails structure.sql merge driver
-;	driver = git-merge-structure-sql %A %O %B
 
 [merge]
   tool = nvim

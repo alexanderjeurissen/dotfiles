@@ -16,7 +16,7 @@ end
 -- create directory if it doesn't exist yet
 function Util.mkdir(path)
   if Util.exists(path) then return false end
-  return os.execute('mkdir ' .. path) and true or false
+  return vim.fn.mkdir(path, 'p') == 1
 end
 
 function Util.getPath(str)

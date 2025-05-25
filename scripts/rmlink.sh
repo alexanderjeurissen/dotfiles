@@ -2,7 +2,9 @@
 
 # Removes the original file of a symbolic link
 rmlink() {
-  rm "$(greadlink -f $1)"
+  local readlink_cmd
+  readlink_cmd=$(command -v greadlink || command -v readlink)
+  rm "$($readlink_cmd -f "$1")"
   unlink "$1"
 }
 

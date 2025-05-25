@@ -257,8 +257,6 @@ mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "NordVPN IKE", id: 1116599239
 mas "Numbers", id: 409203825
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
 mas "Pages", id: 409201541
 mas "Skitch", id: 425955336
 mas "Theine", id: 955848755

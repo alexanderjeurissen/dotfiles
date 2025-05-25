@@ -60,7 +60,7 @@ bindkey -M viins '^B' fzf-branch-widget
 # }}
 
 source ~/.zsh_aliases
-'builtin' 'source' ~/.zsh_prompt
+builtin source ~/.zsh_prompt
 source ~/.zsh_keybindings
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #

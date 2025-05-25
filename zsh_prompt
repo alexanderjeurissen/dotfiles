@@ -1,4 +1,4 @@
-+vi-git-status() {
+vi-git-status() {
   local action="${hook_com[action]}"
 
   if [[ -n $action ]]; then
