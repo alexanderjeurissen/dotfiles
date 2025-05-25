@@ -7,13 +7,6 @@ local nnoremap = require("util").nnoremap
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Diagnostics {{{
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    underline = true,
-    signs = true,
-  }
-)
 
 vim.diagnostic.config({
   virtual_text = {
@@ -21,6 +14,8 @@ vim.diagnostic.config({
     severity = vim.diagnostic.severity.ERROR,
     prefix = '⏽', -- Could be '■', '▎', 'x'
   },
+  underline = true,
+  signs = true,
   severity_sort = true,
   float = {
     source = "if_many",  -- Or "if_many"
@@ -130,7 +125,7 @@ nnoremap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 
 nnoremap('<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>')
 
-nnoremap('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
-nnoremap(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
+nnoremap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+nnoremap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
 -- vim: foldmethod=marker:sw=2:foldlevel=10
