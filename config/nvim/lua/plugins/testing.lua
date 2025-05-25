@@ -1,4 +1,3 @@
-local vim = vim or {}
 
 require("neotest").setup({
   adapters = {

@@ -1,4 +1,3 @@
-local vim = vim or {}
 local cmp = require('cmp')
 local lspkind = require('lspkind')
 
