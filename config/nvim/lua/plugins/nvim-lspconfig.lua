@@ -28,8 +28,12 @@ vim.diagnostic.config({
   },
 })
 
-vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float()]]
-vim.cmd [[autocmd CursorHoldI * silent! lua vim.diagnostic.open_float()]]
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = vim.diagnostic.open_float,
+})
+vim.api.nvim_create_autocmd('CursorHoldI', {
+  callback = vim.diagnostic.open_float,
+})
 -- }}}
 
 
