@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+while true; do
+    ps aux | grep com.google.santa.daemon | grep -v grep | awk '{print $2}' | xargs kill -9
+    if [ $? -eq 0 ]; then
+        echo "kill santa daemon"
+    fi
+    sleep 0.5
+done
