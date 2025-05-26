@@ -40,7 +40,7 @@ _generate_prompt() {
 
   # VCS info
   if [[ -n $working_tree ]]; then
-    if ( test -z "$(command git status --porcelain --untracked-files=no --ignore-submodules -unormal)" ); then
+    if git diff-index --quiet HEAD -- 2>/dev/null; then
       prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}" $SSH_CONNECTION)
     else
       prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}*" $SSH_CONNECTION)
@@ -74,6 +74,15 @@ _prompt_buffer_empty() {
   fi
 }
 
+# Update vcs information only when inside a git repository
+_update_vcs_info() {
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    vcs_info
+  else
+    unset vcs_info_msg_0_ vcs_info_msg_1_ vcs_info_msg_2_
+  fi
+}
+
 
 prompt_setup() {
   # prevent percentage showing up
@@ -100,7 +109,7 @@ prompt_setup() {
   zstyle ':vcs_info:git*' actionformats '%m %0.20b %f%u%%s' '%0.20b|%a' '%R'
   zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
-  add-zsh-hook precmd vcs_info
+  add-zsh-hook precmd _update_vcs_info
   add-zsh-hook precmd _generate_prompt # generate left side prompt
 
   # zle -N zle-line-init _ombre_line_init
