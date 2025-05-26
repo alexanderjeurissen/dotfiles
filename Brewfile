@@ -204,7 +204,6 @@ brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
 # GPU-accelerated terminal emulator
-cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
 # API documentation browser and code snippet manager
