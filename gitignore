@@ -91,5 +91,3 @@ Procfile.local
 
 .stylelintrc
 
-# emacs auto generated config from org
-emacs.d/config.el
