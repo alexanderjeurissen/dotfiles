@@ -48,8 +48,9 @@ bindkey -M viins '^B' fzf-branch-widget
 
 
 # Plugins {{{
-  if type brew &>/dev/null; then
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  if command -v brew >/dev/null; then
+    plugin_dir="$(brew --prefix)/share/zsh-autosuggestions"
+    [[ -f $plugin_dir/zsh-autosuggestions.zsh ]] && source $plugin_dir/zsh-autosuggestions.zsh
     # TODO: zsh-syntax-highlighting significantly slows down the shell
     # source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   fi
