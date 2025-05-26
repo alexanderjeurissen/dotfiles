@@ -81,7 +81,7 @@ o.laststatus = 2
 -- Disable/enable bottom statusline
 o.syntax = 'on'
 
-o.shell = "/bin/sh" -- Set shell to bin/sh to improve performance in zsh/fish
+o.shell = "/bin/sh" -- Set shell to bin/sh to improve performance in zsh
 o.termguicolors = true
 o.background = 'dark'
 

@@ -107,11 +107,5 @@ config/coc/history.json
 config/coc/lists
 config/coc/memos.json
 config/coc/mru
-
 config/configstore/
-
-config/fish/completions
-config/fish/conf.d
-config/fisher/
-
 config/ranger/plugins/
