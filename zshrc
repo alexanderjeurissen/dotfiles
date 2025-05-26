@@ -9,6 +9,12 @@ bindkey "^E" forward-char
 # History settings {{{
   SAVEHIST=100000
   HISTFILE=~/.zsh_history
+  setopt appendhistory
+  setopt sharehistory
+  setopt histignorealldups
+  setopt incappendhistory
+  setopt hist_reduce_blanks
+  setopt hist_verify
 # }}}
 
 # Disables greeting
