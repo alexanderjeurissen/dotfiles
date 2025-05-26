@@ -1,6 +1,0 @@
-{:logseq-journals-calendar {:version "v0.11.0", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
- :logseq-bonofix-theme {:version "v3.10.4", :repo "sansui233/logseq-bonofix-theme", :effect false, :theme true}
- :logseq-bullet-threading {:version "v1.1.4", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
- :logseq-vim-shortcuts {:version "v0.1.22", :repo "vipzhicheng/logseq-plugin-vim-shortcuts", :effect true, :theme false}
- :logseq-readwise-official-plugin {:version "v1.4.11", :repo "readwiseio/logseq-readwise-official-plugin", :effect true, :theme false}
- :logseq-diagrams-as-code {:version "0.0.21", :repo "npgrosser/logseq-diagrams-as-code", :effect false, :theme false}}
