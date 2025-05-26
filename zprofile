@@ -4,30 +4,31 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # Set path {{{
-export PATH="" # Reset path so homebrew has precedence
-export PATH="$HOME/.bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/opt:$PATH"
-export PATH="$HOMEBREW_PREFIX/bin:$PATH"
-export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
-export PATH="$HOME/.scripts:$PATH"
-export PATH="$HOME/.yarn/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+# HOMEBREW_PREFIX/bin and sbin are added via brew shellenv
+path=(
+  "$HOME/.bin"
+  "$HOME/bin"
+  "$HOME/.local/bin"
+  "$HOME/.local/opt"
+  "$HOME/.scripts"
+  "$HOME/.yarn/bin"
+  "$HOME/.cargo/bin"
+  $path
+)
 # }}}
 
 # Go path settings {[{
 export GOPATH="$HOME/Development/go"
-export PATH="$GOPATH/bin:$PATH"
+path=("$GOPATH/bin" $path)
 # }}}
 
 # Ruby settings {{{
 export ENABLE_SPRING=0
 export LDFLAGS="-L$HOMEBREW_PREFIX/opt/ruby@3.3/lib"
 export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/ruby@3.3/include"
-export PATH="$HOMEBREW_PREFIX/opt/ruby@3.3/bin:$PATH"
-export PATH="$HOME/.gem/ruby/3.3.0/bin:$PATH"
-export PATH="$HOMEBREW_PREFIX/lib/ruby/gems/3.3.0/bin:$PATH"
+path=("$HOMEBREW_PREFIX/opt/ruby@3.3/bin" $path)
+path=("$HOME/.gem/ruby/3.3.0/bin" $path)
+path=("$HOMEBREW_PREFIX/lib/ruby/gems/3.3.0/bin" $path)
 # }}}
 
 # Lua settings (derived from $ luarocks path)
@@ -35,14 +36,16 @@ export LUA_PATH='/opt/homebrew/Cellar/luarocks/3.11.1/share/lua/5.4/?.lua;/opt/h
 export LUA_CPATH='/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/loadall.so;./?.so;/Users/alexander/.luarocks/lib/lua/5.4/?.so'
 
 # Add default binaries /usr/bin etc at lowest prio {{{
-export PATH="$PATH:/usr/bin"
-export PATH="$PATH:/bin"
-export PATH="$PATH:/usr/sbin"
-export PATH="$PATH:/sbin"
+path+=(
+  "/usr/bin"
+  "/bin"
+  "/usr/sbin"
+  "/sbin"
+)
 # }}}
 
 typeset -U path PATH
-
+export PATH
 
 # Java settings
 # export JAVA_HOME="/usr/libexec/java_home"
