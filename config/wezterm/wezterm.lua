@@ -2,46 +2,34 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
--- The filled in variant of the < symbol
-local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
-
--- The filled in variant of the > symbol
-local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
 
 -- Define the leader key
 local leader = { key = 't', mods = 'CTRL' }
 
 -- Fix the right status bar
-wezterm.on('update-status', function(window, pane)
-  -- Format date and time
-  -- local date = wezterm.strftime(" %I:%M %p  %A  %B %-d ")
-  local date = wezterm.strftime(" %I:%M %p  %A  %B %-d ");
+wezterm.on('update-status', function(window)
+  -- Minimal flat status bar inspired by OpenAI GPT aesthetics
+  local date = wezterm.strftime('%I:%M %p')
+  local hostname = wezterm.hostname():match('^[^.]+')
+  local status = hostname .. ' | ' .. date
 
-  -- Get hostname
-  local hostname = " " .. wezterm.hostname():match("^[^.]+") .. " "
-
-  -- Build status sections with proper arrows
   window:set_right_status(wezterm.format({
-    -- First arrow: statusline → date
-    { Foreground = { Color = "#dfdfdf" } },
-    { Background = { Color = "#3A3C45" } },
-    { Text = "" },
-
-    -- Date section
-    { Foreground = { Color = "#FBFBFC" } },
-    { Background = { Color = "#3A3C45" } },
-    { Text = date },
-
-    -- Second arrow: date → hostname
-    { Foreground = { Color = "#3A3C45" } },
-    { Background = { Color = "#5C5E6A" } },
-    { Text = "" },
-
-    -- Hostname section
-    { Foreground = { Color = "#ffffff" } },
-    { Background = { Color = "#5C5E6A" } },
-    { Text = hostname },
+    { Foreground = { Color = '#ffffff' } },
+    { Background = { Color = '#000000' } },
+    { Text = ' ' .. status .. ' ' },
   }))
+end)
+
+-- Format the tab title: bold for the active tab and omit the index
+wezterm.on('format-tab-title', function(tab)
+  local title = tab.active_pane.title
+  if tab.is_active then
+    return wezterm.format({
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' ' .. title .. ' ' },
+    })
+  end
+  return ' ' .. title .. ' '
 end)
 
 -- Configuration
