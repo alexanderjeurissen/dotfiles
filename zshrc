@@ -69,13 +69,6 @@ source ~/.zsh_keybindings
 eval "$(zoxide init zsh)"
 eval "$(fzf --zsh)"
 
-# NOTE: This is an important workaround
-# If not added, the path that is set in zshenv will get overridden by the mac os path helper
-# which will prepend system binaries and make them higher prio than homebrew
-if [[ -z "$ZSHENV_LOADED" ]]; then
-  source ~/.zshenv
- export ZSHENV_LOADED=1
-fi
 
 # NOTE: profile zsh config
 # zprof
