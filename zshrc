@@ -21,35 +21,40 @@ bindkey "^E" forward-char
 unsetopt correct_all
 
 # FZF settings {{{
-bindkey -r "^T"
-bindkey -M emacs '^F' fzf-file-widget
-bindkey -M vicmd '^F' fzf-file-widget
-bindkey -M viins '^F' fzf-file-widget
+if command -v fzf >/dev/null; then
+  bindkey -r "^T"
+  bindkey -M emacs '^F' fzf-file-widget
+  bindkey -M vicmd '^F' fzf-file-widget
+  bindkey -M viins '^F' fzf-file-widget
 
-__fsel_branch() {
-  local branches=$(git branch --list)
-  setopt localoptions pipefail no_aliases 2> /dev/null
-  local branch_name
-  echo "$branches" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --ansi --tac --query=${LBUFFER} ${FZF_DEFAULT_OPTS-} ${FZF_BRANCH_OPTS-}" $(__fzfcmd) | awk '{print $1}' | while read -r branch_name; do
-    echo "$branch_name"
-  done
-  local ret=$?
-  echo
-  return $ret
-}
+  __fsel_branch() {
+    local branches=$(git branch --list)
+    setopt localoptions pipefail no_aliases 2> /dev/null
+    local branch_name
+    echo "$branches" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --ansi --tac --query=${LBUFFER} ${FZF_DEFAULT_OPTS-} ${FZF_BRANCH_OPTS-}" $(__fzfcmd) | awk '{print $1}' | while read -r branch_name; do
+      echo "$branch_name"
+    done
+    local ret=$?
+    echo
+    return $ret
+  }
 
-fzf-branch-widget() {
-  LBUFFER="${LBUFFER}$(__fsel_branch)"
-  local ret=$?
-  zle reset-prompt
-  return $ret
-}
+  fzf-branch-widget() {
+    LBUFFER="${LBUFFER}$(__fsel_branch)"
+    local ret=$?
+    zle reset-prompt
+    return $ret
+  }
 
-zle -N fzf-branch-widget
-bindkey -r "^B"
-bindkey -M emacs '^B' fzf-branch-widget
-bindkey -M vicmd '^B' fzf-branch-widget
-bindkey -M viins '^B' fzf-branch-widget
+  zle -N fzf-branch-widget
+  bindkey -r "^B"
+  bindkey -M emacs '^B' fzf-branch-widget
+  bindkey -M vicmd '^B' fzf-branch-widget
+  bindkey -M viins '^B' fzf-branch-widget
+else
+  fzf-file-widget()   { echo 'fzf not installed' >&2; }
+  fzf-branch-widget() { echo 'fzf not installed' >&2; }
+fi
 # }}}
 
 
@@ -74,7 +79,9 @@ source ~/.zsh_keybindings
 
 # Initialize zoxide (improved cd)
 eval "$(zoxide init zsh)"
-eval "$(fzf --zsh)"
+if command -v fzf >/dev/null; then
+  eval "$(fzf --zsh)"
+fi
 
 
 # NOTE: profile zsh config
