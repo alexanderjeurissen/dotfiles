@@ -60,10 +60,10 @@ fi
 
 # Plugins {{{
   if command -v brew >/dev/null; then
-    plugin_dir="$(brew --prefix)/share/zsh-autosuggestions"
+    plugin_dir="$HOMEBREW_PREFIX/share/zsh-autosuggestions"
     [[ -f $plugin_dir/zsh-autosuggestions.zsh ]] && source $plugin_dir/zsh-autosuggestions.zsh
     # TODO: zsh-syntax-highlighting significantly slows down the shell
-    # source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    # source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   fi
 # }}}
 
