@@ -47,7 +47,7 @@ ln -s "$PWD/tmux.conf" ~/.tmux.conf
 - Zsh is configured using `zshrc`, `zshenv` and related files. Set it as
   your shell with `chsh -s $(which zsh)`.
 - Additional application configs live in the `config/` directory (for
-  Alacritty, Karabiner, Ranger, etc.). Link them with `rcup` or create
+  Alacritty, Ranger, etc.). Link them with `rcup` or create
   manual symlinks.
 
 ### Terminfo entries
