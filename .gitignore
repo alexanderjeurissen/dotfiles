@@ -83,6 +83,7 @@ bin/pretty
 
 # dotenv environment variable files
 .env*
+.zshenv.local
 
 # fzf / RG
 .git
