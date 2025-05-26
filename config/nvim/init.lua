@@ -1,6 +1,4 @@
-local vim = vim or {}
 vim.loader.enable()
-local General = require('general')
 
 local k = vim.keycode
 

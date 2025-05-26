@@ -35,7 +35,7 @@ case "$THEME" in
     ;;
 esac
 
-NVIM_CONFIG=$(readlink -f ~/.config/nvim/init.lua)
+NVIM_CONFIG=$(readlink -f ~/.config/nvim/lua/options.lua)
 WEZTERM_CONFIG=$(readlink -f ~/.config/wezterm/wezterm.lua)
 
 TEMP_NVIM=$(mktemp)
