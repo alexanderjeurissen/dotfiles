@@ -1431,12 +1431,6 @@
       }
     },
     "cask": {
-      "alacritty": {
-        "version": "0.5.0",
-        "options": {
-          "full_name": "alacritty"
-        }
-      },
       "alfred": {
         "version": "4.1_1167",
         "options": {
