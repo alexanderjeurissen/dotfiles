@@ -36,6 +36,8 @@ export PATH="$PATH:/usr/sbin"
 export PATH="$PATH:/sbin"
 # }}}
 
+typeset -U path PATH
+
 
 # Java settings
 # export JAVA_HOME="/usr/libexec/java_home"
