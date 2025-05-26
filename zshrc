@@ -7,12 +7,14 @@
 bindkey "^E" forward-char
 
 # History settings {{{
-  SAVEHIST=100000
+# Reduce HISTSIZE or disable incappendhistory if history lag is noticeable
+  SAVEHIST=100000        # total number of lines kept in history file
+  HISTSIZE=5000          # limit in-memory history to improve responsiveness
   HISTFILE=~/.zsh_history
   setopt appendhistory
   setopt sharehistory
   setopt histignorealldups
-  setopt incappendhistory
+  setopt incappendhistory # disable if history lag becomes noticeable
   setopt hist_reduce_blanks
   setopt hist_verify
 # }}}
