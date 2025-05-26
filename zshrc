@@ -7,7 +7,7 @@
 bindkey "^E" forward-char
 
 # History settings {{{
-  SAVEHIST=1000000000000000
+  SAVEHIST=100000
   HISTFILE=~/.zsh_history
 # }}}
 
