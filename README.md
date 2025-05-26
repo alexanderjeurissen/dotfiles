@@ -9,10 +9,10 @@ In summary my work environment consists of:
 |---------|------|
 | editor | Neovim |
 | terminal multiplexer | Tmux |
-| shell | Fish |
+| shell | Zsh |
 | terminal application | Alacritty |
 
-![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/main/_assets/screenshots/flattened_fish.png)
+![image](https://raw.githubusercontent.com/alexanderjeurissen/dotfiles/main/_assets/screenshots/nord.png)
 
 ## Installation
 
