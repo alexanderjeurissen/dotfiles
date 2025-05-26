@@ -62,6 +62,17 @@ scripts/install-terminfo.sh
 This installs the entries into `~/.terminfo` so that tools like tmux can use
 them.
 
+### Tmux plugins
+
+Clone the [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) and
+install the configured plugins by running:
+
+```sh
+scripts/install-tmux-plugins.sh
+```
+
+Run this once after linking `tmux.conf`.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
