@@ -49,8 +49,6 @@ brew "faac"
 brew "fd"
 # Standalone library of the Fraunhofer FDK AAC code from Android
 brew "fdk-aac"
-# User-friendly command-line shell for UNIX-like operating systems
-brew "fish"
 # Free lossless audio codec
 brew "flac"
 # Command-line fuzzy finder written in Go
