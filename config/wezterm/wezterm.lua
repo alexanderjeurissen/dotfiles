@@ -35,8 +35,6 @@ end)
 -- Configuration
   -- Set the font
   config.font = wezterm.font('BlexMono Nerd Font Mono')
-  -- Set the number of scrollback lines (adjust the value to your preference)
-  config.scrollback_lines = 100000000000000
 
   -- Set the font size
   config.font_size = 14.0
