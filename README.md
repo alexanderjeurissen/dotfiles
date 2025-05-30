@@ -73,6 +73,12 @@ scripts/install-tmux-plugins.sh
 
 Run this once after linking `tmux.conf`.
 
+### Compiling Zsh files
+
+Run `scripts/compile-zsh` whenever you modify `zsh_prompt`, `zsh_aliases` or
+`zsh_keybindings` to regenerate their `.zwc` files. The compiled versions will
+be loaded automatically if present.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

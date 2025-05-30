@@ -73,9 +73,21 @@ fi
   bindkey -v
 # }}
 
-source ~/.zsh_aliases
-builtin source ~/.zsh_prompt
-source ~/.zsh_keybindings
+if [[ -f ~/.zsh_aliases.zwc ]]; then
+  source ~/.zsh_aliases.zwc
+else
+  source ~/.zsh_aliases
+fi
+if [[ -f ~/.zsh_prompt.zwc ]]; then
+  builtin source ~/.zsh_prompt.zwc
+else
+  builtin source ~/.zsh_prompt
+fi
+if [[ -f ~/.zsh_keybindings.zwc ]]; then
+  source ~/.zsh_keybindings.zwc
+else
+  source ~/.zsh_keybindings
+fi
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #
 
