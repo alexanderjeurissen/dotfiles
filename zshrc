@@ -61,13 +61,36 @@ fi
 
 
 # Plugins {{{
-  if command -v brew >/dev/null; then
-    plugin_dir="$HOMEBREW_PREFIX/share/zsh-autosuggestions"
-    [[ -f $plugin_dir/zsh-autosuggestions.zsh ]] && source $plugin_dir/zsh-autosuggestions.zsh
-    # TODO: zsh-syntax-highlighting significantly slows down the shell
-    # source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  fi
+# Heavy plugins are loaded lazily to keep startup fast. See _lazy_init_plugins
+# below for details.
 # }}}
+
+# Lazy-load plugin initialization after the first prompt. Manual autoload via
+# add-zsh-hook delays sourcing of zsh-autosuggestions, zoxide and fzf shell
+# integration until the shell is ready, which keeps startup responsive.
+autoload -Uz add-zsh-hook
+_lazy_init_plugins() {
+  if [[ -z ${_zsh_autosuggest_loaded-} ]] && command -v brew >/dev/null; then
+    local dir="$HOMEBREW_PREFIX/share/zsh-autosuggestions"
+    [[ -f $dir/zsh-autosuggestions.zsh ]] && source $dir/zsh-autosuggestions.zsh
+    _zsh_autosuggest_loaded=1
+  fi
+
+  if [[ -z ${_zoxide_loaded-} ]] && command -v zoxide >/dev/null; then
+    eval "$(zoxide init zsh)"
+    _zoxide_loaded=1
+  fi
+
+  if [[ -z ${_fzf_shell_loaded-} ]] && command -v fzf >/dev/null; then
+    eval "$(fzf --zsh)"
+    _fzf_shell_loaded=1
+  fi
+
+  if [[ ${_zsh_autosuggest_loaded-0} -eq 1 && ${_zoxide_loaded-0} -eq 1 && ${_fzf_shell_loaded-0} -eq 1 ]]; then
+    add-zsh-hook -d precmd _lazy_init_plugins
+  fi
+}
+add-zsh-hook precmd _lazy_init_plugins
 
 # Vi settings {{{
   bindkey -v
@@ -78,13 +101,6 @@ builtin source ~/.zsh_prompt
 source ~/.zsh_keybindings
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #
-
-# Initialize zoxide (improved cd)
-eval "$(zoxide init zsh)"
-if command -v fzf >/dev/null; then
-  eval "$(fzf --zsh)"
-fi
-
 
 # NOTE: profile zsh config
 # zprof
