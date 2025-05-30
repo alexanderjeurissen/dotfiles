@@ -1,30 +1,22 @@
 # Black and white theme for the color GNU ls utility.
 # Derived from the ansi-dark theme with no color codes.
 #
-# This simple theme was simultaneously designed for these terminal color schemes:
-# - Solarized dark  (best)
-# - Solarized light
-# - default dark
-# - default light
-# with a slight optimization for Solarized Dark.
+# This simple theme was designed to work with a variety of terminal color schemes
+# including both dark and light backgrounds.
 #
 # How the colors were selected:
 # - Terminal emulators often have an option typically enabled by default that makes
 #   bold a different color.  It is important to leave this option enabled so that
-#   you can access the entire 16-color Solarized palette, and not just 8 colors.
+#   you can access the entire 16-color palette, and not just 8 colors.
 # - We favor universality over a greater number of colors.  So we limit the number
 #   of colors so that this theme will work out of the box in all terminals,
-#   Solarized or not, dark or light.
+#   regardless of whether the terminal is dark or light.
 # - We choose to have the following category of files:
 #   NORMAL & FILE, DIR, LINK, EXEC and
 #   editable text including source, unimportant text, binary docs & multimedia source
 #   files, viewable multimedia, archived/compressed, and unimportant non-text
-# - For uniqueness, we stay away from the Solarized foreground colors are -- either
-#   base00 (brightyellow) or base0 (brightblue).  However, they can be used if
-#   you know what the bg/fg colors of your terminal are, in order to optimize the display.
-# - 3 different options are provided: universal, solarized dark, and solarized light.
-#   The only difference between the universal scheme and one that's optimized for
-#   dark/light is the color of "unimportant" files, which should blend more with the
+# - 3 different options are provided for dark and light terminals.
+#   The only difference between them is how "unimportant" files blend with the
 #   background
 # - We note that blue is the hardest color to see on dark bg and yellow is the hardest
 #   color to see on light bg (with blue being particularly bad).  So we choose yellow
@@ -134,27 +126,6 @@ EIGHTBIT 1
 #
 # NOTES:
 # - See http://www.oreilly.com/catalog/wdnut/excerpt/color_names.html
-# - Color combinations
-#   ANSI Color code       Solarized  Notes                Universal             SolDark              SolLight
-#   ~~~~~~~~~~~~~~~       ~~~~~~~~~  ~~~~~                ~~~~~~~~~             ~~~~~~~              ~~~~~~~~
-#   00    none                                            NORMAL, FILE          <SAME>               <SAME>
-#   30    black           base02
-#   01;30 bright black    base03     bg of SolDark
-#   31    red             red                             docs & mm src         <SAME>               <SAME>
-#   01;31 bright red      orange                          EXEC                  <SAME>               <SAME>
-#   32    green           green                           editable text         <SAME>               <SAME>
-#   01;32 bright green    base01                          unimportant text      <SAME>
-#   33    yellow          yellow     unclear in light bg  multimedia            <SAME>               <SAME>
-#   01;33 bright yellow   base00     fg of SolLight                             unimportant non-text
-#   34    blue            blue       unclear in dark bg   user customized       <SAME>               <SAME>
-#   01;34 bright blue     base0      fg in SolDark                                                   unimportant text
-#   35    magenta         magenta                         LINK                  <SAME>               <SAME>
-#   01;35 bright magenta  violet                          archive/compressed    <SAME>               <SAME>
-#   36    cyan            cyan                            DIR                   <SAME>               <SAME>
-#   01;36 bright cyan     base1                           unimportant non-text                       <SAME>
-#   37    white           base2
-#   01;37 bright white    base3      bg in SolLight
-#   05;37;41                         unclear in Putty dark
 
 
 ### By file type
@@ -430,18 +401,16 @@ EXEC 01 # Unix
 # Your customizations
 
 # Unimportant text files
-# For universal scheme, use brightgreen 01;32
-# For optimal on light bg (but too prominent on dark bg), use white 01;34
+# Shown in bold so they stand out without using color
 .log 01
 *~ 01
-*# 01;32
+*# 01
 #.log 01;34
 #*~ 01;34
 #*# 01;34
 
 # Unimportant non-text files
-# For universal scheme, use brightcyan 01;36
-# For optimal on dark bg (but too prominent on light bg), change to 01;33
+# Also shown in bold for visibility
 #.bak 01;36
 #.BAK 01;36
 #.old 01;36
@@ -471,8 +440,7 @@ EXEC 01 # Unix
 .swo 01
 *.v 01
 
-# The brightmagenta (Solarized: purple) color is free for you to use for your
-# custom file type
+# You may use brightmagenta for any custom file types
 .gpg 00
 .gpg 00
 .pgp 00
