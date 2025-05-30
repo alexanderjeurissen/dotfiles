@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+for file in zsh_prompt zsh_aliases zsh_keybindings; do
+  if [ -f "$ROOT/$file" ]; then
+    zsh -fc "zcompile $ROOT/$file"
+  fi
+done
