@@ -147,8 +147,8 @@
 # }}}
 
 
-alias l="exa -lah --time-style='long-iso' --group-directories-first"
-alias ls="exa --group-directories-first"
+alias l="exa -lah --time-style='long-iso' --group-directories-first -F"
+alias ls="exa --group-directories-first -F"
 # alias v="zed"
 alias v="nvim"
 alias v!="sudo nvim"

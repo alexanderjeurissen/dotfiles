@@ -16,7 +16,7 @@ vi-git-status() {
 
 _segment() {
   local bg=$1 fg=$2 text=$3 indent=$4
-  local segment="%K{$bg}%F{$fg}%B $text %b%f%k"
+  local segment="%K{$bg}%F{$fg}%B$text%b%f%k"
 
   echo -ne $segment
 }
@@ -26,14 +26,22 @@ _generate_prompt() {
   local working_tree="${vcs_info_msg_1_}"
 
   # •
+  # ↪
+  # ↳
   # ∼
-  # ✓
+  # 
   # ✕
   # 
+  # 
   # 
-  # 
-  # 
-  # 
+  #      
+  #
+  # ╭────────────────────────╮
+  # │$ Main : hackerone/core │
+  # ╰────────────────────────╯
+  #
+  # Main  hackerone/core $
+  #
   if [[ -n "$SSH_CONNECTION" ]]; then
     prompt_content+=$( _segment 'default' 'red' " %m" 0)
   fi
@@ -41,9 +49,9 @@ _generate_prompt() {
   # VCS info
   if [[ -n $working_tree ]]; then
     if git diff-index --quiet HEAD -- 2>/dev/null; then
-      prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}" $SSH_CONNECTION)
+      prompt_content+=$(_segment 'white' 'black' "${vcs_info_msg_0_} " $SSH_CONNECTION)
     else
-      prompt_content+=$(_segment 'default' 'default' "${vcs_info_msg_0_}*" $SSH_CONNECTION)
+      prompt_content+=$(_segment 'white' 'black' "${vcs_info_msg_0_}* " $SSH_CONNECTION)
     fi
   fi
 
@@ -51,7 +59,7 @@ _generate_prompt() {
   # Add last exit code indicator
 
   # Add current directory indicator
-  prompt_content+=$(_segment 'default' 'blue' '%(3~|%2~|%~)' $working_tree)
+  prompt_content+=$(_segment 'default' '#484848' ' %(3~|%2~|%~)' $working_tree)
 
   PROMPT="${(j..)prompt_content} %B$%b "
 }

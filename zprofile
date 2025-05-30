@@ -61,8 +61,8 @@ export FZF_CTRL_T_COMMAND='rg --files'
   # retrieved using the following command:
   # gdircolors -c ~/.dircolors/dircolors.ansi-dark
   if command -v gdircolors >/dev/null 2>&1; then
-    eval "$(gdircolors -b ~/.dircolors/dircolors.ansi-dark)"
+    eval "$(gdircolors -b ~/.dircolors/dircolors.bw)"
   else
-    eval "$(dircolors -b ~/.dircolors/dircolors.ansi-dark)"
+    eval "$(dircolors -b ~/.dircolors/dircolors.bw)"
   fi
 # }}}
