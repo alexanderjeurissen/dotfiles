@@ -1,4 +1,10 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+BREW_ENV="$HOME/.cache/brew_env.zsh"
+if [ -r "$BREW_ENV" ]; then
+  source "$BREW_ENV"
+else
+  ~/.dotfiles/scripts/generate-brew-env.sh
+  source "$BREW_ENV"
+fi
 
 # Added by OrbStack: command-line tools and integration
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
