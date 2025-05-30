@@ -19,6 +19,13 @@ bindkey "^E" forward-char
   setopt hist_verify
 # }}}
 
+# Initialize completion system
+autoload -Uz compinit
+compinit -d ~/.cache/zcompdump-$ZSH_VERSION
+if [[ -f ~/.cache/zcompdump-$ZSH_VERSION ]]; then
+  zcompile ~/.cache/zcompdump-$ZSH_VERSION
+fi
+
 # Disables greeting
 unsetopt correct_all
 
