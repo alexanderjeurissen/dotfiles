@@ -68,6 +68,8 @@ tree-sitter-regex = "scm"
 tree-sitter-markdown_inline = "scm"
 tree-sitter-swift = "0.0.53"
 tree-sitter-git_config = "0.0.30"
+tree-sitter-diff = "0.0.32"
+tree-sitter-ini = "0.0.32"
 
 [plugins."CopilotChat.nvim" ]
 git = "CopilotC-Nvim/CopilotChat.nvim"

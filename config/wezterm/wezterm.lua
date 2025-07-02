@@ -23,13 +23,20 @@ end)
 -- Format the tab title: bold for the active tab and omit the index
 wezterm.on('format-tab-title', function(tab)
   local title = tab.active_pane.title
+  local prefix = '  '
+  local intensity = 'Normal'
+
   if tab.is_active then
-    return wezterm.format({
-      { Attribute = { Intensity = 'Bold' } },
-      { Text = ' ' .. title .. ' ' },
-    })
+    prefix = ' •'
+    intensity = 'Bold'
   end
-  return ' ' .. title .. ' '
+
+  return wezterm.format({
+    { Foreground = { Color = '#ffffff' } },
+    { Background = { Color = '#000000' } },
+    { Attribute = { Intensity = intensity } },
+    { Text =  prefix .. title .. ' ' },
+  })
 end)
 
 -- Configuration
