@@ -83,7 +83,7 @@ o.syntax = 'on'
 
 o.shell = "/bin/sh" -- Set shell to bin/sh to improve performance in zsh
 o.termguicolors = true
-o.background = 'dark'
+o.background = 'light'
 
 -- OPTIONS: Window
 wo.wrap = false -- Don't wrap lines as it makes j/k unintuitive.
@@ -106,6 +106,7 @@ if wo.diff == true then -- Set diff mode specific window options
   wo.colorcolumn = '0'
 end
 
-vim.cmd.colorscheme "modus_operandi"
+vim.cmd.colorscheme "default"
+-- vim.cmd.colorscheme "modus_operandi"
 
 return {}

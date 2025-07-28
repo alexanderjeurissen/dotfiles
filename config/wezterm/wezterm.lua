@@ -39,6 +39,23 @@ wezterm.on('format-tab-title', function(tab)
   })
 end)
 
+-- wezterm.gui is not available to the mux server, so take care to
+-- do something reasonable when this config is evaluated by the mux
+function get_appearance()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance()
+  end
+  return 'Dark'
+end
+
+function scheme_for_appearance(appearance)
+  if appearance:find 'Dark' then
+    return 'Modus-Vivendi'
+  else
+    return 'Modus-Operandi'
+  end
+end
+
 -- Configuration
   -- Set the font
   config.font = wezterm.font('BlexMono Nerd Font Mono')
@@ -47,8 +64,7 @@ end)
   config.font_size = 14.0
 
   -- Set the color scheme
-  config.color_scheme = "Modus Operandi"
-  -- config.color_scheme = "Modus Operandi"
+  config.color_scheme = scheme_for_appearance(get_appearance())
 
   -- Set the window background opacity
   config.window_background_opacity = 1.0
