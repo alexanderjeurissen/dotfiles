@@ -3,7 +3,7 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-zf-native.nvim",
+      "natecraddock/telescope-zf-native.nvim",
     },
     config = function()
       local actions = require('telescope.actions')
@@ -42,7 +42,8 @@ return {
           selection_caret = '❯ ',
           entry_prefix = '  ',
           initial_mode = 'insert',
-          selection_strategy = 'descending',
+          -- TODO: Figure out why this is broken now
+          -- selection_strategy = 'descending',
         },
         extensions = {
           ["zf-native"] = { file = { enable = true, highlight_results = true, match_filename = true, smart_case = true },

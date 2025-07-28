@@ -11,4 +11,5 @@ require("lazy").setup({
   },
   install = { colorscheme = { "modus_operandi" } },
   checker = { enabled = true },
+  rocks = { enabled = false }
 })

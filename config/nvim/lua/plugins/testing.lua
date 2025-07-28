@@ -1,7 +1,7 @@
 return {
   {
     "nvim-neotest/neotest",
-    dependencies = { "nvim-neotest/neotest-rspec", "nvim-neotest/neotest-jest" },
+    dependencies = { "nvim-neotest/nvim-nio", "olimorris/neotest-rspec", "nvim-neotest/neotest-jest" },
     config = function()
       require("neotest").setup({
         adapters = {
