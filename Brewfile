@@ -1,17 +1,12 @@
 tap "arleypadua/pkhex-cli"
 tap "armmbed/formulae"
 tap "d12frosted/emacs-plus"
-tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-tap "homebrew/services"
 tap "jason0x43/neovim-nightly"
 tap "jhawthorn/fzy"
 tap "maticzav/swift-graphql", "https://github.com/maticzav/swift-graphql.git"
 tap "osx-cross/avr"
 tap "thoughtbot/formulae"
-# Provides session management: i.e. separate programs from terminals
-brew "abduco"
+
 # Zstandard is a real-time compression algorithm
 brew "zstd"
 # TIFF library and utilities
@@ -25,7 +20,7 @@ brew "jpeg-xl"
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"
 # Graphical system information display for macOS
-brew "archey"
+brew "archey4"
 # GNU Binutils for arm-none-eabi cross development
 brew "arm-none-eabi-binutils"
 # GNU compiler collection for arm-none-eabi
@@ -39,7 +34,7 @@ brew "boost"
 # Atmel AVR MCU programmer
 brew "avrdude"
 # Authenticate with AWS using your Okta credentials
-brew "aws-okta"
+brew "okta-aws-cli"
 # C parser in Python
 brew "pycparser"
 # C Foreign Function Interface for Python
@@ -85,7 +80,7 @@ brew "python@3.12"
 # Text processing system for reStructuredText
 brew "docutils"
 # Modern replacement for 'ls'
-brew "exa"
+brew "eza"
 # ISO AAC audio encoder
 brew "faac"
 # Simple, fast and user-friendly alternative to find
@@ -190,20 +185,10 @@ brew "hyperfine"
 brew "libheif"
 # Library for reading RAW files from digital photo cameras
 brew "libraw"
-# Tools and libraries to manipulate images in many formats
-brew "imagemagick"
-# Install and debug iPhone apps from the command-line
-brew "ios-deploy"
 # Platform built on V8 to build network applications
 brew "node"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@1.1"
-# Command-line application launcher for the iOS Simulator
-brew "ios-sim"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Selection-based modal text editor
-brew "kakoune"
 # Lazier way to manage everything docker
 brew "lazydocker"
 # Simple terminal UI for git commands
@@ -226,38 +211,20 @@ brew "luajit"
 brew "luarocks"
 # Mac App Store command-line interface
 brew "mas"
-# Tools to facilitate the use of Microsoft Access databases
-brew "mdbtools"
 # Library for a binary-based efficient data interchange format
 brew "msgpack"
 # Parser generator tool and incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim", args: ["HEAD"]
-# Install NodeJS versions
-brew "node-build"
-# Manage multiple NodeJS versions
-brew "nodenv"
-# Manage multiple Node.js versions
-brew "nvm"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Terminal multiplexer
 brew "tmux", args: ["HEAD"]
-# Process manager for Procfile-based applications and tmux
-brew "overmind"
 # CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
-# Object-relational database system
-brew "postgresql@10"
-# Object-relational database system
-brew "postgresql@11"
-# Object-relational database system
-brew "postgresql@12"
 # Object-relational database system
 brew "postgresql@14"
 # Interpreted, interactive, object-oriented programming language
@@ -266,28 +233,14 @@ brew "python@3.10"
 brew "python@3.11"
 # Tool Command Language
 brew "tcl-tk"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.8"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # File browser
 brew "ranger", args: ["HEAD"]
-# Install various Ruby versions and implementations
-brew "ruby-build"
-# Ruby version manager
-brew "rbenv"
-# RC file (dotfile) management
-brew "rcm"
 # Persistent key-value database, with built-in net interface
 brew "redis"
 # Perl-powered file rename script with many helpful built-ins
 brew "rename"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
-# Powerful, clean, object-oriented scripting language
-brew "ruby@3.1"
-# Powerful, clean, object-oriented scripting language
-brew "ruby@3.2"
 # Powerful, clean, object-oriented scripting language
 brew "ruby@3.3"
 # Rust toolchain installer
@@ -332,53 +285,29 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 # A CLI to manipulate pokemon game save files.
 brew "arleypadua/pkhex-cli/pkhex-cli"
-# Code generator for SwiftGraphQL library
-brew "maticzav/swift-graphql/swiftgraphql"
 # GNU compiler collection for AVR 8-bit and 32-bit Microcontrollers
 brew "osx-cross/avr/avr-gcc@9"
 # Command-line interface for 1Password
 cask "1password-cli"
-# GPU-accelerated terminal emulator
-cask "alacritty"
-# Free and open-source web browser
-cask "chromium"
 # Terminal emulator
 cask "contour"
-# API documentation browser and code snippet manager
-cask "dash"
 # Collect, organise, edit and annotate documents
 cask "devonthink"
-# Web browser
-cask "firefox"
 cask "font-jetbrains-mono-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-# Free and open-source image editor
-cask "gimp"
 # Open Source Multimedia Framework
 cask "gstreamer-runtime"
 # Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
-# Free and open-source productivity suite
-cask "openoffice"
-# Headless web browser
-cask "phantomjs"
-# Screen measuring tool
-cask "pixelsnap"
 # Collaboration platform for API development
 cask "postman"
 # Archive manager for data compression and backups
 cask "rar"
-# Store SSH keys in the Secure Enclave
-cask "secretive"
 # Instant messaging application focusing on security
 cask "signal"
-# Open-source code editor
-cask "visual-studio-code"
 # Multimedia player
 cask "vlc"
-# Rust-based terminal
-cask "warp"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
 # Multiplayer code editor

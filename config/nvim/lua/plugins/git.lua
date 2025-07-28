@@ -1,15 +1,19 @@
-local map = vim.keymap.set
-
-local diffview = require("diffview")
-local neogit = require('neogit')
-
-diffview.setup()
-neogit.setup({
-  auto_show_console = false
-})
-
-map('n', '<leader>gs', [[:lua require('neogit').open()<CR>]], { silent = true })
-map('n', '<leader>dc', [[:DiffviewClose<CR>]], { silent = true })
-map('n', '<leader>gd', [[:DiffviewOpen<CR>]], { silent = true })
-map('n', '<leader>gD', [[:DiffviewOpen develop<CR>]], { silent = true })
-map('n', '<leader>fh', [[:DiffviewFileHistory %<CR>]], { silent = true })
+return {
+  {
+    "sindrets/diffview.nvim",
+    config = function()
+      require("diffview").setup()
+      vim.keymap.set('n', '<leader>dc', [[:DiffviewClose<CR>]], { silent = true })
+      vim.keymap.set('n', '<leader>gd', [[:DiffviewOpen<CR>]], { silent = true })
+      vim.keymap.set('n', '<leader>gD', [[:DiffviewOpen develop<CR>]], { silent = true })
+      vim.keymap.set('n', '<leader>fh', [[:DiffviewFileHistory %<CR>]], { silent = true })
+    end,
+  },
+  {
+    "TimUntersberger/neogit",
+    config = function()
+      require('neogit').setup({ auto_show_console = false })
+      vim.keymap.set('n', '<leader>gs', function() require('neogit').open() end, { silent = true })
+    end,
+  },
+}
