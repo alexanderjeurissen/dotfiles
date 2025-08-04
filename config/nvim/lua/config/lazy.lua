@@ -9,7 +9,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  install = { colorscheme = { "modus_operandi" } },
+  install = { colorscheme = { "modus" } },
   checker = { enabled = true },
   rocks = { enabled = false }
 })

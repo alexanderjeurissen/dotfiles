@@ -106,7 +106,4 @@ if wo.diff == true then -- Set diff mode specific window options
   wo.colorcolumn = '0'
 end
 
-vim.cmd.colorscheme "default"
--- vim.cmd.colorscheme "modus_operandi"
-
 return {}

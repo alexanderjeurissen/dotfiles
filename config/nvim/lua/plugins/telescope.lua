@@ -42,8 +42,6 @@ return {
           selection_caret = '❯ ',
           entry_prefix = '  ',
           initial_mode = 'insert',
-          -- TODO: Figure out why this is broken now
-          -- selection_strategy = 'descending',
         },
         extensions = {
           ["zf-native"] = { file = { enable = true, highlight_results = true, match_filename = true, smart_case = true },

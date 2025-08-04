@@ -1,4 +1,24 @@
 return {
+  -- copilot core
+  {
+    "zbirenbaum/copilot.lua",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  },
+
+  -- copilot-cmp integration; only loads after copilot.lua
+  {
+    "zbirenbaum/copilot-cmp",
+    dependencies = { "zbirenbaum/copilot.lua" },
+    after = "copilot.lua", -- ensures load order
+    config = function()
+      require("copilot_cmp").setup({})
+    end,
+  },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -8,10 +28,13 @@ return {
       "hrsh7th/cmp-cmdline",
       "onsails/lspkind.nvim",
     },
+    after = "copilot-cmp",
     config = function()
       local cmp = require('cmp')
       local lspkind = require('lspkind')
+
       lspkind.init({ mode = 'symbol', preset = 'codicons' })
+
       cmp.setup({
         snippet = { expand = function(args) vim.snippet.expand(args.body) end },
         window = {
@@ -25,22 +48,21 @@ return {
           ['<C-e>'] = cmp.mapping.abort(),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
         }),
-        sources = cmp.config.sources({ { name = "nvim_lsp" } }, { { name = 'buffer' }, { name = "path" }, { name = "orgmode" } }),
+        sources = cmp.config.sources({
+            { name = "copilot" },
+            { name = "nvim_lsp" }
+          },
+          {
+            { name = 'buffer' },
+            { name = "path" },
+            { name = "orgmode" }
+          }),
         formatting = {
-          fields = { "kind", "abbr", "menu" },
-          format = function(entry, vim_item)
-            local kind = lspkind.cmp_format({
-              mode = 'symbol_text',
-              maxwidth = 50,
-              ellipsis_char = '...',
-              show_labelDetails = true,
-              symbol_map = { Copilot = "" }
-            })(entry, vim_item)
-            local strings = vim.split(kind.kind, "%s", { trimempty = true })
-            kind.kind = " " .. (strings[1] or "") .. " "
-            kind.menu = "    (" .. (strings[2] or "") .. ")"
-            return kind
-          end,
+          format = lspkind.cmp_format({
+            mode = "symbol",
+            max_width = 50,
+            symbol_map = { Copilot = "" }
+          })
         }
       })
       cmp.setup.cmdline({ '/', '?' }, {

@@ -17,6 +17,7 @@ return {
         severity_sort = true,
         float = { source = "if_many" },
       })
+
       vim.api.nvim_create_autocmd('CursorHold', { callback = vim.diagnostic.open_float })
       vim.api.nvim_create_autocmd('CursorHoldI', { callback = vim.diagnostic.open_float })
 
@@ -46,7 +47,7 @@ return {
       local map = vim.keymap.set
       map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { silent = true })
       map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { silent = true })
-      map('n', 'gh ', '<cmd>lua vim.lsp.buf.hover()<CR>', { silent = true })
+      map('n', 'g? ', '<cmd>lua vim.lsp.buf.hover()<CR>', { silent = true })
       map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', { silent = true })
       map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', { silent = true })
       map('n', '<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>', { silent = true })
