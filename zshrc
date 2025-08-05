@@ -1,11 +1,6 @@
 # NOTE: zsh config profiling
 # zmodload zsh/zprof
 
-
-# Allow expanding commands using C-e
-# bindkey -e # Disabled in favor of vi mode
-bindkey "^E" forward-char
-
 # History settings {{{
 # Reduce HISTSIZE or disable incappendhistory if history lag is noticeable
   SAVEHIST=100000        # total number of lines kept in history file
@@ -29,51 +24,36 @@ fi
 # Disables greeting
 unsetopt correct_all
 
-# FZF settings {{{
-if command -v fzf >/dev/null; then
-  bindkey -r "^T"
-  bindkey -M emacs '^F' fzf-file-widget
-  bindkey -M vicmd '^F' fzf-file-widget
-  bindkey -M viins '^F' fzf-file-widget
-
-  __fsel_branch() {
-    local branches=$(git branch --list)
-    setopt localoptions pipefail no_aliases 2> /dev/null
-    local branch_name
-    echo "$branches" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --ansi --tac --query=${LBUFFER} ${FZF_DEFAULT_OPTS-} ${FZF_BRANCH_OPTS-}" $(__fzfcmd) | awk '{print $1}' | while read -r branch_name; do
-      echo "$branch_name"
-    done
+# Atuin {{{
+# Heavy plugins are loaded lazily to keep startup fast. See _lazy_init_plugins
+# below for details.
+if command -v atuin >/dev/null; then
+  fzf-atuin-history-widget() {
+    local selected num
+    setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2>/dev/null
+    selected=$(atuin search --cmd-only --limit ${ATUIN_LIMIT:-5000} | tac |
+      FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${LBUFFER} +m" fzf)
     local ret=$?
-    echo
-    return $ret
-  }
-
-  fzf-branch-widget() {
-    LBUFFER="${LBUFFER}$(__fsel_branch)"
-    local ret=$?
+    if [ -n "$selected" ]; then
+      # the += lets it insert at current pos instead of replacing
+      LBUFFER+="${selected}"
+    fi
     zle reset-prompt
     return $ret
   }
 
-  zle -N fzf-branch-widget
-  bindkey -r "^B"
-  bindkey -M emacs '^B' fzf-branch-widget
-  bindkey -M vicmd '^B' fzf-branch-widget
-  bindkey -M viins '^B' fzf-branch-widget
-else
-  fzf-file-widget()   { echo 'fzf not installed' >&2; }
-  fzf-branch-widget() { echo 'fzf not installed' >&2; }
+  zle -N fzf-atuin-history-widget
+
+  bindkey '^R' fzf-atuin-history-widget
+  bindkey -M emacs '^R' fzf-atuin-history-widget
+  bindkey -M vicmd '^R' fzf-atuin-history-widget
+  bindkey -M viins '^R' fzf-atuin-history-widget
 fi
-# }}}
 
-
-# Plugins {{{
-# Heavy plugins are loaded lazily to keep startup fast. See _lazy_init_plugins
-# below for details.
 # }}}
 
 # Lazy-load plugin initialization after the first prompt. Manual autoload via
-# add-zsh-hook delays sourcing of zsh-autosuggestions, zoxide and fzf shell
+# add-zsh-hook delays sourcing of zsh-autosuggestions, zoxide and atuin shell
 # integration until the shell is ready, which keeps startup responsive.
 autoload -Uz add-zsh-hook
 _lazy_init_plugins() {
@@ -88,9 +68,21 @@ _lazy_init_plugins() {
     _zoxide_loaded=1
   fi
 
-  if [[ -z ${_fzf_shell_loaded-} ]] && command -v fzf >/dev/null; then
-    eval "$(fzf --zsh)"
-    _fzf_shell_loaded=1
+  # make sure you have `tac` [1] (if on on macOS) and `atuin` [2] installed, then drop the below in your ~/.zshrc
+  #
+  # [1]: https://unix.stackexchange.com/questions/114041/how-can-i-get-the-tac-command-on-os-x
+  # [2]: https://github.com/ellie/atuin
+  if [[ -z ${_atuin_shell_loaded-} ]] && command -v atuin >/dev/null; then
+    export ATUIN_NOBIND="true"
+
+    eval "$(atuin init zsh)"
+
+    bindkey '^E' _atuin_search_widget
+    bindkey -M emacs '^E' _atuin_search_widget
+    bindkey -M vicmd '^E' _atuin_search_widget
+    bindkey -M viins '^E' _atuin_search_widget
+
+    _atuin_shell_loaded=1
   fi
 
   if [[ ${_zsh_autosuggest_loaded-0} -eq 1 && ${_zoxide_loaded-0} -eq 1 && ${_fzf_shell_loaded-0} -eq 1 ]]; then
@@ -108,11 +100,13 @@ if [[ -f ~/.zsh_aliases.zwc ]]; then
 else
   source ~/.zsh_aliases
 fi
+
 if [[ -f ~/.zsh_prompt.zwc ]]; then
   builtin source ~/.zsh_prompt.zwc
 else
   builtin source ~/.zsh_prompt
 fi
+
 if [[ -f ~/.zsh_keybindings.zwc ]]; then
   source ~/.zsh_keybindings.zwc
 else

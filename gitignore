@@ -88,6 +88,6 @@ bin/pretty
 # H1 specific
 Procfile.local
 *.patch
-
 .stylelintrc
+**/CLAUDE.local.md
 
