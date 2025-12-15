@@ -28,3 +28,5 @@ react-native@0.62.2
 vim-node-rpc@0.1.34
 # CLI for webpack & friends 
 webpack-cli@3.3.12
+# JSON, HTML, CSS, ESLint language servers extracted from VSCode
+vscode-langservers-extracted@4.10.0
