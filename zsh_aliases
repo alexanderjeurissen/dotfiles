@@ -149,7 +149,9 @@
 
 alias l="eza -lah --time-style='long-iso' --group-directories-first -F"
 alias ls="eza --group-directories-first -F"
-# alias v="zed"
 alias v="nvim"
 alias v!="sudo nvim"
 alias v!!="nvim -u NONE"
+
+alias claude="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" npx --yes @anthropic-ai/claude-code"
+

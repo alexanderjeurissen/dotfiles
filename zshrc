@@ -24,34 +24,6 @@ fi
 # Disables greeting
 unsetopt correct_all
 
-# Atuin {{{
-# Heavy plugins are loaded lazily to keep startup fast. See _lazy_init_plugins
-# below for details.
-if command -v atuin >/dev/null; then
-  fzf-atuin-history-widget() {
-    local selected num
-    setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2>/dev/null
-    selected=$(atuin search --cmd-only --limit ${ATUIN_LIMIT:-5000} | tac |
-      FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${LBUFFER} +m" fzf)
-    local ret=$?
-    if [ -n "$selected" ]; then
-      # the += lets it insert at current pos instead of replacing
-      LBUFFER+="${selected}"
-    fi
-    zle reset-prompt
-    return $ret
-  }
-
-  zle -N fzf-atuin-history-widget
-
-  bindkey '^R' fzf-atuin-history-widget
-  bindkey -M emacs '^R' fzf-atuin-history-widget
-  bindkey -M vicmd '^R' fzf-atuin-history-widget
-  bindkey -M viins '^R' fzf-atuin-history-widget
-fi
-
-# }}}
-
 # Lazy-load plugin initialization after the first prompt. Manual autoload via
 # add-zsh-hook delays sourcing of zsh-autosuggestions, zoxide and atuin shell
 # integration until the shell is ready, which keeps startup responsive.
@@ -77,10 +49,15 @@ _lazy_init_plugins() {
 
     eval "$(atuin init zsh)"
 
-    bindkey '^E' _atuin_search_widget
-    bindkey -M emacs '^E' _atuin_search_widget
-    bindkey -M vicmd '^E' _atuin_search_widget
-    bindkey -M viins '^E' _atuin_search_widget
+  bindkey '^R' _atuin_search_widget
+  bindkey -M emacs '^R' _atuin_search_widget
+  bindkey -M vicmd '^R' _atuin_search_widget
+  bindkey -M viins '^R' _atuin_search_widget
+
+  bindkey '^E' _atuin_search_widget
+  bindkey -M emacs '^E' _atuin_search_widget
+  bindkey -M vicmd '^E' _atuin_search_widget
+  bindkey -M viins '^E' _atuin_search_widget
 
     _atuin_shell_loaded=1
   fi
@@ -112,6 +89,12 @@ if [[ -f ~/.zsh_keybindings.zwc ]]; then
 else
   source ~/.zsh_keybindings
 fi
+
+
+if [[ -f .venv/bin/activate ]]; then
+  source .venv/bin/activate
+fi
+
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #
 
