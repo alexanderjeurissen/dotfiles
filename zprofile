@@ -31,11 +31,12 @@ path=("$GOPATH/bin" $path)
 
 # Ruby settings {{{
 export ENABLE_SPRING=0
-export LDFLAGS="-L$HOMEBREW_PREFIX/opt/ruby@3.3/lib"
-export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/ruby@3.3/include"
-path=("$HOMEBREW_PREFIX/opt/ruby@3.3/bin" $path)
-path=("$HOME/.gem/ruby/3.3.0/bin" $path)
-path=("$HOMEBREW_PREFIX/lib/ruby/gems/3.3.0/bin" $path)
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/ruby@3.4/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/ruby@3.4/include"
+path=("$HOMEBREW_PREFIX/opt/ruby@3.4/bin" $path)
+# TODO: does not seem to exist evaluate if needed
+# path=("$HOME/.gem/ruby/3.4.5/bin" $path)
+path=("$HOMEBREW_PREFIX/lib/ruby/gems/3.4.0/bin" $path)
 # }}}
 
 # Lua settings (derived from $ luarocks path)
