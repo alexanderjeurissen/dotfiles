@@ -58,7 +58,7 @@ o.splitbelow = true
 o.splitright = true
 -- Open new split panes at rightmost position
 -- NOTE: commented out as this can conflict with Noice
-o.lazyredraw = true
+o.lazyredraw = false
 -- Don't redraw while executing macros.
 o.inccommand = 'nosplit'
 -- Show visual indication when using substitute.

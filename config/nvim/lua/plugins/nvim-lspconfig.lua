@@ -3,7 +3,6 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
-      local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
       vim.diagnostic.config({
@@ -27,14 +26,38 @@ return {
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
 
-      lspconfig.ruby_lsp.setup { capabilities = capabilities }
-      lspconfig.cssls.setup{ capabilities = capabilities }
-      lspconfig.ts_ls.setup{ capabilities = capabilities }
-      lspconfig.lua_ls.setup{ capabilities = capabilities }
-      lspconfig.jsonls.setup{ capabilities = capabilities }
-      lspconfig.gopls.setup{
+      vim.lsp.config('pyright', {
         capabilities = capabilities,
-        cmd = {"gopls", "serve"},
+        settings = {
+          python = {
+            analysis = {
+              typeCheckingMode = "basic",
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+            },
+          },
+        },
+      })
+      vim.lsp.enable('pyright')
+
+      vim.lsp.config('ruby_lsp', { capabilities = capabilities })
+      vim.lsp.enable('ruby_lsp')
+
+      vim.lsp.config('cssls', { capabilities = capabilities })
+      vim.lsp.enable('cssls')
+
+      vim.lsp.config('ts_ls', { capabilities = capabilities })
+      vim.lsp.enable('ts_ls')
+
+      vim.lsp.config('lua_ls', { capabilities = capabilities })
+      vim.lsp.enable('lua_ls')
+
+      vim.lsp.config('jsonls', { capabilities = capabilities })
+      vim.lsp.enable('jsonls')
+
+      vim.lsp.config('gopls', {
+        capabilities = capabilities,
+        cmd = { "gopls", "serve" },
         settings = {
           gopls = {
             analyses = { unusedparams = true },
@@ -42,7 +65,8 @@ return {
             gofumpt = true,
           },
         },
-      }
+      })
+      vim.lsp.enable('gopls')
 
       local map = vim.keymap.set
       map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { silent = true })
