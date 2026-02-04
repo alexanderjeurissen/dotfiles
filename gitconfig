@@ -74,6 +74,7 @@
 
 [gitlab]
 	user = alexander@hackerone.com
+  email = alexander@hackerone.com
 
 [color "diff-highlight"]
 	oldNormal = red bold
