@@ -51,6 +51,7 @@ logfile.log
 
 # Gitlab cli config
 ~/.config/gitlab-cli/default.js
+config/glab-cli/config.yml
 
 # cache directories
 Caches
