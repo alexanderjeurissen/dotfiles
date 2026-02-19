@@ -1,0 +1,33 @@
+[colors]
+ansi = [
+    '#f2f2f2',
+    '#a60000',
+    '#006800',
+    '#6f5500',
+    '#0031a9',
+    '#721045',
+    '#005e8b',
+    '#000000'
+]
+brights = [
+    '#c4c4c4',
+    '#a0132f',
+    '#00663f',
+    '#7a4f2f',
+    '#0000b0',
+    '#531ab6',
+    '#005f5f',
+    '#595959'
+]
+cursor_bg = '#000000'
+cursor_border = '#000000'
+cursor_fg = '#ffffff'
+background = '#ffffff'
+foreground = '#000000'
+selection_bg = '#bdbdbd'
+selection_fg = '#000000'
+
+[metadata]
+name = 'Modus-Operandi'
+author = 'anhsirk0'
+origin_url = 'https://codeberg.org/anhsirk0/wezterm-themes/src/branch/main/colors/modus-operandi.toml'

@@ -5,6 +5,15 @@ local config = wezterm.config_builder()
 -- Define the leader key
 local leader = { key = 't', mods = 'CTRL' }
 
+-- Pomodoro state
+local pomodoro = {
+  duration = 1200, -- 20 minutes
+  break_duration = 300, -- 5 minutes
+  start_time = nil,
+  running = false,
+  is_break = false,
+}
+
 -- Fix the right status bar
 wezterm.on('update-status', function(window)
   -- Minimal flat status bar inspired by OpenAI GPT aesthetics
@@ -12,10 +21,59 @@ wezterm.on('update-status', function(window)
   local hostname = wezterm.hostname():match('^[^.]+')
   local status = hostname .. ' | ' .. date
 
+  -- Add pomodoro status
+  local pomo_status = ''
+  if pomodoro.running then
+    local current_time = os.time()
+    local elapsed = current_time - pomodoro.start_time
+    local duration = pomodoro.is_break and pomodoro.break_duration or pomodoro.duration
+    local remaining = duration - elapsed
+
+    if remaining <= 0 then
+      -- Timer completed
+      pomodoro.running = false
+
+      -- Show notification
+      local message = pomodoro.is_break and 'Break complete! Time to work.' or 'Pomodoro complete! Take a break.'
+      os.execute(string.format('osascript -e \'display notification "%s" with title "Pomodoro"\'', message))
+
+      -- Launch clock in new tab
+      window:perform_action(wezterm.action.SpawnCommandInNewTab({
+        args = { 'sh', '-c', '/opt/homebrew/bin/tty-clock -c -C 4 || (echo "Install tty-clock: brew install tty-clock" && read)' }
+      }), window:active_pane())
+
+      -- Toggle mode
+      pomodoro.is_break = not pomodoro.is_break
+    else
+      -- Show progress bar with time inside (minimal padding)
+      local progress = (duration - remaining) / duration
+      local full_text = ' ' .. date .. ' '
+      local total_width = #full_text
+
+      -- Calculate progress position
+      local progress_chars = math.floor(progress * total_width)
+
+      -- Split text at progress point
+      local filled_text = string.sub(full_text, 1, progress_chars)
+      local unfilled_text = string.sub(full_text, progress_chars + 1)
+
+      window:set_right_status(wezterm.format({
+        { Background = { Color = '#0031a9' } }, -- blue from modus palette
+        { Foreground = { Color = '#ffffff' } }, -- white text on blue
+        { Text = filled_text },
+        { Background = { Color = '#000000' } }, -- black background for unfilled
+        { Foreground = { Color = '#ffffff' } }, -- white text on black
+        { Text = unfilled_text },
+      }))
+      return
+    end
+  end
+
+  -- Same minimal padding when not running
   window:set_right_status(wezterm.format({
     { Foreground = { Color = '#ffffff' } },
     { Background = { Color = '#000000' } },
-    { Text = ' ' .. status .. ' ' },
+    { Text = ' ' .. date .. ' ' },
   }))
 end)
 
@@ -118,6 +176,23 @@ end
 
     -- Enter Copy Mode (mimicking tmux visual mode)
     { key = 'v', mods = 'LEADER',       action = wezterm.action.ActivateCopyMode },
+
+    -- Pomodoro toggle (start/stop)
+    { key = 't', mods = 'LEADER', action = wezterm.action_callback(function(window)
+      if pomodoro.running then
+        -- Stop and reset
+        pomodoro.running = false
+        pomodoro.start_time = nil
+        pomodoro.is_break = false
+        window:toast_notification('Pomodoro', 'Stopped', nil, 1000)
+      else
+        -- Start new work session
+        pomodoro.start_time = os.time()
+        pomodoro.running = true
+        pomodoro.is_break = false
+        window:toast_notification('Pomodoro', 'Started - 20min focus', nil, 1000)
+      end
+    end)},
   }
 
   -- Scrollback lines

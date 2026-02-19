@@ -1,0 +1,33 @@
+[colors]
+ansi = [
+    '#1e1e1e',
+    '#ff5f59',
+    '#44bc44',
+    '#d0bc00',
+    '#2fafff',
+    '#feacd0',
+    '#00d3d0',
+    '#ffffff'
+]
+brights = [
+    '#535353',
+    '#ff7f9f',
+    '#00c06f',
+    '#dfaf7a',
+    '#00bcff',
+    '#b6a0ff',
+    '#6ae4b9',
+    '#989898'
+]
+cursor_bg = '#ffffff'
+cursor_border = '#ffffff'
+cursor_fg = '#000000'
+background = '#000000'
+foreground = '#ffffff'
+selection_bg = '#5a5a5a'
+selection_fg = '#ffffff'
+
+[metadata]
+name = 'Modus-Vivendi'
+author = 'anhsirk0'
+origin_url = 'https://codeberg.org/anhsirk0/wezterm-themes/src/branch/main/colors/modus-vivendi.toml'
