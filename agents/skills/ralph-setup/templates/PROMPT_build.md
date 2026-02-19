@@ -18,3 +18,4 @@
 9999999999999. When @[project_root]/IMPLEMENTATION_PLAN.md becomes large periodically clean out the items that are completed from the file using a subagent.
 99999999999999. If you find inconsistencies in `[project_root]/specs/*` then use an Opus 4.5 subagent with 'ultrathink' requested to update the specs.
 999999999999999. IMPORTANT: Keep @[project_root]/AGENTS.md operational only — status updates and progress notes belong in `[project_root]/IMPLEMENTATION_PLAN.md`. A bloated AGENTS.md pollutes every future loop's context.
+9999999999999999. DOCUMENTATION LOOKUPS: When you need to look up library documentation, framework APIs, or other technical references, ALWAYS use the context7 MCP server instead of WebFetch. The context7 server provides efficient, indexed access to documentation. Only use WebFetch as a last resort if context7 doesn't have the information you need.

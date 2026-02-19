@@ -7,4 +7,6 @@
 
 IMPORTANT: Plan only. Do NOT implement anything. Do NOT assume functionality is missing; confirm with code search first. Treat `[shared_utils_dir]` as the project's standard library for shared utilities and components. Prefer consolidated, idiomatic implementations there over ad-hoc copies.
 
+DOCUMENTATION LOOKUPS: When you need to look up library documentation, framework APIs, or other technical references, ALWAYS use the context7 MCP server instead of WebFetch. The context7 server provides efficient, indexed access to documentation. Only use WebFetch as a last resort if context7 doesn't have the information you need.
+
 ULTIMATE GOAL: We want to achieve [project-specific goal]. Consider missing elements and plan accordingly. If an element is missing, search first to confirm it doesn't exist, then if needed author the specification at [project_root]/specs/FILENAME.md. If you create a new element then document the plan to implement it in @[project_root]/IMPLEMENTATION_PLAN.md using a subagent.

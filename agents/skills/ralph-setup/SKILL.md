@@ -16,7 +16,7 @@ Initialize the current project with the Ralph Loop workflow files. Templates are
 
 2. **Derive the project goal** by reading the files in the project root's `specs/` directory and synthesizing a concise ULTIMATE GOAL statement from them.
 
-3. **Detect tooling defaults.** Before asking the user, look in the project for `pyproject.toml`, `Makefile`, `justfile`, `.pre-commit-config.yaml`, and CI config to infer actual build/test/typecheck/lint commands. Use discovered commands as defaults in the questions below.
+3. **Detect tooling defaults.** Before asking the user, look in the project for `pyproject.toml`, `Makefile`, `justfile`, `.pre-commit-config.yaml`, `mise.toml`, and CI config to infer actual build/test/typecheck/lint commands. Use discovered commands as defaults in the questions below.
 
 4. **Ask the user** for project-specific details using AskUserQuestion:
    - The **source code directory** (default: `src`) — relative to the project root.
@@ -54,6 +54,6 @@ Initialize the current project with the Ralph Loop workflow files. Templates are
    - Only write `IMPLEMENTATION_PLAN.md` if it does **not** already exist (it will be generated/managed by Ralph during the planning phase)
 
 9. **Summarize** what was created and provide next steps:
-   - Suggest running `/ralph-loop` with the planning prompt first: `/ralph-loop "$(cat <path>/PROMPT_plan.md)" --max-iterations 5`
-   - Then building: `/ralph-loop "$(cat <path>/PROMPT_build.md)" --max-iterations 20`
+   - Suggest running `/ralph-loop` with the planning prompt first: `/ralph-loop @<path>/PROMPT_plan.md --max-iterations 5`
+   - Then building: `/ralph-loop @<path>/PROMPT_build.md" --max-iterations 20`
    - Use the actual project root path in the suggested commands

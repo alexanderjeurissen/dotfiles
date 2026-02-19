@@ -153,5 +153,7 @@ alias v="nvim"
 alias v!="sudo nvim"
 alias v!!="nvim -u NONE"
 
-alias claude="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" npx --yes @anthropic-ai/claude-code"
+alias claude="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" \claude"
 
+alias plan="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" \claude --dangerously-skip-permissions --model us.anthropic.claude-opus-4-6-v1"
+alias build="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" \claude --dangerously-skip-permissions"

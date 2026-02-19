@@ -1,0 +1,246 @@
+#!/bin/bash
+# Usage: ./loop.sh [plan] [max_iterations]
+# Examples:
+#   ./loop.sh              # Build mode, unlimited tasks
+#   ./loop.sh 20           # Build mode, max 20 tasks
+#   ./loop.sh plan         # Plan mode, unlimited tasks
+#   ./loop.sh plan 5       # Plan mode, max 5 tasks
+
+# Environment variables for Claude Code
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION="us-west-2"
+
+# Model configuration
+MODEL_PLAN="us.anthropic.claude-opus-4-6-v1"
+MODEL_BUILD="us.anthropic.claude-sonnet-4-6"
+
+# Parse arguments
+if [ "$1" = "plan" ]; then
+    # Plan mode
+    MODE="plan"
+    PROMPT_FILE="PROMPT_plan.md"
+    MAX_ITERATIONS=${2:-0}
+    MODEL="$MODEL_PLAN"
+elif [[ "$1" =~ ^[0-9]+$ ]]; then
+    # Build mode with max tasks
+    MODE="build"
+    PROMPT_FILE="PROMPT_build.md"
+    MAX_ITERATIONS=$1
+    MODEL="$MODEL_BUILD"
+else
+    # Build mode, unlimited (no arguments or invalid input)
+    MODE="build"
+    PROMPT_FILE="PROMPT_build.md"
+    MAX_ITERATIONS=0
+    MODEL="$MODEL_BUILD"
+fi
+
+ITERATION=0
+CURRENT_BRANCH=$(git branch --show-current)
+
+# Determine next session number from existing session dirs
+SESSION_LOG_BASE=".ralph/sessions"
+mkdir -p "$SESSION_LOG_BASE"
+LAST_NUM=$(ls "$SESSION_LOG_BASE" 2>/dev/null | grep -oE '^[0-9]+' | sort -n | tail -1)
+SESSION_NUM=$(printf "%03d" $((${LAST_NUM:-0} + 1)))
+SESSION_DIR="$SESSION_LOG_BASE/${SESSION_NUM}_${MODE}"
+mkdir -p "$SESSION_DIR"
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Mode:   $MODE"
+echo "Model:  $MODEL"
+echo "Prompt: $PROMPT_FILE"
+echo "Branch: $CURRENT_BRANCH"
+[ $MAX_ITERATIONS -gt 0 ] && echo "Max:    $MAX_ITERATIONS iterations (number of tasks)"
+echo "Logs:   $SESSION_DIR"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Verify prompt file exists
+if [ ! -f "$PROMPT_FILE" ]; then
+    echo "Error: $PROMPT_FILE not found"
+    exit 1
+fi
+
+# Portable file size (macOS + Linux)
+file_size() {
+    local size
+    size=$(wc -c < "$1" 2>/dev/null) && echo "${size// /}" || echo 0
+}
+
+# Relative time string from a unix timestamp
+relative_time() {
+    local then=$1
+    local now
+    now=$(date +%s)
+    local diff=$(( now - then ))
+    if   [ $diff -lt 5  ]; then echo "just now"
+    elif [ $diff -lt 60 ]; then echo "${diff}s ago"
+    else echo "$((diff / 60))m $((diff % 60))s ago"
+    fi
+}
+
+# Parse the last meaningful status from the log by reading the last few lines
+parse_status() {
+    local log_file=$1
+    local last_lines
+    last_lines=$(tail -3 "$log_file" 2>/dev/null) || return
+
+    # Tool use: assistant is calling a tool
+    if echo "$last_lines" | grep -q '"type":"tool_use"'; then
+        local tool
+        tool=$(echo "$last_lines" | grep -o '"name":"[^"]*"' | tail -1 | cut -d'"' -f4)
+        echo "tool: ${tool:-call}"
+        return
+    fi
+
+    # Text generation: assistant is producing text
+    if echo "$last_lines" | grep -q '"type":"text"'; then
+        echo "generating"
+        return
+    fi
+
+    # Tool result returned to assistant
+    if echo "$last_lines" | grep -q '"type":"tool_result"'; then
+        echo "tool result"
+        return
+    fi
+
+    # Finished
+    if echo "$last_lines" | grep -q '"type":"result"'; then
+        echo "done"
+        return
+    fi
+
+    echo "running"
+}
+
+# Show spinner + status + last-update while $1 (PID) is alive, watching $2 (log file)
+show_progress() {
+    local pid=$1
+    local log_file=$2
+    local iter_label=$3
+    local -a SPINNER=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
+    local spin_idx=0
+    local last_update
+    last_update=$(date +%s)
+    local last_size=0
+    local status="starting"
+
+    tput civis 2>/dev/null  # hide cursor
+
+    while kill -0 "$pid" 2>/dev/null; do
+        local current_size
+        current_size=$(file_size "$log_file")
+
+        if [ "$current_size" -gt "$last_size" ]; then
+            last_update=$(date +%s)
+            last_size=$current_size
+            status=$(parse_status "$log_file")
+        fi
+
+        local time_str
+        time_str=$(relative_time "$last_update")
+
+        local stop_suffix=""
+        [ $GRACEFUL_STOP -eq 1 ] && stop_suffix="  |  stopping after this iter"
+
+        printf "\r\033[K  %s  %s  |  %s  |  %s%s" \
+            "${SPINNER[$spin_idx]}" "$iter_label" "$status" "$time_str" "$stop_suffix"
+
+        spin_idx=$(( (spin_idx + 1) % ${#SPINNER[@]} ))
+        sleep 0.1
+    done
+
+    tput cnorm 2>/dev/null  # restore cursor
+    printf "\r\033[K"       # clear the spinner line
+}
+
+# Ensure cursor is restored and child processes are killed on exit
+CLAUDE_PID=""
+GRACEFUL_STOP=0
+CTRL_C_COUNT=0
+
+handle_int() {
+    CTRL_C_COUNT=$((CTRL_C_COUNT + 1))
+    tput cnorm 2>/dev/null
+    printf "\r\033[K\n"
+
+    if [ $CTRL_C_COUNT -eq 1 ]; then
+        GRACEFUL_STOP=1
+        printf "  Will stop after this iteration completes. Ctrl+C again to force quit.\n"
+        tput civis 2>/dev/null
+    else
+        printf "  Force quitting...\n"
+        [ -n "$CLAUDE_PID" ] && kill -- -"$CLAUDE_PID" 2>/dev/null
+        tput cnorm 2>/dev/null
+        exit 1
+    fi
+}
+
+trap handle_int INT
+trap 'tput cnorm 2>/dev/null; printf "\r\033[K"; [ -n "$CLAUDE_PID" ] && kill -- -"$CLAUDE_PID" 2>/dev/null; exit 1' TERM
+
+while true; do
+    if [ $MAX_ITERATIONS -gt 0 ] && [ $ITERATION -ge $MAX_ITERATIONS ]; then
+        echo "Reached max iterations (number of tasks): $MAX_ITERATIONS"
+        break
+    fi
+
+    ITER_LOG="$SESSION_DIR/iteration_$(printf "%03d" $((ITERATION + 1))).log"
+
+    if [ $MAX_ITERATIONS -gt 0 ]; then
+        ITER_LABEL="iter $((ITERATION + 1))/$MAX_ITERATIONS"
+    else
+        ITER_LABEL="iter $((ITERATION + 1))"
+    fi
+
+    # Run Ralph iteration with selected prompt
+    # -p: Headless mode (non-interactive, reads from stdin)
+    # --dangerously-skip-permissions: Auto-approve all tool calls (YOLO mode)
+    # --output-format=stream-json: Structured output for logging/monitoring
+    # --model: Configured via MODEL_PLAN / MODEL_BUILD constants at the top of the file
+    # --verbose: Detailed execution logging
+    # set -m: enable job control so claude gets its own process group,
+    #   isolating it from terminal SIGINT (Ctrl+C only hits our script)
+    set -m
+    claude -p \
+        --dangerously-skip-permissions \
+        --output-format=stream-json \
+        --model "$MODEL" \
+        --verbose < "$PROMPT_FILE" > "$ITER_LOG" 2>&1 &
+    CLAUDE_PID=$!
+    set +m
+
+    show_progress "$CLAUDE_PID" "$ITER_LOG" "$ITER_LABEL"
+    wait "$CLAUDE_PID"
+    CLAUDE_EXIT=$?
+    CLAUDE_PID=""
+
+    echo "  ✓ $ITER_LABEL complete (exit: $CLAUDE_EXIT) → $ITER_LOG"
+
+    # Commit and push changes after each iteration
+    git add -A
+
+    # Format iteration count for commit message
+    if [ $MAX_ITERATIONS -gt 0 ]; then
+        ITER_MSG="$((ITERATION + 1))/$MAX_ITERATIONS"
+    else
+        ITER_MSG="$((ITERATION + 1))/infinite"
+    fi
+
+    git commit -m "ralph:$MODE iteration $ITER_MSG cleanup" || echo "No changes to commit"
+
+    git push origin "$CURRENT_BRANCH" || {
+        echo "Failed to push. Creating remote branch..."
+        git push -u origin "$CURRENT_BRANCH"
+    }
+
+    ITERATION=$((ITERATION + 1))
+
+    if [ $GRACEFUL_STOP -eq 1 ]; then
+        echo "Graceful stop requested. Exiting after iteration $ITERATION."
+        break
+    fi
+
+    echo -e "\n\n======================== LOOP $ITERATION ========================\n"
+done
