@@ -1,6 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -18,7 +19,6 @@ return {
       })
 
       vim.api.nvim_create_autocmd('CursorHold', { callback = vim.diagnostic.open_float })
-      vim.api.nvim_create_autocmd('CursorHoldI', { callback = vim.diagnostic.open_float })
 
       local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
       for type, icon in pairs(signs) do

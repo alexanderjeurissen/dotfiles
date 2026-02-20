@@ -1,6 +1,18 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    keys = {
+      { "<leader>m", "<cmd>Telescope marks<CR>", desc = "List marks" },
+      { "<leader>tl", "<cmd>Telescope<CR>", desc = "Open Telescope" },
+      { "<leader>pf", "<cmd>Telescope git_files<CR>", desc = "Project files" },
+      { "<leader>p/", "<cmd>Telescope live_grep<CR>", desc = "Grep project" },
+      { "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
+      { "<leader>bb", "<cmd>Telescope buffers<CR>", desc = "List buffers" },
+      { "gb", "<cmd>Telescope buffers<CR>", desc = "List buffers" },
+      { "<leader>gF", "<cmd>Telescope git_files<CR>", desc = "Git files" },
+      { "<leader>gf", "<cmd>Telescope git_status<CR>", desc = "Git status" },
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "natecraddock/telescope-zf-native.nvim",
@@ -48,16 +60,6 @@ return {
                             generic = { enable = true, highlight_results = true, match_filename = false, smart_case = true } },
         },
       }
-      local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>m', builtin.marks, { noremap = true, silent = true, desc = 'List marks' })
-      vim.keymap.set('n', '<leader>tl', ":Telescope<CR>", { noremap = true, silent = true, desc = 'Open Telescope' })
-      vim.keymap.set('n', '<leader>pf', builtin.git_files, { noremap = true, silent = true, desc = 'Project files' })
-      vim.keymap.set('n', '<leader>p/', builtin.live_grep, { noremap = true, silent = true, desc = 'Grep project' })
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { noremap = true, silent = true, desc = 'Find files' })
-      vim.keymap.set('n', '<leader>bb', builtin.buffers, { noremap = true, silent = true, desc = 'List buffers' })
-      vim.keymap.set('n', 'gb', builtin.buffers, { noremap = true, silent = true, desc = 'List buffers' })
-      vim.keymap.set('n', '<leader>gF', builtin.git_files, { noremap = true, silent = true, desc = 'Git files' })
-      vim.keymap.set('n', '<leader>gf', builtin.git_status, { noremap = true, silent = true, desc = 'Git status' })
       require('telescope').load_extension('zf-native')
     end,
   },

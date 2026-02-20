@@ -20,18 +20,23 @@ autocmd('BufReadPost', {
 -- Set syntax highlighting for Appraisals
 vim.filetype.add({ filename = { Appraisals = 'ruby' } })
 
+local function delete_hidden_buffers()
+  local buffers = vim.fn.filter(vim.fn.range(1, vim.fn.bufnr('$')), function(_, val)
+    return vim.fn.buflisted(val) == 1 and vim.fn.bufwinnr(val) == -1 and vim.fn.getbufvar(val, "&modified") == 0 and
+    vim.fn.empty(vim.fn.bufname(val)) == 1
+  end)
+
+  for _, buf in ipairs(buffers) do
+    vim.cmd('bdelete ' .. buf)
+  end
+end
+
+vim.api.nvim_create_user_command('DeleteHiddenBuffers', delete_hidden_buffers, { desc = 'Delete hidden unnamed buffers' })
+
 -- Function to delete hidden buffers
 autocmd('BufLeave', {
   pattern = '*',
-  callback = function()
-    local buffers = vim.fn.filter(vim.fn.range(1, vim.fn.bufnr('$')), function(_, val)
-      return vim.fn.buflisted(val) == 1 and vim.fn.bufwinnr(val) == -1 and vim.fn.getbufvar(val, "&modified") == 0 and
-      vim.fn.empty(vim.fn.bufname(val)) == 1
-    end)
-    for _, buf in ipairs(buffers) do
-      vim.cmd('bdelete ' .. buf)
-    end
-  end,
+  callback = delete_hidden_buffers,
   group = general
 })
 
