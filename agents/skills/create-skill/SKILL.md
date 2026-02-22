@@ -1,78 +1,112 @@
 ---
 name: create-skill
-description: Guide for creating effective skills following best practices. Use when creating or updating skills that extend agent capabilities.
+description: Creates high-quality Agent Skills with spec-compliant SKILL.md frontmatter, progressive disclosure structure, and routing-aware descriptions. Use when creating a new skill or improving an existing skill's clarity, safety, and trigger reliability.
+license: Apache-2.0
+metadata:
+  owner: platform-team
+  version: "0.1.0"
+  lang: "en"
 ---
 
 # Create Skill
 
-Guide for creating effective skills that extend agent capabilities with specialized knowledge, workflows, and tool integrations.
+## Goal
+Produce a skill package that is spec-compliant, concise, discoverable, and reliable in real agent workflows.
 
-## About Skills
+## Use this skill when
+- Creating a new `SKILL.md`-based skill
+- Refactoring a long or vague skill
+- Improving invocation reliability
+- Adding evaluation prompts and acceptance checks
 
-Skills are modular, self-contained packages that extend agent capabilities by providing specialized knowledge, workflows, and tools. Think of them as "onboarding guides" for specific domains or tasks.
+## Do not use this skill when
+- The user asks for one-off ad hoc instructions (not reusable)
+- The task is only to run an existing script without authoring or updating a skill
 
-### What Skills Provide
+## Workflow
+1. Interview the user first (mandatory):
+   - Use `askUserQuestion` extensively to gather requirements before drafting.
+   - Use the runtime's equivalent tool when names differ (for example `question`).
+   - Start with a structured core set of questions, then continue with targeted follow-ups until ambiguity is removed.
+   - Cover mission, scope boundaries, trigger phrases, risk level, scripts, outputs, evaluation needs, and tooling preferences.
+   - Do not draft any skill files until required interview answers are complete.
 
-1. Specialized workflows - Multi-step procedures for specific domains
-2. Tool integrations - Instructions for working with specific file formats or APIs
-3. Domain expertise - Company-specific knowledge, schemas, business logic
-4. Bundled resources - Scripts, references, and assets for complex and repetitive tasks
+2. Run Context7 tooling discovery (mandatory):
+   - Use Context7 on every new skill request to identify relevant CLIs and libraries.
+   - Resolve candidate libraries first, then query docs for practical usage patterns.
+   - Build a shortlist of 2-4 candidates when multiple viable options exist.
+   - Summarize tradeoffs clearly and ask the user which option to adopt.
+   - If the user rejects all candidates, continue with an instructions-only approach.
 
-## Progressive Disclosure Principle
+3. Define scope:
+   - Write one sentence for mission.
+   - List in-scope and out-of-scope tasks.
+   - Keep one workflow per skill.
 
-**The 200-line rule is critical.** SKILL.md must be under 200 lines. If you need more, split content into `references/` files.
+4. Set degree of freedom:
+   - Choose high freedom for context-dependent tasks with multiple valid approaches.
+   - Choose medium freedom when a preferred pattern exists but some variation is acceptable.
+   - Choose low freedom with deterministic scripts for fragile, repeatable operations.
 
-### Three-Level Loading System
+5. Draft frontmatter:
+   - Set `name` (lowercase, hyphenated, matches folder).
+   - Write `description` with:
+     - what it does
+     - when to use it
+     - user-facing trigger keywords
+   - Add optional fields only when useful (`license`, `compatibility`, `metadata`, `allowed-tools`).
 
-1. **Metadata (name + description)** - Always in context (~100 words)
-2. **SKILL.md body** - When skill triggers (<200 lines, ideally <500 lines for optimal performance)
-3. **Bundled resources** - As needed by agent (unlimited)
+6. Write lean `SKILL.md` body:
+   - Include goal, usage boundaries, workflow steps, edge cases, and outputs.
+   - Include selected tooling decisions when external CLIs or libraries are adopted.
+   - Use imperative, objective instruction language.
+   - Keep terminology consistent across the whole skill.
+   - Keep it concise; move deep details to `references/`.
 
-### Why Progressive Disclosure Matters
+7. Apply progressive disclosure:
+   - Keep `SKILL.md` as navigation and core procedure.
+   - Place detailed docs in `references/`.
+   - Keep references one level deep from `SKILL.md`.
 
-- 85% reduction in initial context load
-- Activation times drop from 500ms+ to under 100ms
-- Agent loads only what's needed, when it's needed
-- Skills remain maintainable and focused
+8. Add safety and determinism:
+   - Avoid secrets in skill files and scripts.
+   - Use scripts only for fragile, repetitive, deterministic steps.
+   - Prefer least-privilege tools; require confirmation for risky side effects.
 
-## Skill Structure
+9. Build an evaluation set:
+   - Start with an evaluation-first loop: baseline behavior, minimal instructions, then iterate.
+   - Add explicit trigger prompts.
+   - Add implicit trigger prompts.
+   - Add negative controls that must not trigger.
 
-```
-skill-name/
-├── SKILL.md (required, <200 lines)
-│   ├── YAML frontmatter metadata (required)
-│   │   ├── name: (required)
-│   │   └── description: (required)
-│   └── Markdown instructions (required)
-└── Bundled Resources (optional)
-    ├── scripts/          - Executable code
-    ├── references/       - Documentation loaded as needed
-    └── assets/           - Files used in output
-```
+10. Add feedback loops for quality-critical tasks:
+   - Include validate -> fix -> repeat loops where output correctness matters.
+   - Add clear stopping conditions before proceeding to next steps.
 
-## Core Principles
+11. Run acceptance checks:
+   - Interview responses complete for all required categories.
+   - Context7 discovery completed and user tooling choice captured.
+   - Skill avoids anti-patterns (monolithic `SKILL.md`, over-fragmented references).
+   - Content avoids time-sensitive instructions unless clearly marked legacy.
+   - Frontmatter valid and name-directory match.
+   - Description quality is specific and bounded.
+   - Referenced files exist.
+   - Safety checks pass.
 
-### Concise is Key
-
-The context window is a shared resource. Your skill shares it with everything else the agent needs. Be concise and challenge each piece of information:
-- Does the agent really need this explanation?
-- Can I assume the agent knows this?
-- Does this paragraph justify its token cost?
-
-### Set Appropriate Degrees of Freedom
-
-- **High freedom**: Text-based instructions for multiple valid approaches
-- **Medium freedom**: Pseudocode or scripts with parameters
-- **Low freedom**: Specific scripts with few/no parameters for fragile operations
-
-### Test with All Models
-
-Skills act as additions to models, so effectiveness depends on the underlying model. Test your skill with all models you plan to use it with.
+## Output format
+Return:
+1. Final directory tree
+2. `SKILL.md` content
+3. Any `references/*` and `scripts/*` content
+4. A short validation report against checklist criteria
 
 ## References
-
-For detailed guidance, see:
-- `references/progressive-disclosure.md` - 200-line rule and references pattern
-- `references/skill-structure.md` - SKILL.md format and frontmatter details
-- `references/examples.md` - Good skill examples
-- `references/best-practices.md` - Comprehensive best practices guide
+- Checklist: `references/checklist.md`
+- Description patterns: `references/description-patterns.md`
+- Evaluation prompts: `references/eval-prompts.md`
+- Interview question bank: `references/interview-question-bank.md`
+- Interview playbook: `references/interview-playbook.md`
+- Context7 discovery playbook: `references/context7-discovery-playbook.md`
+- Tooling selection rubric: `references/tooling-selection-rubric.md`
+- Tooling decision record template: `references/tooling-decision-record.md`
+- Quality patterns: `references/quality-patterns.md`
