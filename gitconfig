@@ -33,9 +33,6 @@
   file-style = "bold blue"
   syntax-theme = "Solarized (dark)"
 
-[difftool "zed"]
-  cmd = zed --wait $LOCAL $REMOTE
-
 [difftool]
   prompt = 1
 

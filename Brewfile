@@ -310,5 +310,3 @@ cask "signal"
 cask "vlc"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
-# Multiplayer code editor
-cask "zed@preview"
