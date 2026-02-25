@@ -33,6 +33,19 @@ make_repo() {
     dir=$(mktemp -d "/tmp/ralphloop-verify.XXXXXX")
     cp "$TARGET_SCRIPT" "$dir/ralph_loop"
     chmod +x "$dir/ralph_loop"
+    mkdir -p "$dir/fakebin"
+    cat > "$dir/fakebin/opencode" <<'EOF'
+#!/bin/bash
+if [ "$1" = "run" ]; then
+  printf '{"type":"step_start"}\n'
+  printf '{"type":"text"}\n'
+  printf '{"type":"step_finish","reason":"stop"}\n'
+  exit 0
+fi
+echo "fake opencode: unsupported args" >&2
+exit 1
+EOF
+    chmod +x "$dir/fakebin/opencode"
     git init "$dir" >/dev/null
     printf "List one short line and finish." > "$dir/PROMPT.md"
     printf "%s" "$dir"
@@ -55,18 +68,18 @@ assert_contains "$OUT" "not found" "missing-file fail-fast"
 
 # 3) Env model precedence + non-TTY controls.
 R1=$(make_repo)
-RALPH_MODEL="model/env" "$R1/ralph_loop" "$R1/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
+PATH="$R1/fakebin:$PATH" RALPH_MODEL="model/env" "$R1/ralph_loop" "$R1/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
 assert_contains "$OUT" "Model:        model/env (RALPH_MODEL)" "env model precedence"
 assert_contains "$OUT" "hotkeys disabled in non-TTY" "non-tty hotkey disable"
 
 # 4) CLI model overrides env model.
 R2=$(make_repo)
-RALPH_MODEL="model/env" "$R2/ralph_loop" "$R2/PROMPT.md" --max-iterations 1 --model model/cli >"$OUT" 2>&1 || true
+PATH="$R2/fakebin:$PATH" RALPH_MODEL="model/env" "$R2/ralph_loop" "$R2/PROMPT.md" --max-iterations 1 --model model/cli >"$OUT" 2>&1 || true
 assert_contains "$OUT" "Model:        model/cli (--model)" "cli model override"
 
 # 5) Profile fallback model.
 R3=$(make_repo)
-RALPH_PROFILE="work" RALPH_MODEL_WORK="model/work" "$R3/ralph_loop" "$R3/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
+PATH="$R3/fakebin:$PATH" RALPH_PROFILE="work" RALPH_MODEL_WORK="model/work" "$R3/ralph_loop" "$R3/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
 assert_contains "$OUT" "Model:        model/work (profile:work)" "profile fallback model"
 
 # 6) Static checks for stop semantics wiring.
