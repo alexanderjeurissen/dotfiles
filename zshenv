@@ -19,5 +19,9 @@ export PULL_LOCK=1
 # Set ripgrep rc file
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
+# Opt out from telemetry
+export OPENSPEC_TELEMETRY=0
+export DO_NOT_TRACK=1
+
 [[ -f ~/.zshenv.local ]] && source ~/.zshenv.local
 

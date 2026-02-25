@@ -1,5 +1,14 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/Users/alexanderjeurissen/.zsh/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
 # NOTE: zsh config profiling
 # zmodload zsh/zprof
+
+eval "$(mise activate zsh)"
 
 # History settings {{{
 # Reduce HISTSIZE or disable incappendhistory if history lag is noticeable
