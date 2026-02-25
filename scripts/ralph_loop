@@ -1,112 +1,199 @@
 #!/bin/bash
-# Usage: ./loop.sh [plan] [max_iterations]
-# Examples:
-#   ./loop.sh              # Build mode, unlimited tasks
-#   ./loop.sh 20           # Build mode, max 20 tasks
-#   ./loop.sh plan         # Plan mode, unlimited tasks
-#   ./loop.sh plan 5       # Plan mode, max 5 tasks
 
-# Environment variables for Claude Code
-export CLAUDE_CODE_USE_BEDROCK=1
-export AWS_REGION="us-west-2"
+usage() {
+    cat <<'EOF'
+Usage: ralph_loop <prompt_file> [--max-iterations N] [--model MODEL] [--profile NAME]
 
-# Model configuration
-MODEL_PLAN="us.anthropic.claude-opus-4-6-v1"
-MODEL_BUILD="us.anthropic.claude-sonnet-4-6"
+Examples:
+  ralph_loop PROMPT.md
+  ralph_loop prompts/feature.md --max-iterations 20
+  ralph_loop PROMPT.md --profile work
+  ralph_loop PROMPT.md --profile personal --model openai/gpt-5.3-codex
 
-# Parse arguments
-if [ "$1" = "plan" ]; then
-    # Plan mode
-    MODE="plan"
-    PROMPT_FILE="PROMPT_plan.md"
-    MAX_ITERATIONS=${2:-0}
-    MODEL="$MODEL_PLAN"
-elif [[ "$1" =~ ^[0-9]+$ ]]; then
-    # Build mode with max tasks
-    MODE="build"
-    PROMPT_FILE="PROMPT_build.md"
-    MAX_ITERATIONS=$1
-    MODEL="$MODEL_BUILD"
-else
-    # Build mode, unlimited (no arguments or invalid input)
-    MODE="build"
-    PROMPT_FILE="PROMPT_build.md"
-    MAX_ITERATIONS=0
-    MODEL="$MODEL_BUILD"
+Model precedence:
+  --model > RALPH_MODEL > profile default (--profile / RALPH_PROFILE) > OpenCode default
+
+Controls:
+  q        graceful stop after current iteration (TTY only)
+  Ctrl+C   immediate hard stop
+EOF
+}
+
+fail() {
+    echo "Error: $1" >&2
+    exit 1
+}
+
+is_positive_int() {
+    [[ "$1" =~ ^[0-9]+$ ]]
+}
+
+profile_default_model() {
+    local profile=$1
+    case "$profile" in
+        work)
+            echo "${RALPH_MODEL_WORK:-openai/gpt-5.3-codex}"
+            ;;
+        personal)
+            echo "${RALPH_MODEL_PERSONAL:-openai/gpt-5.3-codex}"
+            ;;
+        default|"")
+            echo "${RALPH_MODEL_DEFAULT:-}"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+MAX_ITERATIONS=0
+PROMPT_FILE=""
+CLI_MODEL=""
+CLI_PROFILE=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --max-iterations)
+            [ $# -lt 2 ] && fail "--max-iterations requires a value"
+            is_positive_int "$2" || fail "--max-iterations must be a non-negative integer"
+            MAX_ITERATIONS="$2"
+            shift 2
+            ;;
+        --model)
+            [ $# -lt 2 ] && fail "--model requires a value"
+            CLI_MODEL="$2"
+            shift 2
+            ;;
+        --profile)
+            [ $# -lt 2 ] && fail "--profile requires a value"
+            CLI_PROFILE="$2"
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            fail "unknown option: $1"
+            ;;
+        *)
+            if [ -z "$PROMPT_FILE" ]; then
+                PROMPT_FILE="$1"
+            else
+                fail "unexpected argument: $1"
+            fi
+            shift
+            ;;
+    esac
+done
+
+[ $# -gt 0 ] && fail "unexpected argument: $1"
+[ -z "$PROMPT_FILE" ] && {
+    usage
+    exit 1
+}
+[ ! -f "$PROMPT_FILE" ] && fail "$PROMPT_FILE not found"
+
+PROFILE="${CLI_PROFILE:-${RALPH_PROFILE:-default}}"
+PROFILE_MODEL="$(profile_default_model "$PROFILE")"
+
+MODEL_SOURCE="opencode default"
+MODEL=""
+if [ -n "$CLI_MODEL" ]; then
+    MODEL="$CLI_MODEL"
+    MODEL_SOURCE="--model"
+elif [ -n "$RALPH_MODEL" ]; then
+    MODEL="$RALPH_MODEL"
+    MODEL_SOURCE="RALPH_MODEL"
+elif [ -n "$PROFILE_MODEL" ]; then
+    MODEL="$PROFILE_MODEL"
+    MODEL_SOURCE="profile:$PROFILE"
 fi
 
 ITERATION=0
 CURRENT_BRANCH=$(git branch --show-current)
+PROMPT_BASENAME=$(basename "$PROMPT_FILE")
+PROMPT_STEM="${PROMPT_BASENAME%.*}"
+PROMPT_TAG=$(printf "%s" "$PROMPT_STEM" | tr -c '[:alnum:]_.-' '_')
+[ -z "$PROMPT_TAG" ] && PROMPT_TAG="prompt"
 
-# Determine next session number from existing session dirs
 SESSION_LOG_BASE=".ralph/sessions"
 mkdir -p "$SESSION_LOG_BASE"
 LAST_NUM=$(ls "$SESSION_LOG_BASE" 2>/dev/null | grep -oE '^[0-9]+' | sort -n | tail -1)
-SESSION_NUM=$(printf "%03d" $((${LAST_NUM:-0} + 1)))
-SESSION_DIR="$SESSION_LOG_BASE/${SESSION_NUM}_${MODE}"
+SESSION_NUM=$(printf "%03d" $(( ${LAST_NUM:-0} + 1 )))
+SESSION_DIR="$SESSION_LOG_BASE/${SESSION_NUM}_${PROMPT_TAG}"
 mkdir -p "$SESSION_DIR"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Mode:   $MODE"
-echo "Model:  $MODEL"
-echo "Prompt: $PROMPT_FILE"
-echo "Branch: $CURRENT_BRANCH"
-[ $MAX_ITERATIONS -gt 0 ] && echo "Max:    $MAX_ITERATIONS iterations (number of tasks)"
-echo "Logs:   $SESSION_DIR"
+echo "Prompt:       $PROMPT_FILE"
+echo "Profile:      $PROFILE"
+if [ -n "$MODEL" ]; then
+    echo "Model:        $MODEL ($MODEL_SOURCE)"
+else
+    echo "Model:        OpenCode default"
+fi
+echo "Branch:       $CURRENT_BRANCH"
+[ "$MAX_ITERATIONS" -gt 0 ] && echo "Max:          $MAX_ITERATIONS iterations"
+echo "Logs:         $SESSION_DIR"
+if [ -t 0 ] && [ -t 1 ] && [ -r /dev/tty ]; then
+    echo "Controls:     q = graceful stop, Ctrl+C = hard stop"
+else
+    echo "Controls:     Ctrl+C = hard stop (hotkeys disabled in non-TTY)"
+fi
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Verify prompt file exists
-if [ ! -f "$PROMPT_FILE" ]; then
-    echo "Error: $PROMPT_FILE not found"
-    exit 1
-fi
-
-# Portable file size (macOS + Linux)
 file_size() {
     local size
     size=$(wc -c < "$1" 2>/dev/null) && echo "${size// /}" || echo 0
 }
 
-# Relative time string from a unix timestamp
 relative_time() {
     local then=$1
     local now
     now=$(date +%s)
     local diff=$(( now - then ))
-    if   [ $diff -lt 5  ]; then echo "just now"
-    elif [ $diff -lt 60 ]; then echo "${diff}s ago"
-    else echo "$((diff / 60))m $((diff % 60))s ago"
+    if [ "$diff" -lt 5 ]; then
+        echo "just now"
+    elif [ "$diff" -lt 60 ]; then
+        echo "${diff}s ago"
+    else
+        echo "$((diff / 60))m $((diff % 60))s ago"
     fi
 }
 
-# Parse the last meaningful status from the log by reading the last few lines
 parse_status() {
     local log_file=$1
     local last_lines
-    last_lines=$(tail -3 "$log_file" 2>/dev/null) || return
+    last_lines=$(tail -20 "$log_file" 2>/dev/null) || return
 
-    # Tool use: assistant is calling a tool
     if echo "$last_lines" | grep -q '"type":"tool_use"'; then
         local tool
-        tool=$(echo "$last_lines" | grep -o '"name":"[^"]*"' | tail -1 | cut -d'"' -f4)
+        tool=$(echo "$last_lines" | grep -o '"tool":"[^"]*"' | tail -1 | cut -d'"' -f4)
+        [ -z "$tool" ] && tool=$(echo "$last_lines" | grep -o '"name":"[^"]*"' | tail -1 | cut -d'"' -f4)
         echo "tool: ${tool:-call}"
         return
     fi
 
-    # Text generation: assistant is producing text
     if echo "$last_lines" | grep -q '"type":"text"'; then
         echo "generating"
         return
     fi
 
-    # Tool result returned to assistant
-    if echo "$last_lines" | grep -q '"type":"tool_result"'; then
-        echo "tool result"
+    if echo "$last_lines" | grep -q '"type":"step_finish".*"reason":"tool-calls"'; then
+        echo "thinking"
         return
     fi
 
-    # Finished
-    if echo "$last_lines" | grep -q '"type":"result"'; then
+    if echo "$last_lines" | grep -q '"type":"step_finish".*"reason":"stop"'; then
+        echo "done"
+        return
+    fi
+
+    if echo "$last_lines" | grep -q '"type":"step_finish"'; then
         echo "done"
         return
     fi
@@ -114,19 +201,38 @@ parse_status() {
     echo "running"
 }
 
-# Show spinner + status + last-update while $1 (PID) is alive, watching $2 (log file)
+CHILD_PID=""
+GRACEFUL_STOP=0
+TTY_HOTKEYS=0
+if [ -t 0 ] && [ -t 1 ] && [ -r /dev/tty ]; then
+    TTY_HOTKEYS=1
+fi
+
+poll_hotkey() {
+    if [ "$TTY_HOTKEYS" -eq 1 ] && [ "$GRACEFUL_STOP" -eq 0 ]; then
+        local key
+        if IFS= read -r -n1 -s -t 0.1 key < /dev/tty; then
+            if [ "$key" = "q" ] || [ "$key" = "Q" ]; then
+                GRACEFUL_STOP=1
+            fi
+        fi
+    else
+        sleep 0.1
+    fi
+}
+
 show_progress() {
     local pid=$1
     local log_file=$2
     local iter_label=$3
-    local -a SPINNER=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
+    local -a spinner=('|' '/' '-' '\\')
     local spin_idx=0
     local last_update
     last_update=$(date +%s)
     local last_size=0
     local status="starting"
 
-    tput civis 2>/dev/null  # hide cursor
+    tput civis 2>/dev/null
 
     while kill -0 "$pid" 2>/dev/null; do
         local current_size
@@ -142,93 +248,73 @@ show_progress() {
         time_str=$(relative_time "$last_update")
 
         local stop_suffix=""
-        [ $GRACEFUL_STOP -eq 1 ] && stop_suffix="  |  stopping after this iter"
+        [ "$GRACEFUL_STOP" -eq 1 ] && stop_suffix="  |  stopping after this iter"
 
         printf "\r\033[K  %s  %s  |  %s  |  %s%s" \
-            "${SPINNER[$spin_idx]}" "$iter_label" "$status" "$time_str" "$stop_suffix"
+            "${spinner[$spin_idx]}" "$iter_label" "$status" "$time_str" "$stop_suffix"
 
-        spin_idx=$(( (spin_idx + 1) % ${#SPINNER[@]} ))
-        sleep 0.1
+        spin_idx=$(( (spin_idx + 1) % ${#spinner[@]} ))
+        poll_hotkey
     done
 
-    tput cnorm 2>/dev/null  # restore cursor
-    printf "\r\033[K"       # clear the spinner line
+    tput cnorm 2>/dev/null
+    printf "\r\033[K"
 }
 
-# Ensure cursor is restored and child processes are killed on exit
-CLAUDE_PID=""
-GRACEFUL_STOP=0
-CTRL_C_COUNT=0
+hard_stop() {
+    tput cnorm 2>/dev/null
+    printf "\r\033[K"
+    [ -n "$CHILD_PID" ] && kill -- -"$CHILD_PID" 2>/dev/null
+}
 
 handle_int() {
-    CTRL_C_COUNT=$((CTRL_C_COUNT + 1))
-    tput cnorm 2>/dev/null
-    printf "\r\033[K\n"
-
-    if [ $CTRL_C_COUNT -eq 1 ]; then
-        GRACEFUL_STOP=1
-        printf "  Will stop after this iteration completes. Ctrl+C again to force quit.\n"
-        tput civis 2>/dev/null
-    else
-        printf "  Force quitting...\n"
-        [ -n "$CLAUDE_PID" ] && kill -- -"$CLAUDE_PID" 2>/dev/null
-        tput cnorm 2>/dev/null
-        exit 1
-    fi
+    printf "\nHard stop requested (Ctrl+C).\n"
+    hard_stop
+    exit 130
 }
 
 trap handle_int INT
-trap 'tput cnorm 2>/dev/null; printf "\r\033[K"; [ -n "$CLAUDE_PID" ] && kill -- -"$CLAUDE_PID" 2>/dev/null; exit 1' TERM
+trap 'hard_stop; exit 1' TERM
 
 while true; do
-    if [ $MAX_ITERATIONS -gt 0 ] && [ $ITERATION -ge $MAX_ITERATIONS ]; then
-        echo "Reached max iterations (number of tasks): $MAX_ITERATIONS"
+    if [ "$MAX_ITERATIONS" -gt 0 ] && [ "$ITERATION" -ge "$MAX_ITERATIONS" ]; then
+        echo "Reached max iterations: $MAX_ITERATIONS"
         break
     fi
 
     ITER_LOG="$SESSION_DIR/iteration_$(printf "%03d" $((ITERATION + 1))).log"
 
-    if [ $MAX_ITERATIONS -gt 0 ]; then
+    if [ "$MAX_ITERATIONS" -gt 0 ]; then
         ITER_LABEL="iter $((ITERATION + 1))/$MAX_ITERATIONS"
     else
         ITER_LABEL="iter $((ITERATION + 1))"
     fi
 
-    # Run Ralph iteration with selected prompt
-    # -p: Headless mode (non-interactive, reads from stdin)
-    # --dangerously-skip-permissions: Auto-approve all tool calls (YOLO mode)
-    # --output-format=stream-json: Structured output for logging/monitoring
-    # --model: Configured via MODEL_PLAN / MODEL_BUILD constants at the top of the file
-    # --verbose: Detailed execution logging
-    # set -m: enable job control so claude gets its own process group,
-    #   isolating it from terminal SIGINT (Ctrl+C only hits our script)
     set -m
-    claude -p \
-        --dangerously-skip-permissions \
-        --output-format=stream-json \
-        --model "$MODEL" \
-        --verbose < "$PROMPT_FILE" > "$ITER_LOG" 2>&1 &
-    CLAUDE_PID=$!
+    if [ -n "$MODEL" ]; then
+        opencode run --format json --model "$MODEL" < "$PROMPT_FILE" > "$ITER_LOG" 2>&1 &
+    else
+        opencode run --format json < "$PROMPT_FILE" > "$ITER_LOG" 2>&1 &
+    fi
+    CHILD_PID=$!
     set +m
 
-    show_progress "$CLAUDE_PID" "$ITER_LOG" "$ITER_LABEL"
-    wait "$CLAUDE_PID"
-    CLAUDE_EXIT=$?
-    CLAUDE_PID=""
+    show_progress "$CHILD_PID" "$ITER_LOG" "$ITER_LABEL"
+    wait "$CHILD_PID"
+    CHILD_EXIT=$?
+    CHILD_PID=""
 
-    echo "  ✓ $ITER_LABEL complete (exit: $CLAUDE_EXIT) → $ITER_LOG"
+    echo "  ✓ $ITER_LABEL complete (exit: $CHILD_EXIT) → $ITER_LOG"
 
-    # Commit and push changes after each iteration
     git add -A
 
-    # Format iteration count for commit message
-    if [ $MAX_ITERATIONS -gt 0 ]; then
+    if [ "$MAX_ITERATIONS" -gt 0 ]; then
         ITER_MSG="$((ITERATION + 1))/$MAX_ITERATIONS"
     else
         ITER_MSG="$((ITERATION + 1))/infinite"
     fi
 
-    git commit -m "ralph:$MODE iteration $ITER_MSG cleanup" || echo "No changes to commit"
+    git commit -m "ralph iteration $ITER_MSG ($PROMPT_TAG) cleanup" || echo "No changes to commit"
 
     git push origin "$CURRENT_BRANCH" || {
         echo "Failed to push. Creating remote branch..."
@@ -237,10 +323,12 @@ while true; do
 
     ITERATION=$((ITERATION + 1))
 
-    if [ $GRACEFUL_STOP -eq 1 ]; then
+    if [ "$GRACEFUL_STOP" -eq 1 ]; then
         echo "Graceful stop requested. Exiting after iteration $ITERATION."
         break
     fi
 
-    echo -e "\n\n======================== LOOP $ITERATION ========================\n"
+    echo
+    echo "======================== LOOP $ITERATION ========================"
+    echo
 done
