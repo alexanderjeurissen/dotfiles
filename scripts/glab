@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+
+token_ref="op://Employee/glab/credential"
+host_ref="op://Employee/glab/hostname"
+account="${OP_ACCOUNT:-}"
+
+if command -v op >/dev/null 2>&1; then
+  token=""
+  host=""
+  if [ -n "$account" ]; then
+    token=$(op --account "$account" read "$token_ref" 2>/dev/null || true)
+    host=$(op --account "$account" read "$host_ref" 2>/dev/null || true)
+  else
+    token=$(op read "$token_ref" 2>/dev/null || true)
+    host=$(op read "$host_ref" 2>/dev/null || true)
+  fi
+
+  if [ -n "$token" ] && [ -n "$host" ]; then
+    export GITLAB_HOST="$host"
+    export GITLAB_TOKEN="$token"
+  fi
+fi
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+real_glab=""
+old_ifs=$IFS
+IFS=:
+for dir in $PATH; do
+  if [ -z "$dir" ]; then
+    dir="."
+  fi
+
+  if [ "$dir" = "$script_dir" ]; then
+    continue
+  fi
+
+  if [ -x "$dir/glab" ]; then
+    real_glab="$dir/glab"
+    break
+  fi
+done
+IFS=$old_ifs
+
+if [ -z "$real_glab" ]; then
+  echo "Unable to find real glab binary in PATH." >&2
+  exit 127
+fi
+
+exec "$real_glab" "$@"

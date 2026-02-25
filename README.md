@@ -93,16 +93,14 @@ This enables `.githooks/pre-commit` and `.githooks/pre-push` via
 ### GitLab token via 1Password (no token in tracked files)
 
 Keep tracked config sanitized (for example `token: xxx` in
-`config/glab-cli/config.yml`) and load the real token from 1Password at shell
-runtime:
+`config/glab-cli/config.yml`).
 
 ```sh
-source scripts/glab-op-env
+glab auth status
 ```
 
-This exports `GITLAB_HOST` and `GITLAB_TOKEN` for `glab` without writing the
-real token into tracked files. The script reads both values from the 1Password
-item `glab` in vault `Employee` (`hostname` and `credential` fields).
+`scripts/glab` is a wrapper that loads `GITLAB_HOST` and `GITLAB_TOKEN` from
+1Password only when you invoke `glab`, then executes the real binary.
 
 ## License
 
