@@ -18,7 +18,6 @@
 - [ ] Candidate CLIs/libraries identified and compared
 - [ ] User asked to choose when multiple candidates exist
 - [ ] Chosen tooling (or no-tooling decision) is explicitly recorded
-- [ ] Tooling decision record is completed
 - [ ] Final skill content reflects the user's tooling decision
 
 ## Routing quality

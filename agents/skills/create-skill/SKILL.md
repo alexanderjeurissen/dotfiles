@@ -37,6 +37,7 @@ Produce a skill package that is spec-compliant, concise, discoverable, and relia
    - Build a shortlist of 2-4 candidates when multiple viable options exist.
    - Summarize tradeoffs clearly and ask the user which option to adopt.
    - If the user rejects all candidates, continue with an instructions-only approach.
+   - Record the final tooling choice and rationale in the validation report; do not create a dedicated tooling-decision artifact file.
 
 3. Define scope:
    - Write one sentence for mission.
@@ -108,5 +109,4 @@ Return:
 - Interview playbook: `references/interview-playbook.md`
 - Context7 discovery playbook: `references/context7-discovery-playbook.md`
 - Tooling selection rubric: `references/tooling-selection-rubric.md`
-- Tooling decision record template: `references/tooling-decision-record.md`
 - Quality patterns: `references/quality-patterns.md`

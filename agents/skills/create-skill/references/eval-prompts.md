@@ -31,7 +31,7 @@ Expected behavior:
 - The skill runs Context7 discovery.
 - The skill presents candidate options with tradeoffs.
 - The skill asks the user to choose a final option.
-- The final output records the decision in the tooling decision record.
+- The final validation report records the tooling decision and rationale.
 
 ## Pass criteria
 - Trigger prompts produce a skill package structure.
