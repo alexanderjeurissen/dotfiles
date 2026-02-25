@@ -26,5 +26,5 @@
 
 - [x] 4.1 Verify CLI fail-fast behavior for missing `prompt_file` and missing prompt path
 - [x] 4.2 Verify model resolution precedence with representative combinations of CLI flags and env vars
-- [ ] 4.3 Verify `q` graceful-stop and `Ctrl+C` hard-stop behavior in interactive runs
+- [x] 4.3 Verify `q` graceful-stop and `Ctrl+C` hard-stop behavior in interactive runs
 - [x] 4.4 Verify non-TTY execution disables graceful hotkey polling without breaking loop execution

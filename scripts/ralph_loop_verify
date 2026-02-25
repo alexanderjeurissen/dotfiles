@@ -1,0 +1,76 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+TARGET_SCRIPT="$SCRIPT_DIR/ralph_loop"
+
+fail() {
+    echo "[FAIL] $1" >&2
+    exit 1
+}
+
+pass() {
+    echo "[PASS] $1"
+}
+
+assert_contains() {
+    local file=$1
+    local needle=$2
+    local label=$3
+    if grep -Fq "$needle" "$file"; then
+        pass "$label"
+    else
+        echo "--- output start ---"
+        cat "$file" || true
+        echo "--- output end ---"
+        fail "$label (missing: $needle)"
+    fi
+}
+
+make_repo() {
+    local dir
+    dir=$(mktemp -d "/tmp/ralphloop-verify.XXXXXX")
+    cp "$TARGET_SCRIPT" "$dir/ralph_loop"
+    chmod +x "$dir/ralph_loop"
+    git init "$dir" >/dev/null
+    printf "List one short line and finish." > "$dir/PROMPT.md"
+    printf "%s" "$dir"
+}
+
+OUT=$(mktemp "/tmp/ralphloop-verify-out.XXXXXX")
+trap 'rm -f "$OUT"' EXIT
+
+# 1) Missing prompt argument should fail fast and print usage.
+if "$TARGET_SCRIPT" >"$OUT" 2>&1; then
+    fail "Missing prompt argument should exit non-zero"
+fi
+assert_contains "$OUT" "Usage: ralph_loop <prompt_file>" "missing-arg fail-fast usage"
+
+# 2) Missing prompt path should fail fast.
+if "$TARGET_SCRIPT" does-not-exist.md >"$OUT" 2>&1; then
+    fail "Missing prompt file should exit non-zero"
+fi
+assert_contains "$OUT" "not found" "missing-file fail-fast"
+
+# 3) Env model precedence + non-TTY controls.
+R1=$(make_repo)
+RALPH_MODEL="model/env" "$R1/ralph_loop" "$R1/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
+assert_contains "$OUT" "Model:        model/env (RALPH_MODEL)" "env model precedence"
+assert_contains "$OUT" "hotkeys disabled in non-TTY" "non-tty hotkey disable"
+
+# 4) CLI model overrides env model.
+R2=$(make_repo)
+RALPH_MODEL="model/env" "$R2/ralph_loop" "$R2/PROMPT.md" --max-iterations 1 --model model/cli >"$OUT" 2>&1 || true
+assert_contains "$OUT" "Model:        model/cli (--model)" "cli model override"
+
+# 5) Profile fallback model.
+R3=$(make_repo)
+RALPH_PROFILE="work" RALPH_MODEL_WORK="model/work" "$R3/ralph_loop" "$R3/PROMPT.md" --max-iterations 1 >"$OUT" 2>&1 || true
+assert_contains "$OUT" "Model:        model/work (profile:work)" "profile fallback model"
+
+# 6) Static checks for stop semantics wiring.
+assert_contains "$TARGET_SCRIPT" "q = graceful stop" "q graceful control advertised"
+assert_contains "$TARGET_SCRIPT" "Hard stop requested (Ctrl+C)." "ctrl-c hard stop message"
+
+pass "ralph_loop verification suite complete"

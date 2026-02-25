@@ -211,11 +211,12 @@ fi
 poll_hotkey() {
     if [ "$TTY_HOTKEYS" -eq 1 ] && [ "$GRACEFUL_STOP" -eq 0 ]; then
         local key
-        if IFS= read -r -n1 -s -t 0.1 key < /dev/tty; then
+        if IFS= read -r -n1 -s -t 0 key < /dev/tty; then
             if [ "$key" = "q" ] || [ "$key" = "Q" ]; then
                 GRACEFUL_STOP=1
             fi
         fi
+        sleep 0.05
     else
         sleep 0.1
     fi
