@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v op >/dev/null 2>&1; then
+  echo "1Password CLI (op) is required." >&2
+  exit 1
+fi
+
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+  echo "Run this script with: source scripts/glab-op-env" >&2
+  exit 1
+fi
+
+token_ref="op://Employee/glab/credential"
+host_ref="op://Employee/glab/hostname"
+account="alexander@hackerone.com"
+
+token=$(op --account "$account" read "$token_ref")
+host=$(op --account "$account" read "$host_ref")
+
+export GITLAB_HOST="$host"
+export GITLAB_TOKEN="$token"

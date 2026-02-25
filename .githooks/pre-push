@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+pattern='(glpat-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY-----)'
+zero_sha='0000000000000000000000000000000000000000'
+
+failed=0
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "$local_sha" ] && continue
+
+  if [ "$local_sha" = "$zero_sha" ]; then
+    continue
+  fi
+
+  if [ "$remote_sha" = "$zero_sha" ]; then
+    revspec="$local_sha"
+  else
+    revspec="$remote_sha..$local_sha"
+  fi
+
+  commits=$(git rev-list "$revspec")
+  [ -z "$commits" ] && continue
+
+  if git grep -n -E "$pattern" $commits >/dev/null; then
+    failed=1
+    echo "[pre-push] Potential secret detected in commits for $local_ref -> $remote_ref" >&2
+  fi
+done
+
+if [ "$failed" -ne 0 ]; then
+  cat >&2 <<'EOF'
+[pre-push] Push blocked due to potential secret(s) in pushed history.
+
+Suggested checks:
+  - git grep -n -E "glpat-|ghp_|AKIA|xox[baprs]-" $(git rev-list --all)
+  - git log --oneline origin/main..HEAD -- config/glab-cli/config.yml
+
+Bypass (not recommended): git push --no-verify
+EOF
+  exit 1
+fi
+
+exit 0

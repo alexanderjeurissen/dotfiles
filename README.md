@@ -79,6 +79,31 @@ Run `scripts/compile-zsh` whenever you modify `zsh_prompt`, `zsh_aliases` or
 `zsh_keybindings` to regenerate their `.zwc` files. The compiled versions will
 be loaded automatically if present.
 
+### Git secret guardrails
+
+Install repository hooks to catch likely secrets before commit/push:
+
+```sh
+scripts/install-git-hooks
+```
+
+This enables `.githooks/pre-commit` and `.githooks/pre-push` via
+`core.hooksPath=.githooks`.
+
+### GitLab token via 1Password (no token in tracked files)
+
+Keep tracked config sanitized (for example `token: xxx` in
+`config/glab-cli/config.yml`) and load the real token from 1Password at shell
+runtime:
+
+```sh
+source scripts/glab-op-env
+```
+
+This exports `GITLAB_HOST` and `GITLAB_TOKEN` for `glab` without writing the
+real token into tracked files. The script reads both values from the 1Password
+item `glab` in vault `Employee` (`hostname` and `credential` fields).
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

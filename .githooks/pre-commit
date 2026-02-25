@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+pattern='(glpat-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY-----)'
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged_files" ] && exit 0
+
+failed=0
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+
+  if ! git cat-file -e ":$file" 2>/dev/null; then
+    continue
+  fi
+
+  if git show ":$file" | rg -n -e "$pattern" >/dev/null; then
+    failed=1
+    echo "[pre-commit] Potential secret detected in staged content: $file" >&2
+  fi
+done <<<"$staged_files"
+
+if [ "$failed" -ne 0 ]; then
+  cat >&2 <<'EOF'
+[pre-commit] Commit blocked due to potential secret(s).
+
+Suggested checks:
+  - Remove/rotate any real credentials
+  - Keep tracked config sanitized (placeholder values only)
+  - For GitLab auth, use environment variables from 1Password
+
+Bypass (not recommended): git commit --no-verify
+EOF
+  exit 1
+fi
+
+exit 0

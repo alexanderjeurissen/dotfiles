@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-commit .githooks/pre-push
+
+echo "Installed repo hooks from .githooks"
+echo "Current hooksPath: $(git config --get core.hooksPath)"
