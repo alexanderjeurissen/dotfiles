@@ -1,12 +1,13 @@
+tap "anomalyco/tap"
 tap "arleypadua/pkhex-cli"
 tap "armmbed/formulae"
+tap "beadbox/cask"
 tap "d12frosted/emacs-plus"
 tap "jason0x43/neovim-nightly"
 tap "jhawthorn/fzy"
 tap "maticzav/swift-graphql", "https://github.com/maticzav/swift-graphql.git"
 tap "osx-cross/avr"
 tap "thoughtbot/formulae"
-
 # Zstandard is a real-time compression algorithm
 brew "zstd"
 # TIFF library and utilities
@@ -19,12 +20,16 @@ brew "webp"
 brew "jpeg-xl"
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"
-# Graphical system information display for macOS
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Simple system information tool written in Python
 brew "archey4"
 # GNU Binutils for arm-none-eabi cross development
 brew "arm-none-eabi-binutils"
 # GNU compiler collection for arm-none-eabi
 brew "arm-none-eabi-gcc"
+# Distributed revision control system
+brew "git"
 # Extendable version manager with support for Ruby, Node.js, Erlang & more
 brew "asdf"
 # Tool for generating GNU Standards-compliant Makefiles
@@ -33,20 +38,12 @@ brew "automake"
 brew "boost"
 # Atmel AVR MCU programmer
 brew "avrdude"
-# Authenticate with AWS using your Okta credentials
-brew "okta-aws-cli"
-# C parser in Python
-brew "pycparser"
-# C Foreign Function Interface for Python
-brew "cffi"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
-# Cryptographic recipes and primitives for Python
-brew "cryptography"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Memory upgrade for your coding agent
+brew "beads"
 # Core application library for C
 brew "glib"
 # Vector graphics library with cross-device output support
@@ -59,10 +56,16 @@ brew "openjdk"
 brew "bfg"
 # Easily generate Instruments traces for your rust crate
 brew "cargo-instruments"
+# C parser in Python
+brew "pycparser"
+# C Foreign Function Interface for Python
+brew "cffi"
 # Cross-platform make
 brew "cmake"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# Cryptographic recipes and primitives for Python
+brew "cryptography"
 # Suite of command-line tools for converting to and working with CSV
 brew "csvkit"
 # Utilities for .cue and .toc files
@@ -75,11 +78,11 @@ brew "dfu-programmer"
 brew "dfu-util"
 # Good-lookin' diffs with diff-highlight and more
 brew "diff-so-fancy"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.12"
 # Text processing system for reStructuredText
 brew "docutils"
-# Modern replacement for 'ls'
+# Perl lib for reading and writing EXIF metadata
+brew "exiftool"
+# Modern, maintained replacement for ls
 brew "eza"
 # ISO AAC audio encoder
 brew "faac"
@@ -121,7 +124,7 @@ brew "theora"
 brew "x264"
 # High-performance, high-quality MPEG-4 video library
 brew "xvid"
-# Play, record, convert, and stream audio and video
+# Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
@@ -137,22 +140,24 @@ brew "gd"
 brew "gdk-pixbuf"
 # Google Drive CLI Client
 brew "gdrive"
+# GitHub command-line tool
+brew "gh"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Interpreter for PostScript and PDF
 brew "ghostscript"
 # GIF image/animation creator/editor
 brew "gifsicle"
-# Distributed revision control system
-brew "git"
 # Git extension for versioning large files
 brew "git-lfs"
 # Open-source GitLab command-line tool
 brew "glab"
-# GNU Pretty Good Privacy (PGP) package
+# GNU Privacy Guard (OpenPGP)
 brew "gnupg"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Task is a task runner/build tool that aims to be simpler and easier to use
+brew "go-task"
 # Generate introspection data for GObject libraries
 brew "gobject-introspection"
 # Language server for the Go language
@@ -181,12 +186,6 @@ brew "hub"
 brew "hunspell"
 # Command-line benchmarking tool
 brew "hyperfine"
-# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
-brew "libheif"
-# Library for reading RAW files from digital photo cameras
-brew "libraw"
-# Platform built on V8 to build network applications
-brew "node"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Lazier way to manage everything docker
@@ -197,8 +196,12 @@ brew "lazygit"
 brew "ldns"
 # Provides library functionality for FIDO U2F & FIDO 2.0, including USB
 brew "libfido2"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
 # Postgres C API library
 brew "libpq"
+# Library for reading RAW files from digital photo cameras
+brew "libraw"
 # LLM inference in C/C++
 brew "llama.cpp"
 # Lightning memory-mapped database: key-value data store
@@ -211,30 +214,40 @@ brew "luajit"
 brew "luarocks"
 # Mac App Store command-line interface
 brew "mas"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
 # Library for a binary-based efficient data interchange format
 brew "msgpack"
-# Parser generator tool and incremental parsing library
+# Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim", args: ["HEAD"]
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Okta federated identity for AWS CLI
+brew "okta-aws-cli"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
-# Terminal multiplexer
-brew "tmux", args: ["HEAD"]
 # CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
 # Object-relational database system
 brew "postgresql@14"
+# Static type checker for Python
+brew "pyright"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.10"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.11"
-# Tool Command Language
-brew "tcl-tk"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
+# Multi-agent orchestration framework for autonomous AI task completion
+brew "ralph-orchestrator"
 # File browser
 brew "ranger", args: ["HEAD"]
+# RC file (dotfile) management
+brew "rcm"
 # Persistent key-value database, with built-in net interface
 brew "redis"
 # Perl-powered file rename script with many helpful built-ins
@@ -242,7 +255,9 @@ brew "rename"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
-brew "ruby@3.3"
+brew "ruby"
+# Safe, concurrent, practical language
+brew "rust"
 # Rust toolchain installer
 brew "rustup"
 # Substitute for classic 'make' tool with autoconf/automake functionality
@@ -257,12 +272,18 @@ brew "shtool"
 brew "sqlcipher"
 # Cross-shell prompt for astronauts
 brew "starship"
+# Tool Command Language
+brew "tcl-tk"
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
 # Convert TeXinfo files to HTML
 brew "texi2html"
+# Terminal multiplexer
+brew "tmux", args: ["HEAD"]
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Digital clock in ncurses
+brew "tty-clock"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Hybrid lossless audio compression
@@ -283,6 +304,8 @@ brew "zsh"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# The AI coding agent built for the terminal.
+brew "anomalyco/tap/opencode"
 # A CLI to manipulate pokemon game save files.
 brew "arleypadua/pkhex-cli/pkhex-cli"
 # GNU compiler collection for AVR 8-bit and 32-bit Microcontrollers
@@ -310,3 +333,16 @@ cask "signal"
 cask "vlc"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
+# Multiplayer code editor
+cask "zed@preview"
+mas "FocusList", id: 1086877679
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Numbers", id: 409203825
+mas "Okta Verify", id: 490179405
+mas "Pages", id: 409201541
+mas "Theine", id: 955848755
+mas "WhatsApp", id: 310633997
+go "github.com/alexanderjeurissen/rabodebit2ynab"
+uv "specify-cli"
