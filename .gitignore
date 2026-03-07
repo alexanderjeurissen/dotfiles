@@ -86,6 +86,9 @@ bin/pretty
 .env*
 .zshenv.local
 
+# Local config overrides (internal metadata)
+ssh/config.local
+
 # fzf / RG
 .git
 

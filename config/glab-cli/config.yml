@@ -9,7 +9,7 @@ glamour_style: dark
 # Allow glab to automatically check for updates and notify you when there are new updates.
 check_update: true
 # Last update check timestamp, used for checking when the last update check was performed.
-last_update_check_timestamp: 2026-02-25T17:45:35+01:00
+last_update_check_timestamp: 2026-03-02T16:49:02+01:00
 # Whether or not to display hyperlink escape characters when listing items like issues or merge requests. Set to TRUE to display hyperlinks in TTYs only. Force hyperlinks by setting FORCE_HYPERLINKS=1 as an environment variable.
 display_hyperlinks: false
 # Default GitLab hostname to use.

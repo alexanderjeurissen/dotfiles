@@ -24,4 +24,3 @@ export OPENSPEC_TELEMETRY=0
 export DO_NOT_TRACK=1
 
 [[ -f ~/.zshenv.local ]] && source ~/.zshenv.local
-

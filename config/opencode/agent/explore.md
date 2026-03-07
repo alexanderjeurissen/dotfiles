@@ -4,6 +4,7 @@ description: >-
   comparison, and requirement clarification. Use when the user wants to explore
   a problem space without implementing code.
 mode: primary
+color: info
 tools:
   question: true
   bash: true
@@ -13,7 +14,7 @@ tools:
   task: true
   webfetch: true
   todowrite: false
-  skill: false
+  skill: true
   apply_patch: false
   gemini_quota: false
 ---
