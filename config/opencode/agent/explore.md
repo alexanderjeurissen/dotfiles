@@ -17,6 +17,9 @@ tools:
   skill: true
   apply_patch: false
   gemini_quota: false
+  context7_*: true
+  aws-docs_*: true
+  rfc-server_*: true
 ---
 Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
