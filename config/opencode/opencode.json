@@ -1,0 +1,66 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "agent": {},
+  "plugin": [
+    "opencode-gemini-auth@latest",
+    "@mohak34/opencode-notifier@latest"
+  ],
+  "enabled_providers": [
+    "amazon-bedrock",
+    "openai",
+    "google"
+  ],
+  "tools": {
+    "rfc-server_*": false,
+    "google-workspace_*": false
+  },
+  "mcp": {
+    "rfc-server": {
+      "type": "local",
+      "command": ["npx", "@mjpitz/mcp-rfc"],
+      "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-b505df81-0361-4555-a969-79feda99c0de"
+      },
+      "enabled": true
+    },
+    "aws-docs": {
+      "type": "local",
+      "command": ["uvx", "awslabs.aws-documentation-mcp-server@latest"],
+      "environment": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_DOCUMENTATION_PARTITION": "aws"
+      },
+      "enabled": true
+    },
+    "google-workspace": {
+      "type": "local",
+      "command": ["google-workspace-mcp"],
+      "enabled": true
+    }
+  },
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "us-west-2",
+        "profile": "default"
+      }
+    },
+    "openai": {
+      "options": {
+        "reasoningEffort": "medium",
+        "reasoningSummary": "auto",
+        "textVerbosity": "medium",
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "store": false
+      }
+    }
+  }
+}
