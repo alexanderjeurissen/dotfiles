@@ -113,3 +113,6 @@ config/coc/memos.json
 config/coc/mru
 config/configstore/
 config/ranger/plugins/
+
+# Local-only opencode agents
+config/opencode/agent/gworkspace.md
