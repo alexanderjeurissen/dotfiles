@@ -3,7 +3,7 @@ return {
     "miikanissi/modus-themes.nvim",
     config = function()
       require("modus-themes").setup({
-        style = "auto",
+        style = "vivendi",
         variant = "default",
         transparent = false,
         dim_inactive = false,
