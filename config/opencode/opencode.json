@@ -9,7 +9,9 @@
   "enabled_providers": [
     "amazon-bedrock",
     "openai",
-    "google"
+    "google",
+    "opencode",
+    "opencode-go"
   ],
   "tools": {
     "rfc-server_*": false,
@@ -18,7 +20,10 @@
   "mcp": {
     "rfc-server": {
       "type": "local",
-      "command": ["npx", "@mjpitz/mcp-rfc"],
+      "command": [
+        "npx",
+        "@mjpitz/mcp-rfc"
+      ],
       "enabled": true
     },
     "context7": {
@@ -31,7 +36,10 @@
     },
     "aws-docs": {
       "type": "local",
-      "command": ["uvx", "awslabs.aws-documentation-mcp-server@latest"],
+      "command": [
+        "uvx",
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
       "environment": {
         "FASTMCP_LOG_LEVEL": "ERROR",
         "AWS_DOCUMENTATION_PARTITION": "aws"
@@ -40,7 +48,9 @@
     },
     "google-workspace": {
       "type": "local",
-      "command": ["google-workspace-mcp"],
+      "command": [
+        "google-workspace-mcp"
+      ],
       "enabled": true
     }
   },

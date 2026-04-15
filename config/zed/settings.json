@@ -7,6 +7,21 @@
 // custom settings, run `zed: open default settings` from the
 // command palette
 {
+  "agent": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-opus-4.6",
+      "enable_thinking": true,
+      "effort": "high"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    }
+  },
   "features": {
     "edit_prediction_provider": "copilot"
   },
