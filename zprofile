@@ -2,7 +2,7 @@ BREW_ENV="$HOME/.cache/brew_env.zsh"
 if [ -r "$BREW_ENV" ]; then
   source "$BREW_ENV"
 else
-  ~/.dotfiles/scripts/generate-brew-env.sh
+  "$HOME/Development/personal/workspace/dotfiles/scripts/generate-brew-env.sh"
   source "$BREW_ENV"
 fi
 

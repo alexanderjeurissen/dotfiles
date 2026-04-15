@@ -1,3 +1,4 @@
+DOTFILES_DIRS="$HOME/Development/personal/workspace/dotfiles"
 COPY_ALWAYS="ssh/*"
 EXCLUDES="_assets bin terminfo .* README.md *:node_modules *:history *:cache Brewfile Brewfile.lock.json Yarnfile CargoFile config/opencode/agent/gworkspace.md"
 UNDOTTED="rubocop.yml tern-config"
