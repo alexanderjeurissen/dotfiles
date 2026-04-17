@@ -2,7 +2,11 @@ export DEFAULT_USER=$USER
 export EDITOR='nvim'
 export HSANDBOX_EDITOR='nvim'
 
-export HOMEBREW_PREFIX="/opt/homebrew" # lookup using (brew --prefix)
+if [[ "$(uname -m)" == "arm64" ]]; then
+  export HOMEBREW_PREFIX="/opt/homebrew"
+else
+  export HOMEBREW_PREFIX="/usr/local"
+fi
 # Export early so startup scripts can use the cached value without invoking brew
 
 # Misc env variables

@@ -1,10 +1,3 @@
-# OPENSPEC:START
-# OpenSpec shell completions configuration
-fpath=("/Users/alexanderjeurissen/.zsh/completions" $fpath)
-autoload -Uz compinit
-compinit
-# OPENSPEC:END
-
 # NOTE: zsh config profiling
 # zmodload zsh/zprof
 
@@ -24,6 +17,7 @@ eval "$(mise activate zsh)"
 # }}}
 
 # Initialize completion system
+fpath=("$HOME/.zsh/completions" $fpath)
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump-$ZSH_VERSION
 if [[ -f ~/.cache/zcompdump-$ZSH_VERSION ]]; then
@@ -71,6 +65,8 @@ _lazy_init_plugins() {
     _atuin_shell_loaded=1
   fi
 
+  _fzf_shell_loaded=1
+
   if [[ ${_zsh_autosuggest_loaded-0} -eq 1 && ${_zoxide_loaded-0} -eq 1 && ${_fzf_shell_loaded-0} -eq 1 ]]; then
     add-zsh-hook -d precmd _lazy_init_plugins
   fi
@@ -98,8 +94,6 @@ if [[ -f ~/.zsh_keybindings.zwc ]]; then
 else
   source ~/.zsh_keybindings
 fi
-
-
 if [[ -f .venv/bin/activate ]]; then
   source .venv/bin/activate
 fi
@@ -109,12 +103,3 @@ fi
 
 # NOTE: profile zsh config
 # zprof
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/alexanderjeurissen/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/alexanderjeurissen/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/alexanderjeurissen/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/alexanderjeurissen/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-
-export GOOGLE_WORKSPACE_CLI_TOKEN=$(gcloud auth print-access-token)

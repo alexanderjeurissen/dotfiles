@@ -18,7 +18,7 @@ _segment() {
   local bg=$1 fg=$2 text=$3 indent=$4
   local segment="%K{$bg}%F{$fg}%B$text%b%f%k"
 
-  echo -ne $segment
+  echo -ne "$segment"
 }
 
 _generate_prompt() {

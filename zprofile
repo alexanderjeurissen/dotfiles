@@ -40,8 +40,9 @@ path=("$HOMEBREW_PREFIX/lib/ruby/gems/3.4.0/bin" $path)
 # }}}
 
 # Lua settings (derived from $ luarocks path)
-export LUA_PATH='/opt/homebrew/Cellar/luarocks/3.11.1/share/lua/5.4/?.lua;/opt/homebrew/Cellar/luarocks/3.9.1/share/lua/5.4/?.lua;/opt/homebrew/share/lua/5.4/?.lua;/opt/homebrew/share/lua/5.4/?/init.lua;/opt/homebrew/lib/lua/5.4/?.lua;/opt/homebrew/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua;/Users/alexander/.luarocks/share/lua/5.4/?.lua;/Users/alexander/.luarocks/share/lua/5.4/?/init.lua'
-export LUA_CPATH='/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/loadall.so;./?.so;/Users/alexander/.luarocks/lib/lua/5.4/?.so'
+if command -v luarocks >/dev/null 2>&1; then
+  eval "$(luarocks path)"
+fi
 
 # Add default binaries /usr/bin etc at lowest prio {{{
 path+=(
