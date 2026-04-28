@@ -8,7 +8,9 @@ fi
 
 # Added by OrbStack: command-line tools and integration
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-source "$HOME/.atuin/bin/env"
+if [ -r "$HOME/.atuin/bin/env" ]; then
+  source "$HOME/.atuin/bin/env"
+fi
 
 # Set path {{{
 # HOMEBREW_PREFIX/bin and sbin are added via brew shellenv
