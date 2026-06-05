@@ -4,21 +4,76 @@ token_ref="op://Employee/glab/credential"
 host_ref="op://Employee/glab/hostname"
 account="${OP_ACCOUNT:-}"
 
-if command -v op >/dev/null 2>&1; then
-  token=""
-  host=""
+# Resolved-credential cache. The real glab already persists its token to
+# ~/.config/glab-cli/config.yml, so caching the resolved values here adds no new
+# on-disk exposure — but it lets back-to-back invocations (e.g. an agent firing
+# many glab calls) skip 1Password entirely instead of hitting `op` every time.
+#   GLAB_CRED_CACHE_TTL=<seconds>   cache lifetime (default 8h; set 0 to disable)
+cache_ttl="${GLAB_CRED_CACHE_TTL:-28800}"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/glab-wrapper"
+cache_file="$cache_dir/creds"
+
+op_run() {
   if [ -n "$account" ]; then
-    token=$(op --account "$account" read "$token_ref" 2>/dev/null || true)
-    host=$(op --account "$account" read "$host_ref" 2>/dev/null || true)
+    op --account "$account" "$@"
   else
-    token=$(op read "$token_ref" 2>/dev/null || true)
-    host=$(op read "$host_ref" 2>/dev/null || true)
+    op "$@"
+  fi
+}
+
+cache_enabled() {
+  [ "$cache_ttl" -gt 0 ] 2>/dev/null
+}
+
+cache_fresh() {
+  cache_enabled || return 1
+  [ -f "$cache_file" ] || return 1
+  now=$(date +%s)
+  # BSD/macOS `stat -f %m`; GNU `stat -c %Y`.
+  mtime=$(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null) || return 1
+  [ $((now - mtime)) -lt "$cache_ttl" ]
+}
+
+# Reads the credentials off 1Password into $host/$token. Under desktop-app
+# integration `op read` authorizes against the app's shared lock state: silent
+# while the app is unlocked, and at most ONE unlock prompt when it's locked
+# (after which every subsequent process is silent again). We deliberately do NOT
+# gate on `op whoami` — with app integration there is no env session token, so
+# `op whoami` ALWAYS reports "not signed in", which made the old wrapper run
+# `op signin` (and trigger a biometric prompt) on every single invocation.
+read_creds() {
+  token=$(op_run read "$token_ref" 2>/dev/null) || return 1
+  host=$(op_run read "$host_ref" 2>/dev/null) || return 1
+  [ -n "$token" ] && [ -n "$host" ]
+}
+
+if command -v op >/dev/null 2>&1; then
+  if cache_fresh && . "$cache_file" 2>/dev/null && [ -n "$GITLAB_TOKEN" ] && [ -n "$GITLAB_HOST" ]; then
+    : # creds restored from cache; nothing hit 1Password
+  else
+    if ! read_creds; then
+      # `op read` failed — most likely a host WITHOUT 1Password app integration,
+      # where a CLI session is required. Fall back to a single interactive
+      # sign-in, then retry once. This never runs on the app-integration path.
+      eval "$(op_run signin)" 2>/dev/null || true
+      if ! read_creds; then
+        echo "glab wrapper: failed to read glab credentials from 1Password." >&2
+        echo "  Ensure the 1Password app is unlocked, or run 'op signin${account:+ --account $account}' manually." >&2
+        exit 1
+      fi
+    fi
+
+    GITLAB_HOST="$host"
+    GITLAB_TOKEN="$token"
+
+    if cache_enabled; then
+      ( umask 077
+        mkdir -p "$cache_dir" \
+          && printf "GITLAB_HOST='%s'\nGITLAB_TOKEN='%s'\n" "$host" "$token" > "$cache_file" )
+    fi
   fi
 
-  if [ -n "$token" ] && [ -n "$host" ]; then
-    export GITLAB_HOST="$host"
-    export GITLAB_TOKEN="$token"
-  fi
+  export GITLAB_HOST GITLAB_TOKEN
 fi
 
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
