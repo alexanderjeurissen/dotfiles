@@ -3,7 +3,7 @@
 This is the host-neutral core of the per-issue worktree workflow, shared across every workspace
 that uses it. Each workspace's own `CLAUDE.md`/`AGENTS.md` imports this file and then adds its
 repo-specific bits (the actual submodules + remotes, integration branches, tracker/forge
-conventions, planning artifacts). Nothing here names a specific repository or organization — the
+conventions). Nothing here names a specific repository or organization — the
 engine discovers all of that at runtime.
 
 Throughout: **workspace** = the top-level checkout (the stable integration view); **issue** = the
@@ -12,9 +12,10 @@ work identifier a per-issue worktree is keyed on (a tracker issue, a PR/MR, or a
 
 ## Repository structure conventions
 
-A workspace is a git repo holding **planning artifacts** alongside **git submodules** for the
-code/content repos. All submodules live under `modules/` and are configured with `update=none` —
-treat each as an independent git repo:
+A workspace is a git repo that groups **git submodules** for the code/content repos under
+`modules/`, plus the tracked worktree manifest. Work tracking and planning live in the issue
+tracker (Linear), not in the repo. Each submodule is configured with `update=none` — treat each as
+an independent git repo:
 
 - To make changes: `cd modules/<repo>/ && git checkout <branch> && … && git commit && git push`.
 - Each submodule has its own remote, branches, and history.
@@ -22,8 +23,8 @@ treat each as an independent git repo:
 - NEVER run `git submodule update` — it is a no-op by design (`update=none`).
 - Git operations (add, commit, push, checkout) inside a submodule are scoped to that submodule's repo.
 
-The workspace repo also tracks planning artifacts (e.g. `mockups/`, `docs/`) — commit those from
-the workspace root.
+The workspace repo may also track supporting assets (e.g. `mockups/`) — commit those from the
+workspace root.
 
 ### Pinning submodule state (auto-pin)
 
