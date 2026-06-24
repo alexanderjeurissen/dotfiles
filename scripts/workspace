@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # workspace — git/fs engine for per-task, fully-isolated "mini-workspace" worktrees.
 #
-# A per-task workspace is a worktree of THIS workspace repo (carrying CLAUDE.md,
+# Terms: the HUB is the top-level checkout (the stable integration view containing modules/
+# and worktrees/); a WORKSPACE is a per-task worktree of the hub. The hub repo is the git
+# repo the hub is a checkout of.
+#
+# A per-task workspace is a worktree of THIS hub repo (carrying CLAUDE.md,
 # .claude/, bin/, .cmux/, docs/, …) at  worktrees/<TASK>/ , with a git worktree of each
 # in-scope submodule nested inside it at  worktrees/<TASK>/modules/<repo>  on the task's
 # feature branch (mirroring the main checkout, where submodules live under modules/).
@@ -9,13 +13,13 @@
 # clean, stable integration vantage point; feature work lives entirely in worktrees.
 #
 # This script is the deterministic plumbing. It does NOT:
-#   - commit the workspace repo  (the slash commands do that: manifest rows, pins)
+#   - commit the hub repo        (the slash commands do that: manifest rows, pins)
 #   - talk to Linear or cmux      (the slash commands orchestrate those)
 # It is idempotent and never steals focus. All progress/warnings go to stderr;
 # capturable results go to stdout as `key=value` (create) or per-repo result lines.
 #
-# The set of submodules is discovered from the root's .gitmodules, and the root from the
-# caller's cwd — nothing is workspace-specific, so the same engine drives every workspace.
+# The set of submodules is discovered from the hub's .gitmodules, and the hub from the
+# caller's cwd — nothing is hub-specific, so the same engine drives every hub.
 #
 # Integration branch resolution (the source of truth):
 #   integration_branch(repo) = the branch currently checked out for that submodule in
@@ -32,18 +36,18 @@
 
 set -euo pipefail
 
-# ── locate the TRUE workspace root (the main worktree) ────────────────────────
+# ── locate the TRUE hub (the top-level checkout / main worktree) ──────────────
 # This engine lives on PATH (~/.scripts → modules/dotfiles/scripts/) and is shared across
 # every per-task workspace, NOT inside any one repo — so it can't self-anchor from its own
 # location, and nothing about the root is hardcoded. Resolve from the caller's cwd instead:
-#   1. honor an explicit $WORKSPACE_ROOT (export to override; handy for tests);
+#   1. honor an explicit $WORKSPACE_HUB (export to override; handy for tests);
 #   2. else climb out of any submodule to the top superproject, then take the parent of
 #      that repo's git COMMON dir. From a linked worktree this still lands on the main
 #      checkout (worktrees share the main .git); climbing first sidesteps the .git/modules
 #      trap that a bare --git-common-dir hits inside a submodule.
-# If neither yields a root (run from outside any checkout), die with a clear message rather
-# than guessing a workspace-specific default.
-resolve_workspace_root() {
+# If neither yields a hub (run from outside any checkout), die with a clear message rather
+# than guessing a default.
+resolve_hub() {
   local base sp common
   base="$PWD"
   while sp="$(git -C "$base" rev-parse --show-superproject-working-tree 2>/dev/null)" && [ -n "$sp" ]; do
@@ -54,20 +58,20 @@ resolve_workspace_root() {
   fi
   return 0   # print nothing → caller dies with a clear message
 }
-WORKSPACE_ROOT="${WORKSPACE_ROOT:-$(resolve_workspace_root)}"
-[ -n "$WORKSPACE_ROOT" ] || { printf 'workspace: error: cannot resolve the workspace root from %s — cd into a workspace checkout or export $WORKSPACE_ROOT\n' "$PWD" >&2; exit 1; }
+HUB="${WORKSPACE_HUB:-$(resolve_hub)}"
+[ -n "$HUB" ] || { printf 'workspace: error: cannot resolve the hub from %s — cd into a hub checkout or export $WORKSPACE_HUB\n' "$PWD" >&2; exit 1; }
 
 # Submodules are grouped under this dir, both in the main checkout and inside each per-task
 # worktree. Repo identifiers (in --repos and the manifest) stay bare names; this prefix
 # locates them on disk. To flatten back to the root, set MODULES_DIR="".
 MODULES_DIR="modules"
-MANIFEST="$WORKSPACE_ROOT/worktrees/WORKSPACES.md"
+MANIFEST="$HUB/worktrees/WORKSPACES.md"
 
 # Known submodules are DISCOVERED from the root's .gitmodules (repo id = path basename),
 # so the engine adapts to whatever workspace it runs in, with zero hardcoding.
 # Override with $WORKSPACE_SUBMODULES (space-separated) if ever needed.
 discover_submodules() {
-  local gm="$WORKSPACE_ROOT/.gitmodules" p
+  local gm="$HUB/.gitmodules" p
   [ -f "$gm" ] || return 0
   git config -f "$gm" --get-regexp '^submodule\..*\.path$' 2>/dev/null \
     | awk '{print $2}' | while IFS= read -r p; do [ -n "$p" ] && basename "$p"; done
@@ -97,7 +101,7 @@ worktree_present() { [ -e "$1/.git" ]; }
 # ── integration branch resolution ─────────────────────────────────────────────
 integration_branch() {
   local repo="$1" rd br def
-  rd="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+  rd="$(submodule_path "$HUB" "$repo")"
   [ -d "$rd" ] || die "unknown submodule path: $rd"
   br="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
   def="$(git -C "$rd" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)"
@@ -152,7 +156,7 @@ manifest_upsert() {
 setup_memory_symlink() {
   local ws_dir="$1" projects_dir canonical_memory per_task_dir link
   projects_dir="$HOME/.claude/projects"
-  canonical_memory="$projects_dir/$(path_to_project_key "$WORKSPACE_ROOT")/memory"
+  canonical_memory="$projects_dir/$(path_to_project_key "$HUB")/memory"
   per_task_dir="$projects_dir/$(path_to_project_key "$ws_dir")"
   link="$per_task_dir/memory"
   mkdir -p "$canonical_memory" "$per_task_dir"
@@ -182,7 +186,7 @@ cmd_create() {
   [ -n "$branch" ] || die "create requires --branch (e.g. feature/dotfiles-zsh)"
   [ -n "$repos" ]  || die "create requires --repos (comma-separated; e.g. dotfiles,tao-te-ching)"
 
-  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+  local ws_dir="$HUB/worktrees/$task"
   local -a repo_arr
   IFS=',' read -ra repo_arr <<< "$repos"
   local repo
@@ -195,13 +199,13 @@ cmd_create() {
     info "workspace worktree already at $ws_dir"
   else
     info "creating workspace worktree at worktrees/$task (detached)"
-    git -C "$WORKSPACE_ROOT" worktree add --detach "$ws_dir" HEAD >/dev/null
+    git -C "$HUB" worktree add --detach "$ws_dir" HEAD >/dev/null
   fi
 
   # 2. a worktree of each in-scope submodule, on the task's feature branch
   for repo in "${repo_arr[@]}"; do
     local repo_path target ib
-    repo_path="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    repo_path="$(submodule_path "$HUB" "$repo")"
     target="$(submodule_path "$ws_dir" "$repo")"
     mkdir -p "$(dirname "$target")"   # ensure worktrees/<TASK>/modules/ exists
     ib="$(integration_branch "$repo")"
@@ -256,7 +260,7 @@ cmd_sync() {
     esac
   done
   [ -n "$task" ] || die "sync requires --task"
-  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+  local ws_dir="$HUB/worktrees/$task"
   worktree_present "$ws_dir" || die "no workspace at $ws_dir (run /workspace $task first)"
 
   local repo any=0 conflicts=0
@@ -315,7 +319,7 @@ cmd_update_modules() {
   for repo in "${repo_arr[@]}"; do
     is_known_submodule "$repo" || die "update-modules: '$repo' is not a known submodule"
     local rd ib before after
-    rd="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    rd="$(submodule_path "$HUB" "$repo")"
     ib="$(integration_branch "$repo")"
     before="$(git -C "$rd" rev-parse --short HEAD)"
     git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; continue; }
@@ -346,7 +350,7 @@ cmd_teardown() {
     esac
   done
   [ -n "$task" ] || die "teardown requires --task"
-  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+  local ws_dir="$HUB/worktrees/$task"
 
   # ── --check: dry-run safety report. Surfaces uncommitted + unpushed work per
   # submodule worktree and changes NOTHING. Lets /teardown run the safety check
@@ -394,7 +398,7 @@ cmd_teardown() {
   for repo in $KNOWN_SUBMODULES; do
     local target repo_path
     target="$(submodule_path "$ws_dir" "$repo")"
-    repo_path="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    repo_path="$(submodule_path "$HUB" "$repo")"
     if worktree_present "$target"; then
       info "removing $repo worktree"
       git -C "$repo_path" worktree remove --force "$target" || warn "$repo: worktree remove failed for $target"
@@ -402,12 +406,12 @@ cmd_teardown() {
   done
   if worktree_present "$ws_dir"; then
     info "removing workspace worktree"
-    git -C "$WORKSPACE_ROOT" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
+    git -C "$HUB" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
   fi
   # prune dangling worktree admin entries
-  git -C "$WORKSPACE_ROOT" worktree prune 2>/dev/null || true
+  git -C "$HUB" worktree prune 2>/dev/null || true
   for repo in $KNOWN_SUBMODULES; do
-    git -C "$(submodule_path "$WORKSPACE_ROOT" "$repo")" worktree prune 2>/dev/null || true
+    git -C "$(submodule_path "$HUB" "$repo")" worktree prune 2>/dev/null || true
   done
   # NOTE: deliberately leave the per-task memory symlink + history dir under
   # ~/.claude/projects untouched (no rm under $HOME). The symlink points at the
@@ -427,7 +431,7 @@ cmd_list() {
   fi
   emit ""
   emit "Workspace worktrees:"
-  git -C "$WORKSPACE_ROOT" worktree list
+  git -C "$HUB" worktree list
 }
 
 # ── dispatch ──────────────────────────────────────────────────────────────────
@@ -441,8 +445,8 @@ case "$cmd" in
   update-modules)       cmd_update_modules "$@";;
   teardown)             cmd_teardown "$@";;
   integration-branch)   [ $# -eq 1 ] || die "integration-branch requires exactly one <repo>"; integration_branch "$1"; printf '\n';;
-  root)                 emit "$WORKSPACE_ROOT";;
+  hub|root)             emit "$HUB";;
   list)                 cmd_list;;
   -h|--help|help)       usage;;
-  *) die "unknown command: $cmd (expected: create|sync|update-modules|teardown|integration-branch|root|list)";;
+  *) die "unknown command: $cmd (expected: create|sync|update-modules|teardown|integration-branch|hub|list)";;
 esac

@@ -1,6 +1,6 @@
 ---
 description: >-
-  Instantiate a fully-isolated, per-issue mini-workspace: a worktree of the workspace repo with
+  Instantiate a fully-isolated, per-issue workspace: a worktree of the hub repo with
   nested worktrees of the in-scope submodules on the issue's feature branch, shared memory, a
   tracked manifest row, and a cmux workspace cwd'd into it. Claude suggests the repo scope; you
   confirm. Targets a tracker issue or a PR/MR.
@@ -12,13 +12,13 @@ Create an isolated per-issue workspace for: **$ARGUMENTS**
 
 This is the `/workspace` command of the worktree-focused workflow (see the workspace guide →
 "Per-issue worktree workspaces"). The engine is `workspace`; this command orchestrates the
-tracker, scope confirmation, the workspace-repo commit, and the cmux spawn.
+tracker, scope confirmation, the hub-repo commit, and the cmux spawn.
 
-> **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the workspace root from
-> anywhere — it climbs out of any submodule before resolving. Resolve the root once for the
-> manifest commit and the spawn cwd, and use `git -C "$ROOT"`:
+> **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the hub from anywhere — it
+> climbs out of any submodule before resolving. Resolve the hub once for the manifest commit and the
+> spawn cwd, and use `git -C "$HUB"`:
 > ```bash
-> ROOT="$(workspace root)"; echo "ROOT=$ROOT"
+> HUB="$(workspace hub)"; echo "HUB=$HUB"
 > ```
 
 ## Steps
@@ -82,11 +82,11 @@ workspace create \
 Capture `workspace_dir=` from the final stdout line. Idempotent — safe to re-run; it also
 **restores** branches that already exist on the remote (the rebuild path).
 
-### 5. Commit the manifest (workspace repo)
+### 5. Commit the manifest (hub repo)
 The engine wrote `worktrees/WORKSPACES.md` but did not commit:
 ```bash
-git -C "$ROOT" add worktrees/WORKSPACES.md
-git -C "$ROOT" commit -m "workspace: open <ID> (<repos>)"
+git -C "$HUB" add worktrees/WORKSPACES.md
+git -C "$HUB" commit -m "workspace: open <ID> (<repos>)"
 ```
 This is standing housekeeping (like a pin) — no need to ask first.
 

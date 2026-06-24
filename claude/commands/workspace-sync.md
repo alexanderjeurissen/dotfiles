@@ -3,7 +3,7 @@ description: >-
   Bring a per-issue workspace's feature branches up to date by MERGING each submodule's integration
   branch in (never rebase), then pushing. Auto-resolves mechanical merge conflicts (e.g. append-only
   migration lists); asks you when a resolution is ambiguous. Auto-targets the cmux workspace it's run
-  from. Does not touch the tracker or the workspace repo.
+  from. Does not touch the tracker or the hub repo.
 argument-hint: "[ISSUE-ID] (optional — omit to target the current workspace or pick from a list)"
 allowed-tools: Bash Read Edit AskUserQuestion
 disable-model-invocation: true
@@ -20,7 +20,7 @@ mechanical collisions, with your input when the right answer is unclear) rather 
 
 The ISSUE-ID argument is **optional**. Resolve the target in this order, then carry the resolved
 **ISSUE-ID** through the rest of the command (no `cd` — the engine self-anchors; resolve
-`ROOT="$(workspace root)"` once for the manifest-fallback read and absolute worktree paths):
+`HUB="$(workspace hub)"` once for the manifest-fallback read and absolute worktree paths):
 
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
@@ -38,14 +38,14 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
            print(m.group(1) if m else '')
    "
    ```
-   If a non-empty ISSUE is printed, that's the target. If empty (e.g. you're at the workspace root /
-   hub), fall through to (3).
+   If a non-empty ISSUE is printed, that's the target. If empty (e.g. you're at the hub), fall
+   through to (3).
 
 3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the
    `workspace:<N>  <ISSUE-ID> · <title>` names). Filter out non-issue rows (`Root`, etc.) and
    present the issue workspaces via `AskUserQuestion`. Capture the ISSUE-ID (token before ` · `). As
    a fallback, the manifest also lists active workspaces:
-   `git -C "$ROOT" show HEAD:worktrees/WORKSPACES.md`.
+   `git -C "$HUB" show HEAD:worktrees/WORKSPACES.md`.
 
 ## Step 1 — Run the engine
 ```bash
@@ -66,9 +66,9 @@ The engine prints one line per submodule:
 ## Step 2 — Resolve conflicts (auto where mechanical, ask where ambiguous)
 
 For each repo the engine reported `CONFLICT`, work inside its worktree
-(`$ROOT/worktrees/<ISSUE-ID>/modules/<repo>`). List the unmerged files:
+(`$HUB/worktrees/<ISSUE-ID>/modules/<repo>`). List the unmerged files:
 ```bash
-git -C "$ROOT/worktrees/<ISSUE-ID>/modules/<repo>" diff --name-only --diff-filter=U
+git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" diff --name-only --diff-filter=U
 ```
 Resolve **every** conflicted file with the right tier below, then complete the merge.
 
@@ -93,7 +93,7 @@ For any conflict where the correct merge isn't a mechanical union — overlappin
 code, schema/DDL divergence, logic both sides changed — **do not guess**. Read the conflict hunks so
 you can describe them concretely:
 ```bash
-git -C "$ROOT/worktrees/<ISSUE-ID>/modules/<repo>" diff --diff-filter=U -- <file>
+git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" diff --diff-filter=U -- <file>
 ```
 Then present the decision via `AskUserQuestion`, one question per conflicted file (or per hunk if a
 file has several distinct ones). State the file/path and summarize what each side did. Offer:
@@ -111,8 +111,8 @@ side's changes** — that's exactly what Tier B exists to prevent.
 Once a repo's files are all resolved (no markers remain — verify with
 `grep -rn '^<<<<<<<\|^|||||||\|^=======\|^>>>>>>>' <files>`), stage and commit the merge:
 ```bash
-git -C "$ROOT/worktrees/<ISSUE-ID>/modules/<repo>" add <resolved files>
-git -C "$ROOT/worktrees/<ISSUE-ID>/modules/<repo>" commit --no-edit
+git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" add <resolved files>
+git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" commit --no-edit
 ```
 
 ## Step 3 — Re-run the engine to push (and catch any later repos)
@@ -139,5 +139,5 @@ about (and the chosen resolution), and anything still needing attention.
 - **Auto-resolve only mechanical collisions** (Tier A) — union-style appends where neither side
   edited the other's lines. Everything semantic is **Tier B → ask**; never guess a code merge.
 - **Never silently drop a side's changes** — a Tier-B resolution always reflects an explicit choice.
-- **No tracker, no workspace-repo commit** — posting a changeset summary to the issue is done by
+- **No tracker, no hub-repo commit** — posting a changeset summary to the issue is done by
   hand (out of scope for this command).

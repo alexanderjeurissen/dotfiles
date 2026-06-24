@@ -15,15 +15,15 @@ It **leaves the cmux workspace open** — closing it is always the user's decisi
 it automatically). It is intentionally **not** wired to "is the work done?" — you run it when you're
 done with the workspace; the code lives on as commits on the (pushed) feature branches.
 
-> **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the workspace root from
-> anywhere — it climbs out of any submodule before resolving, so the old `.git/modules` trap is
-> gone. Run it directly, and use `git -C "$ROOT"` (with `ROOT="$(workspace root)"` from step 0) for
-> the one workspace-repo commit. Never change directory.
+> **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the hub from anywhere — it
+> climbs out of any submodule before resolving, so the old `.git/modules` trap is gone. Run it
+> directly, and use `git -C "$HUB"` (with `HUB="$(workspace hub)"` from step 0) for the one hub-repo
+> commit. Never change directory.
 
-## Step 0 — Resolve the target + workspace root (no `cd`)
+## Step 0 — Resolve the target + hub (no `cd`)
 
 The ISSUE-ID argument is **optional**. Resolve the target in this order, then carry the resolved
-**ISSUE-ID**, **cmux workspace ref**, and **`$ROOT`** through the rest of the command:
+**ISSUE-ID**, **cmux workspace ref**, and **`$HUB`** through the rest of the command:
 
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
@@ -44,19 +44,19 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
    "
    ```
    The three tab-separated fields are: cmux ref to close, ISSUE (empty if at the hub), and the
-   caller's working directory. If ISSUE is empty (you're at the workspace root / hub), fall through
-   to (3) to pick a target.
+   caller's working directory. If ISSUE is empty (you're at the hub), fall through to (3) to pick a
+   target.
 
 3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the
    `workspace:<N>  <ISSUE-ID> · <title>` names). Filter out non-issue rows (`Root`, etc.) and
    present the issue workspaces via `AskUserQuestion`. From the chosen row capture both the
    `workspace:<N>` ref and the ISSUE-ID (token before ` · `).
 
-> **Now resolve the workspace root** for the manifest commit. The engine self-anchors from anywhere,
-> so there's no path to juggle — ask it:
+> **Now resolve the hub** for the manifest commit. The engine self-anchors from anywhere, so
+> there's no path to juggle — ask it:
 > ```bash
-> ROOT="$(workspace root)"   # authoritative workspace root, from the hub or any worktree
-> echo "ROOT=$ROOT"
+> HUB="$(workspace hub)"   # authoritative hub path, from the hub or any workspace
+> echo "HUB=$HUB"
 > ```
 
 ## Step 1 — Safety check (engine dry-run) + dev stack
@@ -95,11 +95,11 @@ Removes each submodule worktree, then the workspace worktree, prunes, and drops 
 deliberately **leaves** the per-issue memory symlink + history under `~/.claude` untouched (harmless;
 points at persistent canonical memory).
 
-## Step 4 — Commit the manifest (workspace repo, via `git -C`)
-No `cd` — operate on the workspace root the engine reported:
+## Step 4 — Commit the manifest (hub repo, via `git -C`)
+No `cd` — operate on the hub the engine reported:
 ```bash
-git -C "$ROOT" add worktrees/WORKSPACES.md
-git -C "$ROOT" commit -m "workspace: close <ISSUE-ID>"
+git -C "$HUB" add worktrees/WORKSPACES.md
+git -C "$HUB" commit -m "workspace: close <ISSUE-ID>"
 ```
 Standing housekeeping — no need to ask.
 
@@ -126,9 +126,9 @@ Also note that the **feature branch(es) are intentionally kept** (the work may b
 to delete local branches only if the user confirms they're merged.
 
 ## Guardrails
-- **No `cd` — call `workspace` (on PATH) directly and use `git -C "$ROOT"`** — see step 0. The engine
-  self-anchors to the workspace root from anywhere (climbing out of any submodule), so the old
-  `.git/modules` anchoring trap is gone.
+- **No `cd` — call `workspace` (on PATH) directly and use `git -C "$HUB"`** — see step 0. The engine
+  self-anchors to the hub from anywhere (climbing out of any submodule), so the old `.git/modules`
+  anchoring trap is gone.
 - **Never destroy unsaved work silently** — the step-2 confirmation is mandatory, every time.
 - **Don't delete feature branches** unless the user confirms they're merged.
 - **Never auto-close the cmux workspace** — see step 5. Teardown removes the *worktrees* and leaves
