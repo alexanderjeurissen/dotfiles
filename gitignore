@@ -21,6 +21,10 @@ build/Release
 # *.ruby-version
 .bundle
 
+# python
+__pycache__/
+*.pyc
+
 #temp json output of yaml translations
 app/languages/*.json
 
