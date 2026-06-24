@@ -19,12 +19,12 @@
 # It is idempotent and never steals focus. All progress/warnings go to stderr;
 # capturable results go to stdout as `key=value` (create) or per-repo result lines.
 #
-# The set of submodules is discovered from the hub's .gitmodules, and the hub from the
+# The set of submodules is discovered from the hub root's .gitmodules, and the hub from the
 # caller's cwd — nothing is hub-specific, so the same engine drives every hub.
 #
 # Integration branch resolution (the source of truth):
 #   integration_branch(repo) = the branch currently checked out for that submodule in
-#   the TOP-LEVEL workspace checkout, under modules/ (e.g. dotfiles→main).
+#   the hub checkout, under modules/ (e.g. dotfiles→main).
 #   Nothing is hardcoded. Divergence from origin/HEAD is warned about, not blocked.
 #
 # Usage (--task and --issue are interchangeable):
@@ -68,8 +68,8 @@ HUB="${WORKSPACE_HUB:-$(resolve_hub)}"
 MODULES_DIR="modules"
 MANIFEST="$HUB/worktrees/WORKSPACES.md"
 
-# Known submodules are DISCOVERED from the root's .gitmodules (repo id = path basename),
-# so the engine adapts to whatever workspace it runs in, with zero hardcoding.
+# Known submodules are DISCOVERED from the hub root's .gitmodules (repo id = path basename),
+# so the engine adapts to whatever hub it runs in, with zero hardcoding.
 # Override with $WORKSPACE_SUBMODULES (space-separated) if ever needed.
 discover_submodules() {
   local gm="$HUB/.gitmodules" p

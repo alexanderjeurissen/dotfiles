@@ -38,7 +38,7 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
            print(m.group(1) if m else '')
    "
    ```
-   If a non-empty ISSUE is printed, that's the target. If empty (e.g. you're at the hub), fall
+   If a non-empty ISSUE is printed, that's the target. If empty (e.g. you're at the hub root), fall
    through to (3).
 
 3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the

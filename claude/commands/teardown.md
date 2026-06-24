@@ -43,8 +43,8 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
            print(f\"{w['ref']}\t{m.group(1) if m else ''}\t{d}\")
    "
    ```
-   The three tab-separated fields are: cmux ref to close, ISSUE (empty if at the hub), and the
-   caller's working directory. If ISSUE is empty (you're at the hub), fall through to (3) to pick a
+   The three tab-separated fields are: cmux ref to close, ISSUE (empty if at the hub root), and the
+   caller's working directory. If ISSUE is empty (you're at the hub root), fall through to (3) to pick a
    target.
 
 3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the

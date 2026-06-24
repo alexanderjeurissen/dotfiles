@@ -136,7 +136,7 @@ need the ref.
 
 - **`/workspace` proposes, never auto-spawns.** It confirms repo scope before creating worktrees or
   the cmux workspace. Skip the spawn if you're already inside the right workspace.
-- **Inside a workspace, submodule paths are `modules/<repo>/…`** — exactly as in the hub.
+- **Inside a workspace, submodule paths are `modules/<repo>/…`** — exactly as at the hub root.
 - **Never steal focus.** `cmux-spawn-work` passes `--focus false`; don't call `select-workspace`,
   `focus-pane`, or `focus-panel` after spawning.
 - **Never auto-close.** Closing is always the user's decision. `/teardown` removes the *worktrees*
