@@ -1,0 +1,434 @@
+#!/usr/bin/env bash
+# workspace — git/fs engine for per-task, fully-isolated "mini-workspace" worktrees.
+#
+# A per-task workspace is a worktree of THIS workspace repo (carrying CLAUDE.md,
+# .claude/, bin/, .cmux/, docs/, …) at  worktrees/<TASK>/ , with a git worktree of each
+# in-scope submodule nested inside it at  worktrees/<TASK>/modules/<repo>  on the task's
+# feature branch (mirroring the main checkout, where submodules live under modules/).
+# Submodule object stores are shared (no re-clone). The top-level repo's view stays a
+# clean, stable integration vantage point; feature work lives entirely in worktrees.
+#
+# This script is the deterministic plumbing. It does NOT:
+#   - commit the workspace repo  (the slash commands do that: manifest rows, pins)
+#   - talk to Linear or cmux      (the slash commands orchestrate those)
+# It is idempotent and never steals focus. All progress/warnings go to stderr;
+# capturable results go to stdout as `key=value` (create) or per-repo result lines.
+#
+# Integration branch resolution (the source of truth):
+#   integration_branch(repo) = the branch currently checked out for that submodule in
+#   the TOP-LEVEL workspace checkout, under modules/ (dotfiles→main, tao-te-ching→main, …).
+#   Nothing is hardcoded. Divergence from origin/HEAD is warned about, not blocked.
+#
+# Usage:
+#   workspace create  --task dotfiles-zsh --branch feature/dotfiles-zsh \
+#                     --repos dotfiles [--title "…"]
+#   workspace sync    --task dotfiles-zsh
+#   workspace update-modules [--repos dotfiles,tao-te-ching]
+#   workspace teardown --task dotfiles-zsh [--check]   (--check = dry-run safety report)
+#   workspace integration-branch dotfiles
+#   workspace list
+
+set -euo pipefail
+
+# ── locate the TRUE workspace root (the main worktree) ────────────────────────
+# This engine lives on PATH (~/.scripts → modules/dotfiles/scripts/), NOT inside the
+# workspace repo, so it can't self-anchor from its own location. Resolve from the caller's
+# cwd instead:
+#   1. honor an explicit $WORKSPACE_ROOT (export to override; handy for tests);
+#   2. else climb out of any submodule to the top superproject, then take the parent of
+#      that repo's git COMMON dir. From a linked worktree this still lands on the main
+#      checkout (worktrees share the main .git); climbing first sidesteps the .git/modules
+#      trap that a bare --git-common-dir hits inside a submodule;
+#   3. else fall back to the canonical default path.
+DEFAULT_WORKSPACE_ROOT="$HOME/Development/personal/workspace"
+resolve_workspace_root() {
+  local base sp common
+  base="$PWD"
+  while sp="$(git -C "$base" rev-parse --show-superproject-working-tree 2>/dev/null)" && [ -n "$sp" ]; do
+    base="$sp"
+  done
+  if common="$(git -C "$base" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+    dirname "$common"; return 0
+  fi
+  printf '%s' "$DEFAULT_WORKSPACE_ROOT"
+}
+WORKSPACE_ROOT="${WORKSPACE_ROOT:-$(resolve_workspace_root)}"
+
+KNOWN_SUBMODULES="dotfiles tao-te-ching zero-based-budget"
+# Submodules are grouped under this dir, both in the main checkout and inside each
+# per-task worktree. Repo identifiers (in --repos and the manifest) stay bare names;
+# this prefix locates them on disk. To flatten back to the root, set MODULES_DIR="".
+MODULES_DIR="modules"
+MANIFEST="$WORKSPACE_ROOT/worktrees/WORKSPACES.md"
+
+# Path to a submodule's checkout, given a base dir (the main root or a worktree dir).
+submodule_path() { if [ -n "$MODULES_DIR" ]; then printf '%s/%s/%s' "$1" "$MODULES_DIR" "$2"; else printf '%s/%s' "$1" "$2"; fi; }
+
+# ── output helpers (info/warn/die → stderr; emit → stdout) ────────────────────
+info() { printf '  %s\n' "$*" >&2; }
+warn() { printf 'workspace: warning: %s\n' "$*" >&2; }
+die()  { printf 'workspace: error: %s\n' "$*" >&2; exit 1; }
+emit() { printf '%s\n' "$*"; }
+
+is_known_submodule() {
+  case " $KNOWN_SUBMODULES " in *" $1 "*) return 0;; *) return 1;; esac
+}
+
+# Claude Code keys per-project memory/history by the absolute cwd path with '/' → '-'.
+path_to_project_key() { printf '%s' "$1" | sed 's#/#-#g'; }
+
+# Is there a git worktree (workspace or submodule) materialized at this path?
+worktree_present() { [ -e "$1/.git" ]; }
+
+# ── integration branch resolution ─────────────────────────────────────────────
+integration_branch() {
+  local repo="$1" rd br def
+  rd="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+  [ -d "$rd" ] || die "unknown submodule path: $rd"
+  br="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
+  def="$(git -C "$rd" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)"
+  if [ -z "$br" ]; then
+    [ -n "$def" ] || die "$repo is detached and origin/HEAD is unknown — cannot resolve integration branch"
+    warn "$repo is in detached HEAD; falling back to its default branch '$def'"
+    br="$def"
+  elif [ -n "$def" ] && [ "$br" != "$def" ]; then
+    warn "$repo is on '$br' but its default is '$def' — using '$br' as the integration base (move feature work into a worktree if this is stale work in the main checkout)"
+  fi
+  printf '%s' "$br"
+}
+
+# ── manifest (worktrees/WORKSPACES.md) ────────────────────────────────────────
+manifest_ensure() {
+  mkdir -p "$(dirname "$MANIFEST")"
+  [ -f "$MANIFEST" ] && return 0
+  cat > "$MANIFEST" <<'EOF'
+# Workspaces Manifest
+
+Reconstruction recipe for the per-task worktrees under `worktrees/`. Each row is enough
+to rebuild a `worktrees/<TASK>/` mini-workspace on a fresh clone: re-create the workspace
+worktree, then a worktree of each listed repo on the task's feature branch (which
+`/workspace-sync` has pushed to the submodule remotes). The checkouts themselves are
+gitignored; this file is tracked. Managed by `/workspace` and `/teardown` (`bin/workspace`).
+
+| Task | Title | Repos | Branch | Opened |
+|------|-------|-------|--------|--------|
+EOF
+}
+
+manifest_remove() {
+  local task="$1" tmp
+  [ -f "$MANIFEST" ] || return 0
+  tmp="$(mktemp)"
+  # Drop the data row whose first column (Task) equals $task EXACTLY. Compared as a literal
+  # field value (not a regex), so task names with regex metacharacters — `dotfiles.v2`, `a+b`
+  # — match only their own row instead of matching/missing the wrong one.
+  awk -F'|' -v t="$task" '{ f=$2; gsub(/^[ \t]+|[ \t]+$/, "", f); if (f != t) print }' "$MANIFEST" > "$tmp"
+  mv "$tmp" "$MANIFEST"
+}
+
+manifest_upsert() {
+  local task="$1" title="$2" repos="$3" branch="$4" opened
+  opened="$(date +%Y-%m-%d)"
+  manifest_ensure
+  manifest_remove "$task"
+  printf '| %s | %s | %s | %s | %s |\n' "$task" "${title:-—}" "$repos" "$branch" "$opened" >> "$MANIFEST"
+}
+
+# ── memory symlink (share canonical memory; history stays per-task) ───────────
+setup_memory_symlink() {
+  local ws_dir="$1" projects_dir canonical_memory per_task_dir link
+  projects_dir="$HOME/.claude/projects"
+  canonical_memory="$projects_dir/$(path_to_project_key "$WORKSPACE_ROOT")/memory"
+  per_task_dir="$projects_dir/$(path_to_project_key "$ws_dir")"
+  link="$per_task_dir/memory"
+  mkdir -p "$canonical_memory" "$per_task_dir"
+  if [ -L "$link" ]; then
+    info "memory: symlink already present"
+  elif [ -e "$link" ]; then
+    warn "memory: $link exists and is not a symlink — leaving as-is (history will be isolated but memory not shared)"
+  else
+    ln -s "$canonical_memory" "$link"
+    info "memory: linked $link → canonical (shared facts, isolated history)"
+  fi
+}
+
+# ── create ────────────────────────────────────────────────────────────────────
+cmd_create() {
+  local task="" branch="" repos="" title=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task)   task="$2";   shift 2;;
+      --branch) branch="$2"; shift 2;;
+      --repos)  repos="$2";  shift 2;;
+      --title)  title="$2";  shift 2;;
+      *) die "create: unknown flag $1";;
+    esac
+  done
+  [ -n "$task" ]   || die "create requires --task (e.g. dotfiles-zsh)"
+  [ -n "$branch" ] || die "create requires --branch (e.g. feature/dotfiles-zsh)"
+  [ -n "$repos" ]  || die "create requires --repos (comma-separated; e.g. dotfiles,tao-te-ching)"
+
+  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+  local -a repo_arr
+  IFS=',' read -ra repo_arr <<< "$repos"
+  local repo
+  for repo in "${repo_arr[@]}"; do
+    is_known_submodule "$repo" || die "create: '$repo' is not a known submodule ($KNOWN_SUBMODULES)"
+  done
+
+  # 1. workspace-repo worktree (detached @ current workspace HEAD — scaffolding only, no pins)
+  if worktree_present "$ws_dir"; then
+    info "workspace worktree already at $ws_dir"
+  else
+    info "creating workspace worktree at worktrees/$task (detached)"
+    git -C "$WORKSPACE_ROOT" worktree add --detach "$ws_dir" HEAD >/dev/null
+  fi
+
+  # 2. a worktree of each in-scope submodule, on the task's feature branch
+  for repo in "${repo_arr[@]}"; do
+    local repo_path target ib
+    repo_path="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    target="$(submodule_path "$ws_dir" "$repo")"
+    mkdir -p "$(dirname "$target")"   # ensure worktrees/<TASK>/modules/ exists
+    ib="$(integration_branch "$repo")"
+    git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || warn "$repo: fetch origin/$ib failed (offline?) — proceeding with local refs"
+    if worktree_present "$target"; then
+      info "$repo: worktree already present"
+    elif git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
+      info "$repo: attaching existing local branch $branch"
+      # An existing local branch may already be checked out in another worktree, in which
+      # case `worktree add` fails ("already checked out at …"). Without this guard, set -e
+      # would abort cmd_create mid-loop, leaving a half-built workspace. Skip this repo with
+      # a clear, actionable diagnostic instead — create is idempotent, so re-run once resolved.
+      if ! git -C "$repo_path" worktree add "$target" "$branch" >/dev/null 2>&1; then
+        warn "$repo: cannot attach branch '$branch' — it may already be checked out in another worktree (see: git -C \"$repo_path\" worktree list). Skipping $repo; resolve, then re-run /workspace $task."
+        continue
+      fi
+    elif git -C "$repo_path" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+      info "$repo: restoring branch $branch from origin (tracking)"
+      git -C "$repo_path" worktree add --track -b "$branch" "$target" "origin/$branch" >/dev/null
+    else
+      info "$repo: new branch $branch off origin/$ib"
+      git -C "$repo_path" worktree add -b "$branch" "$target" "origin/$ib" >/dev/null
+    fi
+
+    # Initialize the worktree's scaffolding (env files, symlinks, history files) if the
+    # repo ships a bin/worktree-init. The post-checkout hook is supposed to do this on
+    # `git worktree add`, but it doesn't fire reliably here — so invoke it directly.
+    # Idempotent and repo-guarded: only repos that ship bin/worktree-init get it.
+    if [ -x "$target/bin/worktree-init" ]; then
+      info "$repo: running bin/worktree-init (env files, symlinks)"
+      ( cd "$target" && bin/worktree-init >/dev/null ) || warn "$repo: bin/worktree-init failed (continuing)"
+    fi
+  done
+
+  # 3. share memory (must exist before Claude launches in the workspace)
+  setup_memory_symlink "$ws_dir"
+
+  # 4. record in the reconstruction manifest (caller commits it)
+  manifest_upsert "$task" "$title" "$repos" "$branch"
+  info "manifest: recorded $task (caller should commit worktrees/WORKSPACES.md)"
+
+  emit "workspace_dir=$ws_dir task=$task repos=$repos branch=$branch status=ready"
+}
+
+# ── sync (merge integration branch in, push; report conflicts) ────────────────
+cmd_sync() {
+  local task=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task) task="$2"; shift 2;;
+      *) die "sync: unknown flag $1";;
+    esac
+  done
+  [ -n "$task" ] || die "sync requires --task"
+  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+  worktree_present "$ws_dir" || die "no workspace at $ws_dir (run /workspace $task first)"
+
+  local repo any=0 conflicts=0
+  for repo in $KNOWN_SUBMODULES; do
+    local rd
+    rd="$(submodule_path "$ws_dir" "$repo")"
+    worktree_present "$rd" || continue
+    any=1
+    local ib cur
+    ib="$(integration_branch "$repo")"
+    cur="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
+    # Detached HEAD → empty $cur; the no-upstream push below would become the invalid
+    # `git push -u origin ""`. Bail early with a clear diagnostic instead.
+    if [ -z "$cur" ]; then
+      emit "ERROR $repo: detached HEAD in worktrees/$task/$repo — checkout the feature branch before syncing"; conflicts=1; continue
+    fi
+    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; conflicts=1; continue; }
+    if git -C "$rd" merge --no-edit "origin/$ib" >/dev/null 2>&1; then
+      if git -C "$rd" rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+        if git -C "$rd" push >/dev/null 2>&1; then
+          emit "OK $repo: merged origin/$ib into $cur, pushed"
+        else
+          emit "ERROR $repo: merged origin/$ib but push failed (resolve in worktrees/$task/$repo)"; conflicts=1
+        fi
+      elif git -C "$rd" push -u origin "$cur" >/dev/null 2>&1; then
+        emit "OK $repo: merged origin/$ib into $cur, pushed (set upstream)"
+      else
+        emit "ERROR $repo: merged origin/$ib but initial push failed (resolve in worktrees/$task/$repo)"; conflicts=1
+      fi
+    else
+      emit "CONFLICT $repo: merge of origin/$ib into $cur conflicts — resolve in worktrees/$task/$repo, then re-run sync"
+      conflicts=1
+    fi
+  done
+  [ "$any" = 1 ] || die "no submodule worktrees found under $ws_dir"
+  return "$conflicts"
+}
+
+# ── update-modules (fast-forward main-checkout submodules; caller pins) ───────
+cmd_update_modules() {
+  local repos=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --repos) repos="$2"; shift 2;;
+      *) die "update-modules: unknown flag $1";;
+    esac
+  done
+  local -a repo_arr
+  if [ -n "$repos" ]; then
+    IFS=',' read -ra repo_arr <<< "$repos"
+  else
+    read -ra repo_arr <<< "$KNOWN_SUBMODULES"
+  fi
+
+  local repo moved=""
+  for repo in "${repo_arr[@]}"; do
+    is_known_submodule "$repo" || die "update-modules: '$repo' is not a known submodule"
+    local rd ib before after
+    rd="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    ib="$(integration_branch "$repo")"
+    before="$(git -C "$rd" rev-parse --short HEAD)"
+    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; continue; }
+    if git -C "$rd" merge --ff-only "origin/$ib" >/dev/null 2>&1; then
+      after="$(git -C "$rd" rev-parse --short HEAD)"
+      if [ "$before" != "$after" ]; then
+        emit "MOVED $repo: $before → $after ($ib)"; moved="$moved $repo"
+      else
+        emit "OK $repo: already current ($ib @ $after)"
+      fi
+    else
+      emit "SKIP $repo: origin/$ib is not a fast-forward from $before (diverged or local commits on '$ib') — resolve manually"
+    fi
+  done
+  # tell the caller which gitlinks to stage+commit as pins
+  [ -n "$moved" ] && emit "PIN:${moved# }"
+  return 0
+}
+
+# ── teardown (remove worktrees, prune, drop manifest row) ─────────────────────
+cmd_teardown() {
+  local task="" check=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task)  task="$2"; shift 2;;
+      --check) check=1; shift;;
+      *) die "teardown: unknown flag $1";;
+    esac
+  done
+  [ -n "$task" ] || die "teardown requires --task"
+  local ws_dir="$WORKSPACE_ROOT/worktrees/$task"
+
+  # ── --check: dry-run safety report. Surfaces uncommitted + unpushed work per
+  # submodule worktree and changes NOTHING. Lets /teardown run the safety check
+  # via the (cwd-independent) engine instead of a fragile shell glob. Final line
+  # is `check=clean|dirty task=<TASK>` for the caller to branch on. ────────────
+  if [ "$check" = 1 ]; then
+    worktree_present "$ws_dir" || die "no workspace at $ws_dir (nothing to tear down)"
+    local repo any=0 dirty=0
+    for repo in $KNOWN_SUBMODULES; do
+      local rd
+      rd="$(submodule_path "$ws_dir" "$repo")"
+      worktree_present "$rd" || continue
+      any=1
+      local st unpushed cur no_upstream=0 ib
+      cur="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
+      st="$(git -C "$rd" status --porcelain 2>/dev/null || true)"
+      if git -C "$rd" rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+        unpushed="$(git -C "$rd" log --oneline '@{u}..' 2>/dev/null || true)"
+      else
+        # No upstream set yet ≠ dirty. Approximate "unpushed work" as commits unique to this
+        # branch vs its integration base, so a freshly-created branch with zero commits beyond
+        # base isn't flagged dirty (and blocked from teardown) merely for lacking an upstream.
+        no_upstream=1
+        ib="$(integration_branch "$repo")"
+        unpushed="$(git -C "$rd" log --oneline "origin/$ib.." 2>/dev/null || true)"
+      fi
+      [ -n "$st$unpushed" ] && dirty=1
+      emit "REPO $repo (branch ${cur:-detached})"
+      if [ -n "$st" ]; then emit "  uncommitted:"; emit "$st"; else emit "  uncommitted: none"; fi
+      if [ -n "$unpushed" ]; then
+        emit "  unpushed:"; emit "$unpushed"
+        [ "$no_upstream" = 1 ] && emit "  (no upstream set — run /workspace-sync $task to push)"
+      elif [ "$no_upstream" = 1 ]; then
+        emit "  unpushed: none (no upstream set yet; no commits beyond origin/${ib})"
+      else
+        emit "  unpushed: none"
+      fi
+    done
+    [ "$any" = 1 ] || emit "(no submodule worktrees under $ws_dir)"
+    if [ "$dirty" = 1 ]; then emit "check=dirty task=$task"; else emit "check=clean task=$task"; fi
+    return 0
+  fi
+
+  local repo
+  for repo in $KNOWN_SUBMODULES; do
+    local target repo_path
+    target="$(submodule_path "$ws_dir" "$repo")"
+    repo_path="$(submodule_path "$WORKSPACE_ROOT" "$repo")"
+    if worktree_present "$target"; then
+      info "removing $repo worktree"
+      git -C "$repo_path" worktree remove --force "$target" || warn "$repo: worktree remove failed for $target"
+    fi
+  done
+  if worktree_present "$ws_dir"; then
+    info "removing workspace worktree"
+    git -C "$WORKSPACE_ROOT" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
+  fi
+  # prune dangling worktree admin entries
+  git -C "$WORKSPACE_ROOT" worktree prune 2>/dev/null || true
+  for repo in $KNOWN_SUBMODULES; do
+    git -C "$(submodule_path "$WORKSPACE_ROOT" "$repo")" worktree prune 2>/dev/null || true
+  done
+  # NOTE: deliberately leave the per-task memory symlink + history dir under
+  # ~/.claude/projects untouched (no rm under $HOME). The symlink points at the
+  # persistent canonical memory and is harmless.
+
+  manifest_remove "$task"
+  info "manifest: dropped $task (caller should commit worktrees/WORKSPACES.md)"
+  emit "torn_down=$task status=removed"
+}
+
+# ── list ──────────────────────────────────────────────────────────────────────
+cmd_list() {
+  if [ -f "$MANIFEST" ]; then
+    cat "$MANIFEST"
+  else
+    emit "(no manifest yet)"
+  fi
+  emit ""
+  emit "Workspace worktrees:"
+  git -C "$WORKSPACE_ROOT" worktree list
+}
+
+# ── dispatch ──────────────────────────────────────────────────────────────────
+usage() { sed -n '2,30p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+
+[ $# -gt 0 ] || usage
+cmd="$1"; shift
+case "$cmd" in
+  create)               cmd_create "$@";;
+  sync)                 cmd_sync "$@";;
+  update-modules)       cmd_update_modules "$@";;
+  teardown)             cmd_teardown "$@";;
+  integration-branch)   [ $# -eq 1 ] || die "integration-branch requires exactly one <repo>"; integration_branch "$1"; printf '\n';;
+  root)                 emit "$WORKSPACE_ROOT";;
+  list)                 cmd_list;;
+  -h|--help|help)       usage;;
+  *) die "unknown command: $cmd (expected: create|sync|update-modules|teardown|integration-branch|root|list)";;
+esac
