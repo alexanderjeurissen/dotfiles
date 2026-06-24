@@ -195,11 +195,11 @@ cmd_create() {
     is_known_submodule "$repo" || die "create: '$repo' is not a known submodule ($KNOWN_SUBMODULES)"
   done
 
-  # 1. hub-repo worktree (detached @ current hub HEAD — scaffolding only, no pins)
+  # 1. the workspace's top-level worktree (of the hub repo, detached @ current hub HEAD — scaffolding only, no pins)
   if worktree_present "$ws_dir"; then
-    info "hub-repo worktree already at $ws_dir"
+    info "workspace already at $ws_dir"
   else
-    info "creating hub-repo worktree at worktrees/$task (detached)"
+    info "creating workspace at worktrees/$task (detached)"
     git -C "$HUB" worktree add --detach "$ws_dir" HEAD >/dev/null
   fi
 
@@ -406,7 +406,7 @@ cmd_teardown() {
     fi
   done
   if worktree_present "$ws_dir"; then
-    info "removing hub-repo worktree"
+    info "removing workspace"
     git -C "$HUB" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
   fi
   # prune dangling worktree admin entries
@@ -431,7 +431,7 @@ cmd_list() {
     emit "(no manifest yet)"
   fi
   emit ""
-  emit "Hub worktrees:"
+  emit "Workspace worktrees:"
   git -C "$HUB" worktree list
 }
 

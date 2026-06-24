@@ -1,6 +1,6 @@
 ---
 description: >-
-  Dismantle a per-issue workspace: remove the nested submodule worktrees and the hub-repo worktree,
+  Dismantle a per-issue workspace: remove the nested submodule worktrees and the workspace's top-level worktree,
   prune, and drop the manifest row (committing it). Auto-targets the workspace it's run from. Checks
   for unpushed/uncommitted work (and a running dev stack) and confirms before destroying. Leaves the
   cmux workspace open (closing it is the user's call) and does not delete feature branches.
@@ -91,7 +91,7 @@ Then run the teardown engine (cwd-independent — `workspace` self-anchors):
 ```bash
 workspace teardown --issue <ISSUE-ID>
 ```
-Removes each submodule worktree, then the hub-repo worktree, prunes, and drops the manifest row. It
+Removes each submodule worktree, then the workspace's top-level worktree, prunes, and drops the manifest row. It
 deliberately **leaves** the per-issue memory symlink + history under `~/.claude` untouched (harmless;
 points at persistent canonical memory).
 

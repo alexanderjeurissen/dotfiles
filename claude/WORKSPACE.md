@@ -10,8 +10,8 @@ Two terms carry the load (and used to collide — they're now distinct):
 - **hub** = the top-level checkout — the stable integration view, containing `modules/` (submodules
   on their integration branches) and `worktrees/`. It stays open as the home base. The git repo it's
   a checkout of is the **hub repo**.
-- **workspace** = the per-issue, isolated environment for one unit of work — *materialized* as a git
-  *worktree* of the hub (the hub-repo worktree + nested submodule worktrees) plus its cmux workspace.
+- **workspace** = the per-issue, isolated environment for one unit of work — *materialized* as git
+  *worktrees* (a top-level worktree of the hub + nested submodule worktrees) plus its cmux workspace.
   ("worktree" is the git mechanism; "workspace" is the thing you work in.)
 
 Also: **issue** = the work identifier a workspace is keyed on (a tracker issue, a PR/MR, or an
@@ -66,7 +66,7 @@ environment.
 └─ worktrees/
    ├─ WORKSPACES.md             tracked reconstruction manifest (the checkouts are gitignored)
    └─ <ISSUE>/                  a per-issue workspace (worktree of the hub repo)
-      ├─ CLAUDE.md .claude/ …    came free with the hub-repo worktree
+      ├─ CLAUDE.md .claude/ …    came free with the top-level worktree
       └─ modules/
          └─ repo-a/             worktree of repo-a on the feature branch (shared object store)
 ```
@@ -84,7 +84,7 @@ hardcoded. **Feature work never lives in the hub checkout — only in workspaces
 
 | Command | What it does |
 |---|---|
-| `/workspace <ISSUE>` | Create the workspace: a hub-repo worktree + submodule worktrees on the feature branch, share memory, record the manifest, spawn a cmux workspace (Claude Code + terminal splits) cwd'd into it. Claude *suggests* repo scope; the user confirms. |
+| `/workspace <ISSUE>` | Create the workspace: a top-level worktree + submodule worktrees on the feature branch, share memory, record the manifest, spawn a cmux workspace (Claude Code + terminal splits) cwd'd into it. Claude *suggests* repo scope; the user confirms. |
 | `/workspace-sync [ISSUE]` | **Merge** each submodule's integration branch into the feature branch (never rebase) + push. Auto-resolves mechanical conflicts, asks when ambiguous; auto-targets the workspace it's run from. No force-push. |
 | `/update-modules` | Fast-forward the hub checkout's submodules to their integration tips + **pin**. The only pinning path. Run after upstream PRs/MRs merge. |
 | `/teardown <ISSUE>` | Remove the workspace's worktrees + drop the manifest row (after a safety check for unsaved work). Keeps feature branches and the cmux workspace. |
