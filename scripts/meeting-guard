@@ -1,0 +1,871 @@
+#!/usr/bin/env python3
+"""
+meeting-guard — an unmissable, terminal-takeover meeting alert for cmux.
+
+A launchd agent runs `meeting-guard poll` every 60s. It reads the next few hours
+of the user's Google Calendar (via gcalcli) and escalates in two stages:
+
+  T-5 min  heads-up : macOS notification + a cmux flash. Soft, non-disruptive.
+  T-2 min  takeover : forcibly switches the visible cmux workspace to a full-screen
+                      red countdown that BLOCKS until acknowledged, re-grabbing focus,
+                      flashing, beeping, and floating a macOS modal on top of every app.
+
+launchd lives outside cmux's session and can't drive its socket, so the work is
+split: the launchd `poll` decides + drops a trigger file (and fires a macOS
+critical modal if the watcher is down); the in-session `watch` loop renders the
+pretty red-screen takeover.
+
+Subcommands:
+  poll            Read calendar; trigger takeover / heads-up as due (what launchd runs).
+  watch           In-cmux loop: heartbeat + render takeovers from the trigger file.
+  takeover ...    The full-screen TUI itself (spawned inside the cmux alert workspace).
+  test            Fabricate a meeting ~2 min out and fire the takeover NOW (live demo).
+  agenda          Print what gcalcli currently returns (debug the calendar reader).
+  install         Install + load the launchd agent.
+  uninstall       Unload + remove the launchd agent.
+  status          Show launchd + config + recent log.
+
+Design notes:
+  - All state lives in ~/.config/meeting-guard/ ; logs in ~/.local/state/meeting-guard/.
+  - Dedup is keyed per event so each meeting fires heads-up once and takeover once.
+  - Snooze writes a snooze_until into state; poll re-spawns the takeover after it lapses.
+  - cmux is driven over its unix socket; from launchd we set CMUX_SOCKET_PATH explicitly.
+"""
+
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+from datetime import datetime, timedelta, timezone
+
+HOME = os.path.expanduser("~")
+CONFIG_DIR = os.path.join(HOME, ".config", "meeting-guard")
+STATE_PATH = os.path.join(CONFIG_DIR, "state.json")
+CONFIG_PATH = os.path.join(CONFIG_DIR, "config.json")
+# launchd→cmux bridge: launchd can't reach the cmux socket (different session),
+# so it drops a trigger here; the in-session `watch` loop renders the takeover
+# and proves it's alive via the heartbeat. See dispatch_takeover().
+TRIGGER_PATH = os.path.join(CONFIG_DIR, "trigger.json")
+HEARTBEAT_PATH = os.path.join(CONFIG_DIR, "watch.heartbeat")
+WATCH_LABEL = "meeting-guard"  # cmux workspace name for the watcher
+LOG_DIR = os.path.join(HOME, ".local", "state", "meeting-guard")
+LOG_PATH = os.path.join(LOG_DIR, "guard.log")
+
+LABEL = "com.alexanderjeurissen.meeting-guard"
+PLIST_PATH = os.path.join(HOME, "Library", "LaunchAgents", LABEL + ".plist")
+SELF = os.path.realpath(__file__)
+
+# cmux socket as discovered via `cmux identify` (uid-suffixed). launchd has no
+# inherited session, so we hand it the path explicitly.
+DEFAULT_CMUX_SOCKET = os.path.join(
+    HOME, "Library", "Application Support", "cmux", "cmux-501.sock"
+)
+
+DEFAULTS = {
+    # gcalcli reader. {start}/{end} are filled with ISO timestamps at call time.
+    # --tsv gives tab-separated rows; --details=url appends the hangout/event link.
+    "gcalcli_cmd": [
+        "gcalcli", "--nocolor", "agenda", "--tsv", "--military",
+        "--details=url", "--nodeclined", "{start}", "{end}",
+    ],
+    "soft_min": 5,    # heads-up threshold (minutes before start)
+    "hard_min": 2,    # full-takeover threshold
+    "lookahead_hours": 12,
+    "max_duration_hours": 4,  # skip longer events: busy/focus blocks, not meetings
+    "snooze_min": 1,  # how long the 's' key snoozes the takeover
+    "color": "#c62828",
+}
+
+
+# ---------------------------------------------------------------------------
+# small infra: config, state, logging, binaries
+# ---------------------------------------------------------------------------
+
+def ensure_dirs():
+    os.makedirs(CONFIG_DIR, exist_ok=True)
+    os.makedirs(LOG_DIR, exist_ok=True)
+
+
+def load_config():
+    cfg = dict(DEFAULTS)
+    try:
+        with open(CONFIG_PATH) as f:
+            cfg.update(json.load(f))
+    except FileNotFoundError:
+        pass
+    return cfg
+
+
+def load_state():
+    try:
+        with open(STATE_PATH) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_state(state):
+    ensure_dirs()
+    tmp = STATE_PATH + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(state, f, indent=2)
+    os.replace(tmp, STATE_PATH)
+
+
+def log(msg):
+    ensure_dirs()
+    stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    line = f"[{stamp}] {msg}"
+    try:
+        with open(LOG_PATH, "a") as f:
+            f.write(line + "\n")
+    except OSError:
+        pass
+    if sys.stderr.isatty():
+        print(line, file=sys.stderr)
+
+
+# cmux ships its CLI inside the app bundle, which is NOT on launchd's PATH.
+CMUX_BIN_FALLBACKS = ["/Applications/cmux.app/Contents/Resources/bin/cmux"]
+
+
+def which(name):
+    p = shutil.which(name) or shutil.which(
+        name, path="/opt/homebrew/bin:/usr/local/bin:" + os.path.join(HOME, ".local/bin")
+    )
+    if p:
+        return p
+    if name == "cmux":
+        for c in CMUX_BIN_FALLBACKS:
+            if os.path.exists(c):
+                return c
+    return None
+
+
+def cmux_env():
+    env = dict(os.environ)
+    env.setdefault("CMUX_SOCKET_PATH", DEFAULT_CMUX_SOCKET)
+    # launchd PATH is bare; make sure the cmux/gcalcli shims resolve.
+    env["PATH"] = ":".join([
+        "/opt/homebrew/bin", "/usr/local/bin",
+        os.path.join(HOME, ".local/bin"), env.get("PATH", "/usr/bin:/bin"),
+    ])
+    return env
+
+
+def cmux(*args, check=False):
+    binp = which("cmux")
+    if not binp:
+        log("cmux binary not found; skipping " + " ".join(args))
+        return None
+    try:
+        r = subprocess.run(
+            [binp, *args], env=cmux_env(),
+            capture_output=True, text=True, timeout=15, check=check,
+        )
+    except (subprocess.SubprocessError, OSError) as e:
+        log(f"cmux {' '.join(args)} errored: {e}")
+        return None
+    if r.returncode != 0:
+        detail = (r.stderr or r.stdout or "").strip().replace("\n", " ")[:300]
+        log(f"cmux {args[0]} rc={r.returncode}: {detail}")
+    return r
+
+
+def notify(title, message, sound="Glass"):
+    tn = which("terminal-notifier")
+    if tn:
+        subprocess.run(
+            [tn, "-title", title, "-message", message, "-sound", sound,
+             "-group", LABEL],
+            env=cmux_env(), capture_output=True, text=True,
+        )
+
+
+def beep():
+    osa = which("osascript")
+    if osa:
+        subprocess.run([osa, "-e", "beep 2"], capture_output=True)
+
+
+# ---------------------------------------------------------------------------
+# calendar reader (gcalcli)
+# ---------------------------------------------------------------------------
+
+def read_meetings(cfg):
+    """Return a list of dicts {start: datetime(local), title, url} for upcoming events."""
+    gcal = which("gcalcli")
+    if not gcal:
+        log("gcalcli not installed/authenticated yet — no meetings read.")
+        return load_agenda_cache(cfg, "gcalcli missing")
+
+    now = datetime.now()
+    end = now + timedelta(hours=cfg["lookahead_hours"])
+    start_s = now.strftime("%Y-%m-%dT%H:%M")
+    end_s = end.strftime("%Y-%m-%dT%H:%M")
+
+    cmd = [gcal if a == "gcalcli" else a.format(start=start_s, end=end_s)
+           for a in cfg["gcalcli_cmd"]]
+    try:
+        out = subprocess.run(
+            cmd, env=cmux_env(), capture_output=True, text=True, timeout=30
+        )
+    except (subprocess.SubprocessError, OSError) as e:
+        log(f"gcalcli failed: {e}")
+        return load_agenda_cache(cfg, "gcalcli error")
+
+    if out.returncode != 0:
+        log(f"gcalcli rc={out.returncode}: {out.stderr.strip()[:200]}")
+        return load_agenda_cache(cfg, f"gcalcli rc={out.returncode}")
+
+    meetings = []
+    for raw in out.stdout.splitlines():
+        line = raw.rstrip("\n")
+        if not line.strip():
+            continue
+        fields = line.split("\t")
+        if len(fields) < 3:
+            continue
+        sdate, stime = fields[0].strip(), fields[1].strip()
+        if not stime:  # all-day event -> empty start time; skip per scope
+            continue
+        try:
+            start = datetime.strptime(f"{sdate} {stime}", "%Y-%m-%d %H:%M")
+        except ValueError:
+            continue
+        # end (for duration): tsv cols 3,4 are end_date, end_time
+        end = None
+        if len(fields) >= 4 and fields[3].strip():
+            try:
+                end = datetime.strptime(
+                    f"{fields[2].strip()} {fields[3].strip()}", "%Y-%m-%d %H:%M")
+            except ValueError:
+                end = None
+        # skip multi-hour "busy"/focus blocks ("Don't book without asking!" etc.)
+        if end and (end - start) > timedelta(hours=cfg["max_duration_hours"]):
+            continue
+        # prefer a real join link (Meet/Zoom) over the generic event page
+        links = [f.strip() for f in fields if f.strip().startswith("http")]
+        url = next((u for u in links
+                    if any(h in u for h in ("meet.google", "zoom.", "hangout"))),
+                   links[0] if links else "")
+        title = ""
+        # title is the last non-url, non-time field
+        for f in reversed(fields[2:]):
+            f = f.strip()
+            if f and not f.startswith("http") and not _looks_like_dt(f):
+                title = f
+                break
+        meetings.append({"start": start, "title": title or "(untitled meeting)",
+                         "url": url})
+    save_agenda_cache(meetings)
+    return meetings
+
+
+AGENDA_CACHE_PATH = os.path.join(CONFIG_DIR, "agenda_cache.json")
+
+
+def save_agenda_cache(meetings):
+    """Persist the last good agenda so a flaky gcalcli read doesn't blind a poll."""
+    ensure_dirs()
+    payload = {
+        "ts": datetime.now().isoformat(),
+        "meetings": [{"start": m["start"].isoformat(), "title": m["title"],
+                      "url": m.get("url", "")} for m in meetings],
+    }
+    tmp = AGENDA_CACHE_PATH + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(payload, f)
+    os.replace(tmp, AGENDA_CACHE_PATH)
+
+
+def load_agenda_cache(cfg, reason):
+    """Fall back to the last good agenda when gcalcli fails, if recent enough.
+
+    The calendar barely changes minute-to-minute, so reusing a recent read is
+    far safer than returning [] (which would silently skip an imminent meeting).
+    """
+    try:
+        with open(AGENDA_CACHE_PATH) as f:
+            data = json.load(f)
+        age = (datetime.now() - datetime.fromisoformat(data["ts"])).total_seconds()
+    except (OSError, ValueError, KeyError):
+        log(f"{reason}; no usable agenda cache — returning no meetings")
+        return []
+    max_age = cfg.get("cache_max_age_hours", 3) * 3600
+    if age > max_age:
+        log(f"{reason}; agenda cache too old ({age/3600:.1f}h) — returning no meetings")
+        return []
+    meetings = [{"start": _parse_dt(m["start"]), "title": m["title"], "url": m.get("url", "")}
+                for m in data.get("meetings", [])]
+    log(f"{reason}; using cached agenda ({age/60:.0f}m old, {len(meetings)} events)")
+    return meetings
+
+
+def _looks_like_dt(s):
+    for fmt in ("%Y-%m-%d", "%H:%M"):
+        try:
+            datetime.strptime(s, fmt)
+            return True
+        except ValueError:
+            pass
+    return False
+
+
+def event_key(m):
+    return m["start"].strftime("%Y%m%dT%H%M") + "|" + m["title"][:60]
+
+
+# ---------------------------------------------------------------------------
+# poll: decide + fire
+# ---------------------------------------------------------------------------
+
+def cmd_poll(cfg):
+    state = load_state()
+    now = datetime.now()
+    meetings = read_meetings(cfg)
+
+    # prune state for events now well in the past
+    for k in list(state):
+        try:
+            kt = datetime.strptime(k.split("|")[0], "%Y%m%dT%H%M")
+        except ValueError:
+            continue
+        if now - kt > timedelta(hours=3):
+            del state[k]
+
+    for m in meetings:
+        mins = (m["start"] - now).total_seconds() / 60.0
+        if mins < -1 or mins > cfg["soft_min"]:
+            continue
+        key = event_key(m)
+        st = state.setdefault(key, {})
+
+        # heads-up window: (hard, soft]
+        if cfg["hard_min"] < mins <= cfg["soft_min"] and not st.get("headsup"):
+            st["headsup"] = now.isoformat()
+            log(f"heads-up: '{m['title']}' in {mins:.1f} min")
+            notify(f"⏰ Meeting in {int(round(mins))} min", m["title"])
+            cmux("trigger-flash")  # caller workspace default
+
+        # takeover window: <= hard, until meeting start (+grace)
+        if mins <= cfg["hard_min"]:
+            snooze_until = st.get("snooze_until")
+            if snooze_until and datetime.fromisoformat(snooze_until) > now:
+                continue
+            if st.get("takeover") and not st.get("snooze_until"):
+                continue  # already took over once and wasn't snoozed
+            st["takeover"] = now.isoformat()
+            st.pop("snooze_until", None)
+            log(f"TAKEOVER: '{m['title']}' in {mins:.1f} min")
+            dispatch_takeover(cfg, m)
+
+    save_state(state)
+
+
+def watcher_alive():
+    """True if the in-cmux watch loop heartbeated recently (<15s)."""
+    try:
+        return (time.time() - os.path.getmtime(HEARTBEAT_PATH)) < 15
+    except OSError:
+        return False
+
+
+def write_trigger(m):
+    ensure_dirs()
+    payload = {
+        "key": event_key(m),
+        "title": m["title"],
+        "start": m["start"].isoformat(),
+        "url": m.get("url", ""),
+        "ts": datetime.now().isoformat(),
+    }
+    tmp = TRIGGER_PATH + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(payload, f)
+    os.replace(tmp, TRIGGER_PATH)
+
+
+def dispatch_takeover(cfg, m):
+    """launchd path: hand off to the in-cmux watcher, else fall back to a modal.
+
+    launchd lives outside cmux's session and cannot drive the socket, so the
+    pretty red-screen takeover is rendered by `watch` (in-session). If that
+    watcher isn't alive (cmux closed / fresh boot), the macOS critical modal is
+    the guaranteed unmissable fallback.
+    """
+    write_trigger(m)
+    if watcher_alive():
+        log("watcher alive — cmux will render the takeover")
+    else:
+        log("watcher absent — firing macOS critical modal fallback")
+        modal_takeover(m)
+
+
+def fire_takeover(cfg, m):
+    """Spawn the full-screen TUI in a focused cmux workspace and force-switch to it."""
+    start_iso = m["start"].isoformat()
+    # one tidy command line; the TUI re-reads everything from argv
+    inner = (
+        f"{shquote(SELF)} takeover "
+        f"--title {shquote(m['title'])} "
+        f"--start {shquote(start_iso)} "
+        f"--url {shquote(m['url'])}"
+    )
+    res = None
+    for attempt in range(1, 4):
+        res = cmux("new-workspace", "--name", "⏰ MEETING", "--command", inner,
+                   "--focus", "true")
+        if res is not None and res.returncode == 0:
+            break
+        log(f"new-workspace attempt {attempt}/3 failed; retrying in 2s")
+        time.sleep(2)
+    if res is None or res.returncode != 0:
+        # cmux unreachable: still make noise at the OS level so it's not silent.
+        log("cmux takeover failed after retries; falling back to modal-only alert")
+        modal_takeover(m)
+        return
+    log(f"takeover workspace created: {res.stdout.strip()}")
+    # paint it red + force it to the front (belt-and-suspenders over --focus)
+    cmux("workspace-action", "--action", "set-color", "--color", cfg["color"])
+    cmux("trigger-flash")
+    activate_cmux()  # raise cmux over other apps so the red screen can't hide
+
+
+def activate_cmux():
+    osa = which("osascript")
+    if osa:
+        subprocess.run([osa, "-e", 'tell application id "com.cmuxterm.app" to activate'],
+                       capture_output=True)
+
+
+def modal_takeover(m):
+    """Guaranteed unmissable fallback when cmux can't be driven: a critical,
+    front-floating macOS alert that blocks until clicked."""
+    osa = which("osascript")
+    if not osa:
+        log("osascript missing — no fallback alert available")
+        return
+    try:
+        start = datetime.fromisoformat(m["start"])
+    except (ValueError, TypeError):
+        start = m["start"] if isinstance(m["start"], datetime) else datetime.now()
+    when = start.strftime("%H:%M")
+    title = str(m["title"]).replace('"', "'")
+    url = str(m.get("url", "")).replace('"', "'")
+    body = f"{title}\\nStarts {when}"
+    if url:
+        body += f"\\n{url}"
+    # Bare `display alert` (no System Events wrapper) — this is the form proven
+    # to surface from the launchd context. Critical + front-floating + blocks.
+    subprocess.run(
+        [osa, "-e", "beep 3", "-e",
+         f'display alert "⏰  MEETING STARTING" message "{body}" '
+         'as critical buttons {"Dismiss"} default button "Dismiss"'],
+        capture_output=True,
+    )
+
+
+def shquote(s):
+    return "'" + str(s).replace("'", "'\\''") + "'"
+
+
+# ---------------------------------------------------------------------------
+# takeover: the full-screen blocking TUI (runs inside the cmux alert workspace)
+# ---------------------------------------------------------------------------
+
+RED_BG = "\033[48;2;198;40;40m"   # solid crimson background (truecolor)
+WHITE = "\033[38;2;255;255;255m"
+DIM = "\033[38;2;255;205;205m"    # soft pink for secondary text
+BOLD = "\033[1m"
+RESET = "\033[0m"
+HIDE_CUR = "\033[?25l"
+SHOW_CUR = "\033[?25h"
+
+# 5-row block font for the countdown — rendered chunky (each cell doubled).
+_FONT = {
+    "0": ["███", "█ █", "█ █", "█ █", "███"],
+    "1": ["  █", "  █", "  █", "  █", "  █"],
+    "2": ["███", "  █", "███", "█  ", "███"],
+    "3": ["███", "  █", "███", "  █", "███"],
+    "4": ["█ █", "█ █", "███", "  █", "  █"],
+    "5": ["███", "█  ", "███", "  █", "███"],
+    "6": ["███", "█  ", "███", "█ █", "███"],
+    "7": ["███", "  █", "  █", "  █", "  █"],
+    "8": ["███", "█ █", "███", "█ █", "███"],
+    "9": ["███", "█ █", "███", "  █", "███"],
+    ":": ["   ", " █ ", "   ", " █ ", "   "],
+    "-": ["   ", "   ", "███", "   ", "   "],
+}
+
+
+def big_text(s):
+    """Render a short string into 5 rows of chunky block glyphs.
+
+    All rows are padded to a uniform width (2-space gaps *between* glyphs, none
+    trailing) so the caller can center them as one aligned block.
+    """
+    rows = ["", "", "", "", ""]
+    for idx, ch in enumerate(s):
+        glyph = _FONT.get(ch, ["   "] * 5)
+        for i in range(5):
+            cell = "".join("██" if c == "█" else "  " for c in glyph[i])
+            rows[i] += ("  " if idx else "") + cell
+    width = max(len(r) for r in rows)
+    return [r.ljust(width) for r in rows]
+
+
+def cmd_takeover(args):
+    import select
+
+    title = _argval(args, "--title", "(meeting)")
+    start_iso = _argval(args, "--start", "")
+    url = _argval(args, "--url", "")
+    try:
+        start = datetime.fromisoformat(start_iso) if start_iso else datetime.now()
+    except ValueError:
+        start = datetime.now()
+
+    cfg = load_config()
+    my_ws = os.environ.get("CMUX_WORKSPACE_ID")
+    last_flash = 0.0
+    last_beep = 0.0
+    last_regrab = 0.0
+
+    sys.stdout.write(HIDE_CUR)
+    try:
+        while True:
+            now = datetime.now()
+            secs = (start - now).total_seconds()
+
+            _draw(title, secs, url)
+
+            # Trap focus on this workspace until acknowledged: if the user
+            # switches away, yank them straight back. Re-selecting the already-
+            # current workspace is a no-op, so this is safe to do every loop.
+            if my_ws and time.monotonic() - last_regrab > 2:
+                cmux("select-workspace", "--workspace", my_ws)
+                last_regrab = time.monotonic()
+            if time.monotonic() - last_flash > 3:
+                cmux("trigger-flash", *(["--workspace", my_ws] if my_ws else []))
+                last_flash = time.monotonic()
+
+            if time.monotonic() - last_beep > 10:
+                beep()
+                last_beep = time.monotonic()
+
+            # stop nagging 3 min after the meeting was supposed to start
+            if secs < -180:
+                _ack_state(title, start, snooze=False)
+                break
+
+            r, _, _ = select.select([sys.stdin], [], [], 1.0)
+            if r:
+                line = sys.stdin.readline().strip().lower()
+                if line in ("s", "snooze"):
+                    _ack_state(title, start, snooze=True, snooze_min=cfg["snooze_min"])
+                    break
+                # any other Enter / input = acknowledged
+                _ack_state(title, start, snooze=False)
+                break
+    finally:
+        sys.stdout.write(SHOW_CUR + RESET + "\n")
+        sys.stdout.flush()
+
+    # close our own alert workspace on the way out
+    if my_ws:
+        cmux("close-workspace", "--workspace", my_ws)
+
+
+def _draw(title, secs, url):
+    size = shutil.get_terminal_size((80, 24))
+    cols, rows = size.columns, size.lines
+    sign = "-" if secs < 0 else ""
+    a = abs(int(secs))
+    countdown = f"{sign}{a // 60:d}:{a % 60:02d}"
+    label = "MEETING STARTED" if secs < 0 else "MEETING STARTS IN"
+
+    # build the centered content block as (text, style) lines
+    lines = [(label, DIM)]
+    lines.append(("", WHITE))
+    for r in big_text(countdown):
+        lines.append((r, WHITE))
+    lines.append(("", WHITE))
+    lines.append((title[: cols - 4], WHITE))
+    if url:
+        lines.append(("", WHITE))
+        lines.append((url[: cols - 4], DIM))
+    lines.append(("", WHITE))
+    lines.append(("", WHITE))
+    lines.append(("[ Enter ]  I'm going        s + Enter  snooze 1 min", DIM))
+
+    top = max(1, (rows - len(lines)) // 2)
+    # paint the WHOLE screen crimson first (ESC[2J clears using current bg),
+    # then position and write each centered line — blank rows stay red.
+    buf = [HIDE_CUR, RESET, RED_BG, BOLD, "\033[2J"]
+    for i, (text, style) in enumerate(lines):
+        buf.append(f"\033[{top + i};1H{RED_BG}{style}{text.center(cols)}")
+    sys.stdout.write("".join(buf))
+    sys.stdout.flush()
+
+
+def _ack_state(title, start, snooze, snooze_min=1):
+    state = load_state()
+    key = event_key({"start": start, "title": title})
+    st = state.setdefault(key, {})
+    if snooze:
+        st["snooze_until"] = (datetime.now() + timedelta(minutes=snooze_min)).isoformat()
+        log(f"snoozed '{title}' for {snooze_min} min")
+    else:
+        st["acked"] = datetime.now().isoformat()
+        st.pop("snooze_until", None)
+        log(f"acknowledged '{title}'")
+    save_state(state)
+
+
+def _argval(args, flag, default=""):
+    if flag in args:
+        i = args.index(flag)
+        if i + 1 < len(args):
+            return args[i + 1]
+    return default
+
+
+# ---------------------------------------------------------------------------
+# test / agenda / install / status
+# ---------------------------------------------------------------------------
+
+def _parse_dt(s):
+    try:
+        return datetime.fromisoformat(s)
+    except (ValueError, TypeError):
+        return datetime.now()
+
+
+def cmd_watch(cfg):
+    """In-cmux session loop: heartbeat + render takeovers the launchd poll triggers."""
+    log("watch loop started (in cmux session)")
+    handled = None
+    while True:
+        try:
+            with open(HEARTBEAT_PATH, "w") as f:
+                f.write(datetime.now().isoformat())
+        except OSError:
+            pass
+        try:
+            with open(TRIGGER_PATH) as f:
+                trig = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            trig = None
+        # dedupe by trigger timestamp, not event key, so a re-dispatch after a
+        # snooze (same meeting, fresh ts) renders again.
+        if trig and trig.get("ts") and trig["ts"] != handled:
+            age = (datetime.now() - _parse_dt(trig.get("ts"))).total_seconds()
+            if age <= 300:  # ignore stale triggers
+                handled = trig["ts"]
+                log(f"watch: rendering takeover for '{trig.get('title')}'")
+                fire_takeover(cfg, {
+                    "start": _parse_dt(trig.get("start")),
+                    "title": trig.get("title", "(meeting)"),
+                    "url": trig.get("url", ""),
+                })
+        time.sleep(2)
+
+
+def _watch_workspace_refs():
+    """Refs of any workspace named WATCH_LABEL (cmux doesn't persist the watch
+    command, so after a restart these are stale idle shells)."""
+    r = cmux("list-workspaces")
+    if r is None:
+        return []
+    refs = []
+    for line in r.stdout.splitlines():
+        if WATCH_LABEL in line:
+            mo = re.search(r"workspace:\d+", line)
+            if mo:
+                refs.append(mo.group(0))
+    return refs
+
+
+def spawn_watcher():
+    """Ensure the watch loop is running inside cmux (call from within the session).
+
+    cmux doesn't persist a workspace's launch command, so after a restart the
+    `meeting-guard` workspace returns as an idle shell. If one exists (e.g. the
+    user pinned it), revive the command *in place* via `cmux send` — no
+    duplicate, and the pin keeps working. Otherwise spawn a fresh workspace.
+    """
+    if watcher_alive():
+        return "already running"
+    # serialize concurrent spawns (many cmux shells restore at once on reboot)
+    lock = os.path.join(CONFIG_DIR, "spawn.lock")
+    try:
+        os.close(os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+    except FileExistsError:
+        if time.time() - os.path.getmtime(lock) < 15:
+            return "spawn in progress elsewhere"
+        os.utime(lock, None)  # stale lock — take it over
+    try:
+        inner = f"{shquote(SELF)} watch"
+        refs = _watch_workspace_refs()
+        if refs:
+            cmux("send", "--workspace", refs[0], inner + "\n")
+            time.sleep(1.5)
+            return f"revived in {refs[0]}" + (" + heartbeating" if watcher_alive() else " (verify)")
+        res = cmux("new-workspace", "--name", WATCH_LABEL, "--command", inner, "--focus", "false")
+        if res is None or res.returncode != 0:
+            return "FAILED (not in a cmux session? run this from a cmux terminal)"
+        time.sleep(1)
+        return "spawned" + (" + heartbeating" if watcher_alive() else "")
+    finally:
+        try:
+            os.remove(lock)
+        except OSError:
+            pass
+
+
+def cmd_test(cfg):
+    print("Firing a live takeover for a fake meeting starting in ~2 minutes…")
+    print("Watch cmux switch to a red full-screen ⏰ MEETING workspace.")
+    m = {
+        "start": datetime.now() + timedelta(minutes=2),
+        "title": "TEST — meeting-guard takeover demo",
+        "url": "https://example.zoom.us/j/example",
+    }
+    fire_takeover(cfg, m)
+
+
+def cmd_agenda(cfg):
+    meetings = read_meetings(cfg)
+    if not meetings:
+        print("No meetings read (gcalcli not authed yet, or none upcoming).")
+        return
+    now = datetime.now()
+    for m in meetings:
+        mins = (m["start"] - now).total_seconds() / 60.0
+        print(f"  {m['start']:%a %H:%M}  (in {mins:6.1f} min)  {m['title']}"
+              + (f"  [{m['url']}]" if m["url"] else ""))
+
+
+def cmd_install():
+    ensure_dirs()
+    plist = f"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>{LABEL}</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{SELF}</string>
+        <string>poll</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>60</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>CMUX_SOCKET_PATH</key>
+        <string>{DEFAULT_CMUX_SOCKET}</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:{os.path.join(HOME, ".local/bin")}:/usr/bin:/bin</string>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>{os.path.join(LOG_DIR, "launchd.out.log")}</string>
+    <key>StandardErrorPath</key>
+    <string>{os.path.join(LOG_DIR, "launchd.err.log")}</string>
+</dict>
+</plist>
+"""
+    with open(PLIST_PATH, "w") as f:
+        f.write(plist)
+    subprocess.run(["launchctl", "unload", PLIST_PATH], capture_output=True)
+    r = subprocess.run(["launchctl", "load", PLIST_PATH], capture_output=True, text=True)
+    if r.returncode != 0:
+        print("launchctl load failed:", r.stderr.strip())
+        return
+    print(f"Installed + loaded {LABEL} (polls every 60s).")
+    print(f"  plist: {PLIST_PATH}")
+    print(f"  logs:  {LOG_PATH}")
+    # the launchd agent can't drive cmux; start the in-session watcher that does
+    print(f"  watcher: {spawn_watcher()}")
+
+
+def cmd_uninstall():
+    subprocess.run(["launchctl", "unload", PLIST_PATH], capture_output=True)
+    try:
+        os.remove(PLIST_PATH)
+    except FileNotFoundError:
+        pass
+    print(f"Unloaded + removed {LABEL}.")
+
+
+def cmd_status(cfg):
+    print("== meeting-guard status ==")
+    print(f"self:    {SELF}")
+    print(f"gcalcli: {which('gcalcli') or 'NOT INSTALLED'}")
+    print(f"cmux:    {which('cmux') or 'NOT FOUND'}")
+    print(f"socket:  {DEFAULT_CMUX_SOCKET}  "
+          f"({'exists' if os.path.exists(DEFAULT_CMUX_SOCKET) else 'MISSING'})")
+    print(f"plist:   {PLIST_PATH}  "
+          f"({'present' if os.path.exists(PLIST_PATH) else 'not installed'})")
+    r = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
+    loaded = LABEL in r.stdout
+    print(f"loaded:  {loaded}")
+    alive = watcher_alive()
+    print(f"watcher: {'alive (cmux red-screen ready)' if alive else 'NOT running — modal fallback only'}")
+    if not alive:
+        print(f"         start it from a cmux terminal:  {SELF} watch  (or re-run install)")
+    print(f"thresholds: heads-up T-{cfg['soft_min']}m, takeover T-{cfg['hard_min']}m")
+    if os.path.exists(LOG_PATH):
+        print("\n-- last log lines --")
+        with open(LOG_PATH) as f:
+            for line in f.readlines()[-8:]:
+                print("  " + line.rstrip())
+
+
+def main():
+    ensure_dirs()
+    cfg = load_config()
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
+    rest = sys.argv[2:]
+    if cmd == "poll":
+        cmd_poll(cfg)
+    elif cmd == "watch":
+        cmd_watch(cfg)
+    elif cmd == "ensure-watch":
+        # idempotent self-heal; meant for cmux shell startup (backgrounded by
+        # the zshrc hook). Right after a reboot cmux's socket may not accept
+        # connections yet, so retry briefly until it does. No-op outside cmux.
+        if os.environ.get("CMUX_WORKSPACE_ID"):
+            for _ in range(18):  # ~90s of retries while cmux finishes starting
+                if watcher_alive():
+                    break
+                spawn_watcher()
+                if watcher_alive():
+                    break
+                time.sleep(5)
+    elif cmd == "takeover":
+        cmd_takeover(rest)
+    elif cmd == "test":
+        cmd_test(cfg)
+    elif cmd == "agenda":
+        cmd_agenda(cfg)
+    elif cmd == "install":
+        cmd_install()
+    elif cmd == "uninstall":
+        cmd_uninstall()
+    elif cmd in ("status", "-h", "--help", "help"):
+        cmd_status(cfg)
+    else:
+        print(f"unknown command: {cmd}", file=sys.stderr)
+        print(__doc__)
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()

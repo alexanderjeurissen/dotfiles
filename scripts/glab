@@ -4,21 +4,96 @@ token_ref="op://Employee/glab/credential"
 host_ref="op://Employee/glab/hostname"
 account="${OP_ACCOUNT:-}"
 
-if command -v op >/dev/null 2>&1; then
-  token=""
-  host=""
+# Resolved-credential cache. The real glab already persists its token to
+# ~/.config/glab-cli/config.yml, so caching the resolved values here adds no new
+# on-disk exposure — but it lets back-to-back invocations (e.g. an agent firing
+# many glab calls) skip 1Password entirely instead of hitting `op` every time.
+#   GLAB_CRED_CACHE_TTL=<seconds>   cache lifetime (default 8h; set 0 to disable)
+# Freshness is mtime-only — the cached token is NOT re-validated. After rotating
+# or revoking it in 1Password, bust the cache to force a re-resolve:
+#   rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/glab-wrapper/creds.v2"  (or set TTL=0)
+cache_ttl="${GLAB_CRED_CACHE_TTL:-28800}"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/glab-wrapper"
+# `.v2`: the on-disk format is versioned, so a stale cache written by an older
+# wrapper (different layout) is ignored rather than misread.
+cache_file="$cache_dir/creds.v2"
+
+op_run() {
   if [ -n "$account" ]; then
-    token=$(op --account "$account" read "$token_ref" 2>/dev/null || true)
-    host=$(op --account "$account" read "$host_ref" 2>/dev/null || true)
+    op --account "$account" "$@"
   else
-    token=$(op read "$token_ref" 2>/dev/null || true)
-    host=$(op read "$host_ref" 2>/dev/null || true)
+    op "$@"
+  fi
+}
+
+cache_enabled() {
+  [ "$cache_ttl" -gt 0 ] 2>/dev/null
+}
+
+cache_fresh() {
+  cache_enabled || return 1
+  [ -f "$cache_file" ] || return 1
+  now=$(date +%s)
+  # BSD/macOS `stat -f %m`; GNU `stat -c %Y`.
+  mtime=$(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null) || return 1
+  [ $((now - mtime)) -lt "$cache_ttl" ]
+}
+
+# Reads the credentials off 1Password into $host/$token. Under desktop-app
+# integration `op read` authorizes against the app's shared lock state: silent
+# while the app is unlocked, and at most ONE unlock prompt when it's locked
+# (after which every subsequent process is silent again). We deliberately do NOT
+# gate on `op whoami` — with app integration there is no env session token, so
+# `op whoami` ALWAYS reports "not signed in", which made the old wrapper run
+# `op signin` (and trigger a biometric prompt) on every single invocation.
+read_creds() {
+  token=$(op_run read "$token_ref" 2>/dev/null) || return 1
+  host=$(op_run read "$host_ref" 2>/dev/null) || return 1
+  [ -n "$token" ] && [ -n "$host" ]
+}
+
+if command -v op >/dev/null 2>&1; then
+  # The cache is two newline-delimited lines (host, then token) read with `read`
+  # — never sourced/eval'd — so a value containing shell metacharacters (a quote,
+  # `$`, …) can't break the cache or inject code at load time.
+  if cache_fresh \
+     && { IFS= read -r GITLAB_HOST && IFS= read -r GITLAB_TOKEN; } < "$cache_file" 2>/dev/null \
+     && [ -n "$GITLAB_HOST" ] && [ -n "$GITLAB_TOKEN" ]; then
+    : # creds restored from cache; nothing hit 1Password
+  else
+    if ! read_creds; then
+      # `op read` failed — most likely a host WITHOUT 1Password app integration,
+      # where a CLI session is required. Fall back to a single interactive
+      # sign-in, then retry once. This never runs on the app-integration path.
+      eval "$(op_run signin)" 2>/dev/null || true
+      read_creds || true
+    fi
+
+    if [ -n "$host" ] && [ -n "$token" ]; then
+      GITLAB_HOST="$host"
+      GITLAB_TOKEN="$token"
+
+      if cache_enabled; then
+        # Warn once if the cache can't be written, rather than silently
+        # re-hitting 1Password on every later invocation.
+        if ! ( umask 077
+               mkdir -p "$cache_dir" \
+                 && printf '%s\n%s\n' "$host" "$token" > "$cache_file" ); then
+          echo "glab wrapper: warning: could not write credential cache ($cache_file); will re-resolve from 1Password next time." >&2
+        fi
+      fi
+    else
+      # Couldn't resolve creds (offline, item moved/renamed, prompt dismissed…).
+      # Don't abort: fall through and let the real glab authenticate from its own
+      # persisted ~/.config/glab-cli/config.yml, exactly as it did before this
+      # wrapper existed.
+      echo "glab wrapper: could not resolve glab credentials from 1Password; falling back to glab's own stored auth." >&2
+    fi
   fi
 
-  if [ -n "$token" ] && [ -n "$host" ]; then
-    export GITLAB_HOST="$host"
-    export GITLAB_TOKEN="$token"
-  fi
+  # Only export when both were actually resolved, so a fall-through doesn't
+  # clobber glab's own auth with empty values.
+  [ -n "$GITLAB_HOST" ] && [ -n "$GITLAB_TOKEN" ] && export GITLAB_HOST GITLAB_TOKEN
 fi
 
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

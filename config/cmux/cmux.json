@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  // Ported from wezterm.lua: Ctrl-T as the tmux-style leader key.
+  // Two-step chord syntax: ["leader", "key"] — first stroke is the prefix,
+  // second stroke is the action key. See:
+  //   https://cmux.com/docs/keyboard-shortcuts#shortcut-chords
+  //
+  // Terminal-level concerns (font, scrollback, padding, ligatures, copy/paste)
+  // live in ~/.config/ghostty/config — cmux reads Ghostty for those.
+  //
+  // Reload after editing: `cmux reload-config` (or Cmd+Shift+,).
+
+  "shortcuts": {
+    "bindings": {
+      // --- Splits (wezterm: LEADER+" / LEADER+%) ---
+      // " is shift+' (apostrophe) → splits horizontally (new pane below)
+      "splitDown":               ["ctrl+t", "shift+'"],
+      // % is shift+5 → splits vertically (new pane to the right)
+      "splitRight":              ["ctrl+t", "shift+5"],
+
+      // --- Surfaces (wezterm tabs: LEADER+c / LEADER+x) ---
+      "newSurface":              ["ctrl+t", "c"],
+      "closeTab":                ["ctrl+t", "x"],
+
+      // --- Pane focus (wezterm: LEADER+h/j/k/l) ---
+      "focusLeft":               ["ctrl+t", "h"],
+      "focusDown":               ["ctrl+t", "j"],
+      "focusUp":                 ["ctrl+t", "k"],
+      "focusRight":              ["ctrl+t", "l"],
+
+      // --- Surface cycling (wezterm: LEADER+n / LEADER+p) ---
+      "nextSurface":             ["ctrl+t", "n"],
+      "prevSurface":             ["ctrl+t", "p"],
+
+      // --- Misc (wezterm: LEADER+z / LEADER+v) ---
+      "toggleSplitZoom":         ["ctrl+t", "z"],
+      "toggleTerminalCopyMode":  ["ctrl+t", "v"]
+
+      // toggleFullScreen left at default (ctrl+cmd+f) — matches wezterm's CMD|CTRL+f.
+      // Copy/paste left at cmux defaults (cmd+c / cmd+v); wezterm's
+      // ctrl+shift+c/v is non-idiomatic on macOS and not ported.
+    }
+  }
+}

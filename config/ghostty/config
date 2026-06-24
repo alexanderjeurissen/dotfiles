@@ -1,0 +1,32 @@
+# Ghostty config — terminal-level settings for cmux.
+#
+# cmux reads this file for font, theme, scrollback, padding, and other
+# terminal-rendering concerns. cmux-owned multiplexer shortcuts (leader,
+# splits, pane focus) live in ~/.config/cmux/cmux.json.
+#
+# Reload after editing: `cmux reload-config` (or Cmd+Shift+,).
+# Docs: https://ghostty.org/docs/config/reference
+
+# --- Font (ported from wezterm.lua) ---
+font-family = BlexMono Nerd Font Mono
+font-size = 14
+
+# Ligatures — wezterm enabled calt, clig, liga via harfbuzz_features.
+font-feature = calt
+font-feature = clig
+font-feature = liga
+
+# --- Scrollback ---
+# NOTE: Ghostty's scrollback-limit is in BYTES, not lines (wezterm used
+# scrollback_lines = 3500 — carrying that number over made the buffer ~3.5 KB).
+# 10000000 = 10 MB (Ghostty default), good for hundreds of thousands of lines.
+scrollback-limit = 10000000
+
+# --- Window padding (wezterm: left=4, right=4, top=0, bottom=0) ---
+window-padding-x = 4
+window-padding-y = 0
+
+# --- Background (wezterm: window_background_opacity = 1.0) ---
+background-opacity = 1.0
+
+# Theme intentionally omitted — pick one in cmux/Ghostty UI later.
