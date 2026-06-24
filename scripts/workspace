@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
-# workspace — git/fs engine for per-task, fully-isolated "mini-workspace" worktrees.
+# workspace — git/fs engine for per-task, fully-isolated workspaces.
 #
 # Terms: the HUB is the top-level checkout (the stable integration view containing modules/
-# and worktrees/); a WORKSPACE is a per-task worktree of the hub. The hub repo is the git
-# repo the hub is a checkout of.
+# and worktrees/); a WORKSPACE is the per-task, isolated environment for one issue/PR, and
+# WORKTREE is the git mechanism it's built from. The hub repo is the git repo the hub is a
+# checkout of.
 #
-# A per-task workspace is a worktree of THIS hub repo (carrying CLAUDE.md,
+# A per-task workspace is materialized as a git worktree of THIS hub repo (carrying CLAUDE.md,
 # .claude/, bin/, .cmux/, docs/, …) at  worktrees/<TASK>/ , with a git worktree of each
 # in-scope submodule nested inside it at  worktrees/<TASK>/modules/<repo>  on the task's
-# feature branch (mirroring the main checkout, where submodules live under modules/).
-# Submodule object stores are shared (no re-clone). The top-level repo's view stays a
-# clean, stable integration vantage point; feature work lives entirely in worktrees.
+# feature branch (mirroring the hub, where submodules live under modules/). Submodule object
+# stores are shared (no re-clone). The hub's view stays a clean, stable integration vantage
+# point; feature work lives entirely in worktrees.
 #
 # This script is the deterministic plumbing. It does NOT:
 #   - commit the hub repo        (the slash commands do that: manifest rows, pins)
@@ -194,11 +195,11 @@ cmd_create() {
     is_known_submodule "$repo" || die "create: '$repo' is not a known submodule ($KNOWN_SUBMODULES)"
   done
 
-  # 1. workspace-repo worktree (detached @ current workspace HEAD — scaffolding only, no pins)
+  # 1. hub-repo worktree (detached @ current hub HEAD — scaffolding only, no pins)
   if worktree_present "$ws_dir"; then
-    info "workspace worktree already at $ws_dir"
+    info "hub-repo worktree already at $ws_dir"
   else
-    info "creating workspace worktree at worktrees/$task (detached)"
+    info "creating hub-repo worktree at worktrees/$task (detached)"
     git -C "$HUB" worktree add --detach "$ws_dir" HEAD >/dev/null
   fi
 
@@ -405,7 +406,7 @@ cmd_teardown() {
     fi
   done
   if worktree_present "$ws_dir"; then
-    info "removing workspace worktree"
+    info "removing hub-repo worktree"
     git -C "$HUB" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
   fi
   # prune dangling worktree admin entries
@@ -430,7 +431,7 @@ cmd_list() {
     emit "(no manifest yet)"
   fi
   emit ""
-  emit "Workspace worktrees:"
+  emit "Hub worktrees:"
   git -C "$HUB" worktree list
 }
 

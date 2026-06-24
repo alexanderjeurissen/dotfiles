@@ -10,8 +10,8 @@ disable-model-invocation: true
 ---
 Create an isolated per-issue workspace for: **$ARGUMENTS**
 
-This is the `/workspace` command of the worktree-focused workflow (see the workspace guide →
-"Per-issue worktree workspaces"). The engine is `workspace`; this command orchestrates the
+This is the `/workspace` command of the workspace workflow (see the workspace guide →
+"Per-issue workspaces"). The engine is `workspace`; this command orchestrates the
 tracker, scope confirmation, the hub-repo commit, and the cmux spawn.
 
 > **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the hub from anywhere — it

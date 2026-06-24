@@ -1,6 +1,6 @@
 # Workspace workflow (shared)
 
-This is the host-neutral core of the per-issue worktree workflow, shared across every **hub** that
+This is the host-neutral core of the per-issue workspace workflow, shared across every **hub** that
 uses it. Each hub's own `CLAUDE.md`/`AGENTS.md` imports this file and then adds its repo-specific
 bits (the actual submodules + remotes, integration branches, tracker/forge conventions). Nothing
 here names a specific repository or organization — the engine discovers all of that at runtime.
@@ -10,8 +10,9 @@ Two terms carry the load (and used to collide — they're now distinct):
 - **hub** = the top-level checkout — the stable integration view, containing `modules/` (submodules
   on their integration branches) and `worktrees/`. It stays open as the home base. The git repo it's
   a checkout of is the **hub repo**.
-- **workspace** = a per-issue worktree *of the hub* — an isolated mini-environment (the hub-repo
-  worktree + nested submodule worktrees + its cmux workspace) for one unit of work.
+- **workspace** = the per-issue, isolated environment for one unit of work — *materialized* as a git
+  *worktree* of the hub (the hub-repo worktree + nested submodule worktrees) plus its cmux workspace.
+  ("worktree" is the git mechanism; "workspace" is the thing you work in.)
 
 Also: **issue** = the work identifier a workspace is keyed on (a tracker issue, a PR/MR, or an
 ad-hoc slug); **PR/MR** = the merge request on whichever forge a submodule lives (GitHub PR, GitLab MR).
@@ -42,7 +43,7 @@ git -C "$(workspace hub)" commit -m "pin <repo> after <description>"
 ```
 
 Submodule commit → hub-repo pin, every time. Stage only the gitlink(s) you changed so the pin commit
-stays focused. **In the worktree-focused workflow, pinning is consolidated into `/update-modules`**
+stays focused. **In the workspace workflow, pinning is consolidated into `/update-modules`**
 (the single pinning path): feature commits land in per-issue *workspaces* and do **not** pin, while
 the hub checkout is fast-forwarded to integration-branch tips and pinned there. The rule above still
 governs any *direct* commit you make in a hub-checkout submodule, but in normal flow feature work
@@ -113,7 +114,7 @@ memory + history). `/workspace` symlinks that project's `memory/` → the canoni
 ## cmux Workflow
 
 cmux is the visual map of in-flight work. Each active issue gets **one cmux workspace** — the
-per-issue worktree — created by `/workspace`. The hub itself stays open as the home base.
+per-issue workspace — created by `/workspace`. The hub itself stays open as the home base.
 
 ### What `/workspace` spawns
 

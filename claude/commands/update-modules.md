@@ -9,7 +9,7 @@ disable-model-invocation: true
 ---
 Refresh the hub's stable integration view: **$ARGUMENTS**
 
-This is the `/update-modules` command. In the worktree-focused workflow, the hub's submodule
+This is the `/update-modules` command. In the workspace workflow, the hub's submodule
 checkouts always sit on their integration branches and act as a clean, stable vantage point. This
 command catches them up to upstream and pins them. It is the **only** place pinning happens —
 per-issue workspaces never pin.
