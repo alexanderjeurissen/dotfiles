@@ -98,6 +98,13 @@ if [[ -f .venv/bin/activate ]]; then
   source .venv/bin/activate
 fi
 
+# meeting-guard self-heal: revive the in-cmux meeting takeover watcher after a
+# cmux/host restart. No-op outside cmux or where the binary is absent, so it's
+# safe to carry across machines. See ~/Development/h1/bin/meeting-guard.
+if [[ -n "$CMUX_WORKSPACE_ID" && -x "$HOME/Development/h1/bin/meeting-guard" ]]; then
+  ( "$HOME/Development/h1/bin/meeting-guard" ensure-watch >/dev/null 2>&1 & )
+fi
+
 # vim: foldmethod=marker:sw=2:foldlevel=10
 #
 
