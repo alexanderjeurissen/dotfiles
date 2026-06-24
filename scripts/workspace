@@ -14,33 +14,35 @@
 # It is idempotent and never steals focus. All progress/warnings go to stderr;
 # capturable results go to stdout as `key=value` (create) or per-repo result lines.
 #
+# The set of submodules is discovered from the root's .gitmodules, and the root from the
+# caller's cwd — nothing is workspace-specific, so the same engine drives every workspace.
+#
 # Integration branch resolution (the source of truth):
 #   integration_branch(repo) = the branch currently checked out for that submodule in
-#   the TOP-LEVEL workspace checkout, under modules/ (dotfiles→main, tao-te-ching→main, …).
+#   the TOP-LEVEL workspace checkout, under modules/ (e.g. dotfiles→main).
 #   Nothing is hardcoded. Divergence from origin/HEAD is warned about, not blocked.
 #
-# Usage:
-#   workspace create  --task dotfiles-zsh --branch feature/dotfiles-zsh \
-#                     --repos dotfiles [--title "…"]
-#   workspace sync    --task dotfiles-zsh
-#   workspace update-modules [--repos dotfiles,tao-te-ching]
-#   workspace teardown --task dotfiles-zsh [--check]   (--check = dry-run safety report)
-#   workspace integration-branch dotfiles
+# Usage (--task and --issue are interchangeable):
+#   workspace create  --task <ID> --branch <feature-branch> --repos <a,b> [--title "…"]
+#   workspace sync    --task <ID>
+#   workspace update-modules [--repos <a,b>]
+#   workspace teardown --task <ID> [--check]   (--check = dry-run safety report)
+#   workspace integration-branch <repo>
 #   workspace list
 
 set -euo pipefail
 
 # ── locate the TRUE workspace root (the main worktree) ────────────────────────
-# This engine lives on PATH (~/.scripts → modules/dotfiles/scripts/), NOT inside the
-# workspace repo, so it can't self-anchor from its own location. Resolve from the caller's
-# cwd instead:
+# This engine lives on PATH (~/.scripts → modules/dotfiles/scripts/) and is shared across
+# every per-task workspace, NOT inside any one repo — so it can't self-anchor from its own
+# location, and nothing about the root is hardcoded. Resolve from the caller's cwd instead:
 #   1. honor an explicit $WORKSPACE_ROOT (export to override; handy for tests);
 #   2. else climb out of any submodule to the top superproject, then take the parent of
 #      that repo's git COMMON dir. From a linked worktree this still lands on the main
 #      checkout (worktrees share the main .git); climbing first sidesteps the .git/modules
-#      trap that a bare --git-common-dir hits inside a submodule;
-#   3. else fall back to the canonical default path.
-DEFAULT_WORKSPACE_ROOT="$HOME/Development/personal/workspace"
+#      trap that a bare --git-common-dir hits inside a submodule.
+# If neither yields a root (run from outside any checkout), die with a clear message rather
+# than guessing a workspace-specific default.
 resolve_workspace_root() {
   local base sp common
   base="$PWD"
@@ -50,16 +52,28 @@ resolve_workspace_root() {
   if common="$(git -C "$base" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
     dirname "$common"; return 0
   fi
-  printf '%s' "$DEFAULT_WORKSPACE_ROOT"
+  return 0   # print nothing → caller dies with a clear message
 }
 WORKSPACE_ROOT="${WORKSPACE_ROOT:-$(resolve_workspace_root)}"
+[ -n "$WORKSPACE_ROOT" ] || { printf 'workspace: error: cannot resolve the workspace root from %s — cd into a workspace checkout or export $WORKSPACE_ROOT\n' "$PWD" >&2; exit 1; }
 
-KNOWN_SUBMODULES="dotfiles tao-te-ching zero-based-budget"
-# Submodules are grouped under this dir, both in the main checkout and inside each
-# per-task worktree. Repo identifiers (in --repos and the manifest) stay bare names;
-# this prefix locates them on disk. To flatten back to the root, set MODULES_DIR="".
+# Submodules are grouped under this dir, both in the main checkout and inside each per-task
+# worktree. Repo identifiers (in --repos and the manifest) stay bare names; this prefix
+# locates them on disk. To flatten back to the root, set MODULES_DIR="".
 MODULES_DIR="modules"
 MANIFEST="$WORKSPACE_ROOT/worktrees/WORKSPACES.md"
+
+# Known submodules are DISCOVERED from the root's .gitmodules (repo id = path basename),
+# so the engine adapts to whatever workspace it runs in, with zero hardcoding.
+# Override with $WORKSPACE_SUBMODULES (space-separated) if ever needed.
+discover_submodules() {
+  local gm="$WORKSPACE_ROOT/.gitmodules" p
+  [ -f "$gm" ] || return 0
+  git config -f "$gm" --get-regexp '^submodule\..*\.path$' 2>/dev/null \
+    | awk '{print $2}' | while IFS= read -r p; do [ -n "$p" ] && basename "$p"; done
+}
+KNOWN_SUBMODULES="${WORKSPACE_SUBMODULES:-$(discover_submodules | tr '\n' ' ')}"
+KNOWN_SUBMODULES="${KNOWN_SUBMODULES% }"
 
 # Path to a submodule's checkout, given a base dir (the main root or a worktree dir).
 submodule_path() { if [ -n "$MODULES_DIR" ]; then printf '%s/%s/%s' "$1" "$MODULES_DIR" "$2"; else printf '%s/%s' "$1" "$2"; fi; }
@@ -157,7 +171,7 @@ cmd_create() {
   local task="" branch="" repos="" title=""
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task)   task="$2";   shift 2;;
+      --task|--issue) task="$2"; shift 2;;   # --issue: alias for cross-workspace compatibility
       --branch) branch="$2"; shift 2;;
       --repos)  repos="$2";  shift 2;;
       --title)  title="$2";  shift 2;;
@@ -237,7 +251,7 @@ cmd_sync() {
   local task=""
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task) task="$2"; shift 2;;
+      --task|--issue) task="$2"; shift 2;;
       *) die "sync: unknown flag $1";;
     esac
   done
@@ -326,7 +340,7 @@ cmd_teardown() {
   local task="" check=0
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task)  task="$2"; shift 2;;
+      --task|--issue) task="$2"; shift 2;;
       --check) check=1; shift;;
       *) die "teardown: unknown flag $1";;
     esac
