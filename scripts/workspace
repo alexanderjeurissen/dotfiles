@@ -2,13 +2,13 @@
 # workspace — git/fs engine for per-task, fully-isolated workspaces.
 #
 # Terms: the HUB is the top-level checkout (the stable integration view containing modules/
-# and worktrees/); a WORKSPACE is the per-task, isolated environment for one issue/PR, and
+# and workspaces/); a WORKSPACE is the per-task, isolated environment for one issue/PR, and
 # WORKTREE is the git mechanism it's built from. The hub repo is the git repo the hub is a
 # checkout of.
 #
 # A per-task workspace is materialized as a git worktree of THIS hub repo (carrying CLAUDE.md,
-# .claude/, bin/, .cmux/, docs/, …) at  worktrees/<TASK>/ , with a git worktree of each
-# in-scope submodule nested inside it at  worktrees/<TASK>/modules/<repo>  on the task's
+# .claude/, bin/, .cmux/, docs/, …) at  workspaces/<TASK>/ , with a git worktree of each
+# in-scope submodule nested inside it at  workspaces/<TASK>/modules/<repo>  on the task's
 # feature branch (mirroring the hub, where submodules live under modules/). Submodule object
 # stores are shared (no re-clone). The hub's view stays a clean, stable integration vantage
 # point; feature work lives entirely in worktrees.
@@ -66,7 +66,7 @@ HUB="${WORKSPACE_HUB:-$(resolve_hub)}"
 # worktree. Repo identifiers (in --repos and the manifest) stay bare names; this prefix
 # locates them on disk. To flatten back to the root, set MODULES_DIR="".
 MODULES_DIR="modules"
-MANIFEST="$HUB/worktrees/WORKSPACES.md"
+MANIFEST="$HUB/workspaces/WORKSPACES.md"
 
 # Known submodules are DISCOVERED from the hub root's .gitmodules (repo id = path basename),
 # so the engine adapts to whatever hub it runs in, with zero hardcoding.
@@ -116,15 +116,15 @@ integration_branch() {
   printf '%s' "$br"
 }
 
-# ── manifest (worktrees/WORKSPACES.md) ────────────────────────────────────────
+# ── manifest (workspaces/WORKSPACES.md) ────────────────────────────────────────
 manifest_ensure() {
   mkdir -p "$(dirname "$MANIFEST")"
   [ -f "$MANIFEST" ] && return 0
   cat > "$MANIFEST" <<'EOF'
 # Workspaces Manifest
 
-Reconstruction recipe for the per-task worktrees under `worktrees/`. Each row is enough
-to rebuild a `worktrees/<TASK>/` mini-workspace on a fresh clone: re-create the workspace
+Reconstruction recipe for the per-task worktrees under `workspaces/`. Each row is enough
+to rebuild a `workspaces/<TASK>/` mini-workspace on a fresh clone: re-create the workspace
 worktree, then a worktree of each listed repo on the task's feature branch (which
 `/workspace-sync` has pushed to the submodule remotes). The checkouts themselves are
 gitignored; this file is tracked. Managed by `/workspace` and `/teardown` (`bin/workspace`).
@@ -187,7 +187,7 @@ cmd_create() {
   [ -n "$branch" ] || die "create requires --branch (e.g. feature/dotfiles-zsh)"
   [ -n "$repos" ]  || die "create requires --repos (comma-separated; e.g. dotfiles,tao-te-ching)"
 
-  local ws_dir="$HUB/worktrees/$task"
+  local ws_dir="$HUB/workspaces/$task"
   local -a repo_arr
   IFS=',' read -ra repo_arr <<< "$repos"
   local repo
@@ -199,7 +199,7 @@ cmd_create() {
   if worktree_present "$ws_dir"; then
     info "workspace already at $ws_dir"
   else
-    info "creating workspace at worktrees/$task (detached)"
+    info "creating workspace at workspaces/$task (detached)"
     git -C "$HUB" worktree add --detach "$ws_dir" HEAD >/dev/null
   fi
 
@@ -208,7 +208,7 @@ cmd_create() {
     local repo_path target ib
     repo_path="$(submodule_path "$HUB" "$repo")"
     target="$(submodule_path "$ws_dir" "$repo")"
-    mkdir -p "$(dirname "$target")"   # ensure worktrees/<TASK>/modules/ exists
+    mkdir -p "$(dirname "$target")"   # ensure workspaces/<TASK>/modules/ exists
     ib="$(integration_branch "$repo")"
     git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || warn "$repo: fetch origin/$ib failed (offline?) — proceeding with local refs"
     if worktree_present "$target"; then
@@ -246,7 +246,7 @@ cmd_create() {
 
   # 4. record in the reconstruction manifest (caller commits it)
   manifest_upsert "$task" "$title" "$repos" "$branch"
-  info "manifest: recorded $task (caller should commit worktrees/WORKSPACES.md)"
+  info "manifest: recorded $task (caller should commit workspaces/WORKSPACES.md)"
 
   emit "workspace_dir=$ws_dir task=$task repos=$repos branch=$branch status=ready"
 }
@@ -261,7 +261,7 @@ cmd_sync() {
     esac
   done
   [ -n "$task" ] || die "sync requires --task"
-  local ws_dir="$HUB/worktrees/$task"
+  local ws_dir="$HUB/workspaces/$task"
   worktree_present "$ws_dir" || die "no workspace at $ws_dir (run /workspace $task first)"
 
   local repo any=0 conflicts=0
@@ -276,7 +276,7 @@ cmd_sync() {
     # Detached HEAD → empty $cur; the no-upstream push below would become the invalid
     # `git push -u origin ""`. Bail early with a clear diagnostic instead.
     if [ -z "$cur" ]; then
-      emit "ERROR $repo: detached HEAD in worktrees/$task/$repo — checkout the feature branch before syncing"; conflicts=1; continue
+      emit "ERROR $repo: detached HEAD in workspaces/$task/$repo — checkout the feature branch before syncing"; conflicts=1; continue
     fi
     git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; conflicts=1; continue; }
     if git -C "$rd" merge --no-edit "origin/$ib" >/dev/null 2>&1; then
@@ -284,15 +284,15 @@ cmd_sync() {
         if git -C "$rd" push >/dev/null 2>&1; then
           emit "OK $repo: merged origin/$ib into $cur, pushed"
         else
-          emit "ERROR $repo: merged origin/$ib but push failed (resolve in worktrees/$task/$repo)"; conflicts=1
+          emit "ERROR $repo: merged origin/$ib but push failed (resolve in workspaces/$task/$repo)"; conflicts=1
         fi
       elif git -C "$rd" push -u origin "$cur" >/dev/null 2>&1; then
         emit "OK $repo: merged origin/$ib into $cur, pushed (set upstream)"
       else
-        emit "ERROR $repo: merged origin/$ib but initial push failed (resolve in worktrees/$task/$repo)"; conflicts=1
+        emit "ERROR $repo: merged origin/$ib but initial push failed (resolve in workspaces/$task/$repo)"; conflicts=1
       fi
     else
-      emit "CONFLICT $repo: merge of origin/$ib into $cur conflicts — resolve in worktrees/$task/$repo, then re-run sync"
+      emit "CONFLICT $repo: merge of origin/$ib into $cur conflicts — resolve in workspaces/$task/$repo, then re-run sync"
       conflicts=1
     fi
   done
@@ -351,7 +351,7 @@ cmd_teardown() {
     esac
   done
   [ -n "$task" ] || die "teardown requires --task"
-  local ws_dir="$HUB/worktrees/$task"
+  local ws_dir="$HUB/workspaces/$task"
 
   # ── --check: dry-run safety report. Surfaces uncommitted + unpushed work per
   # submodule worktree and changes NOTHING. Lets /teardown run the safety check
@@ -419,7 +419,7 @@ cmd_teardown() {
   # persistent canonical memory and is harmless.
 
   manifest_remove "$task"
-  info "manifest: dropped $task (caller should commit worktrees/WORKSPACES.md)"
+  info "manifest: dropped $task (caller should commit workspaces/WORKSPACES.md)"
   emit "torn_down=$task status=removed"
 }
 

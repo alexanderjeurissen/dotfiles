@@ -26,7 +26,7 @@ tracker, scope confirmation, the hub-repo commit, and the cmux spawn.
 ### 1. Resolve the target → the workspace identifier
 
 A workspace targets **either a tracker issue or a PR/MR**. The chosen identifier is load-bearing:
-it becomes the worktree dir (`worktrees/<ID>/`), the manifest row, **and** the cmux workspace name —
+it becomes the workspace dir (`workspaces/<ID>/`), the manifest row, **and** the cmux workspace name —
 so it must be canonical and consistent. Pick the path by what `$ARGUMENTS` names:
 
 **A. Tracker issue** (`ABC-597`, …)
@@ -83,9 +83,9 @@ Capture `workspace_dir=` from the final stdout line. Idempotent — safe to re-r
 **restores** branches that already exist on the remote (the rebuild path).
 
 ### 5. Commit the manifest (hub repo)
-The engine wrote `worktrees/WORKSPACES.md` but did not commit:
+The engine wrote `workspaces/WORKSPACES.md` but did not commit:
 ```bash
-git -C "$HUB" add worktrees/WORKSPACES.md
+git -C "$HUB" add workspaces/WORKSPACES.md
 git -C "$HUB" commit -m "workspace: open <ID> (<repos>)"
 ```
 This is standing housekeeping (like a pin) — no need to ask first.
@@ -106,7 +106,7 @@ cmux-spawn-work \
   --cwd "<workspace_dir>" \
   --color "$color"
 ```
-The cmux name uses the **same identifier** as the worktree dir and manifest — they never diverge.
+The cmux name uses the **same identifier** as the workspace dir and manifest — they never diverge.
 This creates a cmux workspace cwd'd to the worktree with two splits — **Claude Code (left)** and a
 **terminal (right)**, tagged with the chosen distinct color — so the instance sees a fully isolated
 mini-workspace (shared memory, isolated history). Idempotent (re-running returns the existing

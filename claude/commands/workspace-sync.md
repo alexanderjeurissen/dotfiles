@@ -25,7 +25,7 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
 2. **Auto-detect the caller workspace.** Otherwise, identify the cmux workspace this session is
-   running in and read its working directory — if that dir is inside `worktrees/<ISSUE>/`, that's
+   running in and read its working directory — if that dir is inside `workspaces/<ISSUE>/`, that's
    the target (the common case: "sync the workspace I'm in"):
    ```bash
    CALLER=$(cmux identify --json | python3 -c "import sys,json; print(json.load(sys.stdin)['caller']['workspace_ref'])")
@@ -34,7 +34,7 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
    caller = '$CALLER'
    for w in json.load(sys.stdin)['workspaces']:
        if w['ref'] == caller:
-           m = re.search(r'/worktrees/([^/]+)', w.get('current_directory') or '')
+           m = re.search(r'/workspaces/([^/]+)', w.get('current_directory') or '')
            print(m.group(1) if m else '')
    "
    ```
@@ -45,20 +45,20 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
    `workspace:<N>  <ISSUE-ID> · <title>` names). Filter out non-issue rows (`Root`, etc.) and
    present the issue workspaces via `AskUserQuestion`. Capture the ISSUE-ID (token before ` · `). As
    a fallback, the manifest also lists active workspaces:
-   `git -C "$HUB" show HEAD:worktrees/WORKSPACES.md`.
+   `git -C "$HUB" show HEAD:workspaces/WORKSPACES.md`.
 
 ## Step 1 — Run the engine
 ```bash
 workspace sync --issue <ISSUE-ID>
 ```
-For each in-scope submodule worktree under `worktrees/<ISSUE-ID>/modules/<repo>`, the engine:
+For each in-scope submodule worktree under `workspaces/<ISSUE-ID>/modules/<repo>`, the engine:
 `fetch origin/<integration-branch>` → `git merge --no-edit origin/<integration-branch>` →
 `git push` (plain; sets upstream on first push). The integration branch is resolved from the
 **top-level** checkout.
 
 The engine prints one line per submodule:
 - `OK <repo>: …` — merged + pushed. Nothing more to do.
-- `CONFLICT <repo>: …` — the merge is **left in progress** in `worktrees/<ISSUE-ID>/modules/<repo>`.
+- `CONFLICT <repo>: …` — the merge is **left in progress** in `workspaces/<ISSUE-ID>/modules/<repo>`.
   Go to step 2. (The engine stops at the first conflict and exits non-zero; that's expected — this
   command drives the resolution and re-runs.)
 - `ERROR <repo>: …` — fetch/push failed (offline, network, or remote moved). Relay it; not a conflict.
@@ -66,9 +66,9 @@ The engine prints one line per submodule:
 ## Step 2 — Resolve conflicts (auto where mechanical, ask where ambiguous)
 
 For each repo the engine reported `CONFLICT`, work inside its worktree
-(`$HUB/worktrees/<ISSUE-ID>/modules/<repo>`). List the unmerged files:
+(`$HUB/workspaces/<ISSUE-ID>/modules/<repo>`). List the unmerged files:
 ```bash
-git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" diff --name-only --diff-filter=U
+git -C "$HUB/workspaces/<ISSUE-ID>/modules/<repo>" diff --name-only --diff-filter=U
 ```
 Resolve **every** conflicted file with the right tier below, then complete the merge.
 
@@ -93,7 +93,7 @@ For any conflict where the correct merge isn't a mechanical union — overlappin
 code, schema/DDL divergence, logic both sides changed — **do not guess**. Read the conflict hunks so
 you can describe them concretely:
 ```bash
-git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" diff --diff-filter=U -- <file>
+git -C "$HUB/workspaces/<ISSUE-ID>/modules/<repo>" diff --diff-filter=U -- <file>
 ```
 Then present the decision via `AskUserQuestion`, one question per conflicted file (or per hunk if a
 file has several distinct ones). State the file/path and summarize what each side did. Offer:
@@ -111,8 +111,8 @@ side's changes** — that's exactly what Tier B exists to prevent.
 Once a repo's files are all resolved (no markers remain — verify with
 `grep -rn '^<<<<<<<\|^|||||||\|^=======\|^>>>>>>>' <files>`), stage and commit the merge:
 ```bash
-git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" add <resolved files>
-git -C "$HUB/worktrees/<ISSUE-ID>/modules/<repo>" commit --no-edit
+git -C "$HUB/workspaces/<ISSUE-ID>/modules/<repo>" add <resolved files>
+git -C "$HUB/workspaces/<ISSUE-ID>/modules/<repo>" commit --no-edit
 ```
 
 ## Step 3 — Re-run the engine to push (and catch any later repos)

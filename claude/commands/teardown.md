@@ -28,7 +28,7 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
 2. **Auto-detect the caller workspace.** Identify the cmux workspace this session is running in and
-   read its working directory. If that dir is inside `worktrees/<ISSUE>/`, that's the target (the
+   read its working directory. If that dir is inside `workspaces/<ISSUE>/`, that's the target (the
    common case: "tear down the workspace I'm in"). This call also yields the cmux ref we need to
    close later — run it **regardless** of how ISSUE was resolved:
    ```bash
@@ -39,7 +39,7 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
    for w in json.load(sys.stdin)['workspaces']:
        if w['ref'] == caller:
            d = w.get('current_directory') or ''
-           m = re.search(r'/worktrees/([^/]+)', d)
+           m = re.search(r'/workspaces/([^/]+)', d)
            print(f\"{w['ref']}\t{m.group(1) if m else ''}\t{d}\")
    "
    ```
@@ -98,7 +98,7 @@ points at persistent canonical memory).
 ## Step 4 — Commit the manifest (hub repo, via `git -C`)
 No `cd` — operate on the hub the engine reported:
 ```bash
-git -C "$HUB" add worktrees/WORKSPACES.md
+git -C "$HUB" add workspaces/WORKSPACES.md
 git -C "$HUB" commit -m "workspace: close <ISSUE-ID>"
 ```
 Standing housekeeping — no need to ask.

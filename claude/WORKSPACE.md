@@ -8,7 +8,7 @@ here names a specific repository or organization — the engine discovers all of
 Two terms carry the load (and used to collide — they're now distinct):
 
 - **hub** = the top-level checkout — the stable integration view, containing `modules/` (submodules
-  on their integration branches) and `worktrees/`. It stays open as the home base. The git repo it's
+  on their integration branches) and `workspaces/`. It stays open as the home base. The git repo it's
   a checkout of is the **hub repo**.
 - **workspace** = the per-issue, isolated environment for one unit of work — *materialized* as git
   *worktrees* (a top-level worktree of the hub + nested submodule worktrees) plus its cmux workspace.
@@ -53,7 +53,7 @@ never touches the hub checkout, so that's rare.
 
 Parallel work on multiple issues happens in **isolated per-issue workspaces**, not by switching
 branches in the hub's submodule checkouts. Each issue gets a "mini-workspace": a git worktree of *the
-hub repo* at `worktrees/<ISSUE>/` (carrying `CLAUDE.md`/`AGENTS.md`, `.claude/`, `.cmux/`, `docs/`, …),
+hub repo* at `workspaces/<ISSUE>/` (carrying `CLAUDE.md`/`AGENTS.md`, `.claude/`, `.cmux/`, `docs/`, …),
 with a git worktree of each in-scope submodule nested inside it under `modules/<repo>` on the issue's
 feature branch (mirroring the hub's `modules/` layout). Submodule object stores are shared (no
 re-clone), and a cmux workspace cwd's into it — so the Claude instance sees a complete, isolated
@@ -63,7 +63,7 @@ environment.
 <hub>/                          PRIMARY — the hub, a stable integration view
 ├─ modules/                     submodules on their integration branches
 │  └─ repo-a/  repo-b/  …
-└─ worktrees/
+└─ workspaces/
    ├─ WORKSPACES.md             tracked reconstruction manifest (the checkouts are gitignored)
    └─ <ISSUE>/                  a per-issue workspace (worktree of the hub repo)
       ├─ CLAUDE.md .claude/ …    came free with the top-level worktree
@@ -97,9 +97,9 @@ slash commands orchestrate the tracker, scope confirmation, the hub-repo commits
 pins), and cmux spawning. The commands are global (`~/.claude/commands/`, symlinked from
 `dotfiles/claude/commands/`), so every hub shares one copy.
 
-### The manifest — `worktrees/WORKSPACES.md`
+### The manifest — `workspaces/WORKSPACES.md`
 
-Tracked, while the per-issue checkouts are gitignored (`worktrees/*/`). One row per active workspace
+Tracked, while the per-issue checkouts are gitignored (`workspaces/*/`). One row per active workspace
 (issue, title, repos, branch, opened). It's a **reconstruction recipe**: on a fresh clone, each row
 is enough to rebuild the workspace from the pushed feature branches — which is exactly why
 `/workspace-sync`'s push matters. `/workspace` and `/teardown` maintain it; the row is committed as
@@ -107,7 +107,7 @@ standing housekeeping.
 
 ### Memory & history
 
-Because a workspace cwd's to `worktrees/<ISSUE>/`, Claude keys it as a separate project (separate
+Because a workspace cwd's to `workspaces/<ISSUE>/`, Claude keys it as a separate project (separate
 memory + history). `/workspace` symlinks that project's `memory/` → the canonical hub memory, so
 **facts are shared** while **history stays isolated** per issue.
 
@@ -119,13 +119,13 @@ per-issue workspace — created by `/workspace`. The hub itself stays open as th
 ### What `/workspace` spawns
 
 `/workspace <ISSUE>` calls `cmux-spawn-work`, which creates a cmux workspace **cwd'd to**
-`worktrees/<ISSUE>/` (the isolated mini-workspace), split into **two panes** — **Claude Code** on the
+`workspaces/<ISSUE>/` (the isolated mini-workspace), split into **two panes** — **Claude Code** on the
 left and a **terminal** on the right — and tagged with a **distinct color** (the `/workspace` command
 picks one not already in use; `cmux-spawn-work` defaults to Blue). It is **idempotent** (re-running
 with the same `--name` returns the existing workspace) and **never steals focus** (`--focus false`).
 
 ```bash
-cmux-spawn-work --name "<ISSUE> · <title>" --cwd "$PWD/worktrees/<ISSUE>"
+cmux-spawn-work --name "<ISSUE> · <title>" --cwd "$PWD/workspaces/<ISSUE>"
 # → workspace=workspace:21 status=created name="<ISSUE> · <title>"
 ```
 
