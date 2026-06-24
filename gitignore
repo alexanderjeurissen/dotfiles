@@ -90,4 +90,4 @@ Procfile.local
 *.patch
 .stylelintrc
 **/CLAUDE.local.md
-
+**/.claude/settings.local.json
