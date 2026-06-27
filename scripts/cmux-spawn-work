@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# cmux-spawn-work — spawn a cmux workspace for a per-task worktree.
+#
+# Creates a workspace cwd'd to the given path with two splits: Claude Code (left, launched
+# via the workspace's initial command) and a terminal (right), tagged with --color (default
+# Blue; the /workspace command passes a distinct color it picks). Used by the `/workspace`
+# command after the worktrees are in place.
+#
+# Idempotent: re-running with the same --name returns the existing workspace instead of
+# creating a duplicate (and re-applies the color). Never steals focus (--focus false everywhere).
+#
+# Usage:
+#   cmux-spawn-work --name "dotfiles-zsh · refactor zsh config" \
+#                   --cwd /abs/path/to/worktrees/dotfiles-zsh [--command claude] [--color Blue]
+#
+# Output (stdout): one key=value line, e.g.
+#   workspace=workspace:21 status=created name="dotfiles-zsh · refactor zsh config"
+
+set -euo pipefail
+
+die() { printf 'cmux-spawn-work: error: %s\n' "$*" >&2; exit 1; }
+
+command -v cmux >/dev/null 2>&1 || die "cmux CLI not on PATH"
+command -v jq   >/dev/null 2>&1 || die "jq not on PATH (brew install jq)"
+
+name="" cwd="" cmd="claude" color="Blue"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --name)    name="$2";  shift 2;;
+    --cwd)     cwd="$2";   shift 2;;
+    --command) cmd="$2";   shift 2;;
+    --color)   color="$2"; shift 2;;
+    -h|--help) sed -n '2,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0;;
+    *) die "unknown flag: $1";;
+  esac
+done
+[ -n "$name" ] || die "--name is required"
+[ -n "$cwd" ]  || die "--cwd is required"
+[ -d "$cwd" ]  || die "--cwd does not exist: $cwd"
+
+# Match an existing workspace by title. Active workspace titles carry a live
+# activity-spinner glyph prefix, so we strip leading non-alphanumerics and then compare
+# the remainder to $name EXACTLY. A bare substring match would collide on prefix task IDs
+# (`ALEXJEU-9` matching an existing `ALEXJEU-90 · …`) and return the wrong workspace.
+find_ws() {
+  cmux --json list-workspaces 2>/dev/null \
+    | jq -r --arg n "$name" '.workspaces[] | select((.title | sub("^[^A-Za-z0-9]+"; "")) == $n) | .ref' \
+    | head -n1
+}
+
+# Tag the workspace with a consistent color (best-effort; never fail the spawn over it).
+set_color() { cmux workspace-action --action set-color --color "$color" --workspace "$1" >/dev/null 2>&1 || true; }
+
+existing="$(find_ws || true)"
+if [ -n "$existing" ]; then
+  set_color "$existing"
+  printf 'workspace=%s status=existing name=%q\n' "$existing" "$name"
+  exit 0
+fi
+
+# Create the workspace cwd'd to the worktree; --command launches Claude Code in the first
+# surface. new-workspace prints e.g. "OK workspace:21" — capture the ref from it.
+out="$(cmux new-workspace --name "$name" --cwd "$cwd" --command "$cmd" --focus false 2>&1)" \
+  || die "new-workspace failed: $out"
+ws="$(printf '%s' "$out" | grep -oE 'workspace:[0-9]+' | head -n1)"
+[ -n "$ws" ] || ws="$(find_ws || true)"
+[ -n "$ws" ] || die "could not resolve newly-created workspace (output: $out)"
+
+# Second split: a terminal to the right. New surfaces inherit the workspace cwd.
+cmux new-pane --type terminal --direction right --workspace "$ws" --focus false >/dev/null 2>&1 \
+  || die "new-pane (terminal) failed for $ws"
+
+set_color "$ws"
+
+printf 'workspace=%s status=created name=%q\n' "$ws" "$name"

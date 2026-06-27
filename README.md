@@ -19,8 +19,8 @@ In summary my work environment consists of:
 ### Using rcm
 
 1. Install `rcm` using your package manager, e.g. `brew install rcm`.
-2. Clone this repository into `~/Development/personal/workspace/dotfiles`.
-3. Run `rcup -v -d ~/Development/personal/workspace/dotfiles` to symlink all
+2. Clone this repository into `~/Development/personal/hub/modules/dotfiles`.
+3. Run `rcup -v -d ~/Development/personal/hub/modules/dotfiles` to symlink all
    managed files from this repository location. The included `rcrc` file
    controls which files are linked.
 
