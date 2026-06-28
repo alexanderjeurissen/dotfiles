@@ -3,6 +3,7 @@ tap "arleypadua/pkhex-cli"
 tap "armmbed/formulae"
 tap "beadbox/cask"
 tap "d12frosted/emacs-plus"
+tap "hashicorp/tap"
 tap "jason0x43/neovim-nightly"
 tap "jhawthorn/fzy"
 tap "maticzav/swift-graphql", "https://github.com/maticzav/swift-graphql.git"
@@ -234,6 +235,8 @@ brew "pgcli"
 brew "pipx"
 # Object-relational database system
 brew "postgresql@14"
+# Framework for managing multi-language pre-commit hooks
+brew "pre-commit"
 # Static type checker for Python
 brew "pyright"
 # Interpreted, interactive, object-oriented programming language
@@ -255,7 +258,7 @@ brew "rename"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
-brew "ruby"
+brew "ruby", link: false
 # Safe, concurrent, practical language
 brew "rust"
 # Rust toolchain installer
@@ -270,12 +273,16 @@ brew "shntool"
 brew "shtool"
 # SQLite extension providing 256-bit AES encryption
 brew "sqlcipher"
+# Non-interactive SSH password auth
+brew "sshpass"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Tool Command Language
 brew "tcl-tk"
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
+# Tool to generate documentation from Terraform modules
+brew "terraform-docs"
 # Convert TeXinfo files to HTML
 brew "texi2html"
 # Terminal multiplexer
@@ -304,14 +311,14 @@ brew "zsh"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
-# The AI coding agent built for the terminal.
-brew "anomalyco/tap/opencode"
-# A CLI to manipulate pokemon game save files.
-brew "arleypadua/pkhex-cli/pkhex-cli"
-# GNU compiler collection for AVR 8-bit and 32-bit Microcontrollers
-brew "osx-cross/avr/avr-gcc@9"
+# Terraform
+brew "hashicorp/tap/terraform", trusted: true
 # Command-line interface for 1Password
 cask "1password-cli"
+# Desktop app for the beads issue tracker
+cask "beadbox/cask/beadbox"
+# Ghostty-based terminal with vertical tabs and notifications for AI coding agents
+cask "cmux"
 # Terminal emulator
 cask "contour"
 # Collect, organise, edit and annotate documents
@@ -321,6 +328,8 @@ cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
 # Open Source Multimedia Framework
 cask "gstreamer-runtime"
+# Privacy-first, open-source platform for knowledge sharing and management
+cask "logseq"
 # Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
 # Collaboration platform for API development
@@ -334,15 +343,19 @@ cask "vlc"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
 # Multiplayer code editor
+cask "zed"
+# Multiplayer code editor
 cask "zed@preview"
-mas "FocusList", id: 1086877679
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
-mas "Okta Verify", id: 490179405
-mas "Pages", id: 409201541
-mas "Theine", id: 955848755
-mas "WhatsApp", id: 310633997
 go "github.com/alexanderjeurissen/rabodebit2ynab"
+go "github.com/google/yamlfmt/cmd/yamlfmt"
 uv "specify-cli"
+npm "@fission-ai/openspec"
+npm "@google/gemini-cli"
+npm "@googleworkspace/cli"
+npm "@termly-dev/cli"
+npm "corepack"
+npm "dorita980"
+npm "excalidraw-cli"
+npm "json-language-server"
+npm "typescript-language-server"
+npm "typescript"
