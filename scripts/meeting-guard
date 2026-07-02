@@ -50,6 +50,9 @@ CONFIG_PATH = os.path.join(CONFIG_DIR, "config.json")
 # and proves it's alive via the heartbeat. See dispatch_takeover().
 TRIGGER_PATH = os.path.join(CONFIG_DIR, "trigger.json")
 HEARTBEAT_PATH = os.path.join(CONFIG_DIR, "watch.heartbeat")
+# written by `takeover` as its first act: cmux delivers --command by typing it
+# into the new shell, so workspace creation alone doesn't prove the TUI runs.
+TAKEOVER_MARKER = os.path.join(CONFIG_DIR, "takeover.started")
 WATCH_LABEL = "meeting-guard"  # cmux workspace name for the watcher
 LOG_DIR = os.path.join(HOME, ".local", "state", "meeting-guard")
 LOG_PATH = os.path.join(LOG_DIR, "guard.log")
@@ -406,7 +409,17 @@ def dispatch_takeover(cfg, m):
 
 
 def fire_takeover(cfg, m):
-    """Spawn the full-screen TUI in a focused cmux workspace and force-switch to it."""
+    """Spawn the full-screen TUI in a cmux workspace and force-switch to it.
+
+    The workspace is spawned *unfocused*: cmux delivers --command by typing it
+    into the new interactive shell, so grabbing focus first lets in-flight user
+    keystrokes land ahead of the command and corrupt it (a stray 'v' once made
+    it `v'/…/meeting-guard' takeover …` → zsh error, no alert). The TUI grabs
+    focus itself on its first loop, and proves it started via TAKEOVER_MARKER —
+    only then do we trust the takeover rendered; otherwise re-send the command,
+    and as a last resort fall back to the macOS modal so the alert is never
+    silently lost.
+    """
     start_iso = m["start"].isoformat()
     # one tidy command line; the TUI re-reads everything from argv
     inner = (
@@ -415,10 +428,14 @@ def fire_takeover(cfg, m):
         f"--start {shquote(start_iso)} "
         f"--url {shquote(m['url'])}"
     )
+    try:
+        os.remove(TAKEOVER_MARKER)
+    except OSError:
+        pass
     res = None
     for attempt in range(1, 4):
         res = cmux("new-workspace", "--name", "⏰ MEETING", "--command", inner,
-                   "--focus", "true")
+                   "--focus", "false")
         if res is not None and res.returncode == 0:
             break
         log(f"new-workspace attempt {attempt}/3 failed; retrying in 2s")
@@ -429,10 +446,38 @@ def fire_takeover(cfg, m):
         modal_takeover(m)
         return
     log(f"takeover workspace created: {res.stdout.strip()}")
-    # paint it red + force it to the front (belt-and-suspenders over --focus)
+    mo = re.search(r"workspace:\d+", res.stdout or "")
+    ref = mo.group(0) if mo else None
+    if not _takeover_confirmed():
+        # the typed command line got mangled before it reached the shell;
+        # flush the dead prompt line and re-send the command in place.
+        log("takeover TUI not confirmed; re-sending command into the workspace")
+        if ref:
+            cmux("send", "--workspace", ref, "\n")
+            cmux("send", "--workspace", ref, inner + "\n")
+        if not _takeover_confirmed():
+            log("takeover TUI still not confirmed; falling back to modal alert")
+            if ref:
+                cmux("close-workspace", "--workspace", ref)
+            modal_takeover(m)
+            return
+    # confirmed running — paint it red + force it to the front (the TUI also
+    # re-grabs focus every loop; this is belt-and-suspenders)
+    if ref:
+        cmux("select-workspace", "--workspace", ref)
     cmux("workspace-action", "--action", "set-color", "--color", cfg["color"])
     cmux("trigger-flash")
     activate_cmux()  # raise cmux over other apps so the red screen can't hide
+
+
+def _takeover_confirmed(timeout=8.0):
+    """Wait for the marker cmd_takeover writes as its first act."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if os.path.exists(TAKEOVER_MARKER):
+            return True
+        time.sleep(0.25)
+    return False
 
 
 def activate_cmux():
@@ -521,6 +566,16 @@ def big_text(s):
 def cmd_takeover(args):
     import select
 
+    # first act: prove to fire_takeover that the TUI is really running —
+    # workspace creation alone doesn't (the spawn command is typed into a
+    # fresh shell and can be corrupted before it executes)
+    try:
+        ensure_dirs()
+        with open(TAKEOVER_MARKER, "w") as f:
+            f.write(datetime.now().isoformat())
+    except OSError:
+        pass
+
     title = _argval(args, "--title", "(meeting)")
     start_iso = _argval(args, "--start", "")
     url = _argval(args, "--url", "")
@@ -565,6 +620,10 @@ def cmd_takeover(args):
             r, _, _ = select.select([sys.stdin], [], [], 1.0)
             if r:
                 line = sys.stdin.readline().strip().lower()
+                # fire_takeover re-sends the spawn command if the marker is
+                # slow to appear; if it lands in our stdin it's not a user ack
+                if "takeover --title" in line:
+                    continue
                 if line in ("s", "snooze"):
                     _ack_state(title, start, snooze=True, snooze_min=cfg["snooze_min"])
                     break
