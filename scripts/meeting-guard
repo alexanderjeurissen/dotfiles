@@ -735,11 +735,12 @@ def cmd_watch(cfg):
 
 
 def _watch_workspace_refs():
-    """Refs of any workspace named WATCH_LABEL (cmux doesn't persist the watch
-    command, so after a restart these are stale idle shells)."""
+    """Refs of any workspace named WATCH_LABEL, or None when cmux couldn't be
+    reached — so callers can tell 'no such workspace' apart from a transient
+    broken-pipe list (the latter must NOT trigger a close/recreate)."""
     r = cmux("list-workspaces")
-    if r is None:
-        return []
+    if r is None or r.returncode != 0:
+        return None
     refs = []
     for line in r.stdout.splitlines():
         if WATCH_LABEL in line:
@@ -749,13 +750,25 @@ def _watch_workspace_refs():
     return refs
 
 
-def spawn_watcher():
-    """Ensure the watch loop is running inside cmux (call from within the session).
+def _watch_cmd():
+    """The watch-loop command as one shell-quoted string. Used identically for
+    `respawn-pane` (start the loop) and `surface resume set` (mark the surface
+    restorable), so cmux's resume approval matches however the surface was made."""
+    return f"{shquote(SELF)} watch"
 
-    cmux doesn't persist a workspace's launch command, so after a restart the
-    `meeting-guard` workspace returns as an idle shell. If one exists (e.g. the
-    user pinned it), revive the command *in place* via `cmux send` — no
-    duplicate, and the pin keeps working. Otherwise spawn a fresh workspace.
+
+def spawn_watcher():
+    """(Re)start the watch loop inside cmux (call from within the session).
+
+    Restart the loop *in place* with `respawn-pane`: this preserves a pinned
+    meeting-guard workspace and its position and never leaves a duplicate (a
+    close+recreate can't even touch a pinned workspace). The surface is also
+    tagged with a restorable resume command (`surface resume set`) so a cmux/host
+    restart re-runs the watcher once you approve it in the UI
+    (terminal.resumeCommands, policy `auto`). This is likewise the mid-session
+    self-heal path: the shell-startup hook and the throttled precmd hook (see
+    zshrc) both funnel here when the heartbeat goes stale. Idempotent: a no-op
+    while it's heartbeating.
     """
     if watcher_alive():
         return "already running"
@@ -768,17 +781,31 @@ def spawn_watcher():
             return "spawn in progress elsewhere"
         os.utime(lock, None)  # stale lock — take it over
     try:
-        inner = f"{shquote(SELF)} watch"
         refs = _watch_workspace_refs()
+        if refs is None:
+            return "cmux unreachable (will retry)"  # transient; hook retries later
+        cmd = _watch_cmd()
         if refs:
-            cmux("send", "--workspace", refs[0], inner + "\n")
-            time.sleep(1.5)
-            return f"revived in {refs[0]}" + (" + heartbeating" if watcher_alive() else " (verify)")
-        res = cmux("new-workspace", "--name", WATCH_LABEL, "--command", inner, "--focus", "false")
-        if res is None or res.returncode != 0:
-            return "FAILED (not in a cmux session? run this from a cmux terminal)"
-        time.sleep(1)
-        return "spawned" + (" + heartbeating" if watcher_alive() else "")
+            ref = refs[0]  # reuse the existing (possibly pinned) workspace
+        else:
+            res = cmux("new-workspace", "--name", WATCH_LABEL, "--focus", "false")
+            if res is None or res.returncode != 0:
+                return "FAILED (not in a cmux session? run this from a cmux terminal)"
+            mo = re.search(r"workspace:\d+", res.stdout or "")
+            if not mo:
+                return "FAILED (could not resolve new workspace ref)"
+            ref = mo.group(0)
+            time.sleep(1)  # let the fresh shell finish coming up before respawn
+        # start the loop in place, then mark the surface restorable across restart
+        cmux("respawn-pane", "--workspace", ref, "--command", cmd)
+        cmux("surface", "resume", "set", "--workspace", ref,
+             "--kind", "tmux", "--name", WATCH_LABEL, "--shell", cmd)
+        for _ in range(6):  # let the loop's first heartbeat land
+            time.sleep(0.5)
+            if watcher_alive():
+                break
+        verb = "respawned" if refs else "spawned"
+        return f"{verb} in {ref}" + (" + heartbeating" if watcher_alive() else " (verify)")
     finally:
         try:
             os.remove(lock)

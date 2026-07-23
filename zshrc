@@ -98,12 +98,27 @@ if [[ -f .venv/bin/activate ]]; then
   source .venv/bin/activate
 fi
 
-# meeting-guard self-heal: revive the in-cmux meeting takeover watcher after a
-# cmux/host restart. No-op outside cmux or where the binary is absent, so it's
-# safe to carry across machines. Shipped as scripts/meeting-guard (deployed to
-# ~/.scripts, on PATH).
+# meeting-guard self-heal: keep the in-cmux takeover watcher alive. It renders
+# the red meeting takeover from inside cmux and dies two ways — a cmux/host
+# restart (cmux restores its workspace but only re-runs the surface command once
+# you approve its resume prompt) or the loop itself exiting mid-session. launchd
+# can't drive cmux from outside its session, so revival must happen in-session:
+# run ensure-watch at shell startup AND from a throttled precmd (per-shell, at
+# most once/2min) so a watcher that dies mid-session is revived without waiting
+# for a brand-new shell. No-op outside cmux or where the binary is absent, so
+# it's safe to carry across machines. Shipped as scripts/meeting-guard (~/.scripts).
 if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v meeting-guard >/dev/null 2>&1; then
-  ( meeting-guard ensure-watch >/dev/null 2>&1 & )
+  autoload -Uz add-zsh-hook
+  zmodload zsh/datetime 2>/dev/null
+  typeset -g _mg_last_heal=0
+  _meeting_guard_heal() {
+    local now=${EPOCHSECONDS:-0}
+    (( now && now - _mg_last_heal < 120 )) && return   # throttle; skip if unset
+    _mg_last_heal=$now
+    ( meeting-guard ensure-watch >/dev/null 2>&1 & )
+  }
+  add-zsh-hook precmd _meeting_guard_heal
+  _meeting_guard_heal   # run once now (covers this fresh shell)
 fi
 
 # vim: foldmethod=marker:sw=2:foldlevel=10
