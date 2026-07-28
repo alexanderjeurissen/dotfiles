@@ -153,5 +153,5 @@ alias v="nvim"
 alias v!="sudo nvim"
 alias v!!="nvim -u NONE"
 
-alias code="headroom wrap \claude --permission-mode auto"
+alias code="claude --permission-mode auto --model \"claude-opus-4-8[1m]\""
 alias codeb="CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION=\"us-west-2\" code"
