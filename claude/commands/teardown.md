@@ -2,8 +2,9 @@
 description: >-
   Dismantle a per-issue workspace: remove the nested submodule worktrees and the workspace's top-level worktree,
   prune, and drop the manifest row (committing it). Auto-targets the workspace it's run from. Checks
-  for unpushed/uncommitted work (and a running dev stack) and confirms before destroying. Leaves the
-  cmux workspace open (closing it is the user's call) and does not delete feature branches.
+  for unpushed/uncommitted work (and a running dev stack) and confirms before destroying. The single
+  confirmation also decides whether to close the cmux workspace (default: close; the user can keep it
+  open). Does not delete feature branches.
 argument-hint: "[ISSUE-ID] (optional — omit to target the current workspace or pick from a list)"
 allowed-tools: Bash Read AskUserQuestion
 disable-model-invocation: true
@@ -11,9 +12,11 @@ disable-model-invocation: true
 Tear down a per-issue workspace (requested target: **$ARGUMENTS**).
 
 This is the `/teardown` command. It removes the worktrees and updates the reconstruction manifest.
-It **leaves the cmux workspace open** — closing it is always the user's decision (offer it, never do
-it automatically). It is intentionally **not** wired to "is the work done?" — you run it when you're
-done with the workspace; the code lives on as commits on the (pushed) feature branches.
+Whether the cmux workspace is also closed is **decided as part of the single Step-2 confirmation**
+(default: close it; the user can choose to keep it open) — so consent is captured at the moment of
+decision, not deferred to a second prompt that gets dropped. It is intentionally **not** wired to
+"is the work done?" — you run it when you're done with the workspace; the code lives on as commits on
+the (pushed) feature branches.
 
 > **No `cd`, ever.** The engine (`workspace`, on PATH) self-anchors to the hub from anywhere — it
 > climbs out of any submodule before resolving, so the old `.git/modules` trap is gone. Run it
@@ -74,12 +77,23 @@ The check's final line is `check=clean issue=<ISSUE-ID>` or `check=dirty issue=<
 `<issue>-*` compose project means the worktree's dev stack is still up and should be brought down in
 step 3.
 
-## Step 2 — Confirm the destructive action (mandatory)
+## Step 2 — Confirm the destructive action **and** the close decision (mandatory)
 Teardown is destructive (the engine uses `--force`) and may close the workspace you're sitting in.
-**Always** confirm via `AskUserQuestion` before proceeding — state plainly which ISSUE-ID and which
-cmux workspace will be removed, and surface anything from step 1: uncommitted/unpushed work
+**Always** confirm via a single `AskUserQuestion` before proceeding — state plainly which ISSUE-ID
+and which cmux workspace are in scope, and surface anything from step 1: uncommitted/unpushed work
 (`check=dirty`) and any running dev stack. If there's unsaved work, recommend running
-`/workspace-sync <ISSUE-ID>` first so it's pushed. Only proceed on explicit confirmation.
+`/workspace-sync <ISSUE-ID>` first so it's pushed.
+
+This one question **also** decides the fate of the cmux workspace — fold it into the same prompt so
+there is no second, droppable offer later. Offer these options (default to the first):
+
+- **Tear down + close the cmux workspace** *(recommended)* — removes the worktrees, drops the
+  manifest row, and closes `workspace:<N>`.
+- **Tear down, keep the workspace open** — removes the worktrees but leaves `workspace:<N>` open.
+- **Cancel** — do nothing.
+
+Carry the chosen **close / keep-open** decision into step 5. Only proceed (steps 3–5) on explicit
+confirmation; on Cancel, stop here.
 
 ## Step 3 — Bring down the dev stack (if any), then run the engine
 If step 1 found a running compose project for this issue, bring it down first (keeps cloned volumes;
@@ -103,15 +117,15 @@ git -C "$HUB" commit -m "workspace: close <ISSUE-ID>"
 ```
 Standing housekeeping — no need to ask.
 
-## Step 5 — Report, then *offer* to close the cmux workspace (never auto-close)
-Report the outcome as text. The worktrees are gone and the manifest is committed; the cmux workspace
-itself stays open. **Closing it is the user's decision — never close it automatically.**
+## Step 5 — Report, then execute the close decision from step 2
+Report the outcome as text. The worktrees are gone and the manifest is committed.
 
-Offer it explicitly, surfacing the resolved `workspace:<N>` ref from step 0 (e.g. "The worktrees are
-torn down. Want me to close the cmux workspace `workspace:<N>`?"). Only if the user confirms, run the
-close as a **synchronous** call (do **not** background it; the Bash tool reaps lingering children, so
-a backgrounded close is killed before its RPC fires). Use the **literal** ref — shell variables don't
-persist across Bash calls:
+Now act on the **close / keep-open** decision the user already made in step 2 — do **not** re-prompt:
+
+- **Keep open:** say so and stop; the cmux workspace stays as-is.
+- **Close:** run the close as a **synchronous** call (do **not** background it; the Bash tool reaps
+  lingering children, so a backgrounded close is killed before its RPC fires). Use the resolved
+  **literal** `workspace:<N>` ref from step 0 — shell variables don't persist across Bash calls:
 
 ```bash
 cmux close-workspace --workspace workspace:<N>
@@ -131,8 +145,9 @@ to delete local branches only if the user confirms they're merged.
   anchoring trap is gone.
 - **Never destroy unsaved work silently** — the step-2 confirmation is mandatory, every time.
 - **Don't delete feature branches** unless the user confirms they're merged.
-- **Never auto-close the cmux workspace** — see step 5. Teardown removes the *worktrees* and leaves
-  the workspace open; offer to close it and only do so on explicit confirmation. When the user does
-  confirm, close **synchronously, never backgrounded**. All durable state (worktree removal, manifest
-  commit) already landed in steps 3–4, so an unclosed workspace is harmless — recover/close it from
-  any session with `cmux close-workspace --workspace workspace:<N>`.
+- **Never close the cmux workspace without consent** — the choice is captured in the step-2
+  confirmation (default: close; keep-open is an explicit option), and step 5 just executes it. There
+  is no separate end-of-run offer. When the decision is *close*, close **synchronously, never
+  backgrounded**. All durable state (worktree removal, manifest commit) already landed in steps 3–4,
+  so an unclosed workspace is harmless — recover/close it from any session with
+  `cmux close-workspace --workspace workspace:<N>`.
