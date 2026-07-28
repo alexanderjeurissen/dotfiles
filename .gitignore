@@ -116,3 +116,6 @@ config/ranger/plugins/
 
 # Local-only opencode agents
 config/opencode/agent/gworkspace.md
+
+# Serena MCP tool artifacts
+.serena/
