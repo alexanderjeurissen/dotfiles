@@ -97,6 +97,20 @@ slash commands orchestrate the tracker, scope confirmation, the hub-repo commits
 pins), and cmux spawning. The commands are global (`~/.claude/commands/`, symlinked from
 `dotfiles/claude/commands/`), so every hub shares one copy.
 
+### Shared Claude assets (host-neutral, dotfiles-managed)
+
+Alongside the commands, dotfiles carries two more host-neutral layers, linked into `~/.claude/` by
+`rcup` and therefore shared by every hub + every project:
+
+- **`dotfiles/claude/skills/` → `~/.claude/skills/`** — global skills. The `cmux-*` family lives here
+  (cmux is host-neutral), so hubs must **not** keep hub-local copies under `<hub>/.claude/skills/`.
+- **`dotfiles/claude/hooks/` → `~/.claude/hooks/`** — global hooks. `allow-readonly-traversal.py` is
+  wired as a `PreToolUse(Bash)` hook in `~/.claude/settings.json`; it auto-approves provably
+  read-only `cd`+`/dev/null` submodule traversals (and only those — it abstains otherwise, keyed to
+  `CLAUDE_PROJECT_DIR`), removing the built-in cd+redirect approval prompt.
+
+To add either, drop the file under `dotfiles/claude/{skills,hooks}/` and run `rcup`.
+
 ### The manifest — `workspaces/WORKSPACES.md`
 
 Tracked, while the per-issue checkouts are gitignored (`workspaces/*/`). One row per active workspace
