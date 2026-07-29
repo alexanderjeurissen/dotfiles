@@ -2,6 +2,46 @@
   "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
   "schemaVersion": 1,
 
+  // meeting-guard's in-cmux takeover watcher, as a *restorable* workspace.
+  // The single terminal surface runs `meeting-guard watch` as a layout surface
+  // command (not typed-in), so cmux can re-run it on session restore once you
+  // approve its resume prompt (approve `meeting-guard watch` with policy "auto").
+  // scripts/meeting-guard also (re)creates this same workspace in-session
+  // (shell-startup + throttled precmd) to cover a watcher that dies mid-session.
+  // Trigger from the Command Palette (Cmd+Shift+P) as "Meeting Guard".
+  "actions": {
+    "meeting-guard": {
+      "type": "workspaceCommand",
+      "title": "Meeting Guard",
+      "subtitle": "Open the in-cmux meeting takeover watcher",
+      "commandName": "Meeting Guard",
+      "icon": { "type": "symbol", "name": "alarm" },
+      "palette": true
+    }
+  },
+
+  "commands": [
+    {
+      "name": "Meeting Guard",
+      "description": "In-cmux meeting takeover watcher (meeting-guard watch)",
+      "workspace": {
+        "name": "meeting-guard",
+        "color": "#c62828",
+        "layout": {
+          "pane": {
+            "surfaces": [
+              {
+                "type": "terminal",
+                "name": "meeting-guard",
+                "command": "/Users/alexanderjeurissen/Development/personal/hub/modules/dotfiles/scripts/meeting-guard watch"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+
   // Ported from wezterm.lua: Ctrl-T as the tmux-style leader key.
   // Two-step chord syntax: ["leader", "key"] — first stroke is the prefix,
   // second stroke is the action key. See:
