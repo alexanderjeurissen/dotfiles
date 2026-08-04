@@ -26,7 +26,7 @@ tracker, scope confirmation, the hub-repo commit, and the cmux spawn.
 ### 1. Resolve the target → the workspace identifier
 
 A workspace targets **either a tracker issue or a PR/MR**. The chosen identifier is load-bearing:
-it becomes the workspace dir (`workspaces/<ID>/`), the manifest row, **and** the cmux workspace name —
+it becomes the workspace dir (`.claude/worktrees/<ID>/`), the manifest row, **and** the cmux workspace name —
 so it must be canonical and consistent. Pick the path by what `$ARGUMENTS` names:
 
 **A. Tracker issue** (`ABC-597`, …)
@@ -79,13 +79,15 @@ workspace create \
   --repos <comma,separated,confirmed,repos> \
   --title "<issue or PR/MR title>"
 ```
-Capture `workspace_dir=` from the final stdout line. Idempotent — safe to re-run; it also
+Capture `workspace_dir=` and `manifest=` from the final stdout line. Idempotent — safe to re-run; it also
 **restores** branches that already exist on the remote (the rebuild path).
 
 ### 5. Commit the manifest (hub repo)
-The engine wrote `workspaces/WORKSPACES.md` but did not commit:
+The engine wrote the manifest (its path is the `manifest=` field from step 4 — canonically
+`.claude/WORKSPACES.md`; a not-yet-migrated hub may still use `workspaces/WORKSPACES.md`) but
+did not commit it:
 ```bash
-git -C "$HUB" add workspaces/WORKSPACES.md
+git -C "$HUB" add "${manifest#"$HUB"/}"
 git -C "$HUB" commit -m "workspace: open <ID> (<repos>)"
 ```
 This is standing housekeeping (like a pin) — no need to ask first.
