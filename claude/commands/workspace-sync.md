@@ -10,9 +10,9 @@ disable-model-invocation: true
 ---
 Sync a per-issue workspace (requested target: **$ARGUMENTS**).
 
-This is the `/workspace-sync` command. It keeps the issue's feature branch(es) current with their
-integration branches and pushes — so the work is durable and the manifest stays a valid
-reconstruction recipe. **Merge strategy (not rebase)**: no history rewriting, no force-push,
+This is the `/workspace-sync` command. It keeps the worktree's feature branch(es) current with
+their integration branches and pushes — so the work is durable and reviewable. **Merge strategy
+(not rebase)**: no history rewriting, no force-push,
 PR/MR-review-friendly. When a merge conflicts, this command **resolves it** (automatically for
 mechanical collisions, with your input when the right answer is unclear) rather than stopping.
 
@@ -20,7 +20,7 @@ mechanical collisions, with your input when the right answer is unclear) rather 
 
 The ISSUE-ID argument is **optional**. Resolve the target in this order, then carry the resolved
 **ISSUE-ID** through the rest of the command (no `cd` — the engine self-anchors; resolve
-`HUB="$(workspace hub)"` once for the manifest-fallback read and absolute worktree paths):
+`HUB="$(workspace hub)"` once for the absolute worktree paths (the `WS=` step below):
 
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
@@ -43,16 +43,15 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
 
 3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the
    `workspace:<N>  <ISSUE-ID> · <title>` names). Filter out non-issue rows (`Root`, etc.) and
-   present the issue workspaces via `AskUserQuestion`. Capture the ISSUE-ID (token before ` · `). As
-   a fallback, the manifest also lists active workspaces:
-   `git -C "$HUB" show HEAD:.claude/WORKSPACES.md 2>/dev/null || git -C "$HUB" show HEAD:workspaces/WORKSPACES.md`.
+   present the issue workspaces via `AskUserQuestion`. Capture the name (token before ` · `). As a
+   fallback, `workspace list` shows all hub worktrees (both `.claude/worktrees/` and legacy `workspaces/`).
 
 ## Step 1 — Run the engine
 Resolve the worktree base once (works whether the workspace is under `.claude/worktrees/` or the
 legacy `workspaces/`), then sync:
 ```bash
-WS="$(workspace dir <ISSUE-ID>)"      # absolute path to the resolved workspace dir
-workspace sync --issue <ISSUE-ID>
+WS="$(workspace dir <ISSUE-ID>)"      # absolute path to the resolved worktree dir
+workspace sync --name <ISSUE-ID>      # omit --name to target the worktree you're inside
 ```
 For each in-scope submodule worktree under `$WS/modules/<repo>`, the engine:
 `fetch origin/<integration-branch>` → `git merge --no-edit origin/<integration-branch>` →
@@ -120,7 +119,7 @@ git -C "$WS/modules/<repo>" commit --no-edit
 
 ## Step 3 — Re-run the engine to push (and catch any later repos)
 ```bash
-workspace sync --issue <ISSUE-ID>
+workspace sync --name <ISSUE-ID>
 ```
 Re-running is idempotent: already-merged repos do an "already up to date" merge and push; any repo
 the engine hadn't reached yet (it stops at the first conflict) now gets its turn. Repeat steps 2–3

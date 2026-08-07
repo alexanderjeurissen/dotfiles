@@ -1,47 +1,46 @@
 #!/usr/bin/env bash
-# workspace — git/fs engine for per-task, fully-isolated workspaces.
+# workspace — git/fs engine for per-worktree, fully-isolated dev environments.
 #
 # Terms: the HUB is the top-level checkout (the stable integration view containing modules/
-# and per-task worktrees under .claude/worktrees/); a WORKSPACE is the per-task, isolated environment for one issue/PR, and
-# WORKTREE is the git mechanism it's built from. The hub repo is the git repo the hub is a
-# checkout of.
+#   and per-worktree environments under .claude/worktrees/). A WORKTREE is one isolated
+#   environment — a git worktree of the hub repo with a git worktree of each in-scope
+#   submodule nested under modules/<repo>, object stores shared (no re-clone). The HARNESS
+#   (Claude Desktop, `claude --worktree`, or this engine) makes the hub worktree; the engine
+#   fills in the submodule worktrees. The hub itself stays a clean integration vantage point.
 #
-# A per-task workspace is materialized as a git worktree of THIS hub repo (carrying CLAUDE.md,
-# .claude/, bin/, .cmux/, docs/, …) at  .claude/worktrees/<TASK>/ , with a git worktree of each
-# in-scope submodule nested inside it at  .claude/worktrees/<TASK>/modules/<repo>  on the task's
-# feature branch (mirroring the hub, where submodules live under modules/). Submodule object
-# stores are shared (no re-clone). The hub's view stays a clean, stable integration vantage
-# point; feature work lives entirely in worktrees.
+# This is deterministic git/fs plumbing only. It does NOT talk to Linear or cmux, and it does
+#   NOT commit the hub repo — the slash commands orchestrate those. Progress/warnings → stderr;
+#   capturable results → stdout as `key=value` (bootstrap) or per-repo result lines (sync).
 #
-# This script is the deterministic plumbing. It does NOT:
-#   - commit the hub repo        (the slash commands do that: manifest rows, pins)
-#   - talk to Linear or cmux      (the slash commands orchestrate those)
-# It is idempotent and never steals focus. All progress/warnings go to stderr;
-# capturable results go to stdout as `key=value` (create) or per-repo result lines.
+# Submodules are discovered from the hub's .gitmodules; the hub is resolved from the caller's
+#   cwd — nothing is hub-specific, so one engine drives every hub.
 #
-# The set of submodules is discovered from the hub root's .gitmodules, and the hub from the
-# caller's cwd — nothing is hub-specific, so the same engine drives every hub.
+# Integration branch = the branch a submodule is on in the hub checkout (e.g. core→develop);
+#   nothing hardcoded. Divergence from origin/HEAD is warned about, not blocked.
 #
-# Integration branch resolution (the source of truth):
-#   integration_branch(repo) = the branch currently checked out for that submodule in
-#   the hub checkout, under modules/ (e.g. dotfiles→main).
-#   Nothing is hardcoded. Divergence from origin/HEAD is warned about, not blocked.
-#
-# Usage (--task and --issue are interchangeable):
-#   workspace create  --task <ID> --branch <feature-branch> --repos <a,b> [--title "…"]
-#   workspace sync    --task <ID>
-#   workspace update-modules [--repos <a,b>]
-#   workspace teardown --task <ID> [--check]   (--check = dry-run safety report)
+# Usage:
+#   workspace bootstrap --repos <a,b> [--name <name>] [--branch <branch>]
+#       Materialize the in-scope submodule worktrees into the current (or --name'd) hub
+#       worktree, branch defaulting to the worktree name. Adopts a worktree the harness
+#       already made (Desktop / `claude --worktree`), or creates one if absent.
+#   workspace sync [--name <name>]              merge each submodule's integration branch + push
+#   workspace teardown --name <name> [--check]  remove a worktree's submodule + hub worktrees
+#   workspace prune                             sweep dangling worktree registrations
+#   workspace update-modules [--repos <a,b>]    fast-forward hub-checkout submodules (caller pins)
 #   workspace integration-branch <repo>
-#   workspace dir <ID>            (print the resolved workspace dir; adopts either location)
-#   workspace list
+#   workspace dir [<name>]                      print the resolved worktree dir
+#   workspace list                              list hub worktrees
+#   workspace hub                               print the hub path
+#
+# --name accepts --issue/--task as aliases (back-compat). bootstrap/sync target the worktree
+#   you run them from when --name is omitted; teardown always needs --name (it's a hub-side op).
 
 set -euo pipefail
 
 # ── locate the TRUE hub (the top-level checkout / main worktree) ──────────────
 # This engine lives on PATH (~/.scripts → modules/dotfiles/scripts/) and is shared across
-# every per-task workspace, NOT inside any one repo — so it can't self-anchor from its own
-# location, and nothing about the root is hardcoded. Resolve from the caller's cwd instead:
+# every worktree, NOT inside any one repo — so it can't self-anchor from its own location,
+# and nothing about the root is hardcoded. Resolve from the caller's cwd instead:
 #   1. honor an explicit $WORKSPACE_HUB (export to override; handy for tests);
 #   2. else climb out of any submodule to the top superproject, then take the parent of
 #      that repo's git COMMON dir. From a linked worktree this still lands on the main
@@ -63,15 +62,15 @@ resolve_hub() {
 HUB="${WORKSPACE_HUB:-$(resolve_hub)}"
 [ -n "$HUB" ] || { printf 'workspace: error: cannot resolve the hub from %s — cd into a hub checkout or export $WORKSPACE_HUB\n' "$PWD" >&2; exit 1; }
 
-# Submodules are grouped under this dir, both in the main checkout and inside each per-task
-# worktree. Repo identifiers (in --repos and the manifest) stay bare names; this prefix
-# locates them on disk. To flatten back to the root, set MODULES_DIR="".
+# Submodules are grouped under this dir, both in the main checkout and inside each worktree.
+# Repo identifiers (in --repos) stay bare names; this prefix locates them on disk. To flatten
+# back to the root, set MODULES_DIR="".
 MODULES_DIR="modules"
 
-# Per-task worktrees live under .claude/worktrees/<TASK> (Claude Code's default worktree dir,
-# shared with Desktop-app sessions). The legacy location was workspaces/<TASK>; both are
-# resolved (see resolve_ws_dir / resolve_manifest) so pre-move worktrees + manifests keep
-# working and drain naturally as tasks close.
+# Per-worktree environments live under .claude/worktrees/<name> — Claude Code's default
+# worktree dir, shared with Desktop-app sessions and `claude --worktree`. The legacy location
+# was workspaces/<name>; both are resolved (see resolve_ws_dir) so pre-move worktrees keep
+# working and drain naturally.
 WT_DIR=".claude/worktrees"
 LEGACY_WT_DIR="workspaces"
 
@@ -106,14 +105,30 @@ path_to_project_key() { printf '%s' "$1" | sed 's#/#-#g'; }
 # Is there a git worktree (workspace or submodule) materialized at this path?
 worktree_present() { [ -e "$1/.git" ]; }
 
-# Resolve a task's workspace dir: prefer an existing worktree in either location (so a
-# Desktop-created or legacy worktree is adopted, never duplicated), else default new tasks
-# to the canonical .claude/worktrees/<TASK>.
+# Resolve a named worktree's dir: prefer an existing worktree in either location (so a
+# Desktop-created or legacy worktree is adopted, never duplicated), else default to the
+# canonical .claude/worktrees/<name>.
 resolve_ws_dir() {
-  local task="$1"
-  if   worktree_present "$HUB/$WT_DIR/$task";        then printf '%s/%s/%s' "$HUB" "$WT_DIR" "$task"
-  elif worktree_present "$HUB/$LEGACY_WT_DIR/$task"; then printf '%s/%s/%s' "$HUB" "$LEGACY_WT_DIR" "$task"
-  else printf '%s/%s/%s' "$HUB" "$WT_DIR" "$task"; fi
+  local name="$1"
+  if   worktree_present "$HUB/$WT_DIR/$name";        then printf '%s/%s/%s' "$HUB" "$WT_DIR" "$name"
+  elif worktree_present "$HUB/$LEGACY_WT_DIR/$name"; then printf '%s/%s/%s' "$HUB" "$LEGACY_WT_DIR" "$name"
+  else printf '%s/%s/%s' "$HUB" "$WT_DIR" "$name"; fi
+}
+
+# Name of the worktree the caller's cwd is inside (climbing out of any submodule to the
+# top-level hub worktree first), or empty if at the hub root / outside a worktree. Lets
+# bootstrap/sync target "the worktree I'm in" without an explicit --name.
+current_ws_name() {
+  local base sp top
+  base="$PWD"
+  while sp="$(git -C "$base" rev-parse --show-superproject-working-tree 2>/dev/null)" && [ -n "$sp" ]; do
+    base="$sp"
+  done
+  top="$(git -C "$base" rev-parse --show-toplevel 2>/dev/null)" || return 0
+  case "$top" in
+    "$HUB/$WT_DIR/"*|"$HUB/$LEGACY_WT_DIR/"*) basename "$top" ;;
+    *) : ;;
+  esac
 }
 
 # ── integration branch resolution ─────────────────────────────────────────────
@@ -133,52 +148,7 @@ integration_branch() {
   printf '%s' "$br"
 }
 
-# ── manifest (.claude/WORKSPACES.md; legacy workspaces/WORKSPACES.md still honored) ──────
-# Prefer whichever manifest already exists, else default new hubs to the canonical .claude/.
-resolve_manifest() {
-  if   [ -f "$HUB/.claude/WORKSPACES.md" ];    then printf '%s/.claude/WORKSPACES.md' "$HUB"
-  elif [ -f "$HUB/workspaces/WORKSPACES.md" ]; then printf '%s/workspaces/WORKSPACES.md' "$HUB"
-  else printf '%s/.claude/WORKSPACES.md' "$HUB"; fi
-}
-MANIFEST="$(resolve_manifest)"
-
-manifest_ensure() {
-  mkdir -p "$(dirname "$MANIFEST")"
-  [ -f "$MANIFEST" ] && return 0
-  cat > "$MANIFEST" <<'EOF'
-# Workspaces Manifest
-
-Reconstruction recipe for the per-task worktrees under `.claude/worktrees/`. Each row is
-enough to rebuild a `.claude/worktrees/<TASK>/` mini-workspace on a fresh clone: re-create
-the workspace worktree, then a worktree of each listed repo on the task's feature branch
-(which `/workspace-sync` has pushed to the submodule remotes). The checkouts themselves are
-gitignored; this file is tracked. Managed by `/workspace` and `/teardown` (`bin/workspace`).
-
-| Task | Title | Repos | Branch | Opened |
-|------|-------|-------|--------|--------|
-EOF
-}
-
-manifest_remove() {
-  local task="$1" tmp
-  [ -f "$MANIFEST" ] || return 0
-  tmp="$(mktemp)"
-  # Drop the data row whose first column (Task) equals $task EXACTLY. Compared as a literal
-  # field value (not a regex), so task names with regex metacharacters — `dotfiles.v2`, `a+b`
-  # — match only their own row instead of matching/missing the wrong one.
-  awk -F'|' -v t="$task" '{ f=$2; gsub(/^[ \t]+|[ \t]+$/, "", f); if (f != t) print }' "$MANIFEST" > "$tmp"
-  mv "$tmp" "$MANIFEST"
-}
-
-manifest_upsert() {
-  local task="$1" title="$2" repos="$3" branch="$4" opened
-  opened="$(date +%Y-%m-%d)"
-  manifest_ensure
-  manifest_remove "$task"
-  printf '| %s | %s | %s | %s | %s |\n' "$task" "${title:-—}" "$repos" "$branch" "$opened" >> "$MANIFEST"
-}
-
-# ── memory symlink (share canonical memory; history stays per-task) ───────────
+# ── memory symlink (share canonical memory; history stays per-worktree) ───────
 setup_memory_symlink() {
   local ws_dir="$1" projects_dir canonical_memory per_task_dir link
   projects_dir="$HOME/.claude/projects"
@@ -196,39 +166,44 @@ setup_memory_symlink() {
   fi
 }
 
-# ── create ────────────────────────────────────────────────────────────────────
-cmd_create() {
-  local task="" branch="" repos="" title=""
+# ── bootstrap (materialize in-scope submodule worktrees into a hub worktree) ──
+# Adopts the hub worktree the harness (Desktop / `claude --worktree`) already created, or
+# creates one if absent, then materializes a worktree of each in-scope submodule on a branch
+# defaulting to the worktree name (distinct per worktree → collision-free across sessions, so
+# multiple worktrees for the same issue "just work"). No issue-keying, no manifest, no
+# one-per-issue guard: worktrees are disposable; the branch is what's durable (pushed by sync).
+cmd_bootstrap() {
+  local name="" branch="" repos=""
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task|--issue) task="$2"; shift 2;;   # --issue: alias for cross-workspace compatibility
+      --name|--issue|--task) name="$2"; shift 2;;
       --branch) branch="$2"; shift 2;;
       --repos)  repos="$2";  shift 2;;
-      --title)  title="$2";  shift 2;;
-      *) die "create: unknown flag $1";;
+      *) die "bootstrap: unknown flag $1";;
     esac
   done
-  [ -n "$task" ]   || die "create requires --task (e.g. dotfiles-zsh)"
-  [ -n "$branch" ] || die "create requires --branch (e.g. feature/dotfiles-zsh)"
-  [ -n "$repos" ]  || die "create requires --repos (comma-separated; e.g. dotfiles,tao-te-ching)"
+  [ -n "$name" ] || name="$(current_ws_name)"
+  [ -n "$name" ]  || die "bootstrap: run inside a worktree (…/.claude/worktrees/<name>) or pass --name <name>"
+  [ -n "$repos" ] || die "bootstrap requires --repos (comma-separated; e.g. core,infrastructure)"
 
-  local ws_dir; ws_dir="$(resolve_ws_dir "$task")"
+  local ws_dir; ws_dir="$(resolve_ws_dir "$name")"
   local -a repo_arr
   IFS=',' read -ra repo_arr <<< "$repos"
   local repo
   for repo in "${repo_arr[@]}"; do
-    is_known_submodule "$repo" || die "create: '$repo' is not a known submodule ($KNOWN_SUBMODULES)"
+    is_known_submodule "$repo" || die "bootstrap: '$repo' is not a known submodule ($KNOWN_SUBMODULES)"
   done
+  branch="${branch:-$name}"
 
-  # 1. the workspace's top-level worktree (of the hub repo, detached @ current hub HEAD — scaffolding only, no pins)
+  # 1. adopt-or-create the hub worktree (detached @ current hub HEAD — scaffolding only)
   if worktree_present "$ws_dir"; then
-    info "workspace already at $ws_dir"
+    info "adopting worktree at ${ws_dir#"$HUB"/}"
   else
-    info "creating workspace at ${ws_dir#"$HUB"/} (detached)"
+    info "creating worktree at ${ws_dir#"$HUB"/} (detached)"
     git -C "$HUB" worktree add --detach "$ws_dir" HEAD >/dev/null
   fi
 
-  # 2. a worktree of each in-scope submodule, on the task's feature branch
+  # 2. a worktree of each in-scope submodule, on the feature branch
   for repo in "${repo_arr[@]}"; do
     local repo_path target ib
     repo_path="$(submodule_path "$HUB" "$repo")"
@@ -240,12 +215,11 @@ cmd_create() {
       info "$repo: worktree already present"
     elif git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
       info "$repo: attaching existing local branch $branch"
-      # An existing local branch may already be checked out in another worktree, in which
-      # case `worktree add` fails ("already checked out at …"). Without this guard, set -e
-      # would abort cmd_create mid-loop, leaving a half-built workspace. Skip this repo with
-      # a clear, actionable diagnostic instead — create is idempotent, so re-run once resolved.
+      # An existing local branch may already be checked out in another worktree, in which case
+      # `worktree add` fails ("already checked out at …"). Skip this repo with a clear
+      # diagnostic instead of aborting the loop under set -e — bootstrap is re-runnable.
       if ! git -C "$repo_path" worktree add "$target" "$branch" >/dev/null 2>&1; then
-        warn "$repo: cannot attach branch '$branch' — it may already be checked out in another worktree (see: git -C \"$repo_path\" worktree list). Skipping $repo; resolve, then re-run /workspace $task."
+        warn "$repo: cannot attach branch '$branch' — it may already be checked out in another worktree (see: git -C \"$repo_path\" worktree list). Skipping $repo."
         continue
       fi
     elif git -C "$repo_path" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
@@ -256,38 +230,35 @@ cmd_create() {
       git -C "$repo_path" worktree add -b "$branch" "$target" "origin/$ib" >/dev/null
     fi
 
-    # Initialize the worktree's scaffolding (env files, symlinks, history files) if the
-    # repo ships a bin/worktree-init. The post-checkout hook is supposed to do this on
-    # `git worktree add`, but it doesn't fire reliably here — so invoke it directly.
-    # Idempotent and repo-guarded: only repos that ship bin/worktree-init get it.
+    # Initialize the worktree's scaffolding (env files, symlinks, history files) if the repo
+    # ships a bin/worktree-init. The post-checkout hook is supposed to do this on
+    # `git worktree add` but doesn't fire reliably here — so invoke it directly. Idempotent
+    # and repo-guarded: only repos that ship bin/worktree-init get it.
     if [ -x "$target/bin/worktree-init" ]; then
       info "$repo: running bin/worktree-init (env files, symlinks)"
       ( cd "$target" && bin/worktree-init >/dev/null ) || warn "$repo: bin/worktree-init failed (continuing)"
     fi
   done
 
-  # 3. share memory (must exist before Claude launches in the workspace)
+  # 3. share memory (facts shared; history stays per-worktree)
   setup_memory_symlink "$ws_dir"
 
-  # 4. record in the reconstruction manifest (caller commits it)
-  manifest_upsert "$task" "$title" "$repos" "$branch"
-  info "manifest: recorded $task (caller should commit ${MANIFEST#"$HUB"/})"
-
-  emit "workspace_dir=$ws_dir manifest=$MANIFEST task=$task repos=$repos branch=$branch status=ready"
+  emit "workspace_dir=$ws_dir name=$name repos=$repos branch=$branch status=ready"
 }
 
 # ── sync (merge integration branch in, push; report conflicts) ────────────────
 cmd_sync() {
-  local task=""
+  local name=""
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task|--issue) task="$2"; shift 2;;
+      --name|--issue|--task) name="$2"; shift 2;;
       *) die "sync: unknown flag $1";;
     esac
   done
-  [ -n "$task" ] || die "sync requires --task"
-  local ws_dir; ws_dir="$(resolve_ws_dir "$task")"
-  worktree_present "$ws_dir" || die "no workspace at $ws_dir (run /workspace $task first)"
+  [ -n "$name" ] || name="$(current_ws_name)"
+  [ -n "$name" ] || die "sync: run inside a worktree or pass --name <name>"
+  local ws_dir; ws_dir="$(resolve_ws_dir "$name")"
+  worktree_present "$ws_dir" || die "no worktree at $ws_dir"
 
   local repo any=0 conflicts=0
   for repo in $KNOWN_SUBMODULES; do
@@ -365,25 +336,23 @@ cmd_update_modules() {
   return 0
 }
 
-# ── teardown (remove worktrees, prune, drop manifest row) ─────────────────────
+# ── teardown (remove a worktree's submodule + hub worktrees, then prune) ──────
+# A hub-side op: --name is required (you don't tear down the worktree you're standing in).
+# --check is a dry-run safety report of uncommitted + unpushed work; it changes nothing.
 cmd_teardown() {
-  local task="" check=0
+  local name="" check=0
   while [ $# -gt 0 ]; do
     case "$1" in
-      --task|--issue) task="$2"; shift 2;;
+      --name|--issue|--task) name="$2"; shift 2;;
       --check) check=1; shift;;
       *) die "teardown: unknown flag $1";;
     esac
   done
-  [ -n "$task" ] || die "teardown requires --task"
-  local ws_dir; ws_dir="$(resolve_ws_dir "$task")"
+  [ -n "$name" ] || die "teardown requires --name <name> (run from the hub: cd \"\$(workspace hub)\")"
+  local ws_dir; ws_dir="$(resolve_ws_dir "$name")"
 
-  # ── --check: dry-run safety report. Surfaces uncommitted + unpushed work per
-  # submodule worktree and changes NOTHING. Lets /teardown run the safety check
-  # via the (cwd-independent) engine instead of a fragile shell glob. Final line
-  # is `check=clean|dirty task=<TASK>` for the caller to branch on. ────────────
   if [ "$check" = 1 ]; then
-    worktree_present "$ws_dir" || die "no workspace at $ws_dir (nothing to tear down)"
+    worktree_present "$ws_dir" || die "no worktree at $ws_dir (nothing to tear down)"
     local repo any=0 dirty=0
     for repo in $KNOWN_SUBMODULES; do
       local rd
@@ -408,7 +377,7 @@ cmd_teardown() {
       if [ -n "$st" ]; then emit "  uncommitted:"; emit "$st"; else emit "  uncommitted: none"; fi
       if [ -n "$unpushed" ]; then
         emit "  unpushed:"; emit "$unpushed"
-        [ "$no_upstream" = 1 ] && emit "  (no upstream set — run /workspace-sync $task to push)"
+        [ "$no_upstream" = 1 ] && emit "  (no upstream set — run /workspace-sync $name to push)"
       elif [ "$no_upstream" = 1 ]; then
         emit "  unpushed: none (no upstream set yet; no commits beyond origin/${ib})"
       else
@@ -416,8 +385,14 @@ cmd_teardown() {
       fi
     done
     [ "$any" = 1 ] || emit "(no submodule worktrees under $ws_dir)"
-    if [ "$dirty" = 1 ]; then emit "check=dirty task=$task"; else emit "check=clean task=$task"; fi
+    if [ "$dirty" = 1 ]; then emit "check=dirty name=$name"; else emit "check=clean name=$name"; fi
     return 0
+  fi
+
+  # Refuse to remove the worktree the caller is standing in — that yanks cwd out from under
+  # the session and breaks its PreToolUse hooks. Run teardown from the hub root instead.
+  if [ "$(current_ws_name)" = "$name" ]; then
+    die "teardown: refusing to remove '$name' from inside it — run from the hub root (cd \"\$(workspace hub)\")"
   fi
 
   local repo
@@ -431,49 +406,50 @@ cmd_teardown() {
     fi
   done
   if worktree_present "$ws_dir"; then
-    info "removing workspace"
-    git -C "$HUB" worktree remove --force "$ws_dir" || warn "workspace: worktree remove failed for $ws_dir"
+    info "removing worktree $name"
+    git -C "$HUB" worktree remove --force "$ws_dir" || warn "worktree: remove failed for $ws_dir"
   fi
-  # prune dangling worktree admin entries
+  cmd_prune >/dev/null
+  # NOTE: deliberately leave the per-worktree memory symlink + history dir under
+  # ~/.claude/projects untouched (no rm under $HOME). The symlink points at the persistent
+  # canonical memory and is harmless.
+  emit "torn_down=$name status=removed"
+}
+
+# ── prune (sweep dangling worktree registrations, hub + each submodule) ───────
+# Safe by construction: `git worktree prune` only reaps entries whose working dir is missing,
+# so a live worktree (dir present) or a locked one is never touched. Run periodically, or
+# after archiving a Desktop session whose worktree was removed.
+cmd_prune() {
+  info "pruning dangling worktree registrations (hub + submodules)"
   git -C "$HUB" worktree prune 2>/dev/null || true
+  local repo
   for repo in $KNOWN_SUBMODULES; do
     git -C "$(submodule_path "$HUB" "$repo")" worktree prune 2>/dev/null || true
   done
-  # NOTE: deliberately leave the per-task memory symlink + history dir under
-  # ~/.claude/projects untouched (no rm under $HOME). The symlink points at the
-  # persistent canonical memory and is harmless.
-
-  manifest_remove "$task"
-  info "manifest: dropped $task (caller should commit ${MANIFEST#"$HUB"/})"
-  emit "torn_down=$task status=removed"
+  emit "pruned=ok"
 }
 
-# ── list ──────────────────────────────────────────────────────────────────────
+# ── list (all hub worktrees, both locations) ──────────────────────────────────
 cmd_list() {
-  if [ -f "$MANIFEST" ]; then
-    cat "$MANIFEST"
-  else
-    emit "(no manifest yet)"
-  fi
-  emit ""
-  emit "Workspace worktrees:"
   git -C "$HUB" worktree list
 }
 
 # ── dispatch ──────────────────────────────────────────────────────────────────
-usage() { sed -n '2,30p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+usage() { sed -n '2,36p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 
 [ $# -gt 0 ] || usage
 cmd="$1"; shift
 case "$cmd" in
-  create)               cmd_create "$@";;
+  bootstrap)            cmd_bootstrap "$@";;
   sync)                 cmd_sync "$@";;
   update-modules)       cmd_update_modules "$@";;
   teardown)             cmd_teardown "$@";;
+  prune)                cmd_prune "$@";;
   integration-branch)   [ $# -eq 1 ] || die "integration-branch requires exactly one <repo>"; integration_branch "$1"; printf '\n';;
-  dir|path)             [ $# -eq 1 ] || die "dir requires exactly one <ID>"; resolve_ws_dir "$1"; printf '\n';;
+  dir|path)             [ $# -eq 1 ] || die "dir requires exactly one <name>"; resolve_ws_dir "$1"; printf '\n';;
   hub|root)             emit "$HUB";;
   list)                 cmd_list;;
   -h|--help|help)       usage;;
-  *) die "unknown command: $cmd (expected: create|sync|update-modules|teardown|integration-branch|dir|hub|list)";;
+  *) die "unknown command: $cmd (expected: bootstrap|sync|update-modules|teardown|prune|integration-branch|dir|hub|list)";;
 esac

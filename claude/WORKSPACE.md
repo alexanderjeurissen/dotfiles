@@ -20,7 +20,7 @@ ad-hoc slug); **PR/MR** = the merge request on whichever forge a submodule lives
 ## Repository structure conventions
 
 The hub is a checkout of a git repo (the *hub repo*) that groups **git submodules** for the
-code/content repos under `modules/`, plus the tracked worktree manifest. Work tracking and planning
+code/content repos under `modules/`. Work tracking and planning
 live in the issue tracker (Linear), not in the repo. Each submodule is configured with `update=none`
 — treat each as an independent git repo:
 
@@ -64,7 +64,7 @@ environment.
 ├─ modules/                     submodules on their integration branches
 │  └─ repo-a/  repo-b/  …
 └─ .claude/
-   ├─ WORKSPACES.md             tracked reconstruction manifest (the checkouts are gitignored)
+   ├─ WORKSPACES.md             frozen legacy manifest (checkouts are gitignored)
    └─ worktrees/
       └─ <ISSUE>/               a per-issue workspace (worktree of the hub repo)
          ├─ CLAUDE.md .claude/ …  came free with the top-level worktree
@@ -85,17 +85,16 @@ hardcoded. **Feature work never lives in the hub checkout — only in workspaces
 
 | Command | What it does |
 |---|---|
-| `/workspace <ISSUE>` | Create the workspace: a top-level worktree + submodule worktrees on the feature branch, share memory, record the manifest, spawn a cmux workspace (Claude Code + terminal splits) cwd'd into it. Claude *suggests* repo scope; the user confirms. |
-| `/workspace-sync [ISSUE]` | **Merge** each submodule's integration branch into the feature branch (never rebase) + push. Auto-resolves mechanical conflicts, asks when ambiguous; auto-targets the workspace it's run from. No force-push. |
+| `/workspace <name>` | Confirm repo scope, then `workspace bootstrap`: adopt the worktree the harness made (Claude Desktop / `claude --worktree`) or create one, materialize the in-scope submodule worktrees, share memory, and spawn a cmux workspace (Claude Code + terminal splits) cwd'd into it. Spawn mechanics only — no tracker, no manifest. |
+| `/workspace-sync [name]` | **Merge** each submodule's integration branch into the feature branch (never rebase) + push. Auto-resolves mechanical conflicts, asks when ambiguous; auto-targets the worktree it's run from. No force-push. |
 | `/update-modules` | Fast-forward the hub checkout's submodules to their integration tips + **pin**. The only pinning path. Run after upstream PRs/MRs merge. |
-| `/teardown <ISSUE>` | Remove the workspace's worktrees + drop the manifest row (after a safety check for unsaved work). Keeps feature branches and the cmux workspace. |
+| `workspace teardown --name <name>` | Remove a worktree's submodule + hub worktrees, then prune (run from the hub; `--check` first for a safety report). `workspace prune` alone sweeps dangling registrations. Keeps feature branches. |
 
 The engine `workspace` (on PATH, from `dotfiles/scripts/` via `~/.scripts`; shared across hubs and
 discovering this hub's submodules + integration branches from `.gitmodules` and the hub checkout)
 does the deterministic git/fs plumbing only — it never commits the hub repo, talks to a tracker, or
 touches cmux. (`workspace hub` prints the hub path from anywhere; `$WORKSPACE_HUB` overrides it.) The
-slash commands orchestrate the tracker, scope confirmation, the hub-repo commits (manifest rows,
-pins), and cmux spawning. The commands are global (`~/.claude/commands/`, symlinked from
+slash commands orchestrate scope confirmation, the hub-repo pin commits, and cmux spawning. The commands are global (`~/.claude/commands/`, symlinked from
 `dotfiles/claude/commands/`), so every hub shares one copy.
 
 ### Shared Claude assets (host-neutral, dotfiles-managed)
@@ -112,13 +111,13 @@ Alongside the commands, dotfiles carries two more host-neutral layers, linked in
 
 To add either, drop the file under `dotfiles/claude/{skills,hooks}/` and run `rcup`.
 
-### The manifest — `.claude/WORKSPACES.md`
+### The manifest — `.claude/WORKSPACES.md` (frozen / deprecated)
 
-Tracked, while the per-issue checkouts are gitignored (`.claude/worktrees/*/`, and legacy `workspaces/*/`). One row per active workspace
-(issue, title, repos, branch, opened). It's a **reconstruction recipe**: on a fresh clone, each row
-is enough to rebuild the workspace from the pushed feature branches — which is exactly why
-`/workspace-sync`'s push matters. `/workspace` and `/teardown` maintain it; the row is committed as
-standing housekeeping.
+Worktrees are now disposable and often hash-named (Claude Desktop / `claude --worktree` generate the
+names), so the engine no longer maintains a manifest. Where a tracked `.claude/WORKSPACES.md` still
+exists, it's a **frozen record** of the draining legacy `workspaces/` worktrees — delete it once
+those are gone. Worktree checkouts stay gitignored (`.claude/worktrees/*/`, legacy `workspaces/*/`);
+durability comes from `/workspace-sync` pushing the feature branches, not from a manifest.
 
 ### Memory & history
 
