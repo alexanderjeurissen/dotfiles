@@ -97,6 +97,21 @@ touches cmux. (`workspace hub` prints the hub path from anywhere; `$WORKSPACE_HU
 slash commands orchestrate scope confirmation, the hub-repo pin commits, and cmux spawning. The commands are global (`~/.claude/commands/`, symlinked from
 `dotfiles/claude/commands/`), so every hub shares one copy.
 
+### Filling submodules on demand
+
+Worktrees start with **empty `modules/<repo>` mountpoints** — submodules are materialized
+lazily, exactly when you need them, so there's no upfront scope to declare and you never check
+out all of them. When you need a submodule and its dir is empty, fill it:
+
+```sh
+workspace fill <repo> [<repo> …]      # e.g. workspace fill core infrastructure
+```
+
+`fill` is `bootstrap` scoped to those repos, run from inside the worktree: it materializes each
+on this worktree's branch (shared object store, runs `bin/worktree-init`), idempotent, so
+already-present submodules are skipped. `/workspace`'s scope step just pre-warms an obvious set;
+you can always fill more later.
+
 ### Shared Claude assets (host-neutral, dotfiles-managed)
 
 Alongside the commands, dotfiles carries two more host-neutral layers, linked into `~/.claude/` by
@@ -151,6 +166,8 @@ need the ref.
 - **`/workspace` proposes, never auto-spawns.** It confirms repo scope before creating worktrees or
   the cmux workspace. Skip the spawn if you're already inside the right workspace.
 - **Inside a workspace, submodule paths are `modules/<repo>/…`** — exactly as at the hub root.
+- **Fill submodules on demand.** A worktree starts with empty `modules/<repo>` mountpoints; if you
+  need a submodule and its dir is empty, run `workspace fill <repo>` before using it.
 - **Never steal focus.** `cmux-spawn-work` passes `--focus false`; don't call `select-workspace`,
   `focus-pane`, or `focus-panel` after spawning.
 - **Never auto-close.** Closing is always the user's decision. `/teardown` removes the *worktrees*

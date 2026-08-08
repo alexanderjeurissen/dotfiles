@@ -23,6 +23,7 @@
 #       Materialize the in-scope submodule worktrees into the current (or --name'd) hub
 #       worktree, branch defaulting to the worktree name. Adopts a worktree the harness
 #       already made (Desktop / `claude --worktree`), or creates one if absent.
+#   workspace fill <repo> [<repo> …]            materialize submodule worktrees on demand (from inside)
 #   workspace sync [--name <name>]              merge each submodule's integration branch + push
 #   workspace teardown --name <name> [--check]  remove a worktree's submodule + hub worktrees
 #   workspace prune                             sweep dangling worktree registrations
@@ -435,8 +436,29 @@ cmd_list() {
   git -C "$HUB" worktree list
 }
 
+# ── fill (materialize specific submodule worktrees on demand) ─────────────────
+# On-demand population: a worktree starts with empty modules/<repo> mountpoints; fill the ones
+# you need, when you need them. `bootstrap` scoped to the named repos, run from inside the
+# worktree (idempotent — already-present submodules are skipped). No upfront scope to declare.
+cmd_fill() {
+  [ $# -ge 1 ] || die "fill requires one or more <repo> (e.g. workspace fill core infrastructure)"
+  local csv; csv="$(printf '%s,' "$@")"; csv="${csv%,}"
+  cmd_bootstrap --repos "$csv"
+}
+
+# ── prepare (SessionStart helper: ready a worktree, print its name) ───────────
+# If the caller's cwd is inside a hub worktree, ensure the shared-memory symlink exists and
+# print the worktree name on stdout; otherwise print nothing. Cheap + idempotent — meant for a
+# SessionStart hook so a worktree session shares hub memory from turn 1.
+cmd_prepare() {
+  local name; name="$(current_ws_name)"
+  [ -n "$name" ] || return 0
+  setup_memory_symlink "$(resolve_ws_dir "$name")"
+  emit "$name"
+}
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
-usage() { sed -n '2,36p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+usage() { sed -n '2,37p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 
 [ $# -gt 0 ] || usage
 cmd="$1"; shift
@@ -446,10 +468,12 @@ case "$cmd" in
   update-modules)       cmd_update_modules "$@";;
   teardown)             cmd_teardown "$@";;
   prune)                cmd_prune "$@";;
+  fill)                 cmd_fill "$@";;
+  prepare)              cmd_prepare "$@";;
   integration-branch)   [ $# -eq 1 ] || die "integration-branch requires exactly one <repo>"; integration_branch "$1"; printf '\n';;
   dir|path)             [ $# -eq 1 ] || die "dir requires exactly one <name>"; resolve_ws_dir "$1"; printf '\n';;
   hub|root)             emit "$HUB";;
   list)                 cmd_list;;
   -h|--help|help)       usage;;
-  *) die "unknown command: $cmd (expected: bootstrap|sync|update-modules|teardown|prune|integration-branch|dir|hub|list)";;
+  *) die "unknown command: $cmd (expected: bootstrap|fill|sync|update-modules|teardown|prune|prepare|integration-branch|dir|hub|list)";;
 esac
