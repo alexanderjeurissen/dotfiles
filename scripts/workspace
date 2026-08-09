@@ -63,6 +63,14 @@ resolve_hub() {
 HUB="${WORKSPACE_HUB:-$(resolve_hub)}"
 [ -n "$HUB" ] || { printf 'workspace: error: cannot resolve the hub from %s — cd into a hub checkout or export $WORKSPACE_HUB\n' "$PWD" >&2; exit 1; }
 
+# All of this engine's git network ops go over SSH to the submodule remotes. Bound the SSH
+# connect (and a mid-transfer stall) so an unreachable remote — VPN down — fails fast instead of
+# hanging: git has no fetch/ls-remote timeout of its own, which would otherwise defeat the
+# callers' "proceed with local refs" fallbacks. Only caps the connect + idle time, never a
+# transfer that's making progress. Respects an existing GIT_SSH_COMMAND if the caller set one.
+: "${GIT_SSH_COMMAND:=ssh -o ConnectTimeout=8 -o BatchMode=yes -o ServerAliveInterval=5 -o ServerAliveCountMax=2}"
+export GIT_SSH_COMMAND
+
 # Submodules are grouped under this dir, both in the main checkout and inside each worktree.
 # Repo identifiers (in --repos) stay bare names; this prefix locates them on disk. To flatten
 # back to the root, set MODULES_DIR="".
@@ -211,7 +219,7 @@ cmd_bootstrap() {
     target="$(submodule_path "$ws_dir" "$repo")"
     mkdir -p "$(dirname "$target")"   # ensure <ws_dir>/modules/ exists
     ib="$(integration_branch "$repo")"
-    git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || warn "$repo: fetch origin/$ib failed (offline?) — proceeding with local refs"
+    git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || warn "$repo: fetch origin/$ib failed/timed out (offline?) — proceeding with local refs"
     if worktree_present "$target"; then
       info "$repo: worktree already present"
     elif git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
@@ -275,7 +283,7 @@ cmd_sync() {
     if [ -z "$cur" ]; then
       emit "ERROR $repo: detached HEAD in ${ws_dir#"$HUB"/}/$repo — checkout the feature branch before syncing"; conflicts=1; continue
     fi
-    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; conflicts=1; continue; }
+    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed/timed out"; conflicts=1; continue; }
     if git -C "$rd" merge --no-edit "origin/$ib" >/dev/null 2>&1; then
       if git -C "$rd" rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
         if git -C "$rd" push >/dev/null 2>&1; then
@@ -320,7 +328,7 @@ cmd_update_modules() {
     rd="$(submodule_path "$HUB" "$repo")"
     ib="$(integration_branch "$repo")"
     before="$(git -C "$rd" rev-parse --short HEAD)"
-    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed"; continue; }
+    git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed/timed out"; continue; }
     if git -C "$rd" merge --ff-only "origin/$ib" >/dev/null 2>&1; then
       after="$(git -C "$rd" rev-parse --short HEAD)"
       if [ "$before" != "$after" ]; then
