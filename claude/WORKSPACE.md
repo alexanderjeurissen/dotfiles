@@ -108,9 +108,20 @@ workspace fill <repo> [<repo> …]      # e.g. workspace fill core infrastructur
 ```
 
 `fill` is `bootstrap` scoped to those repos, run from inside the worktree: it materializes each
-on this worktree's branch (shared object store, runs `bin/worktree-init`), idempotent, so
-already-present submodules are skipped. `/workspace`'s scope step just pre-warms an obvious set;
-you can always fill more later.
+(shared object store, runs `bin/worktree-init`), idempotent, so already-present submodules are
+skipped. `/workspace`'s scope step just pre-warms an obvious set; you can always fill more later.
+
+**Joining work that already has a branch — pass `--branch`.** By default `fill` puts each submodule
+on a branch named after the worktree *directory*, and for a harness-generated worktree that name
+(`hi-9a8103`) matches nothing on the remote — so fill cuts a fresh branch off
+`origin/<integration>` and you get an empty checkout that looks like a successful fill. When the
+work lives on an existing branch (an open PR/MR, someone else's branch), name it:
+
+```sh
+workspace fill --branch feature/scn-due-agentcore fedramp
+```
+
+Then it attaches the local branch, or creates it tracking `origin/<branch>` if it's remote-only.
 
 ### Shared Claude assets (host-neutral, dotfiles-managed)
 

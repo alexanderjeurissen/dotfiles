@@ -23,7 +23,9 @@
 #       Materialize the in-scope submodule worktrees into the current (or --name'd) hub
 #       worktree, branch defaulting to the worktree name. Adopts a worktree the harness
 #       already made (Desktop / `claude --worktree`), or creates one if absent.
-#   workspace fill <repo> [<repo> …]            materialize submodule worktrees on demand (from inside)
+#   workspace fill [--branch <branch>] <repo> [<repo> …]
+#       Materialize submodule worktrees on demand (from inside the worktree). Pass --branch to
+#       join work already on a named branch; without it the branch defaults to the worktree name.
 #   workspace sync [--name <name>]              merge each submodule's integration branch + push
 #   workspace teardown --name <name> [--check]  remove a worktree's submodule + hub worktrees
 #   workspace prune                             sweep dangling worktree registrations
@@ -448,10 +450,28 @@ cmd_list() {
 # On-demand population: a worktree starts with empty modules/<repo> mountpoints; fill the ones
 # you need, when you need them. `bootstrap` scoped to the named repos, run from inside the
 # worktree (idempotent — already-present submodules are skipped). No upfront scope to declare.
+#
+# --branch matters when you're joining *existing* work: without it the branch defaults to the
+# worktree's directory name, which for a harness-generated worktree (`hi-9a8103`) matches nothing
+# on the remote — so fill falls through to cutting a fresh branch off origin/<integration> instead
+# of checking out the branch the work actually lives on.
 cmd_fill() {
-  [ $# -ge 1 ] || die "fill requires one or more <repo> (e.g. workspace fill core infrastructure)"
-  local csv; csv="$(printf '%s,' "$@")"; csv="${csv%,}"
-  cmd_bootstrap --repos "$csv"
+  local branch=""
+  local -a repos=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --branch) branch="$2"; shift 2;;
+      -*) die "fill: unknown flag $1";;
+      *) repos+=("$1"); shift;;
+    esac
+  done
+  [ ${#repos[@]} -ge 1 ] || die "fill requires one or more <repo> (e.g. workspace fill core infrastructure)"
+  local csv; csv="$(printf '%s,' "${repos[@]}")"; csv="${csv%,}"
+  if [ -n "$branch" ]; then
+    cmd_bootstrap --repos "$csv" --branch "$branch"
+  else
+    cmd_bootstrap --repos "$csv"
+  fi
 }
 
 # ── prepare (SessionStart helper: ready a worktree, print its name) ───────────
@@ -466,7 +486,7 @@ cmd_prepare() {
 }
 
 # ── dispatch ──────────────────────────────────────────────────────────────────
-usage() { sed -n '2,37p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+usage() { sed -n '2,39p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 
 [ $# -gt 0 ] || usage
 cmd="$1"; shift
