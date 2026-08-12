@@ -1,0 +1,303 @@
+#!/usr/bin/env bash
+# plannotator-round — one round of `plannotator annotate` on a stable URL, archived.
+#
+# `plannotator annotate` is one-shot: 1.5s after you submit it stops its HTTP server and
+# exits, and locally it binds a fresh random port every run. So an iterative draft→review
+# loop leaves you with a dead browser tab after every submit and a new URL to chase for the
+# next round. This wrapper makes the loop survivable:
+#
+#   • pins PLANNOTATOR_PORT so every round of every draft is served at the SAME url —
+#     one tab, one bookmark, no re-pointing the browser pane;
+#   • archives each round's decision JSON + feedback markdown under a rounds dir, so a
+#     later round can never overwrite an earlier one;
+#   • when plannotator exits, takes over the same port with a small confirmation page, so
+#     the tab shows "round N received" instead of going unreachable. That page polls the
+#     port and reloads itself when the next round starts, so the next draft simply appears.
+#
+# Runs one round in the FOREGROUND and blocks until you submit — background the wrapper
+# itself (`nohup plannotator-round draft.md >round.log 2>&1 &`) when an agent drives it.
+#
+# Usage:
+#   plannotator-round <file.md|url|folder> [options] [-- <extra plannotator args>]
+#   plannotator-round --status [--port N]
+#   plannotator-round --stop   [--port N]
+#
+# Options:
+#   --port N          Port to serve on (default $PLANNOTATOR_ROUND_PORT, else 19433)
+#   --rounds-dir DIR  Where to archive rounds (default <file's dir>/plannotator-rounds)
+#   --open            Let plannotator open a browser (default: don't — the url is stable)
+#   --no-confirm      Don't hold the port with a confirmation page after submit
+#   --ttl SECONDS     How long the confirmation page keeps the port (default 28800; 0 = forever)
+#   --status          Report whether a confirmation page is holding the port
+#   --stop            Stop this port's confirmation page (frees the port) and exit
+#
+# Defaults `--gate --json` for plannotator; anything after `--` is appended to that.
+#
+# Output (stdout): key=value lines — one when the round opens, one when it lands, e.g.
+#   round=03 url=http://localhost:19433 draft=/abs/draft.md
+#   round=03 decision=annotated json=/abs/…/draft.round-03.json feedback=/abs/…/draft.round-03.md
+
+set -euo pipefail
+
+die() { printf 'plannotator-round: error: %s\n' "$*" >&2; exit 1; }
+note() { printf 'plannotator-round: %s\n' "$*" >&2; }
+
+command -v plannotator >/dev/null 2>&1 || die "plannotator not on PATH"
+command -v jq          >/dev/null 2>&1 || die "jq not on PATH (brew install jq)"
+command -v python3     >/dev/null 2>&1 || die "python3 not on PATH"
+
+port="${PLANNOTATOR_ROUND_PORT:-19433}"
+draft="" rounds_dir="" ttl=28800
+open_browser=0 confirm=1 action="round"
+extra=()
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --port)       port="$2"; shift 2;;
+    --rounds-dir) rounds_dir="$2"; shift 2;;
+    --ttl)        ttl="$2"; shift 2;;
+    --open)       open_browser=1; shift;;
+    --no-confirm) confirm=0; shift;;
+    --status)     action="status"; shift;;
+    --stop)       action="stop"; shift;;
+    -h|--help)    sed -n '2,43p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0;;
+    --)           shift; extra=("$@"); break;;
+    -*)           die "unknown flag: $1 (pass plannotator flags after --)";;
+    *)            [ -z "$draft" ] || die "only one file/url/folder argument"; draft="$1"; shift;;
+  esac
+done
+
+case "$port" in ''|*[!0-9]*) die "--port must be a number: $port";; esac
+case "$ttl"  in ''|*[!0-9]*) die "--ttl must be a number of seconds: $ttl";; esac
+
+url="http://localhost:${port}"
+run_dir="${TMPDIR:-/tmp}"
+pid_file="${run_dir}/plannotator-round-${port}.pid"
+html_file="${run_dir}/plannotator-round-${port}.html"
+
+# ── the port, and who holds it ────────────────────────────────────────────────
+listeners() { lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null | sort -u; }
+
+# PID of the confirmation page we parked on this port, if it is still alive and still holding it.
+confirm_pid() {
+  local pid
+  [ -f "$pid_file" ] || return 1
+  pid="$(cat "$pid_file" 2>/dev/null || true)"
+  case "$pid" in ''|*[!0-9]*) return 1;; esac
+  kill -0 "$pid" 2>/dev/null || return 1
+  listeners | grep -qx "$pid" || return 1
+  printf '%s\n' "$pid"
+}
+
+stop_confirm() {
+  local pid
+  if pid="$(confirm_pid)"; then
+    kill "$pid" 2>/dev/null || true
+    for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
+      kill -0 "$pid" 2>/dev/null || break
+      sleep 0.25
+    done
+    kill -9 "$pid" 2>/dev/null || true
+  fi
+  rm -f "$pid_file"
+}
+
+case "$action" in
+  status)
+    if pid="$(confirm_pid)"; then
+      printf 'port=%s state=confirmation-page pid=%s url=%s\n' "$port" "$pid" "$url"
+    elif [ -n "$(listeners)" ]; then
+      printf 'port=%s state=busy pids=%s url=%s\n' "$port" "$(listeners | paste -sd, -)" "$url"
+    else
+      printf 'port=%s state=free url=%s\n' "$port" "$url"
+    fi
+    exit 0;;
+  stop)
+    stop_confirm
+    [ -z "$(listeners)" ] || note "port $port is still held by: $(listeners | paste -sd, -)"
+    printf 'port=%s state=stopped\n' "$port"
+    exit 0;;
+esac
+
+[ -n "$draft" ] || die "no file/url/folder given (see --help)"
+
+# ── where rounds are archived ─────────────────────────────────────────────────
+case "$draft" in
+  http://*|https://*)
+    base="$(printf '%s' "$draft" | sed -e 's|^[a-z]*://||' -e 's|[^A-Za-z0-9._-]|-|g' | cut -c1-60)"
+    [ -n "$rounds_dir" ] || rounds_dir="$PWD/plannotator-rounds";;
+  *)
+    [ -e "$draft" ] || die "no such file or folder: $draft"
+    draft="$(cd "$(dirname "$draft")" && pwd)/$(basename "$draft")"
+    base="$(basename "$draft")"; base="${base%.*}"
+    [ -n "$rounds_dir" ] || rounds_dir="$(dirname "$draft")/plannotator-rounds";;
+esac
+
+mkdir -p "$rounds_dir"
+rounds_dir="$(cd "$rounds_dir" && pwd)"
+
+# Never reuse a round number: walk up until the slot is free.
+n=1
+while [ -e "$(printf '%s/%s.round-%02d.json' "$rounds_dir" "$base" "$n")" ]; do n=$((n + 1)); done
+round="$(printf '%02d' "$n")"
+json_out="${rounds_dir}/${base}.round-${round}.json"
+md_out="${rounds_dir}/${base}.round-${round}.md"
+err_out="${rounds_dir}/${base}.round-${round}.err"
+
+# ── hand the port over from the previous round's confirmation page ────────────
+stop_confirm
+if [ -n "$(listeners)" ]; then
+  die "port $port is held by PID(s) $(listeners | paste -sd, -) — pass --port N, or stop that process"
+fi
+
+printf 'round=%s url=%s draft=%s rounds_dir=%s\n' "$round" "$url" "$draft" "$rounds_dir"
+
+# ── the round itself ──────────────────────────────────────────────────────────
+export PLANNOTATOR_PORT="$port"
+[ "$open_browser" -eq 1 ] || export PLANNOTATOR_SKIP_BROWSER_OPEN=1
+
+child=""
+on_signal() { [ -n "$child" ] && kill "$child" 2>/dev/null || true; exit 130; }
+trap on_signal INT TERM
+
+plannotator annotate "$draft" --gate --json "${extra[@]+"${extra[@]}"}" >"$json_out" 2>"$err_out" &
+child=$!
+set +e
+wait "$child"
+status=$?
+set -e
+trap - INT TERM
+
+if [ "$status" -ne 0 ]; then
+  note "plannotator exited $status — stderr tail:"
+  tail -n 15 "$err_out" >&2 || true
+  rm -f "$json_out"
+  exit "$status"
+fi
+
+[ -s "$json_out" ] || die "plannotator wrote no decision JSON (see $err_out)"
+decision="$(jq -r '.decision // "unknown"' "$json_out" 2>/dev/null || echo unknown)"
+feedback="$(jq -r '.feedback // ""' "$json_out" 2>/dev/null || true)"
+if [ -n "$feedback" ]; then printf '%s\n' "$feedback" >"$md_out"; else md_out=""; fi
+cp "$json_out" "${rounds_dir}/${base}.latest.json"
+# latest.* always describes THIS round — drop a previous round's markdown when this one
+# carried no feedback (an Approve), so `latest.md` is never stale.
+if [ -n "$md_out" ]; then
+  cp "$md_out" "${rounds_dir}/${base}.latest.md"
+else
+  rm -f "${rounds_dir}/${base}.latest.md"
+fi
+
+printf 'round=%s decision=%s json=%s feedback=%s\n' \
+  "$round" "$decision" "$json_out" "${md_out:-none}"
+
+[ "$confirm" -eq 1 ] || exit 0
+
+# ── hold the port with a confirmation page so the tab never dies ──────────────
+esc() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+case "$decision" in
+  annotated) headline="Round ${round} feedback received";  detail="Your annotations are with the agent. Nothing else to do here.";;
+  approved)  headline="Round ${round} approved";            detail="Approved as-is — the agent is proceeding.";;
+  dismissed) headline="Round ${round} dismissed";           detail="You closed the review without sending anything.";;
+  *)         headline="Round ${round} submitted";            detail="Decision recorded as ${decision}.";;
+esac
+
+cat >"$html_file" <<HTML
+<!doctype html><meta charset="utf-8"><title>${headline}</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root { color-scheme: light dark; --fg:#1c1c1e; --muted:#6b6b70; --bg:#fbfbfd; --card:#fff; --line:#e4e4e9; --ok:#1f8b4c }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e9e9ec; --muted:#9a9aa2; --bg:#16161a; --card:#1f1f25; --line:#2e2e36; --ok:#4ec27f } }
+  * { box-sizing:border-box } body { margin:0; min-height:100vh; display:grid; place-items:center;
+    background:var(--bg); color:var(--fg); font:15px/1.55 ui-sans-serif,-apple-system,"SF Pro Text",system-ui,sans-serif }
+  .card { width:min(620px,92vw); background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 30px }
+  h1 { margin:0 0 6px; font-size:20px; letter-spacing:-0.01em }
+  h1 .tick { color:var(--ok); margin-right:8px }
+  p { margin:0 0 16px; color:var(--muted) }
+  dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:13px }
+  dt { color:var(--muted) } dd { margin:0; overflow-wrap:anywhere; font-family:ui-monospace,SFMono-Regular,Menlo,monospace }
+  .foot { margin:20px 0 0; padding-top:14px; border-top:1px solid var(--line); font-size:13px; color:var(--muted) }
+</style>
+<div class="card">
+  <h1><span class="tick">&#10003;</span>$(esc "$headline")</h1>
+  <p>$(esc "$detail")</p>
+  <dl>
+    <dt>draft</dt><dd>$(esc "$draft")</dd>
+    <dt>decision</dt><dd>$(esc "$decision")</dd>
+    <dt>archived</dt><dd>$(esc "$json_out")</dd>
+    $( [ -n "$md_out" ] && printf '<dt>feedback</dt><dd>%s</dd>' "$(esc "$md_out")" )
+    <dt>at</dt><dd>$(esc "$(date '+%Y-%m-%d %H:%M:%S %Z')")</dd>
+  </dl>
+  <p class="foot">Keep this tab open at <strong>$(esc "$url")</strong> — it watches the port and
+     loads the next round here automatically.</p>
+</div>
+<script>
+  // Poll the port. Our own page answers with x-plannotator-round: confirmation; plannotator's
+  // UI does not — so a missing header means the next round is up, and we reload into it.
+  // A failed fetch (nothing listening) is ignored, so this tab never shows a browser error page.
+  setInterval(function () {
+    fetch(location.pathname + '?_probe=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (r.headers.get('x-plannotator-round') !== 'confirmation') location.reload(); })
+      .catch(function () {});
+  }, 2000);
+</script>
+HTML
+
+placeholder_py=$(cat <<'PY'
+import http.server, socketserver, sys, threading
+
+port, page, ttl = int(sys.argv[1]), sys.argv[2], float(sys.argv[3])
+with open(page, 'rb') as fh:
+    body = fh.read()
+
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    protocol_version = 'HTTP/1.1'
+
+    def respond(self, with_body=True):
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.send_header('Cache-Control', 'no-store')
+        self.send_header('X-Plannotator-Round', 'confirmation')
+        self.end_headers()
+        if with_body:
+            self.wfile.write(body)
+
+    def do_GET(self):
+        self.respond()
+
+    def do_HEAD(self):
+        self.respond(False)
+
+    def log_message(self, *args):
+        pass
+
+
+class Server(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
+
+server = Server(('127.0.0.1', port), Handler)
+if ttl > 0:
+    threading.Timer(ttl, server.shutdown).start()
+server.serve_forever()
+PY
+)
+
+nohup python3 -c "$placeholder_py" "$port" "$html_file" "$ttl" \
+  >"${run_dir}/plannotator-round-${port}.log" 2>&1 &
+echo $! >"$pid_file"
+
+# Confirm it actually took the port before claiming the tab is safe.
+for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
+  if confirm_pid >/dev/null; then
+    printf 'round=%s confirmation=serving url=%s ttl=%s\n' "$round" "$url" "$ttl"
+    exit 0
+  fi
+  sleep 0.25
+done
+note "confirmation page did not come up on $port (see ${run_dir}/plannotator-round-${port}.log)"
+rm -f "$pid_file"
+exit 0
