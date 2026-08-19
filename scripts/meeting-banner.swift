@@ -202,7 +202,7 @@ final class Banner: NSObject, NSApplicationDelegate {
         panel.isFloatingPanel = true
         panel.becomesKeyOnlyIfNeeded = true
         panel.hidesOnDeactivate = false
-        panel.isOpaque = true
+        panel.isOpaque = false
         panel.backgroundColor = TRACK_BG
         panel.hasShadow = false
         // above .mainMenu (24) so it paints over the menu bar

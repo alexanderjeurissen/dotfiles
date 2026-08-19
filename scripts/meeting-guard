@@ -227,7 +227,7 @@ def show_banner(cfg, m, key=None):
     ensure_dirs()
     argv = [SELF, "show",
             "--title", str(m["title"]),
-            "--start", m["start"].isoformat(),
+            "--start", m["start"].isoformat(timespec="seconds"),
             "--window", str(int(cfg["soft_min"]) * 60)]
     if key:
         argv += ["--key", key]
@@ -263,7 +263,7 @@ def cmd_show(cfg, args):
         modal_fallback({"title": title, "start": start})
         return
 
-    argv = [b, "--title", title, "--start", start.isoformat(), "--window", window]
+    argv = [b, "--title", title, "--start", start.isoformat(timespec="seconds"), "--window", window]
     # in a call => possibly sharing a screen; keep the banner out of the capture
     if mic_hot():
         argv.append("--hide-from-capture")
