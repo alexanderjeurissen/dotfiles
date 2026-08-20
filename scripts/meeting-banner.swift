@@ -43,8 +43,10 @@ let selfTest = CommandLine.arguments.contains("--self-test")
 let hideFromCapture = CommandLine.arguments.contains("--hide-from-capture")
 // how long the bar represents end-to-end: full at T-window, empty at T-0
 let progressWindow = max(1, Double(arg("--window", "300")) ?? 300)
-// give up if nobody clicks, so a banner can't outlive its meeting forever
-let ttl = Double(arg("--ttl", "240")) ?? 240
+// 0 (the default) means never auto-expire: the banner stays until Dismiss or
+// Snooze, however long the meeting has already been running. Pass a positive
+// --ttl only when you want it to give up on its own (demos, tests).
+let ttl = Double(arg("--ttl", "0")) ?? 0
 
 let mStart: Date = {
     let iso = arg("--start")
@@ -140,12 +142,16 @@ private let TIME_W: CGFloat = 68
 // midpoint of the bar rather than on whatever space the controls left over
 private let RESERVE: CGFloat = MARGIN + BTN_W + BTN_GAP + BTN_W + 6 + TIME_W
 
-private let TRACK_BG = NSColor(srgbRed: 0.14, green: 0.14, blue: 0.16, alpha: 0.98)
-private func fillColor(secsLeft: Double) -> NSColor {
+// The bar reads as two reds: the TRACK is the lighter red (revealed as time runs
+// out) and the FILL — time remaining — is a darker red on top of it. So the bar
+// visibly turns lighter/hotter as the meeting approaches.
+private let FILL_DARK = NSColor(srgbRed: 0.34, green: 0.05, blue: 0.05, alpha: 1)
+
+private func trackColor(secsLeft: Double) -> NSColor {
     // escalate as the deadline closes; no animation, just a colour step
-    if secsLeft <= 60  { return NSColor(srgbRed: 0.90, green: 0.16, blue: 0.10, alpha: 1) }
-    if secsLeft <= 120 { return NSColor(srgbRed: 0.82, green: 0.22, blue: 0.14, alpha: 1) }
-    return NSColor(srgbRed: 0.68, green: 0.20, blue: 0.20, alpha: 1)
+    if secsLeft <= 60  { return NSColor(srgbRed: 0.94, green: 0.19, blue: 0.13, alpha: 1) }
+    if secsLeft <= 120 { return NSColor(srgbRed: 0.86, green: 0.22, blue: 0.16, alpha: 1) }
+    return NSColor(srgbRed: 0.75, green: 0.21, blue: 0.19, alpha: 1)
 }
 
 /// Exact menu-bar height for this screen: the gap frame leaves above
@@ -203,7 +209,7 @@ final class Banner: NSObject, NSApplicationDelegate {
         panel.becomesKeyOnlyIfNeeded = true
         panel.hidesOnDeactivate = false
         panel.isOpaque = false
-        panel.backgroundColor = TRACK_BG
+        panel.backgroundColor = trackColor(secsLeft: mStart.timeIntervalSinceNow)
         panel.hasShadow = false
         // above .mainMenu (24) so it paints over the menu bar
         panel.level = .statusBar
@@ -218,7 +224,7 @@ final class Banner: NSObject, NSApplicationDelegate {
         // full-bleed, square corners — no inset, no cornerRadius
         let track = NSView(frame: content.bounds)
         track.wantsLayer = true
-        track.layer?.backgroundColor = TRACK_BG.cgColor
+        track.layer?.backgroundColor = trackColor(secsLeft: mStart.timeIntervalSinceNow).cgColor
         content.addSubview(track)
 
         // depletes right-to-left: anchored at x=0, width shrinks toward 0
@@ -277,18 +283,20 @@ final class Banner: NSObject, NSApplicationDelegate {
         let text = String(format: "%@%d:%02d", secs < 0 ? "-" : "", a / 60, a % 60)
         // DEPLETING: full at T-window, empty at T-0. Time remaining, not elapsed.
         let remaining = min(1.0, max(0.0, secs / progressWindow))
-        let colour = fillColor(secsLeft: secs)
+        let track = trackColor(secsLeft: secs)
 
         for u in units {
             u.time.stringValue = text
             let h = u.track.bounds.height
             u.fill.frame = NSRect(x: 0, y: 0,
                                   width: u.track.bounds.width * CGFloat(remaining), height: h)
-            u.fill.layer?.backgroundColor = colour.cgColor
+            u.fill.layer?.backgroundColor = FILL_DARK.cgColor
+            u.track.layer?.backgroundColor = track.cgColor
+            u.panel.backgroundColor = track
             // keep it above whatever just got opened, without stealing focus
             if !u.panel.isVisible { u.panel.orderFrontRegardless() }
         }
-        if Date().timeIntervalSince(born) > ttl { finish(EXIT_EXPIRED) }
+        if ttl > 0, Date().timeIntervalSince(born) > ttl { finish(EXIT_EXPIRED) }
     }
 
     @objc private func dismissClicked() { finish(EXIT_ACK) }
