@@ -2,8 +2,8 @@
 description: >-
   Bring a per-issue workspace's feature branches up to date by MERGING each submodule's integration
   branch in (never rebase), then pushing. Auto-resolves mechanical merge conflicts (e.g. append-only
-  migration lists); asks you when a resolution is ambiguous. Auto-targets the cmux workspace it's run
-  from. Does not touch the tracker or the hub repo.
+  migration lists); asks you when a resolution is ambiguous. Auto-targets the worktree it's run from.
+  Does not touch the tracker or the hub repo.
 argument-hint: "[ISSUE-ID] (optional — omit to target the current workspace or pick from a list)"
 allowed-tools: Bash Read Edit AskUserQuestion
 disable-model-invocation: true
@@ -24,27 +24,23 @@ The ISSUE-ID argument is **optional**. Resolve the target in this order, then ca
 
 1. **Explicit arg.** If `$ARGUMENTS` is non-empty, use it as the ISSUE-ID.
 
-2. **Auto-detect the caller workspace.** Otherwise, identify the cmux workspace this session is
-   running in and read its working directory — if that dir is inside `.claude/worktrees/<ISSUE>/` (or legacy `workspaces/<ISSUE>/`), that's
-   the target (the common case: "sync the workspace I'm in"):
+2. **Auto-detect from the working directory.** Otherwise, read the name straight out of `$PWD` —
+   the session's cwd *is* the worktree (Claude Desktop cwd's into it), so no host tooling is needed.
+   This is the common case: "sync the workspace I'm in".
    ```bash
-   CALLER=$(cmux identify --json | python3 -c "import sys,json; print(json.load(sys.stdin)['caller']['workspace_ref'])")
-   cmux list-workspaces --json | python3 -c "
-   import sys, json, re
-   caller = '$CALLER'
-   for w in json.load(sys.stdin)['workspaces']:
-       if w['ref'] == caller:
-           m = re.search(r'/(?:\.claude/worktrees|workspaces)/([^/]+)', w.get('current_directory') or '')
-           print(m.group(1) if m else '')
-   "
+   NAME=$(printf '%s\n' "$PWD" | sed -nE 's#.*/(\.claude/worktrees|workspaces)/([^/]+).*#\2#p')
    ```
-   If a non-empty ISSUE is printed, that's the target. If empty (e.g. you're at the hub root), fall
-   through to (3).
+   Note `sed -E`: BSD/macOS sed does not accept `\|` alternation in basic regex. Matching a path
+   *segment* (rather than requiring the cwd to be the worktree root) means this also resolves
+   correctly from a nested submodule dir like `modules/<repo>/...`.
 
-3. **Pick from a list.** Run `cmux list-workspaces` (plain text shows the
-   `workspace:<N>  <ISSUE-ID> · <title>` names). Filter out non-issue rows (`Root`, etc.) and
-   present the issue workspaces via `AskUserQuestion`. Capture the name (token before ` · `). As a
-   fallback, `workspace list` shows all hub worktrees (both `.claude/worktrees/` and legacy `workspaces/`).
+   If `NAME` is non-empty, that's the target. If empty — you're at the hub root or somewhere
+   unrelated — fall through to (3).
+
+3. **Pick from a list.** Run `workspace list`, which prints one row per hub worktree as
+   `<path>  <sha> [<branch>]`. Drop the row whose path equals `$(workspace hub)` (that's the hub
+   itself, not a worktree); the candidate name for each remaining row is its path's basename.
+   Present those via `AskUserQuestion`.
 
 ## Step 1 — Run the engine
 Resolve the worktree base once (works whether the workspace is under `.claude/worktrees/` or the
