@@ -70,11 +70,18 @@ DEFAULTS = {
         "gcalcli", "--nocolor", "agenda", "--tsv", "--military",
         "--details=url", "--nodeclined", "{start}", "{end}",
     ],
-    "soft_min": 5,    # heads-up threshold (minutes before start); also the bar's span
-    "hard_min": 2,    # banner threshold
+    "soft_min": 5,    # the bar's span: full at T-soft, empty at meeting start
+    "hard_min": 5,    # banner threshold. == soft_min, so the banner IS the
+                      # heads-up and no separate notification fires. Set hard_min
+                      # lower than soft_min to get a notification first.
     "lookahead_hours": 12,
     "max_duration_hours": 4,  # skip longer events: busy/focus blocks, not meetings
-    "snooze_min": 1,  # how long Snooze defers the banner
+    "snooze_min": 1,  # minutes Snooze defers the banner for
+    # how long past a meeting's start we keep re-showing a snoozed banner. Must
+    # stay under the 3h state-prune horizon below or the event is forgotten first.
+    "linger_min": 120,
+    # assumed length when gcalcli gives us no end time, used for the banner's ttl
+    "default_meeting_min": 30,
 }
 
 
@@ -222,13 +229,32 @@ def mic_hot():
         return False
 
 
+def banner_ttl(cfg, m):
+    """Seconds the banner should live: until the meeting ends.
+
+    Measured from now (the banner is spawned at T-soft, or later after a snooze),
+    so it clears itself exactly when the meeting is over rather than piling up.
+
+    Never returns <= 0: the banner treats 0 as "never expire", so a meeting whose
+    end has already passed would produce an immortal banner. Floors at grace_sec
+    so a late re-show is still dismissable, and falls back to a nominal duration
+    when gcalcli gave us no end time.
+    """
+    grace = 60
+    end = m.get("end")
+    if not end:
+        end = m["start"] + timedelta(minutes=cfg["default_meeting_min"])
+    return max(grace, int((end - datetime.now()).total_seconds()))
+
+
 def show_banner(cfg, m, key=None):
     """Spawn `show` detached so poll stays fast and the 60s tick isn't blocked."""
     ensure_dirs()
     argv = [SELF, "show",
             "--title", str(m["title"]),
             "--start", m["start"].isoformat(timespec="seconds"),
-            "--window", str(int(cfg["soft_min"]) * 60)]
+            "--window", str(int(cfg["soft_min"]) * 60),
+            "--ttl", str(banner_ttl(cfg, m))]
     if key:
         argv += ["--key", key]
     try:
@@ -252,6 +278,7 @@ def cmd_show(cfg, args):
     start_iso = _argval(args, "--start", "")
     key = _argval(args, "--key", "")
     window = _argval(args, "--window", str(int(cfg["soft_min"]) * 60))
+    ttl = _argval(args, "--ttl", "")
     try:
         start = datetime.fromisoformat(start_iso) if start_iso else datetime.now()
     except ValueError:
@@ -263,7 +290,10 @@ def cmd_show(cfg, args):
         modal_fallback({"title": title, "start": start})
         return
 
-    argv = [b, "--title", title, "--start", start.isoformat(timespec="seconds"), "--window", window]
+    argv = [b, "--title", title, "--start", start.isoformat(timespec="seconds"),
+            "--window", window]
+    if ttl:
+        argv += ["--ttl", ttl]
     # in a call => possibly sharing a screen; keep the banner out of the capture
     if mic_hot():
         argv.append("--hide-from-capture")
@@ -379,8 +409,8 @@ def read_meetings(cfg):
             if f and not f.startswith("http") and not _looks_like_dt(f):
                 title = f
                 break
-        meetings.append({"start": start, "title": title or "(untitled meeting)",
-                         "url": url})
+        meetings.append({"start": start, "end": end,
+                         "title": title or "(untitled meeting)", "url": url})
     save_agenda_cache(meetings)
     return meetings
 
@@ -393,7 +423,9 @@ def save_agenda_cache(meetings):
     ensure_dirs()
     payload = {
         "ts": datetime.now().isoformat(),
-        "meetings": [{"start": m["start"].isoformat(), "title": m["title"],
+        "meetings": [{"start": m["start"].isoformat(),
+                      "end": m["end"].isoformat() if m.get("end") else None,
+                      "title": m["title"],
                       "url": m.get("url", "")} for m in meetings],
     }
     tmp = AGENDA_CACHE_PATH + ".tmp"
@@ -419,7 +451,9 @@ def load_agenda_cache(cfg, reason):
     if age > max_age:
         log(f"{reason}; agenda cache too old ({age/3600:.1f}h) — returning no meetings")
         return []
-    meetings = [{"start": _parse_dt(m["start"]), "title": m["title"], "url": m.get("url", "")}
+    meetings = [{"start": _parse_dt(m["start"]),
+                 "end": _parse_dt(m["end"]) if m.get("end") else None,
+                 "title": m["title"], "url": m.get("url", "")}
                 for m in data.get("meetings", [])]
     log(f"{reason}; using cached agenda ({age/60:.0f}m old, {len(meetings)} events)")
     return meetings
@@ -459,7 +493,15 @@ def cmd_poll(cfg):
 
     for m in meetings:
         mins = (m["start"] - now).total_seconds() / 60.0
-        if mins < -1 or mins > cfg["soft_min"]:
+        # Keep considering an event well past its start time. A banner is meant to
+        # persist until Dismiss or Snooze, and a snooze taken during an
+        # already-running meeting has to come back — with the old `mins < -1`
+        # bound the event was already out of range by then, so it never did.
+        if mins > cfg["soft_min"] or mins < -cfg["linger_min"]:
+            continue
+        # once the meeting is over there is nothing left to nag about; linger_min
+        # is only the bound for events whose end time we could not read
+        if m.get("end") and now > m["end"]:
             continue
         key = event_key(m)
         st = state.setdefault(key, {})
@@ -495,6 +537,7 @@ def cmd_test(cfg):
     b = banner_bin()
     print(f"banner binary: {b or 'COULD NOT BUILD'}")
     m = {"start": datetime.now() + timedelta(minutes=2),
+         "end": datetime.now() + timedelta(minutes=5),
          "title": "TEST - meeting-guard banner demo"}
     show_banner(cfg, m)
 
