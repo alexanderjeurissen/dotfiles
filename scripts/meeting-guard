@@ -418,6 +418,20 @@ def read_meetings(cfg):
 AGENDA_CACHE_PATH = os.path.join(CONFIG_DIR, "agenda_cache.json")
 
 
+def _parse_dt(s):
+    """Parse a cached ISO timestamp, tolerating a corrupt entry.
+
+    Defined here next to its only callers. It previously lived far down the file
+    among the CLI subcommands; the cmux-removal rewrite carried over the calendar
+    reader without it, so every cache fallback raised NameError and took the whole
+    poll down instead of degrading to the cached agenda.
+    """
+    try:
+        return datetime.fromisoformat(s)
+    except (ValueError, TypeError):
+        return datetime.now()
+
+
 def save_agenda_cache(meetings):
     """Persist the last good agenda so a flaky gcalcli read doesn't blind a poll."""
     ensure_dirs()
