@@ -16,8 +16,8 @@
 # Submodules are discovered from the hub's .gitmodules; the hub is resolved from the caller's
 #   cwd — nothing is hub-specific, so one engine drives every hub.
 #
-# Integration branch = the branch a submodule is on in the hub checkout (e.g. core→develop);
-#   nothing hardcoded. Divergence from origin/HEAD is warned about, not blocked.
+# Integration branch = each submodule's default branch (origin/HEAD, e.g. core→develop), never
+#   whatever the hub checkout is on; a hub submodule on another branch is warned about, not followed.
 #
 # Usage:
 #   workspace bootstrap --repos <a,b> [--name <name>] [--branch <branch>]
@@ -148,20 +148,20 @@ current_ws_name() {
 }
 
 # ── integration branch resolution ─────────────────────────────────────────────
+# Always the remote's default branch. Following the hub checkout's current branch instead meant a
+# feature branch left checked out in the hub became the base every new worktree branch was cut
+# from (fill/bootstrap) and what sync merged into workspaces.
 integration_branch() {
   local repo="$1" rd br def
   rd="$(submodule_path "$HUB" "$repo")"
   [ -d "$rd" ] || die "unknown submodule path: $rd"
-  br="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
   def="$(git -C "$rd" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)"
-  if [ -z "$br" ]; then
-    [ -n "$def" ] || die "$repo is detached and origin/HEAD is unknown — cannot resolve integration branch"
-    warn "$repo is in detached HEAD; falling back to its default branch '$def'"
-    br="$def"
-  elif [ -n "$def" ] && [ "$br" != "$def" ]; then
-    warn "$repo is on '$br' but its default is '$def' — using '$br' as the integration base (move feature work into a worktree if this is stale work in the main checkout)"
+  [ -n "$def" ] || die "$repo: origin/HEAD is unknown — cannot resolve its default branch (fix: git -C \"$rd\" remote set-head origin --auto)"
+  br="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
+  if [ -n "$br" ] && [ "$br" != "$def" ]; then
+    warn "$repo: hub checkout is on '$br', not its default '$def' — using '$def' (move feature work into a worktree if this is stale work in the hub)"
   fi
-  printf '%s' "$br"
+  printf '%s' "$def"
 }
 
 # ── memory symlink (share canonical memory; history stays per-worktree) ───────
@@ -331,9 +331,15 @@ cmd_update_modules() {
   local repo moved=""
   for repo in "${repo_arr[@]}"; do
     is_known_submodule "$repo" || die "update-modules: '$repo' is not a known submodule"
-    local rd ib before after
+    local rd ib cur before after
     rd="$(submodule_path "$HUB" "$repo")"
     ib="$(integration_branch "$repo")"
+    # Never fast-forward a non-integration branch the hub happens to be on to origin/<default>.
+    cur="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
+    if [ "$cur" != "$ib" ]; then
+      emit "SKIP $repo: hub checkout is on '${cur:-detached HEAD}', not '$ib' — move that work into a worktree, switch the hub back to '$ib', re-run"
+      continue
+    fi
     before="$(git -C "$rd" rev-parse --short HEAD)"
     git -C "$rd" fetch origin "$ib" --quiet 2>/dev/null || { emit "ERROR $repo: fetch origin/$ib failed/timed out"; continue; }
     if git -C "$rd" merge --ff-only "origin/$ib" >/dev/null 2>&1; then
