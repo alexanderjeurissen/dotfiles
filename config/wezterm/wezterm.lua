@@ -121,8 +121,7 @@ end
   config.font_size = 14.0
 
   -- Set the color scheme
-  -- config.color_scheme = scheme_for_appearance(get_appearance())
-  config.color_scheme = 'Modus-Vivendi'
+  config.color_scheme = scheme_for_appearance(get_appearance())
 
   -- Set the window background opacity
   config.window_background_opacity = 1.0
