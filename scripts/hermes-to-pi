@@ -1,0 +1,322 @@
+#!/Users/alexanderjeurissen/.hermes/hermes-agent/venv/bin/python3.11
+"""Import native Hermes sessions into pi's session history.
+
+Reads a snapshot of ~/.hermes/state.db through Hermes' own display export
+(deduped across compaction/rewind generations, the transcript Hermes shows) and
+writes one pi JSONL session per Hermes session under ~/.pi/agent/sessions/.
+Sessions Hermes itself imported from Claude Code are skipped.
+
+Idempotent: pi session ids are derived from the Hermes id, so re-running skips
+anything already imported (pass --force to overwrite).
+
+Usage: hermes-to-pi [--dry-run] [--force] [--session-id ID ...]
+"""
+import sys
+
+HERMES_ROOT = "/Users/alexanderjeurissen/.hermes/hermes-agent"
+sys.path.insert(0, HERMES_ROOT)
+import hermes_bootstrap  # noqa: E402,F401  activates Hermes' dependency env (may re-exec)
+
+import argparse  # noqa: E402
+import json  # noqa: E402
+import os  # noqa: E402
+import secrets  # noqa: E402
+import sqlite3  # noqa: E402
+import tempfile  # noqa: E402
+import uuid  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+from agent.compaction_display import project_compaction_message_for_display  # noqa: E402
+from hermes_state import SessionDB  # noqa: E402
+
+HERMES_DB = Path.home() / ".hermes" / "state.db"
+PI_SESSIONS = Path.home() / ".pi" / "agent" / "sessions"
+ID_NAMESPACE = uuid.UUID("5b1f3c0e-7d2a-4e8b-9c61-0a4d2f9e8b17")
+SKIP_KINDS = {"hidden"}
+ZERO_COST = {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0, "total": 0}
+
+
+def iso(ts):
+    return datetime.fromtimestamp(float(ts), tz=timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
+def ms(ts):
+    return int(float(ts) * 1000)
+
+
+def pi_dir_for(cwd):
+    return PI_SESSIONS / ("--" + cwd.lstrip("/").replace("/", "-").replace("\\", "-").replace(":", "-") + "--")
+
+
+def pi_session_id(hermes_id):
+    return str(uuid.uuid5(ID_NAMESPACE, hermes_id))
+
+
+def find_existing(pi_id):
+    return next(PI_SESSIONS.glob(f"*/*_{pi_id}.jsonl"), None)
+
+
+def zero_usage():
+    return {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0, "totalTokens": 0, "cost": dict(ZERO_COST)}
+
+
+def to_blocks(content, allow_images=True):
+    """Hermes content (str | OpenAI-style part list | None) -> pi text/image blocks."""
+    if content is None:
+        return []
+    if isinstance(content, str):
+        return [{"type": "text", "text": content}] if content else []
+    blocks = []
+    for part in content if isinstance(content, list) else [content]:
+        if isinstance(part, str):
+            blocks.append({"type": "text", "text": part})
+            continue
+        if not isinstance(part, dict):
+            continue
+        kind = part.get("type")
+        if kind in ("text", "input_text", "output_text"):
+            blocks.append({"type": "text", "text": part.get("text", "")})
+        elif kind in ("image_url", "input_image", "image"):
+            url = part.get("image_url")
+            url = url.get("url") if isinstance(url, dict) else url or part.get("url") or ""
+            if allow_images and isinstance(url, str) and url.startswith("data:") and ";base64," in url:
+                mime, data = url[5:].split(";base64,", 1)
+                blocks.append({"type": "image", "mimeType": mime, "data": data})
+            else:
+                blocks.append({"type": "text", "text": f"[image: {url[:200] if isinstance(url, str) else 'attachment'}]"})
+        else:
+            blocks.append({"type": "text", "text": json.dumps(part, ensure_ascii=False)[:4000]})
+    return blocks
+
+
+def text_of(content):
+    return "\n".join(b["text"] for b in to_blocks(content, allow_images=False) if b["type"] == "text")
+
+
+def parse_tool_calls(raw):
+    if not raw:
+        return []
+    try:
+        calls = json.loads(raw) if isinstance(raw, str) else raw
+    except json.JSONDecodeError:
+        return []
+    out = []
+    for call in calls or []:
+        fn = call.get("function") or {}
+        args = fn.get("arguments", call.get("arguments"))
+        if isinstance(args, str):
+            try:
+                args = json.loads(args) if args.strip() else {}
+            except json.JSONDecodeError:
+                args = {"_raw": args}
+        if not isinstance(args, dict):
+            args = {"_value": args}
+        out.append({"type": "toolCall", "id": call.get("id") or call.get("call_id") or f"call_{secrets.token_hex(6)}",
+                    "name": fn.get("name") or call.get("name") or "unknown", "arguments": args})
+    return out
+
+
+def tool_is_error(content):
+    if not isinstance(content, str) or not content.startswith("{"):
+        return False
+    try:
+        data = json.loads(content)
+    except json.JSONDecodeError:
+        return False
+    return isinstance(data, dict) and (data.get("success") is False or bool(data.get("error")))
+
+
+class Writer:
+    def __init__(self):
+        self.entries, self.last_id, self.used = [], None, set()
+
+    def new_id(self):
+        while True:
+            eid = secrets.token_hex(4)
+            if eid not in self.used:
+                self.used.add(eid)
+                return eid
+
+    def add(self, entry_type, ts, **fields):
+        eid = self.new_id()
+        self.entries.append({"type": entry_type, "id": eid, "parentId": self.last_id, "timestamp": iso(ts), **fields})
+        self.last_id = eid
+        return eid
+
+    def message(self, ts, message):
+        return self.add("message", ts, message=message)
+
+
+def convert(session, messages, parent_file):
+    sid = session["id"]
+    provider = session.get("billing_provider") or "hermes"
+    model = session.get("model") or "unknown"
+    w = Writer()
+    pending = {}  # toolCallId -> toolName for the latest assistant turn
+    call_names = {}
+
+    def flush_pending(ts):
+        for call_id, name in list(pending.items()):
+            w.message(ts, {"role": "toolResult", "toolCallId": call_id, "toolName": name,
+                           "content": [{"type": "text", "text": "(no tool result recorded in Hermes)"}],
+                           "isError": True, "timestamp": ms(ts)})
+        pending.clear()
+
+    def custom(ts, kind, content):
+        blocks = to_blocks(content)
+        if blocks:
+            w.add("custom_message", ts, customType=f"hermes:{kind}", content=blocks, display=True)
+
+    def emit(msg):
+        ts, role, kind = msg["timestamp"], msg["role"], msg.get("display_kind")
+        content = msg.get("content")
+        if role != "tool":
+            flush_pending(ts)
+        if role == "user":
+            if kind:
+                custom(ts, kind, content)
+            else:
+                blocks = to_blocks(content)
+                if blocks:
+                    w.message(ts, {"role": "user", "content": blocks, "timestamp": ms(ts)})
+        elif role == "assistant":
+            blocks = []
+            thinking = msg.get("reasoning_content") or msg.get("reasoning")
+            if isinstance(thinking, str) and thinking.strip():
+                blocks.append({"type": "thinking", "thinking": thinking})
+            blocks += [b for b in to_blocks(content, allow_images=False) if b["text"]]
+            calls = parse_tool_calls(msg.get("tool_calls"))
+            blocks += calls
+            if not blocks:
+                return
+            w.message(ts, {"role": "assistant", "content": blocks, "api": "hermes-import", "provider": provider,
+                           "model": model, "usage": zero_usage(), "stopReason": "toolUse" if calls else "stop",
+                           "timestamp": ms(ts)})
+            for c in calls:
+                pending[c["id"]] = c["name"]
+                call_names[c["id"]] = c["name"]
+        elif role == "tool":
+            call_id = msg.get("tool_call_id")
+            name = msg.get("tool_name") or call_names.get(call_id) or "unknown"
+            if call_id in pending:
+                pending.pop(call_id)
+                w.message(ts, {"role": "toolResult", "toolCallId": call_id, "toolName": name,
+                               "content": to_blocks(content) or [{"type": "text", "text": ""}],
+                               "isError": tool_is_error(content), "timestamp": ms(ts)})
+            else:  # result with no open call on this branch: keep it visible, out of the tool protocol
+                custom(ts, f"orphan_tool_result:{name}", content)
+        elif content:
+            custom(ts, role, content)
+
+    for msg in messages:
+        if msg.get("display_kind") in SKIP_KINDS:
+            continue
+        if msg.get("_compressed_summary"):
+            ts = msg["timestamp"]
+            flush_pending(ts)
+            cid = w.new_id()
+            w.entries.append({"type": "compaction", "id": cid, "parentId": w.last_id, "timestamp": iso(ts),
+                              "summary": text_of(msg.get("content")), "firstKeptEntryId": cid, "tokensBefore": 0,
+                              "details": {"importedFrom": "hermes"}})
+            w.last_id = cid
+            projected = project_compaction_message_for_display(msg)
+            if projected is not None:  # a real user ask or prior tail carried inside the handoff
+                emit({**projected, "_compressed_summary": 0})
+            continue
+        emit(msg)
+
+    end_ts = session.get("ended_at") or session.get("last_activity_at") or (messages[-1]["timestamp"] if messages else session["started_at"])
+    flush_pending(end_ts)
+    if not any(e["type"] == "message" for e in w.entries):
+        return None
+
+    inp, out = session.get("input_tokens") or 0, session.get("output_tokens") or 0
+    cr, cw = session.get("cache_read_tokens") or 0, session.get("cache_write_tokens") or 0
+    cost = session.get("actual_cost_usd") or session.get("estimated_cost_usd") or 0
+    if inp or out or cr or cw or cost:
+        w.add("usage", end_ts, kind="hermes_import", provider=provider, model=model,
+              usage={"input": inp, "output": out, "cacheRead": cr, "cacheWrite": cw,
+                     "totalTokens": inp + out + cr + cw, "cost": {**ZERO_COST, "total": float(cost)}})
+    w.add("custom", end_ts, customType="hermes-import",
+          data={"hermesSessionId": sid, "source": session.get("source"), "model": model, "provider": provider,
+                "parentHermesSessionId": session.get("parent_session_id"), "gitBranch": session.get("git_branch"),
+                "endReason": session.get("end_reason")})
+    if session.get("title"):
+        w.add("session_info", end_ts, name=session["title"])
+
+    header = {"type": "session", "version": 3, "id": pi_session_id(sid), "timestamp": iso(session["started_at"]),
+              "cwd": session.get("cwd") or str(Path.home())}
+    if parent_file:
+        header["parentSession"] = str(parent_file)
+    return [header] + w.entries
+
+
+def target_path(session):
+    cwd = session.get("cwd") or str(Path.home())
+    stamp = iso(session["started_at"]).replace(":", "-").replace(".", "-")
+    return pi_dir_for(cwd) / f"{stamp}_{pi_session_id(session['id'])}.jsonl"
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--dry-run", action="store_true", help="convert and report, write nothing")
+    ap.add_argument("--force", action="store_true", help="overwrite sessions already imported")
+    ap.add_argument("--session-id", action="append", help="only this Hermes session id (repeatable)")
+    args = ap.parse_args()
+
+    with tempfile.TemporaryDirectory(prefix="hermes-to-pi-") as tmp:
+        snapshot = Path(tmp) / "state.db"
+        src = sqlite3.connect(f"file:{HERMES_DB}?mode=ro", uri=True)
+        dst = sqlite3.connect(snapshot)
+        src.backup(dst)
+        src.close()
+        dst.close()
+        db = SessionDB(snapshot)
+
+        con = sqlite3.connect(snapshot)
+        con.row_factory = sqlite3.Row
+        rows = con.execute("SELECT id, parent_session_id FROM sessions WHERE source <> 'claude-code' "
+                           "ORDER BY started_at").fetchall()
+        con.close()
+        ids = [r["id"] for r in rows if not args.session_id or r["id"] in args.session_id]
+        # parents first, so a delegate child can point its parentSession at the parent's pi file
+        ids.sort(key=lambda i: 0 if not next(r for r in rows if r["id"] == i)["parent_session_id"] else 1)
+
+        written = skipped = empty = 0
+        files = {}
+        for hid in ids:
+            data = db.export_session(hid, include_compacted=True)
+            if not data:
+                empty += 1
+                continue
+            messages = data.pop("messages", None) or []
+            path = target_path(data)
+            files[hid] = path
+            existing = find_existing(pi_session_id(hid))
+            if existing and not args.force:
+                files[hid] = existing
+                skipped += 1
+                continue
+            parent = data.get("parent_session_id")
+            lines = convert(data, messages, files.get(parent) if parent else None)
+            if lines is None:
+                empty += 1
+                continue
+            counts = sum(1 for e in lines if e.get("type") == "message")
+            print(f"{'would write' if args.dry_run else 'wrote'} {hid} -> {path} ({counts} messages)")
+            if args.dry_run:
+                continue
+            if existing and existing != path:
+                existing.unlink()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "w", encoding="utf-8") as fh:
+                for line in lines:
+                    fh.write(json.dumps(line, ensure_ascii=False, separators=(",", ":")) + "\n")
+            os.utime(path, (float(data.get("last_activity_at") or data["started_at"]),) * 2)
+            written += 1
+        print(f"done: {written} written, {skipped} already imported, {empty} empty")
+
+
+if __name__ == "__main__":
+    main()
