@@ -20,10 +20,11 @@
     "amazon-bedrock/openai.gpt-6-astra",
     "amazon-bedrock/openai.gpt-6-luna",
     "amazon-bedrock/openai.gpt-6-sol",
+    "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
     "amazon-bedrock/global.anthropic.claude-sonnet-5"
   ],
   "defaultProvider": "amazon-bedrock",
-  "defaultModel": "global.anthropic.claude-opus-5-5",
+  "defaultModel": "global.anthropic.claude-sonnet-5-5",
   "defaultThinkingLevel": "high",
   "terminal": {
     "showTerminalProgress": true

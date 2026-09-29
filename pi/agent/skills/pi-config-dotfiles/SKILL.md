@@ -7,7 +7,7 @@ description: Use when creating or editing pi extensions/config under ~/.pi/agent
 
 Generic pi config under `~/.pi/agent/` is version-controlled in the dotfiles repo, managed with rcm.
 The repo is `~/Development/personal/hub/modules/dotfiles`, and rcm symlinks each file back into place.
-Tracked now: `settings.json`, `extensions/*.ts`, `skills/`.
+Tracked now: `settings.json`, `AGENTS.md`, `agents/*.md`, `extensions/*.ts`, `skills/`.
 
 ## New file
 
