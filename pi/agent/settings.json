@@ -1,0 +1,31 @@
+{
+  "lastChangelogVersion": "0.87.1",
+  "theme": "modus-operandi",
+  "packages": [
+    "npm:pi-mcp-adapter",
+    "npm:pi-worktrees",
+    "npm:pi-minions",
+    "npm:pi-lens",
+    "npm:@plannotator/pi-extension",
+    "npm:airspeak",
+    "npm:@duarteocarmo/pi-modus-themes",
+    "npm:pi-web-access",
+    "npm:@jl1990/pi-scheduler",
+    "npm:pi-cmux"
+  ],
+  "enabledModels": [
+    "amazon-bedrock/global.anthropic.claude-opus-5-5",
+    "amazon-bedrock/global.openai.gpt-6-sol",
+    "amazon-bedrock/openai.gpt-6-astra",
+    "amazon-bedrock/openai.gpt-6-luna",
+    "amazon-bedrock/openai.gpt-6-sol",
+    "amazon-bedrock/global.anthropic.claude-sonnet-5"
+  ],
+  "defaultProvider": "amazon-bedrock",
+  "defaultModel": "global.anthropic.claude-opus-5-5",
+  "defaultThinkingLevel": "high",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "enableInstallTelemetry": false
+}
