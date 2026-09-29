@@ -12,6 +12,28 @@
   //
   // Reload after editing: `cmux reload-config` (or Cmd+Shift+,).
 
+  // Every new workspace starts pi in its first terminal. The shell stays
+  // alive after pi exits. Pick "None" under the plus button's
+  // "Default for New Workspace" submenu to go back to a blank terminal.
+  "actions": {
+    "pi-workspace": {
+      "type": "workspace",
+      "title": "Pi",
+      "workspace": {
+        "layout": {
+          "pane": {
+            "surfaces": [
+              { "type": "terminal", "name": "pi", "command": "pi", "focus": true }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "ui": {
+    "newWorkspace": { "action": "pi-workspace" }
+  },
+
   "shortcuts": {
     "bindings": {
       // --- Splits (wezterm: LEADER+" / LEADER+%) ---
