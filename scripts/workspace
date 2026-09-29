@@ -5,9 +5,13 @@
 #   and per-worktree environments under .worktrees/). A WORKTREE is one isolated
 #   environment — a git worktree of the hub repo with a git worktree of each in-scope
 #   submodule nested under modules/<repo>, object stores shared (no re-clone). The HARNESS
-#   (Hermes `/worktree new`, Claude Desktop, `claude --worktree`, or this engine) makes the hub
-#   worktree; the engine fills in the submodule worktrees — no harness populates submodules
-#   itself. The hub itself stays a clean integration vantage point.
+#   (Hermes `/worktree new`, Claude Desktop, `claude --worktree`, pi-worktrees `/wt create`, or
+#   this engine) makes the hub worktree; the engine fills in the submodule worktrees — no
+#   harness populates submodules itself. The hub itself stays a clean integration vantage point.
+#
+# Worktrees are found by name: under the hub (.worktrees/, .claude/worktrees/, workspaces/) or
+#   anywhere else git has them registered — pi-worktrees keeps them in
+#   ~/.local/share/pi-worktrees/<timestamp>/<name>. Teardown also drops pi's metadata file.
 #
 # This is deterministic git/fs plumbing only. It does NOT talk to Linear or cmux, and it does
 #   NOT commit the hub repo — the slash commands orchestrate those. Progress/warnings → stderr;
@@ -120,14 +124,52 @@ path_to_project_key() { printf '%s' "$1" | sed 's#/#-#g'; }
 # Is there a git worktree (workspace or submodule) materialized at this path?
 worktree_present() { [ -e "$1/.git" ]; }
 
+# Is <dir> a linked worktree of the hub repo (anywhere on disk, not the hub itself)? Harnesses
+# that keep worktrees outside the hub — pi-worktrees' `/wt create` puts them under
+# ~/.local/share/pi-worktrees/<timestamp>/<name> — are recognized by this, not by path.
+is_hub_worktree() {
+  local dir="$1" common
+  [ -n "$dir" ] && [ "$dir" != "$HUB" ] && worktree_present "$dir" || return 1
+  common="$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 1
+  [ "$common" = "$HUB/.git" ]
+}
+
+# A hub worktree registered anywhere on disk whose basename is <name>, if exactly one exists.
+find_registered_ws_dir() {
+  local name="$1" p match="" n=0
+  while IFS= read -r p; do
+    [ "$p" != "$HUB" ] && [ "$(basename "$p")" = "$name" ] && worktree_present "$p" || continue
+    match="$p"; n=$((n + 1))
+  done < <(git -C "$HUB" worktree list --porcelain 2>/dev/null | sed -n 's/^worktree //p')
+  [ "$n" -gt 1 ] && die "worktree name '$name' is ambiguous ($n registered worktrees share it) — pass a unique name"
+  [ -n "$match" ] && printf '%s' "$match"
+  return 0
+}
+
+# pi-worktrees keeps a metadata file per worktree it created, at
+# <storage-root>/.meta/<timestamp>/<name>.json beside <storage-root>/<timestamp>/<name>. Print its
+# path when <ws_dir> has one (i.e. it is pi-managed); derived from the worktree path itself, so a
+# custom $PI_WORKTREE_HOME resolves too. Matched on `name`, not `worktreePath`: pi stores the
+# logical path and git reports the physical one, which differ under a symlinked dir.
+pi_meta_file() {
+  local ws_dir="$1" ts_dir f
+  ts_dir="$(dirname "$ws_dir")"
+  f="$(dirname "$ts_dir")/.meta/$(basename "$ts_dir")/$(basename "$ws_dir").json"
+  [ -f "$f" ] && grep -qF "\"name\": \"$(basename "$ws_dir")\"" "$f" && printf '%s' "$f"
+  return 0
+}
+
 # Resolve a named worktree's dir: prefer an existing worktree in ANY supported location (so a
-# Hermes-, Desktop- or legacy-created worktree is adopted, never duplicated), else default to
-# the canonical .worktrees/<name>. Probe order = newest convention first.
+# Hermes-, Desktop-, pi- or legacy-created worktree is adopted, never duplicated), else default
+# to the canonical .worktrees/<name>. Probe order = newest hub-relative convention first, then
+# any registered hub worktree with that name (pi-worktrees and other out-of-hub harnesses).
 resolve_ws_dir() {
-  local name="$1" d
+  local name="$1" d found
   for d in "$WT_DIR" "$CLAUDE_WT_DIR" "$LEGACY_WT_DIR"; do
     if worktree_present "$HUB/$d/$name"; then printf '%s/%s/%s' "$HUB" "$d" "$name"; return 0; fi
   done
+  found="$(find_registered_ws_dir "$name")"
+  if [ -n "$found" ]; then printf '%s' "$found"; return 0; fi
   printf '%s/%s/%s' "$HUB" "$WT_DIR" "$name"
 }
 
@@ -143,7 +185,7 @@ current_ws_name() {
   top="$(git -C "$base" rev-parse --show-toplevel 2>/dev/null)" || return 0
   case "$top" in
     "$HUB/$WT_DIR/"*|"$HUB/$CLAUDE_WT_DIR/"*|"$HUB/$LEGACY_WT_DIR/"*) basename "$top" ;;
-    *) : ;;
+    *) if is_hub_worktree "$top"; then basename "$top"; fi ;;
   esac
 }
 
@@ -167,6 +209,11 @@ integration_branch() {
 # ── memory symlink (share canonical memory; history stays per-worktree) ───────
 setup_memory_symlink() {
   local ws_dir="$1" projects_dir canonical_memory per_task_dir link
+  # Claude Code only. A pi-managed worktree is driven by pi, which keeps no per-cwd memory there.
+  if [ -n "$(pi_meta_file "$ws_dir")" ]; then
+    info "memory: pi-managed worktree — skipping the Claude Code memory symlink"
+    return 0
+  fi
   projects_dir="$HOME/.claude/projects"
   canonical_memory="$projects_dir/$(path_to_project_key "$HUB")/memory"
   per_task_dir="$projects_dir/$(path_to_project_key "$ws_dir")"
@@ -199,7 +246,7 @@ cmd_bootstrap() {
     esac
   done
   [ -n "$name" ] || name="$(current_ws_name)"
-  [ -n "$name" ]  || die "bootstrap: run inside a worktree (…/$WT_DIR/<name>) or pass --name <name>"
+  [ -n "$name" ]  || die "bootstrap: run inside a hub worktree (…/$WT_DIR/<name>, a pi-worktrees /wt worktree, …) or pass --name <name>"
   [ -n "$repos" ] || die "bootstrap requires --repos (comma-separated; e.g. core,infrastructure)"
 
   local ws_dir; ws_dir="$(resolve_ws_dir "$name")"
@@ -428,8 +475,18 @@ cmd_teardown() {
     fi
   done
   if worktree_present "$ws_dir"; then
+    local pi_meta; pi_meta="$(pi_meta_file "$ws_dir")"
     info "removing worktree $name"
-    git -C "$HUB" worktree remove --force "$ws_dir" || warn "worktree: remove failed for $ws_dir"
+    if git -C "$HUB" worktree remove --force "$ws_dir"; then
+      # pi-worktrees lists a worktree from its metadata file; drop it with the worktree so
+      # `/wt` does not keep offering a path that no longer exists. Only the file is removed.
+      if [ -n "$pi_meta" ]; then
+        rm -f "$pi_meta"; rmdir "$(dirname "$pi_meta")" "$(dirname "$ws_dir")" 2>/dev/null || true
+        info "removed pi-worktrees metadata for $name"
+      fi
+    else
+      warn "worktree: remove failed for $ws_dir"
+    fi
   fi
   cmd_prune >/dev/null
   # NOTE: deliberately leave the per-worktree memory symlink + history dir under
@@ -497,7 +554,7 @@ cmd_prepare() {
 }
 
 # ── dispatch ──────────────────────────────────────────────────────────────────
-usage() { sed -n '2,39p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+usage() { sed -n '2,45p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 
 [ $# -gt 0 ] || usage
 cmd="$1"; shift
