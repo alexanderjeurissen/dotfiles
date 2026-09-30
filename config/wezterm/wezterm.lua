@@ -3,7 +3,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- Define the leader key
-local leader = { key = 't', mods = 'CTRL' }
+local leader = { key = 'b', mods = 'CTRL' }
 
 -- Pomodoro state
 local pomodoro = {
