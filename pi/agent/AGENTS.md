@@ -1,12 +1,11 @@
 # Advisor and second opinion
 
-The default model is a fast executor. Two named minions add judgment:
+If you have the `spawn` tool, this section applies. The default model is a fast executor. Two named minions add judgment:
 
 - `advisor`: a stronger Anthropic model.
 - `second-opinion`: a model from a different vendor.
 
 Both minions are read-only and give guidance. You stay responsible for the work and the decision.
-These consultations are an exception to any rule against delegation to check your own output.
 
 This section does not apply to the `advisor` or `second-opinion` minion itself.
 
