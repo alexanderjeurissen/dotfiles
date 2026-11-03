@@ -18,6 +18,7 @@ export LINT_STAGED=1
 export PULL_LOCK=1
 
 # pi only lists Bedrock when AWS_PROFILE is set; must not live in an alias, cmux restores pi by absolute path
+# caveat: with AWS_PROFILE set, Node/Python AWS SDKs ignore exported AWS_ACCESS_KEY_ID/SECRET; unset AWS_PROFILE to use temp keys
 export AWS_PROFILE="${AWS_PROFILE:-default}"
 export AWS_REGION="${AWS_REGION:-us-west-2}"
 
