@@ -17,6 +17,10 @@ export SKIP_WAIT=1
 export LINT_STAGED=1
 export PULL_LOCK=1
 
+# pi only lists Bedrock when AWS_PROFILE is set; must not live in an alias, cmux restores pi by absolute path
+export AWS_PROFILE="${AWS_PROFILE:-default}"
+export AWS_REGION="${AWS_REGION:-us-west-2}"
+
 # export LIBRARY_PATH="/opt/homebrew/opt/gcc/lib/gcc/$(gcc -dumpversion)/"
 # export LD_LIBRARY_PATH="/opt/homebrew/opt/gcc/lib/gcc/$(gcc -dumpversion)/"
 
