@@ -7,6 +7,34 @@ CLI, do the work yourself.
 If your task starts with "You are a delegated Paseo subagent", do not start subagents unless your
 task or the skill it names tells you to.
 
+## Delegate by default
+
+Inside Paseo, hand separable work to subagents instead of doing it all yourself. Subagents keep your
+context small, run in parallel, and let a cheaper model do cheap work. Before a multi-step task,
+split it: what can run without you, and what needs your judgment?
+
+Delegate:
+
+- **Reading and searching** across many files, modules or repos (`haiku`).
+- **Log, CI and test-output triage**, and summaries of long threads, diffs or docs (`haiku`).
+- **Research**: web or doc lookups, comparing options, checking versions (`sonnet`).
+- **Independent tracks** of a larger task, one subagent each, run in parallel (`sonnet`).
+- **Verification** with fresh eyes: reviewing your own change, checking a claim (`opus` or `sol`).
+
+Do it yourself when the work is a few tool calls, when steps depend tightly on each other, or when
+it is a decision or an outward-facing action (posting, committing, messaging).
+
+How:
+
+- Start independent subagents together, then keep working. Paseo wakes you when each finishes;
+  use `subagent_wait` only when you need the result now.
+- Pick the cheapest profile that fits. Up to four active subagents at a time.
+- The brief must stand alone: goal, paths, constraints, the exact output wanted.
+- Ask for long results in a file and the path in the reply: the finish notification truncates at
+  4,000 characters.
+- Subagents share your working directory. Give `worker` subagents disjoint files, and never two
+  writers on the same file.
+
 ## Profiles
 
 Pick the model with `profile`, not `provider`. `subagent_presets` lists each profile's model, effort
