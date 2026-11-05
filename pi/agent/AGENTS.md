@@ -7,6 +7,20 @@ CLI, do the work yourself.
 If your task starts with "You are a delegated Paseo subagent", do not start subagents unless your
 task or the skill it names tells you to.
 
+## Profiles
+
+Pick the model with `profile`, not `provider`. `subagent_presets` lists each profile's model, effort
+and "when to use" notes. Pass `thinking` only to change the effort for one call.
+
+| Profile | Use for |
+|---|---|
+| `opus` | Planning, hard debugging, the advisor, the Anthropic review pass |
+| `sol` | The OpenAI review pass, cross-vendor checks of code |
+| `sonnet` | Implementation from a clear spec, coordinators, research scouts |
+| `haiku` | Cheap scoped subagents: search, triage, summaries, extraction |
+| `terra` | Screenshots and diagrams, drafting text, moderate coding |
+| `astra` | A second opinion on a high-stakes decision, only when the user asks |
+
 ## Advisor
 
 The default model is a fast executor. A stronger model adds judgment. Consult it:
@@ -20,14 +34,12 @@ The default model is a fast executor. A stronger model adds judgment. Consult it
 Do not consult for short, mechanical or clear work, and always when the user asks.
 
 ```js
-subagent_run({ name: "advisor", role: "scout",
-  provider: "pi/amazon-bedrock/global.anthropic.claude-opus-5-5", thinking: "high", prompt: <brief> })
+subagent_run({ name: "advisor", role: "scout", profile: "opus", prompt: <brief> })
 ```
 
 Then `subagent_wait` for it. A **second opinion** uses a different vendor and costs more: run it
 only when the user asks. Offer it before a high-stakes, hard-to-reverse decision, or when you and
-the advisor disagree. Use `provider: "pi/amazon-bedrock/global.openai.gpt-6-sol"` and
-`thinking: "xhigh"`.
+the advisor disagree. Use `profile: "astra"`.
 
 The brief must stand alone, because the subagent cannot see this conversation:
 
