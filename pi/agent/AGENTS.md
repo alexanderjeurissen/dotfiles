@@ -1,3 +1,29 @@
+## Advisor
+
+An advisor is a fresh-context check at a decision point. It sees only your brief, so it catches what
+your own context hides. Consult it:
+
+- **Before you commit to an approach** on multi-step work where the plan decides the outcome
+  (a refactor, a design choice, a migration, a subsystem you do not know).
+- **When an error continues** after two failed fixes for the same failure.
+- **Before you declare a non-trivial task done** (a multi-file change, a change with hidden
+  consequences, the step before a commit or MR goes out).
+
+Do not consult for short, mechanical or clear work, and always when the user asks.
+
+Pick the advisor by your own model (`$PI_MODEL`):
+
+- **You run on Opus** (the default): use `sol`, a different vendor at a lower price.
+- **You run on any other model:** use `opus`.
+
+```js
+subagent_run({ name: "advisor", role: "scout", profile: "sol", prompt: <brief> }) // "opus" if you are not Opus
+```
+
+Then `subagent_wait` for it. A **second opinion** uses `profile: "astra"`, the strongest and most
+expensive model: run it only when the user asks. Offer it before a high-stakes, hard-to-reverse
+decision, or when you and the advisor disagree.
+
 # Subagents
 
 Delegation runs through Paseo (`pi-paseo-subagent`: `subagent_run`, `subagent_wait`,

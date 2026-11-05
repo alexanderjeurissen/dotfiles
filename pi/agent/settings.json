@@ -14,15 +14,15 @@
   ],
   "enabledModels": [
     "amazon-bedrock/global.anthropic.claude-opus-5-5",
-    "amazon-bedrock/global.openai.gpt-6-sol",
     "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
-    "amazon-bedrock/global.anthropic.claude-sonnet-5",
+    "amazon-bedrock/global.anthropic.claude-haiku-5-5",
+    "amazon-bedrock/global.openai.gpt-6.1-sol",
     "amazon-bedrock/global.openai.gpt-6-astra",
-    "amazon-bedrock/global.openai.gpt-6-luna"
+    "amazon-bedrock/global.openai.gpt-6.1-terra"
   ],
   "defaultProvider": "amazon-bedrock",
-  "defaultModel": "global.anthropic.claude-sonnet-5-5",
-  "defaultThinkingLevel": "high",
+  "defaultModel": "global.anthropic.claude-opus-5-5",
+  "defaultThinkingLevel": "medium",
   "terminal": {
     "showTerminalProgress": true
   },
