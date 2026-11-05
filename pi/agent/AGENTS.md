@@ -28,7 +28,7 @@ How:
 
 - Start independent subagents together, then keep working. Paseo wakes you when each finishes;
   use `subagent_wait` only when you need the result now.
-- Pick the cheapest profile that fits. Up to four active subagents at a time.
+- Pick the cheapest profile that fits. Up to 10 active subagents at a time.
 - The brief must stand alone: goal, paths, constraints, the exact output wanted.
 - Ask for long results in a file and the path in the reply: the finish notification truncates at
   4,000 characters.
