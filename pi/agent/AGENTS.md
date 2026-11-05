@@ -73,8 +73,8 @@ and "when to use" notes. Pass `thinking` only to change the effort for one call.
 
 | Profile | Use for |
 |---|---|
-| `opus` | Planning, hard debugging, the advisor, the Anthropic review pass |
-| `sol` | The OpenAI review pass, cross-vendor checks of code |
+| `opus` | Planning, hard debugging, the Anthropic review pass, the advisor for non-Opus sessions |
+| `sol` | The OpenAI review pass, cross-vendor checks, the advisor for Opus sessions |
 | `sonnet` | Implementation from a clear spec, coordinators, research scouts |
 | `haiku` | Cheap scoped subagents: search, triage, summaries, extraction |
 | `terra` | Screenshots and diagrams, drafting text, moderate coding |
