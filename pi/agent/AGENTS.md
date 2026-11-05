@@ -31,7 +31,12 @@ How:
 - Pick the cheapest profile that fits. Up to 8 active subagents at a time (the tool's limit per agent).
 - The brief must stand alone: goal, paths, constraints, the exact output wanted.
 - Ask for long results in a file and the path in the reply: the finish notification truncates at
-  4,000 characters.
+  4,000 characters. Use `/tmp/<skill-or-task>/<slug>/<unit>.md`, one file per child, and ask for a
+  one-line verdict plus the path as the reply.
+- Fan out only when there are three or more independent units. For one or two, do them yourself.
+- Children never act outward: no posting, commenting, committing, pushing, messaging, or Linear or
+  tracker writes. Say so in every brief. Children have the same tools you have, so this is an
+  instruction, not a block. The parent reads the files, decides and acts.
 - Subagents share your working directory. Give `worker` subagents disjoint files, and never two
   writers on the same file.
 
