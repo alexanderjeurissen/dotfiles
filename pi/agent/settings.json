@@ -3,14 +3,14 @@
   "theme": "modus-operandi",
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:pi-minions",
     "npm:pi-lens",
     "npm:@plannotator/pi-extension",
     "npm:airspeak",
     "npm:@duarteocarmo/pi-modus-themes",
     "npm:pi-web-access",
     "npm:pi-cmux",
-    "npm:@inobit/pi-permission"
+    "npm:@inobit/pi-permission",
+    "npm:pi-paseo-subagent"
   ],
   "enabledModels": [
     "amazon-bedrock/global.anthropic.claude-opus-5-5",
