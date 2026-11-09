@@ -1,12 +1,11 @@
 #!/usr/bin/env sh
 # Sentry MCP launcher. Resolves SENTRY_ACCESS_TOKEN without hitting 1Password on
 # every spawn (each pi session/subagent starts its own MCP server), same layering
-# as ~/.scripts/glab: mesh secrets file -> mtime cache -> one `op read`.
+# as ~/.scripts/glab: mtime cache -> one `op read`.
 #   SENTRY_CRED_CACHE_TTL=<seconds>  cache lifetime (default 8h; 0 disables)
 # Bust after rotating the token: rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/sentry-mcp/token"
 
 token_ref="op://Employee/sentry/token"
-secrets_file="${MATRIX_PI_SECRETS:-$HOME/.matrix-pi/secrets}/sentry.key"
 cache_ttl="${SENTRY_CRED_CACHE_TTL:-28800}"
 cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/sentry-mcp/token"
 
@@ -18,8 +17,6 @@ cache_fresh() {
 
 if [ -n "${SENTRY_ACCESS_TOKEN:-}" ] && [ "${SENTRY_ACCESS_TOKEN#op://}" = "$SENTRY_ACCESS_TOKEN" ]; then
   : # real token already in env
-elif [ -s "$secrets_file" ]; then
-  SENTRY_ACCESS_TOKEN=$(cat "$secrets_file")
 elif cache_fresh; then
   SENTRY_ACCESS_TOKEN=$(cat "$cache_file")
 else
