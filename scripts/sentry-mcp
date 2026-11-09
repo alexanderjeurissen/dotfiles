@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+# Sentry MCP launcher. Resolves SENTRY_ACCESS_TOKEN without hitting 1Password on
+# every spawn (each pi session/subagent starts its own MCP server), same layering
+# as ~/.scripts/glab: mesh secrets file -> mtime cache -> one `op read`.
+#   SENTRY_CRED_CACHE_TTL=<seconds>  cache lifetime (default 8h; 0 disables)
+# Bust after rotating the token: rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/sentry-mcp/token"
+
+token_ref="op://Employee/sentry/token"
+secrets_file="${MATRIX_PI_SECRETS:-$HOME/.matrix-pi/secrets}/sentry.key"
+cache_ttl="${SENTRY_CRED_CACHE_TTL:-28800}"
+cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/sentry-mcp/token"
+
+cache_fresh() {
+  [ "$cache_ttl" -gt 0 ] 2>/dev/null && [ -s "$cache_file" ] || return 1
+  mtime=$(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null) || return 1
+  [ $(( $(date +%s) - mtime )) -lt "$cache_ttl" ]
+}
+
+if [ -n "${SENTRY_ACCESS_TOKEN:-}" ] && [ "${SENTRY_ACCESS_TOKEN#op://}" = "$SENTRY_ACCESS_TOKEN" ]; then
+  : # real token already in env
+elif [ -s "$secrets_file" ]; then
+  SENTRY_ACCESS_TOKEN=$(cat "$secrets_file")
+elif cache_fresh; then
+  SENTRY_ACCESS_TOKEN=$(cat "$cache_file")
+else
+  SENTRY_ACCESS_TOKEN=$(op read "$token_ref" 2>/dev/null)
+  if [ -z "$SENTRY_ACCESS_TOKEN" ]; then
+    echo "sentry-mcp: could not resolve $token_ref from 1Password" >&2
+    exit 1
+  fi
+  if [ "$cache_ttl" -gt 0 ] 2>/dev/null; then
+    ( umask 077; mkdir -p "$(dirname "$cache_file")" && printf '%s' "$SENTRY_ACCESS_TOKEN" > "$cache_file" ) \
+      || echo "sentry-mcp: warning: could not write $cache_file" >&2
+  fi
+fi
+export SENTRY_ACCESS_TOKEN
+
+exec "${NPX:-$HOME/.local/bin/npx}" -y @sentry/mcp-server@latest "$@"
