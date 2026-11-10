@@ -20,9 +20,7 @@ Pick the advisor by your own model (`$PI_MODEL`):
 subagent_run({ name: "advisor", role: "scout", profile: "sol", prompt: <brief> }) // "opus" if you are not Opus
 ```
 
-Then `subagent_wait` for it. A **second opinion** uses `profile: "astra"`, the strongest and most
-expensive model: run it only when the user asks. Offer it before a high-stakes, hard-to-reverse
-decision, or when you and the advisor disagree.
+Then `subagent_wait` for it.
 
 # Subagents
 
@@ -79,7 +77,7 @@ and "when to use" notes. Pass `thinking` only to change the effort for one call.
 | `sonnet` | Implementation from a clear spec, coordinators, research scouts |
 | `haiku` | Cheap scoped subagents: search, triage, summaries, extraction |
 | `terra` | Screenshots and diagrams, drafting text, moderate coding |
-| `astra` | A second opinion on a high-stakes decision, only when the user asks |
+| `astra` | Only when the user asks for `astra` by name |
 
 ## Advisor
 
@@ -97,9 +95,7 @@ Do not consult for short, mechanical or clear work, and always when the user ask
 subagent_run({ name: "advisor", role: "scout", profile: "opus", prompt: <brief> })
 ```
 
-Then `subagent_wait` for it. A **second opinion** uses a different vendor and costs more: run it
-only when the user asks. Offer it before a high-stakes, hard-to-reverse decision, or when you and
-the advisor disagree. Use `profile: "astra"`.
+Then `subagent_wait` for it.
 
 The brief must stand alone, because the subagent cannot see this conversation:
 
