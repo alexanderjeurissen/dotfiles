@@ -54,11 +54,17 @@ How:
   use `subagent_wait` only when you need the result now.
 - Pick the cheapest profile that fits. Up to 8 active subagents at a time (the tool's limit per agent).
 - The brief must stand alone: goal, paths, constraints, the exact output wanted.
+- Speed comes from turn count, not from the model. A subagent costs about 10 s to start, and each
+  tool round trip costs 3-6 s, at any thinking level. To cut turns, name the exact files and
+  commands in the brief, and tell the child to batch independent reads and searches into one
+  `codemode` call. `opus` is the slowest per turn; prefer `haiku` or `sol` when a scout must be fast.
 - Ask for long results in a file and the path in the reply: the finish notification truncates at
   4,000 characters. Use `~/.local/state/subagents/<skill-or-task>/<slug>/<unit>.md`, one file per
   child, and ask for a one-line verdict plus the path as the reply. Never `/tmp`: macOS empties it on
   reboot while Paseo resumes the session, so the parent keeps the summary and loses the report.
 - Fan out only when there are three or more independent units. For one or two, do them yourself.
+  Split a long job that has independent parts (more than about 10 tool calls in a row) across
+  parallel children; a unit of a few calls is not worth the start-up cost.
 - Children never act outward: no posting, commenting, committing, pushing, messaging, or Linear or
   tracker writes. Say so in every brief. Children have the same tools you have, so this is an
   instruction, not a block. The parent reads the files, decides and acts.
