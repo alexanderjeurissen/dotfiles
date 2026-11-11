@@ -28,8 +28,12 @@ Delegation runs through Paseo (`pi-paseo-subagent`: `subagent_run`, `subagent_wa
 `subagent_read`, `subagent_list`, `subagent_stop`). It works only inside a Paseo agent. In the Pi
 CLI, do the work yourself.
 
-If your task starts with "You are a delegated Paseo subagent", do not start subagents unless your
-task or the skill it names tells you to.
+If your task starts with "You are a delegated Paseo subagent", the same delegation rules apply to
+you: when your task has three or more independent multi-turn units, start your own subagents rather
+than doing them one after another. Limit the depth to two levels. Every brief ends with
+`Delegation depth: N`, where N is the child's depth (your own depth plus one; a brief without the
+line means depth 1). At depth 2, do not start subagents. Pass the outward-action ban down
+unchanged.
 
 ## Delegate by default
 
