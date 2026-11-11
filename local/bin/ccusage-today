@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Prints today's ccusage spend ("day $X.XX") from a 60s cache; refreshes in the background, never blocks.
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/ccusage-today"
+lock="$cache.lock"
+mkdir -p "$(dirname "$cache")"
+
+refresh() {
+  local t out v
+  t=$(date +%F)
+  if out=$(ccusage daily --since "$t" --until "$t" --json --offline 2>/dev/null) &&
+     v=$(jq -er --arg d "$t" '[.daily[] | select(.period == $d) | .totalCost][0] // 0' <<<"$out") &&
+     line=$(printf 'day $%.2f' "$v" 2>/dev/null); then :; else line='day ?'; fi
+  printf '%s' "$line" >"$cache.tmp.$$" && mv "$cache.tmp.$$" "$cache"
+  rmdir "$lock" 2>/dev/null
+}
+
+now=$(date +%s)
+age=$(( now - $(stat -f %m "$cache" 2>/dev/null || echo 0) ))
+if (( age >= 60 )); then
+  # Clear a lock left by a refresh that died or hung.
+  [[ -d $lock ]] && (( now - $(stat -f %m "$lock" 2>/dev/null || echo "$now") > 120 )) && rmdir "$lock" 2>/dev/null
+  if mkdir "$lock" 2>/dev/null; then
+    refresh </dev/null >/dev/null 2>&1 &
+    disown 2>/dev/null
+  fi
+fi
+
+if [[ -s $cache ]]; then cat "$cache"; else printf 'day ?'; fi
+echo
