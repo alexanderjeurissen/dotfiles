@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# hub-refresh: fast-forward the h1 hub's submodules to their integration tips and pin the drifted
+# gitlinks in one hub commit. Never pushes. Run by launchd (com.alexanderjeurissen.hub-refresh).
+set -uo pipefail
+export PATH="$HOME/.scripts:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+export WORKSPACE_HUB="${WORKSPACE_HUB:-$HOME/Development/h1}"
+HUB="$WORKSPACE_HUB"
+
+echo "== $(date '+%F %T')"
+out="$(workspace update-modules 2>&1)"; echo "$out"
+# Every repo erroring means the VPN/network is down, not 16 broken remotes.
+grep -qvE '^(ERROR|workspace: warning)' <<<"$out" || { echo "all fetches failed — VPN down? skipped"; exit 0; }
+
+pins=()
+while IFS= read -r p; do
+  [ -n "$p" ] || continue
+  r="${p#modules/}"
+  # Never pin leaked feature work: the hub checkout must be on the integration branch.
+  if [ "$(git -C "$HUB/$p" branch --show-current)" = "$(workspace integration-branch "$r")" ]; then
+    pins+=("$p")
+  else
+    echo "SKIP-PIN $r: off its integration branch"
+  fi
+done < <(git -C "$HUB" diff --ignore-submodules=dirty --name-only -- modules/)
+
+if [ ${#pins[@]} -eq 0 ]; then echo "nothing to pin"; exit 0; fi
+# Commit only the gitlinks (pathspec), so anything else already staged in the hub stays out.
+git -C "$HUB" commit -q -m "pin ${pins[*]//modules\//} after fast-forward to integration tip(s)" -- "${pins[@]}" \
+  && git -C "$HUB" log -1 --format='pinned %h %s'

@@ -268,12 +268,12 @@ cmd_bootstrap() {
 
   # 2. a worktree of each in-scope submodule, on the feature branch
   for repo in "${repo_arr[@]}"; do
-    local repo_path target ib
+    local repo_path target ib fetch_ok=1
     repo_path="$(submodule_path "$HUB" "$repo")"
     target="$(submodule_path "$ws_dir" "$repo")"
     mkdir -p "$(dirname "$target")"   # ensure <ws_dir>/modules/ exists
     ib="$(integration_branch "$repo")"
-    git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || warn "$repo: fetch origin/$ib failed/timed out (offline?) — proceeding with local refs"
+    git -C "$repo_path" fetch origin "$ib" --quiet 2>/dev/null || { fetch_ok=0; warn "$repo: fetch origin/$ib failed/timed out (offline?) — proceeding with local refs"; }
     if worktree_present "$target"; then
       info "$repo: worktree already present"
     elif git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
@@ -289,6 +289,8 @@ cmd_bootstrap() {
       info "$repo: restoring branch $branch from origin (tracking)"
       git -C "$repo_path" worktree add --track -b "$branch" "$target" "origin/$branch" >/dev/null
     else
+      # Never cut a new branch from a stale origin/<ib>: that silently bases the work on old code.
+      [ "$fetch_ok" = 1 ] || die "$repo: refusing to cut new branch $branch from stale origin/$ib (fetch failed; its tip is from $(git -C "$repo_path" log -1 --format=%cr "origin/$ib" 2>/dev/null || echo never)) — fix the network/auth and re-run"
       info "$repo: new branch $branch off origin/$ib"
       git -C "$repo_path" worktree add -b "$branch" "$target" "origin/$ib" >/dev/null
     fi
@@ -381,6 +383,8 @@ cmd_update_modules() {
     local rd ib cur before after
     rd="$(submodule_path "$HUB" "$repo")"
     ib="$(integration_branch "$repo")"
+    # An uninitialized mountpoint would make every git -C below climb into the hub repo itself.
+    worktree_present "$rd" || { emit "SKIP $repo: not initialized in the hub (no $rd/.git)"; continue; }
     # Never fast-forward a non-integration branch the hub happens to be on to origin/<default>.
     cur="$(git -C "$rd" branch --show-current 2>/dev/null || true)"
     if [ "$cur" != "$ib" ]; then
