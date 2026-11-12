@@ -121,6 +121,6 @@ so. If a consultation changes the plan, tell the user in one line.
 
 ## Code review
 
-For a review of an MR, PR, branch or diff, use the `mr-dual-review` skill where it exists. It
-starts one coordinator subagent that runs an Opus and a Sol pass, merges them and posts. Do not
+For a review of an MR, PR, branch or diff, use the `code-review` skill where it exists. It
+starts one coordinator subagent that runs an Opus, a Sol and a ponytail pass, merges them and posts. Do not
 review a change you wrote in this session.
