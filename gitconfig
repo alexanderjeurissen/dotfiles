@@ -99,3 +99,9 @@
 	sslVerify = false
 [init]
 	defaultBranch = main
+# Push to GitLab over HTTPS with the token in the Keychain: unattended agents cannot answer
+# 1Password SSH-agent approvals. Fetches stay on SSH. Needs the VPN (internal host).
+[url "https://gitlab-internal.inverselink.com/"]
+	pushInsteadOf = git@gitlab.inverselink.com:
+[credential "https://gitlab-internal.inverselink.com"]
+	helper = "!f() { test \"$1\" = get || exit 0; echo username=oauth2; echo password=$(/usr/bin/security find-generic-password -s kata-ingest -a gitlab -w); }; f"
