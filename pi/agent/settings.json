@@ -1,16 +1,16 @@
 {
-  "lastChangelogVersion": "0.87.1",
-  "theme": "modus-operandi",
+  "lastChangelogVersion": "1.5.0",
+  "theme": "modus-vivendi",
   "packages": [
-    "npm:pi-mcp-adapter",
     "npm:pi-lens",
-    "npm:@plannotator/pi-extension",
     "npm:airspeak",
     "npm:@duarteocarmo/pi-modus-themes",
     "npm:pi-web-access",
     "npm:pi-cmux",
-    "npm:@inobit/pi-permission",
-    "npm:pi-paseo-subagent"
+    "git:github.com/Hacker0x01/pi-bedrock-sso",
+    "git:github.com/DietrichGebert/ponytail",
+    "npm:pi-paseo-subagent",
+    "npm:pi-ask-user"
   ],
   "enabledModels": [
     "amazon-bedrock/global.anthropic.claude-opus-5-5",
@@ -26,5 +26,12 @@
   "terminal": {
     "showTerminalProgress": true
   },
-  "enableInstallTelemetry": false
+  "enableInstallTelemetry": false,
+  "hideThinkingBlock": false,
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.8",
+    "{\"source\":\"npm:airspeak\",\"scope\":\"user\"}": "1.1.5",
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.47.0",
+    "{\"source\":\"npm:pi-cmux\",\"scope\":\"user\"}": "0.6.0"
+  }
 }
