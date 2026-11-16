@@ -33,7 +33,9 @@ you: when your task has three or more independent multi-turn units, start your o
 than doing them one after another. Limit the depth to two levels. Every brief ends with
 `Delegation depth: N`, where N is the child's depth (your own depth plus one; a brief without the
 line means depth 1). At depth 2, do not start subagents. Pass the outward-action ban down
-unchanged.
+unchanged. A subagent that starts subagents must `subagent_wait` for all of them before it ends its
+turn: Paseo shows a middle agent that ended its turn as finished, and "Archive finished" then
+archives its running children (getpaseo/paseo#8288).
 
 ## Delegate by default
 
