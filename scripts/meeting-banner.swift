@@ -167,6 +167,8 @@ private struct Unit {
     let fill: NSView
     let title: NSTextField
     let time: NSTextField
+    let dismiss: NSButton
+    let snooze: NSButton
 }
 
 final class Banner: NSObject, NSApplicationDelegate {
@@ -180,6 +182,12 @@ final class Banner: NSObject, NSApplicationDelegate {
             self?.tick()
         }
         tick()
+        // The panel can't become key (an inactive accessory app can't take key on
+        // macOS 14+), so WindowServer hands clicks on it to the frontmost app and
+        // the buttons never fire. A global monitor still sees those clicks.
+        NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
+            self?.handleClick(at: NSEvent.mouseLocation)
+        }
         if selfTest {
             for (i, u) in units.enumerated() {
                 let f = u.panel.frame
@@ -263,7 +271,8 @@ final class Banner: NSObject, NSApplicationDelegate {
         track.addSubview(title)
 
         panel.orderFrontRegardless()      // show WITHOUT activating the app
-        return Unit(panel: panel, track: track, fill: fill, title: title, time: time)
+        return Unit(panel: panel, track: track, fill: fill, title: title, time: time,
+                    dismiss: btnDismiss, snooze: btnSnooze)
     }
 
     private func makeButton(_ label: String, action: Selector) -> NSButton {
@@ -297,6 +306,17 @@ final class Banner: NSObject, NSApplicationDelegate {
             if !u.panel.isVisible { u.panel.orderFrontRegardless() }
         }
         if ttl > 0, Date().timeIntervalSince(born) > ttl { finish(EXIT_EXPIRED) }
+    }
+
+    private func handleClick(at p: NSPoint) {
+        func hit(_ b: NSButton) -> Bool {
+            guard let w = b.window else { return false }
+            return w.convertToScreen(b.convert(b.bounds, to: nil)).contains(p)
+        }
+        for u in units {
+            if hit(u.dismiss) { finish(EXIT_ACK) }
+            if hit(u.snooze) { finish(EXIT_SNOOZE) }
+        }
     }
 
     @objc private func dismissClicked() { finish(EXIT_ACK) }
