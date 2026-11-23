@@ -118,7 +118,7 @@ on a branch named after the worktree *directory*, and for a harness-generated wo
 work lives on an existing branch (an open PR/MR, someone else's branch), name it:
 
 ```sh
-workspace fill --branch feature/scn-due-agentcore fedramp
+workspace fill --branch feature/my-change some-repo
 ```
 
 Then it attaches the local branch, or creates it tracking `origin/<branch>` if it's remote-only.
