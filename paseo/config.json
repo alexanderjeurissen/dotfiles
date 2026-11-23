@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "daemon": {
+    "listen": "127.0.0.1:6767",
+    "mcp": {
+      "injectIntoAgents": true
+    },
+    "agentProfiles": [
+      {
+        "id": "agent_profile_opus",
+        "name": "opus",
+        "icon": "brain",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.anthropic.claude-opus-5-5",
+        "thinkingOptionId": "high",
+        "notes": "Anthropic flagship ($4/$20), about 6-11x Sol's cost per task. Use for the Anthropic code-review pass, the hardest coding tasks where the top score matters more than cost, long-form analysis outside code, and the advisor for sessions running on Astra. Not the default advisor, not for mechanical edits or bulk work."
+      },
+      {
+        "id": "agent_profile_sol",
+        "name": "sol",
+        "icon": "eye",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.openai.gpt-6.2-sol",
+        "thinkingOptionId": "high",
+        "notes": "OpenAI GPT-6.2 Sol ($2/$10; input 2x and output 1.5x above 272K). Use for the OpenAI code-review pass and independent cross-vendor checks of diffs and scripts. Not for open-ended architecture or trivial edits."
+      },
+      {
+        "id": "agent_profile_sonnet",
+        "name": "sonnet",
+        "icon": "code",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.openai.gpt-6.2-sol",
+        "thinkingOptionId": "medium",
+        "notes": "Name kept for skill compatibility; runs GPT-6.2 Sol at medium ($2/$10), which outscores Sonnet 5.5 at the same price. Use for implementation from a clear spec, scoped fixes, tests and docs, coordinators (plan, delegate, merge, post) and research scouts. Keep the brief and context under 272K tokens. Not for deep debugging or critical review."
+      },
+      {
+        "id": "agent_profile_sonnet_long",
+        "name": "sonnet-long",
+        "icon": "code",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
+        "thinkingOptionId": "high",
+        "notes": "Anthropic Claude Sonnet 5.5 at high ($2/$10, no long-context surcharge). Use only when the work needs more than 272K tokens of context in one session (large diffs, many-file reads that cannot be split), where Sol pays 2x input and 1.5x output. Under 272K use sonnet (Sol 6.2)."
+      },
+      {
+        "id": "agent_profile_astra",
+        "name": "astra",
+        "icon": "microscope",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.openai.gpt-6.2-astra",
+        "thinkingOptionId": "xhigh",
+        "notes": "OpenAI flagship GPT-6.2 Astra ($8/$40). At xhigh it matches its max score with 41% of the tokens and outscores Opus at under half the cost per task. Use as the advisor for Sol and Opus sessions, a second opinion before a high-stakes decision, when Opus and Sol disagree, or the hardest reasoning. Not for bulk work."
+      },
+      {
+        "id": "agent_profile_terra",
+        "name": "terra",
+        "icon": "palette",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.openai.gpt-6.1-terra",
+        "thinkingOptionId": "medium",
+        "notes": "OpenAI fast, cheap model ($1/$5). Use for screenshots and diagrams, drafting PR or issue text, and moderate coding. Not for architecture, hard debugging or subtle review."
+      },
+      {
+        "id": "agent_profile_haiku",
+        "name": "haiku",
+        "icon": "search",
+        "provider": "pi",
+        "model": "amazon-bedrock/global.anthropic.claude-haiku-5-5",
+        "thinkingOptionId": "medium",
+        "notes": "Anthropic cheapest model ($0.10/$0.50 up to 100K-token prompts). Default cheap subagent: codebase search, log and CI triage, summaries for a parent agent, extraction, classification, small edits from a tight spec. Pass thinking=low for search and extraction. Keep briefs tight. Not for multi-file edits, debugging or anything that goes straight into a commit."
+      }
+    ],
+    "cors": {
+      "allowedOrigins": [
+        "https://app.paseo.sh"
+      ]
+    },
+    "relay": {
+      "enabled": false
+    }
+  },
+  "app": {
+    "baseUrl": "https://app.paseo.sh"
+  },
+  "pluginsEnabled": true,
+  "plugins": {
+    "paseo-asks": {
+      "source": "directory",
+      "path": "/Users/alexanderjeurissen/.paseo/plugins/paseo-asks/9c070cee-d924-419f-9189-8f46f0e479ce/checkout",
+      "enabled": false
+    },
+    "ccusage-usage-source": {
+      "source": "directory",
+      "path": "/Users/alexanderjeurissen/Development/personal/ccusage-usage-source",
+      "enabled": true
+    },
+    "paseo-kata": {
+      "source": "directory",
+      "path": "/Users/alexanderjeurissen/Development/paseo-kata",
+      "enabled": true
+    }
+  },
+  "agents": {
+    "providers": {
+      "claude": {
+        "enabled": false
+      },
+      "pi": {
+        "models": [
+          {
+            "id": "amazon-bedrock/global.anthropic.claude-opus-5-5",
+            "label": "Claude Opus 5.5 (Global)",
+            "description": "amazon-bedrock/global.anthropic.claude-opus-5-5",
+            "isDefault": false,
+            "thinkingOptions": [
+              {
+                "id": "off",
+                "label": "Off",
+                "description": "No extra reasoning"
+              },
+              {
+                "id": "minimal",
+                "label": "Minimal",
+                "description": "Light reasoning"
+              },
+              {
+                "id": "low",
+                "label": "Low",
+                "description": "Faster reasoning"
+              },
+              {
+                "id": "medium",
+                "label": "Medium",
+                "description": "Balanced reasoning",
+                "isDefault": true
+              },
+              {
+                "id": "high",
+                "label": "High",
+                "description": "Deeper reasoning"
+              },
+              {
+                "id": "xhigh",
+                "label": "Xhigh",
+                "description": "Very deep reasoning"
+              },
+              {
+                "id": "max",
+                "label": "Max",
+                "description": "Extreme reasoning"
+              }
+            ]
+          },
+          {
+            "id": "amazon-bedrock/global.openai.gpt-6-sol",
+            "label": "GPT-6 Sol (Global)",
+            "description": "amazon-bedrock/global.openai.gpt-6-sol",
+            "isDefault": false,
+            "thinkingOptions": [
+              {
+                "id": "off",
+                "label": "Off",
+                "description": "No extra reasoning"
+              },
+              {
+                "id": "minimal",
+                "label": "Minimal",
+                "description": "Light reasoning"
+              },
+              {
+                "id": "low",
+                "label": "Low",
+                "description": "Faster reasoning"
+              },
+              {
+                "id": "medium",
+                "label": "Medium",
+                "description": "Balanced reasoning",
+                "isDefault": true
+              },
+              {
+                "id": "high",
+                "label": "High",
+                "description": "Deeper reasoning"
+              },
+              {
+                "id": "xhigh",
+                "label": "Xhigh",
+                "description": "Very deep reasoning"
+              }
+            ]
+          },
+          {
+            "id": "amazon-bedrock/global.openai.gpt-6-astra",
+            "label": "GPT-6 Astra (Global)",
+            "description": "amazon-bedrock/global.openai.gpt-6-astra",
+            "isDefault": false,
+            "thinkingOptions": [
+              {
+                "id": "off",
+                "label": "Off",
+                "description": "No extra reasoning"
+              },
+              {
+                "id": "minimal",
+                "label": "Minimal",
+                "description": "Light reasoning"
+              },
+              {
+                "id": "low",
+                "label": "Low",
+                "description": "Faster reasoning"
+              },
+              {
+                "id": "medium",
+                "label": "Medium",
+                "description": "Balanced reasoning",
+                "isDefault": true
+              },
+              {
+                "id": "high",
+                "label": "High",
+                "description": "Deeper reasoning"
+              },
+              {
+                "id": "xhigh",
+                "label": "Xhigh",
+                "description": "Very deep reasoning"
+              }
+            ]
+          },
+          {
+            "id": "amazon-bedrock/global.openai.gpt-6-luna",
+            "label": "GPT-6 Luna (Global)",
+            "description": "amazon-bedrock/global.openai.gpt-6-luna",
+            "isDefault": false,
+            "thinkingOptions": [
+              {
+                "id": "off",
+                "label": "Off",
+                "description": "No extra reasoning"
+              },
+              {
+                "id": "minimal",
+                "label": "Minimal",
+                "description": "Light reasoning"
+              },
+              {
+                "id": "low",
+                "label": "Low",
+                "description": "Faster reasoning"
+              },
+              {
+                "id": "medium",
+                "label": "Medium",
+                "description": "Balanced reasoning",
+                "isDefault": true
+              },
+              {
+                "id": "high",
+                "label": "High",
+                "description": "Deeper reasoning"
+              },
+              {
+                "id": "xhigh",
+                "label": "Xhigh",
+                "description": "Very deep reasoning"
+              }
+            ]
+          },
+          {
+            "id": "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
+            "label": "Claude Sonnet 5.5 (Global)",
+            "description": "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
+            "isDefault": true,
+            "thinkingOptions": [
+              {
+                "id": "off",
+                "label": "Off",
+                "description": "No extra reasoning"
+              },
+              {
+                "id": "minimal",
+                "label": "Minimal",
+                "description": "Light reasoning"
+              },
+              {
+                "id": "low",
+                "label": "Low",
+                "description": "Faster reasoning"
+              },
+              {
+                "id": "medium",
+                "label": "Medium",
+                "description": "Balanced reasoning",
+                "isDefault": true
+              },
+              {
+                "id": "high",
+                "label": "High",
+                "description": "Deeper reasoning"
+              },
+              {
+                "id": "xhigh",
+                "label": "Xhigh",
+                "description": "Very deep reasoning"
+              },
+              {
+                "id": "max",
+                "label": "Max",
+                "description": "Extreme reasoning"
+              }
+            ]
+          }
+        ]
+      },
+      "copilot": {
+        "enabled": false
+      },
+      "codex": {
+        "enabled": false
+      },
+      "opencode": {
+        "enabled": false
+      }
+    }
+  }
+}

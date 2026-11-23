@@ -16,12 +16,12 @@
     "amazon-bedrock/global.anthropic.claude-opus-5-5",
     "amazon-bedrock/global.anthropic.claude-sonnet-5-5",
     "amazon-bedrock/global.anthropic.claude-haiku-5-5",
-    "amazon-bedrock/global.openai.gpt-6.1-sol",
-    "amazon-bedrock/global.openai.gpt-6-astra",
+    "amazon-bedrock/global.openai.gpt-6.2-sol",
+    "amazon-bedrock/global.openai.gpt-6.2-astra",
     "amazon-bedrock/global.openai.gpt-6.1-terra"
   ],
   "defaultProvider": "amazon-bedrock",
-  "defaultModel": "global.anthropic.claude-opus-5-5",
+  "defaultModel": "global.openai.gpt-6.2-sol",
   "defaultThinkingLevel": "medium",
   "terminal": {
     "showTerminalProgress": true
@@ -33,5 +33,15 @@
     "{\"source\":\"npm:airspeak\",\"scope\":\"user\"}": "1.1.5",
     "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.47.0",
     "{\"source\":\"npm:pi-cmux\",\"scope\":\"user\"}": "0.6.0"
+  },
+  "compaction": {
+    "modelOverrides": {
+      "amazon-bedrock/global.openai.gpt-6.2-sol": {
+        "reserveTokens": 790000
+      },
+      "amazon-bedrock/global.openai.gpt-6.2-astra": {
+        "reserveTokens": 790000
+      }
+    }
   }
 }

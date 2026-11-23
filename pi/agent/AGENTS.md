@@ -13,14 +13,29 @@ Do not consult for short, mechanical or clear work, and always when the user ask
 
 Pick the advisor by your own model (`$PI_MODEL`):
 
-- **You run on Opus** (the default): use `sol`, a different vendor at a lower price.
-- **You run on any other model:** use `opus`.
+- **You run on Sol or Opus** (Sol is the default): use `astra` before an approach or when an error
+  continues. It scores higher than Opus at under half the cost per task. For the check before you
+  declare a task done, a Sol session uses `opus` instead: a different vendor catches what a
+  same-vendor model shares.
+- **You run on Astra or any other model:** use `opus`.
 
 ```js
-subagent_run({ name: "advisor", role: "scout", profile: "sol", prompt: <brief> }) // "opus" if you are not Opus
+subagent_run({ name: "advisor", role: "scout", profile: "astra", prompt: <brief> }) // see the rules above for "opus"
 ```
 
 Then `subagent_wait` for it.
+
+The brief must stand alone, because the subagent cannot see this conversation:
+
+1. **Goal:** the purpose of the task and its constraints.
+2. **State:** the work done so far and the evidence, with file paths.
+3. **Plan or proposal:** what you intend to do, or the conclusion to check. For a second opinion,
+   put the problem before the proposal so it forms its own view first.
+4. **Question:** the one item you need judged.
+5. **Rules:** "Give guidance in under 300 words. Do not edit, write or start subagents."
+
+Trust evidence more than advice. If a recommended step fails, or the code contradicts a claim, say
+so. If a consultation changes the plan, tell the user in one line.
 
 # Subagents
 
@@ -49,7 +64,8 @@ Delegate:
 - **Log, CI and test-output triage**, and summaries of long threads, diffs or docs (`haiku`).
 - **Research**: web or doc lookups, comparing options, checking versions (`sonnet`).
 - **Independent tracks** of a larger task, one subagent each, run in parallel (`sonnet`).
-- **Verification** with fresh eyes: reviewing your own change, checking a claim (`opus` or `sol`).
+- **Verification** with fresh eyes: reviewing your own change, checking a claim (`sol`, or `astra`
+  when it is high-stakes).
 
 Do it yourself when the work is a few tool calls, when steps depend tightly on each other, or when
 it is a decision or an outward-facing action (posting, committing, messaging).
@@ -64,6 +80,9 @@ How:
   tool round trip costs 3-6 s, at any thinking level. To cut turns, name the exact files and
   commands in the brief, and tell the child to batch independent reads and searches into one
   `codemode` call. `opus` is the slowest per turn; prefer `haiku` or `sol` when a scout must be fast.
+- Keep a `haiku` prompt under 100K tokens (its rates are 5x above that). Keep a Sol or Astra
+  context under 272K (input 2x and output 1.5x above that, for the whole request). Work that cannot
+  fit in 272K goes to `sonnet-long`, which has no long-context surcharge.
 - Ask for long results in a file and the path in the reply: the finish notification truncates at
   4,000 characters. Use `~/.local/state/subagents/<skill-or-task>/<slug>/<unit>.md`, one file per
   child, and ask for a one-line verdict plus the path as the reply. Never `/tmp`: macOS empties it on
@@ -84,42 +103,17 @@ and "when to use" notes. Pass `thinking` only to change the effort for one call.
 
 | Profile | Use for |
 |---|---|
-| `opus` | Planning, hard debugging, the Anthropic review pass, the advisor for non-Opus sessions |
-| `sol` | The OpenAI review pass, cross-vendor checks, the advisor for Opus sessions |
-| `sonnet` | Implementation from a clear spec, coordinators, research scouts |
+| `opus` | The Anthropic review pass, the hardest coding tasks, the advisor for Astra sessions |
+| `sol` | GPT-6.2 Sol at high: the OpenAI review pass, cross-vendor checks |
+| `sonnet` | GPT-6.2 Sol at medium (name kept for skills): implementation from a clear spec, coordinators, research scouts |
+| `sonnet-long` | Claude Sonnet 5.5 at high: the same work when it needs more than 272K tokens of context |
 | `haiku` | Cheap scoped subagents: search, triage, summaries, extraction |
 | `terra` | Screenshots and diagrams, drafting text, moderate coding |
-| `astra` | Only when the user asks for `astra` by name |
+| `astra` | GPT-6.2 Astra at xhigh: the advisor for Sol and Opus sessions, high-stakes second opinions |
 
-## Advisor
-
-The default model is a fast executor. A stronger model adds judgment. Consult it:
-
-- **Before you commit to an approach** on multi-step work where the plan decides the outcome
-  (a refactor, a design choice, a migration, a subsystem you do not know).
-- **When an error continues** after two failed fixes for the same failure.
-- **Before you declare a non-trivial task done** (a multi-file change, a change with hidden
-  consequences, the step before a commit or MR goes out).
-
-Do not consult for short, mechanical or clear work, and always when the user asks.
-
-```js
-subagent_run({ name: "advisor", role: "scout", profile: "opus", prompt: <brief> })
-```
-
-Then `subagent_wait` for it.
-
-The brief must stand alone, because the subagent cannot see this conversation:
-
-1. **Goal:** the purpose of the task and its constraints.
-2. **State:** the work done so far and the evidence, with file paths.
-3. **Plan or proposal:** what you intend to do, or the conclusion to check. For a second opinion,
-   put the problem before the proposal so it forms its own view first.
-4. **Question:** the one item you need judged.
-5. **Rules:** "Give guidance in under 300 words. Do not edit, write or start subagents."
-
-Trust evidence more than advice. If a recommended step fails, or the code contradicts a claim, say
-so. If a consultation changes the plan, tell the user in one line.
+Model choice follows published Bedrock list prices and public benchmarks (Vals AI, Arena, Artificial
+Analysis), read 2026-11-23. None of it is measured on our own work; if a model refuses
+security content, move that task to another.
 
 ## Code review
 
